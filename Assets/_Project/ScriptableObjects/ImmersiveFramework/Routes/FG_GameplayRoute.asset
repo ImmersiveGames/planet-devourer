@@ -17,4 +17,5 @@ MonoBehaviour:
   primarySceneName: FG_Gameplay
   routeContentProfile: {fileID: 0}
   startupActivity: {fileID: 11400000, guid: fef5f07f33f4f414aa773ce34674ae4d, type: 2}
+  transitionGateMode: 30
   description: 

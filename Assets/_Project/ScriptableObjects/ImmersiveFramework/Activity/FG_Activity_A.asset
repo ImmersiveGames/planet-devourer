@@ -16,3 +16,4 @@ MonoBehaviour:
   description: 
   activityContentProfile: {fileID: 0}
   visualTransitionMode: 10
+  transitionGateMode: 30

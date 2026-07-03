@@ -17,4 +17,5 @@ MonoBehaviour:
   primarySceneName: FG_Menu
   routeContentProfile: {fileID: 0}
   startupActivity: {fileID: 0}
+  transitionGateMode: 30
   description: 
