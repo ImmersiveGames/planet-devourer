@@ -765,6 +765,7 @@ GameObject:
   - component: {fileID: 1030083290}
   - component: {fileID: 1030083289}
   - component: {fileID: 1030083288}
+  - component: {fileID: 1030083292}
   m_Layer: 0
   m_Name: PlayerPrototype
   m_TagString: Untagged
@@ -882,6 +883,28 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &1030083292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1030083286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcfea0d7cc4144be8c064041108b58b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.UnityInput.UnityPlayerInputGateAdapter
+  playerInput: {fileID: 1030083291}
+  gameplayActionMapName: Player
+  blockOnInputAcceptance: 1
+  blockOnGameplayAction: 1
+  blockMode: 10
+  restorePreviousState: 1
+  applyOnEnable: 1
+  logStateChanges: 1
+  logMissingRuntimeOnce: 1
+  logMissingTargetOnce: 1
 --- !u!1 &1283593779
 GameObject:
   m_ObjectHideFlags: 0
