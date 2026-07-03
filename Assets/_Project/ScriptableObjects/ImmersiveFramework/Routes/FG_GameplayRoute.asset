@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a35fe899a80d2d64dac72e8bfe3079df, type: 3}
-  m_Name: StartupRoute
+  m_Name: FG_GameplayRoute
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.RouteAsset
-  routeName: Startup Route
-  primaryScenePath: Assets/_Project/Scenes/Boot/StartupScene.unity
-  primarySceneName: StartupScene
+  routeName: Gameplay Route
+  primaryScenePath: Assets/_Project/Scenes/Gameplay/FG_Gameplay.unity
+  primarySceneName: FG_Gameplay
   routeContentProfile: {fileID: 0}
-  startupActivity: {fileID: 0}
+  startupActivity: {fileID: 11400000, guid: fef5f07f33f4f414aa773ce34674ae4d, type: 2}
   description: 

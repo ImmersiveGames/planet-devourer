@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1ce6d27d442ac76449f283afbc33d04f, type: 3}
-  m_Name: GameApplication
+  m_Name: FG_GameApplication
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.GameApplicationAsset
   applicationName: Game Application
-  startupRoute: {fileID: 11400000, guid: 185d57856036e774e8b0e79e1bd974a9, type: 2}
-  globalUiScenePolicy: 0
-  globalUiScenePath: 
-  globalUiSceneName: 
+  startupRoute: {fileID: 11400000, guid: 5b6fb2a4340e15c418e39f9feb720657, type: 2}
+  globalUiScenePolicy: 1
+  globalUiScenePath: Assets/_Project/Scenes/Menu/FG_UIGlobal.unity
+  globalUiSceneName: FG_UIGlobal
   validationMode: 1
