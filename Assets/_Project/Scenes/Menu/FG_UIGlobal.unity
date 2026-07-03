@@ -2007,7 +2007,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1583345335
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2092,18 +2092,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Pause.PauseInputActionTrigger
   playerInput: {fileID: 2130431399}
   actionsAsset: {fileID: 0}
-  playerActionMapName: Player
-  uiActionMapName: UI
+  pauseActionMapName: Global
   pauseActionName: Pause
-  requirePlayerAction: 1
-  requireUiAction: 1
   subscribeOnEnable: 1
   enableResolvedActionsOnEnable: 1
   requestKind: 30
-  reason: pause.input.action.trigger
+  reason: firstgame.pause.keyboard.toggle
+  switchPlayerInputActionMap: 0
+  gameplayActionMapName: Player
+  pauseUiActionMapName: UI
   logReadyOnEnable: 1
   logPerformedInput: 1
   logIgnoredInput: 1
+  logActionMapSwitching: 1
 --- !u!1 &1973391310
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,15 +8,14 @@
       "hash": "1116a7c5e3f3b984708b6ab4e6db458e4006d6ea"
     },
     "com.immersive.framework": {
-      "version": "https://github.com/ImmersiveGames/com.immersive.framework.git",
+      "version": "file:C:/Projetos/ImmersivePackages/com.immersive.framework",
       "depth": 0,
-      "source": "git",
+      "source": "local",
       "dependencies": {
         "com.immersive.foundation": "0.1.0",
         "com.immersive.logging": "0.2.1",
         "com.unity.inputsystem": "1.19.0"
-      },
-      "hash": "b7fe195c80fe33a7576c5e189672b83c82d91dc1"
+      }
     },
     "com.immersive.logging": {
       "version": "https://github.com/ImmersiveGames/com.immersive.logging.git",

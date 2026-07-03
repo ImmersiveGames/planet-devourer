@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.immersive.foundation": "https://github.com/ImmersiveGames/com.immersive.foundation.git#v0.1.0",
-    "com.immersive.framework": "https://github.com/ImmersiveGames/com.immersive.framework.git",
+    "com.immersive.framework": "file:C:/Projetos/ImmersivePackages/com.immersive.framework",
     "com.immersive.logging": "https://github.com/ImmersiveGames/com.immersive.logging.git",
     "com.immersive.pooling": "https://github.com/ImmersiveGames/com.immersive.pooling.git#v0.1.0",
     "com.unity.2d.sprite": "1.0.0",
