@@ -55,6 +55,13 @@ Fluxo esperado:
 - nomes temporarios como `Probe`, `Test` ou `Smoke` quando o arquivo ja representa comportamento final de jogo;
 - documentacao historica/canonica do framework.
 
+## Documentation Policy
+
+- documentacao canonica do framework fica no package `Packages/com.immersive.framework/Documentation~/`;
+- este projeto mantem apenas notas operacionais de uso real;
+- novas notas locais devem ficar em `Assets/_Project/Documentation/`;
+- `Assets/_Documentation` nao deve receber documentacao nova.
+
 ## Diferenca para QA
 
 ```text
