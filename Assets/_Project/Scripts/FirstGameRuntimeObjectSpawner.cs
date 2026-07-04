@@ -6,7 +6,7 @@ namespace _Project.Scripts
     {
         [SerializeField] private GameObject prefab;
         [SerializeField] private Transform spawnPoint;
-        [SerializeField] private bool spawnOnStart = true;
+        [SerializeField] private bool spawnOnStart = false;
         [SerializeField] private bool destroyPreviousBeforeSpawn = true;
 
         private GameObject _spawned;

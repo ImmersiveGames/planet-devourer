@@ -123,8 +123,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2185659000139376480}
-  - component: {fileID: 7040304477481119775}
-  - component: {fileID: 3788638061540006315}
+  - component: {fileID: 3754564655889158408}
+  - component: {fileID: 7415825257087643170}
   m_Layer: 0
   m_Name: FG_RuntimeBox
   m_TagString: Untagged
@@ -148,7 +148,7 @@ Transform:
   - {fileID: 5490380985780345030}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7040304477481119775
+--- !u!114 &3754564655889158408
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -157,19 +157,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 6484869738164440760}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 517834c9aef64609846c8bd369267153, type: 3}
+  m_Script: {fileID: 11500000, guid: 71ee52cb6da64fb691d51a321688c072, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.RuntimeObjects.UnityRuntimeObjectParticipationAdapter
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Reset.Unity.UnityResetSubjectAdapter
   registerOnEnable: 1
   unregisterOnDisable: 1
   retryUntilRuntimeAvailable: 1
-  objectEntryId: firstgame.runtime.box.01
+  idGeneration: 20
+  subjectId: 
+  runtimeSubjectIdPrefix: firstgame.runtime.box
   scope: 30
-  requiredness: 10
-  displayName: Runtime Box 01
-  resetParticipants:
-  - {fileID: 3788638061540006315}
---- !u!114 &3788638061540006315
+  displayName: Runtime Box
+  diagnosticTag: Prefab:FG_RuntimeBox
+  participantDiscovery: 20
+  includeInactiveParticipants: 1
+--- !u!114 &7415825257087643170
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -178,21 +180,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 6484869738164440760}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aec87a78d1d2441d9563b35f9f0e7749, type: 3}
+  m_Script: {fileID: 11500000, guid: c38bb81ea60d475c8bd3479b0ce24e8f, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ObjectReset.Unity.ObjectResetTransformParticipant
-  targetDeclaration: {fileID: 0}
-  participantId: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Reset.Unity.UnityTransformResetParticipant
+  participantId: transform
   requiredness: 10
   order: 0
-  displayName: 
-  source: ObjectResetUnityParticipant
-  reason: unity-object-reset-participant
-  targetTransformOverride: {fileID: 0}
-  baselineConfigured: 1
-  resetLocalPosition: 1
-  resetLocalRotation: 1
-  resetLocalScale: 1
-  baselineLocalPosition: {x: 57, y: 0, z: 0}
-  baselineLocalEulerAngles: {x: 0, y: 0, z: 0}
+  displayName: Transform
+  source: UnityTransformResetParticipant
+  reason: unity-transform-reset
+  target: {fileID: 2185659000139376480}
+  captureBaselineOnEnable: 1
+  resetPosition: 1
+  resetRotation: 1
+  resetScale: 1
+  baselineLocalPosition: {x: 0, y: 0, z: 0}
+  baselineLocalEulerAngles: {x: -0, y: 0, z: 0}
   baselineLocalScale: {x: 1, y: 1, z: 1}
