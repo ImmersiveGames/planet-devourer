@@ -1,7 +1,10 @@
 {
     "name": "Project.Runtime",
     "rootNamespace": "Project",
-    "references": [],
+    "references": [
+        "GUID:1f14397897fa70c48994f55dd2f07413",
+        "Unity.InputSystem"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

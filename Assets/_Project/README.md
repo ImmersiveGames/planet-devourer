@@ -17,6 +17,8 @@ Assets/_Project/
 
 FIRSTGAME nao e QA sintetico. Ele deve parecer um consumidor real pequeno, nao um laboratorio de smokes.
 
+POST-RESET-B2: nomes temporarios como `Probe`, `Test`, `Smoke` e `QA_` nao devem permanecer no FIRSTGAME quando o arquivo ja representa exemplo final de jogo.
+
 ## Fluxo manual esperado
 
 Use as cenas de `Assets/_Project/Scenes/`:

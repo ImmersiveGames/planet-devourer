@@ -1,9 +1,9 @@
 using Immersive.Framework.Reset;
 using Immersive.Framework.Reset.Unity;
 using UnityEngine;
-namespace _Project.Scripts
+namespace Project._Project.Scripts.Runtime.Player
 {
-    public sealed class FirstGamePlayerResetProbe : MonoBehaviour, IUnityResettable, IUnityResettableMetadata
+    public sealed class FirstGamePlayerResettableState : MonoBehaviour, IUnityResettable, IUnityResettableMetadata
     {
         private int _resetCount;
         private Vector3 _baselinePosition;
@@ -16,7 +16,7 @@ namespace _Project.Scripts
 
         public string ResetDisplayName => "FirstGame Player Reset Probe";
 
-        public string ResetSource => nameof(FirstGamePlayerResetProbe);
+        public string ResetSource => nameof(FirstGamePlayerResettableState);
 
         public string ResetReason => "firstgame.player.reset-probe";
 
@@ -34,7 +34,7 @@ namespace _Project.Scripts
 
             return ResetParticipantResult.CreateSucceeded(
                 context.Participant,
-                nameof(FirstGamePlayerResetProbe),
+                nameof(FirstGamePlayerResettableState),
                 context.Reason,
                 $"FirstGame player reset probe executed. resetCount='{_resetCount}'.");
         }

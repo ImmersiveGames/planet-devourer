@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
-
-namespace FirstGame
+namespace Project._Project.Scripts.Runtime.Player
 {
     /// <summary>
     /// Minimal consumer-side movement prototype for FIRSTGAME.
