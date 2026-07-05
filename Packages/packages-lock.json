@@ -25,11 +25,10 @@
       "hash": "00af12ab19fe00a19143351a729b7351b3e8048e"
     },
     "com.immersive.pooling": {
-      "version": "https://github.com/ImmersiveGames/com.immersive.pooling.git#v0.1.0",
+      "version": "file:C:/Projetos/ImmersivePackages/com.immersive.pooling",
       "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "ccedf13bf292b66c9735864dc957c464060a51a6"
+      "source": "local",
+      "dependencies": {}
     },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
@@ -126,7 +125,7 @@
       "dependencies": {}
     },
     "com.unity.ide.rider": {
-      "version": "3.0.38",
+      "version": "3.0.40",
       "depth": 0,
       "source": "registry",
       "dependencies": {

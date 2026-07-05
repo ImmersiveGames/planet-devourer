@@ -9,8 +9,7 @@ using UnityEngine;
 namespace Project.Editor
 {
     /// <summary>
-    /// Setup inicial do projeto consumidor.
-    /// Este arquivo prepara pastas e ferramentas antes da chegada do Immersive Framework.
+    /// Setup editor-only para a estrutura local do projeto consumidor.
     /// Não cria lifecycle, runtime bootstrap, GameLifecycleSettings ou estrutura interna do framework.
     /// </summary>
     [InitializeOnLoad]
@@ -19,7 +18,6 @@ namespace Project.Editor
         private const string MenuRoot = "Tools/Initial Project Setup/";
         private const string ProjectRootFolder = "Assets/_Project";
         private const string ExternalRootFolder = "Assets/_External";
-        private const string SandboxRootFolder = "Assets/_Sandbox";
 
         private static readonly string[] InitialFolders =
         {
@@ -28,13 +26,12 @@ namespace Project.Editor
             ProjectRootFolder + "/Audio",
             ProjectRootFolder + "/Audio/Music",
             ProjectRootFolder + "/Audio/SFX",
+            ProjectRootFolder + "/Documentation",
             ProjectRootFolder + "/Materials",
             ProjectRootFolder + "/Prefabs",
             ProjectRootFolder + "/Scenes",
-            ProjectRootFolder + "/Scenes/Boot",
             ProjectRootFolder + "/Scenes/Menu",
             ProjectRootFolder + "/Scenes/Gameplay",
-            ProjectRootFolder + "/Scenes/Sandbox",
             ProjectRootFolder + "/ScriptableObjects",
             ProjectRootFolder + "/Scripts",
             ProjectRootFolder + "/Scripts/Runtime",
@@ -47,13 +44,7 @@ namespace Project.Editor
             ExternalRootFolder,
             ExternalRootFolder + "/Plugins",
             ExternalRootFolder + "/Tools",
-            ExternalRootFolder + "/LocalPackages",
-
-            SandboxRootFolder,
-            SandboxRootFolder + "/Scenes",
-            SandboxRootFolder + "/Prefabs",
-            SandboxRootFolder + "/Materials",
-            SandboxRootFolder + "/ScriptableObjects"
+            ExternalRootFolder + "/LocalPackages"
         };
 
         private static readonly PackageSpec[] UnityCorePackages =
