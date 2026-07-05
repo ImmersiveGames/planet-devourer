@@ -770,3 +770,101 @@ SceneRoots:
   - {fileID: 1634023019}
   - {fileID: 1648496401}
   - {fileID: 117388944}
+--- !u!1 &930000000001
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 930000000002}
+  - component: {fileID: 930000000003}
+  - component: {fileID: 930000000004}
+  - component: {fileID: 930000000005}
+  - component: {fileID: 930000000006}
+  m_Layer: 0
+  m_Name: FirstGameAudioRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &930000000002
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930000000001}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &930000000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930000000001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f37a6125514e4491a7174d4372fc4c22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.RouteLifecycle.RouteContentBinding
+  route: {fileID: 11400000, guid: 5b6fb2a4340e15c418e39f9feb720657, type: 2}
+  localContentId: fg1-menu-route-audio
+  requiredness: 10
+--- !u!114 &930000000004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930000000001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 831dd588133da8f44ba1373af95bb31b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Audio.Unity::Immersive.Audio.Unity.Hosts.AudioRuntimeHost
+  defaults: {fileID: 11400000, guid: e5e12a3f83524b67b1d3f34cce8cba53, type: 2}
+  playbackRoot: {fileID: 0}
+  poolRuntimeHost: {fileID: 0}
+  composeOnAwake: 1
+  ensurePersistentListener: 1
+  listenerDuplicatePolicy: 1
+  includeInactiveListenersForListenerReport: 1
+--- !u!114 &930000000005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930000000001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0df80799a0b34c54b7d7cf52c7bb9901, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Project.Runtime::Project._Project.Scripts.Runtime.Audio.FirstGameBgmDirector
+  audioRuntimeHost: {fileID: 930000000004}
+  logTransitions: 1
+--- !u!114 &930000000006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930000000001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd5526acfd984a5395d1729a02b012ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Project.Runtime::Project._Project.Scripts.Runtime.Audio.FirstGameRouteBgmBinding
+  routeBgm: {fileID: 11400000, guid: 8571959e9d584503a8b78e6f20e64285, type: 2}
+  director: {fileID: 930000000005}
+  startupActivityBgmBinding: {fileID: 0}
