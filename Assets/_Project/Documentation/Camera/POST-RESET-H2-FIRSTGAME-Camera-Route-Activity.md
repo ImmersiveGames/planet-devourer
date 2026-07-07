@@ -1,16 +1,10 @@
 # POST-RESET-H2 — FIRSTGAME Camera Route/Activity Adapter
 
-Status: implementation patch, pending Unity compile and FIRSTGAME smoke.
+Status: migrated to framework camera components, pending Unity compile and FIRSTGAME smoke.
 
 ## Scope
 
-This cut adds a FIRSTGAME-side camera adapter. It does not change `com.immersive.framework`, `com.immersive.audio`, or the QA harness.
-
-Runtime path:
-
-```text
-Assets/_Project/Scripts/Runtime/GameCamera/
-```
+This cut uses the official Immersive Framework camera components in FIRSTGAME. It does not change `com.immersive.framework`, `com.immersive.audio`, or the QA harness.
 
 Editor setup path:
 
@@ -68,8 +62,11 @@ FirstGameCameraAnchors
 MenuRoute_CameraRig
 GameplayRoute_CameraRig
 ActivityA_CameraRig
-FirstGameRouteCameraBinding
-FirstGameActivityCameraBinding
+FrameworkCameraDirector
+FrameworkRouteCameraBinding
+FrameworkActivityCameraBinding
+FrameworkCameraAnchorHost
+FrameworkCinemachineRigApplier
 ```
 
 ## Expected smoke
@@ -91,5 +88,5 @@ Clear Activity -> Gameplay Route camera
 Expected log prefix:
 
 ```text
-[FIRSTGAME_CAMERA]
+[FRAMEWORK_CAMERA]
 ```

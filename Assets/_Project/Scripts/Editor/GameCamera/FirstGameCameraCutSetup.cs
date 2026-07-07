@@ -1,7 +1,8 @@
 using Immersive.Framework.ActivityFlow;
 using Immersive.Framework.Authoring;
+using Immersive.Framework.Camera;
+using Immersive.Framework.Camera.Cinemachine;
 using Immersive.Framework.RouteLifecycle;
-using Project._Project.Scripts.Runtime.GameCamera;
 using Unity.Cinemachine;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -60,14 +61,15 @@ namespace Project.Editor.GameCamera
             }
 
             GameObject mainCamera = EnsureMainCamera(scene, new Vector3(0f, 1f, -10f), Quaternion.identity);
-            UnityEngine.Camera operationalCamera = EnsureComponent<UnityEngine.Camera>(mainCamera);
-            CinemachineBrain brain = EnsureComponent<CinemachineBrain>(mainCamera);
+            EnsureComponent<UnityEngine.Camera>(mainCamera);
+            EnsureComponent<CinemachineBrain>(mainCamera);
             RemoveForbiddenCameraComponents(mainCamera, removeCamera: false, removeBrain: false);
 
             GameObject root = EnsureRoot(scene, "FirstGameCameraRoot");
             RouteContentBinding routeContentBinding = EnsureComponent<RouteContentBinding>(root);
-            FirstGameCameraDirector director = EnsureComponent<FirstGameCameraDirector>(root);
-            FirstGameRouteCameraBinding routeCameraBinding = EnsureComponent<FirstGameRouteCameraBinding>(root);
+            FrameworkCameraDirector director = EnsureComponent<FrameworkCameraDirector>(root);
+            FrameworkCinemachineRigApplier rigApplier = EnsureComponent<FrameworkCinemachineRigApplier>(root);
+            FrameworkRouteCameraBinding routeCameraBinding = EnsureComponent<FrameworkRouteCameraBinding>(root);
 
             GameObject menuRig = EnsureCinemachineRig(scene, "MenuRoute_CameraRig", new Vector3(0f, 1f, -10f), Quaternion.identity);
 
@@ -75,11 +77,12 @@ namespace Project.Editor.GameCamera
             SetSerialized(routeContentBinding, "localContentId", "firstgame.menu.route.camera");
             SetSerialized(routeContentBinding, "requiredness", 10);
 
-            SetSerialized(director, "operationalCamera", operationalCamera);
-            SetSerialized(director, "cinemachineBrain", brain);
             SetSerialized(director, "defaultCameraRig", menuRig);
+            SetSerialized(director, "defaultAnchors", (Object)null);
             SetSerialized(director, "routePriority", 20);
             SetSerialized(director, "activityPriority", 100);
+            SetSerialized(director, "setRigActiveState", true);
+            SetSerialized(director, "rigApplier", rigApplier);
             SetSerialized(director, "logTransitions", true);
 
             SetSerialized(routeCameraBinding, "routeCameraRig", menuRig);
@@ -90,8 +93,8 @@ namespace Project.Editor.GameCamera
             menuRig.SetActive(false);
 
             ValidateObjectReference(routeContentBinding, "route", menuRoute, "RouteContentBinding route on Menu camera root");
-            ValidateObjectReference(routeCameraBinding, "routeCameraRig", menuRig, "FirstGameRouteCameraBinding routeCameraRig on Menu camera root");
-            ValidateObjectReference(routeCameraBinding, "director", director, "FirstGameRouteCameraBinding director on Menu camera root");
+            ValidateObjectReference(routeCameraBinding, "routeCameraRig", menuRig, "FrameworkRouteCameraBinding routeCameraRig on Menu camera root");
+            ValidateObjectReference(routeCameraBinding, "director", director, "FrameworkRouteCameraBinding director on Menu camera root");
 
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);
@@ -112,14 +115,15 @@ namespace Project.Editor.GameCamera
             }
 
             GameObject mainCamera = EnsureMainCamera(scene, new Vector3(0f, 4f, -10f), Quaternion.Euler(20f, 0f, 0f));
-            UnityEngine.Camera operationalCamera = EnsureComponent<UnityEngine.Camera>(mainCamera);
-            CinemachineBrain brain = EnsureComponent<CinemachineBrain>(mainCamera);
+            EnsureComponent<UnityEngine.Camera>(mainCamera);
+            EnsureComponent<CinemachineBrain>(mainCamera);
             RemoveForbiddenCameraComponents(mainCamera, removeCamera: false, removeBrain: false);
 
             GameObject root = EnsureRoot(scene, "FirstGameCameraRoot");
             RouteContentBinding routeContentBinding = EnsureComponent<RouteContentBinding>(root);
-            FirstGameCameraDirector director = EnsureComponent<FirstGameCameraDirector>(root);
-            FirstGameRouteCameraBinding routeCameraBinding = EnsureComponent<FirstGameRouteCameraBinding>(root);
+            FrameworkCameraDirector director = EnsureComponent<FrameworkCameraDirector>(root);
+            FrameworkCinemachineRigApplier rigApplier = EnsureComponent<FrameworkCinemachineRigApplier>(root);
+            FrameworkRouteCameraBinding routeCameraBinding = EnsureComponent<FrameworkRouteCameraBinding>(root);
 
             GameObject player = FindInScene(scene, "PlayerPrototype");
             if (player == null)
@@ -128,7 +132,7 @@ namespace Project.Editor.GameCamera
             }
 
             GameObject anchorsObject = EnsureRoot(scene, "FirstGameCameraAnchors");
-            FirstGameCameraAnchorHost anchors = EnsureComponent<FirstGameCameraAnchorHost>(anchorsObject);
+            FrameworkCameraAnchorHost anchors = EnsureComponent<FrameworkCameraAnchorHost>(anchorsObject);
             Transform target = player != null ? player.transform : null;
             SetSerialized(anchors, "trackingTarget", target);
             SetSerialized(anchors, "lookAtTarget", target);
@@ -140,17 +144,18 @@ namespace Project.Editor.GameCamera
             SetSerialized(routeContentBinding, "localContentId", "firstgame.gameplay.route.camera");
             SetSerialized(routeContentBinding, "requiredness", 10);
 
-            SetSerialized(director, "operationalCamera", operationalCamera);
-            SetSerialized(director, "cinemachineBrain", brain);
             SetSerialized(director, "defaultCameraRig", routeRig);
+            SetSerialized(director, "defaultAnchors", anchors);
             SetSerialized(director, "routePriority", 20);
             SetSerialized(director, "activityPriority", 100);
+            SetSerialized(director, "setRigActiveState", true);
+            SetSerialized(director, "rigApplier", rigApplier);
             SetSerialized(director, "logTransitions", true);
 
-            FirstGameActivityCameraBinding activityABinding = EnsureActivityBinding(scene, "ActivityA_ContentRoot", activityA, activityARig, FirstGameActivityCameraPolicy.UseOwnOrKeepPreviousActivity, anchors, director);
-            EnsureActivityBinding(scene, "ActivityB_ContentRoot", activityB, null, FirstGameActivityCameraPolicy.UseOwnOrKeepPreviousActivity, anchors, director);
-            EnsureActivityBinding(scene, "ActivityC_RouteFallback_ContentRoot", activityC, null, FirstGameActivityCameraPolicy.UseRoute, anchors, director);
-            EnsureActivityBinding(scene, "ActivityD_StopBgm_ContentRoot", activityD, null, FirstGameActivityCameraPolicy.UseRoute, anchors, director);
+            FrameworkActivityCameraBinding activityABinding = EnsureActivityBinding(scene, "ActivityA_ContentRoot", activityA, activityARig, FrameworkCameraActivityPolicy.UseOwnOrRetainActivityUntilRouteExit, anchors, director);
+            EnsureActivityBinding(scene, "ActivityB_ContentRoot", activityB, null, FrameworkCameraActivityPolicy.UseOwnOrRetainActivityUntilRouteExit, anchors, director);
+            EnsureActivityBinding(scene, "ActivityC_RouteFallback_ContentRoot", activityC, null, FrameworkCameraActivityPolicy.UseRoute, anchors, director);
+            EnsureActivityBinding(scene, "ActivityD_StopBgm_ContentRoot", activityD, null, FrameworkCameraActivityPolicy.UseRoute, anchors, director);
 
             SetSerialized(routeCameraBinding, "routeCameraRig", routeRig);
             SetSerialized(routeCameraBinding, "routeAnchors", anchors);
@@ -161,23 +166,23 @@ namespace Project.Editor.GameCamera
             activityARig.SetActive(false);
 
             ValidateObjectReference(routeContentBinding, "route", gameplayRoute, "RouteContentBinding route on Gameplay camera root");
-            ValidateObjectReference(routeCameraBinding, "routeCameraRig", routeRig, "FirstGameRouteCameraBinding routeCameraRig on Gameplay camera root");
-            ValidateObjectReference(routeCameraBinding, "routeAnchors", anchors, "FirstGameRouteCameraBinding routeAnchors on Gameplay camera root");
-            ValidateObjectReference(routeCameraBinding, "director", director, "FirstGameRouteCameraBinding director on Gameplay camera root");
-            ValidateObjectReference(routeCameraBinding, "startupActivityCameraBinding", activityABinding, "FirstGameRouteCameraBinding startupActivityCameraBinding on Gameplay camera root");
+            ValidateObjectReference(routeCameraBinding, "routeCameraRig", routeRig, "FrameworkRouteCameraBinding routeCameraRig on Gameplay camera root");
+            ValidateObjectReference(routeCameraBinding, "routeAnchors", anchors, "FrameworkRouteCameraBinding routeAnchors on Gameplay camera root");
+            ValidateObjectReference(routeCameraBinding, "director", director, "FrameworkRouteCameraBinding director on Gameplay camera root");
+            ValidateObjectReference(routeCameraBinding, "startupActivityCameraBinding", activityABinding, "FrameworkRouteCameraBinding startupActivityCameraBinding on Gameplay camera root");
 
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);
         }
 
-        private static FirstGameActivityCameraBinding EnsureActivityBinding(
+        private static FrameworkActivityCameraBinding EnsureActivityBinding(
             Scene scene,
             string rootName,
             ActivityAsset expectedActivity,
             GameObject rig,
-            FirstGameActivityCameraPolicy policy,
-            FirstGameCameraAnchorHost anchors,
-            FirstGameCameraDirector director)
+            FrameworkCameraActivityPolicy policy,
+            FrameworkCameraAnchorHost anchors,
+            FrameworkCameraDirector director)
         {
             GameObject root = FindInScene(scene, rootName);
             if (root == null)
@@ -189,19 +194,21 @@ namespace Project.Editor.GameCamera
             ActivityLocalVisibilityAdapter adapter = EnsureComponent<ActivityLocalVisibilityAdapter>(root);
             SetSerialized(adapter, "activity", expectedActivity);
 
-            FirstGameActivityCameraBinding binding = EnsureComponent<FirstGameActivityCameraBinding>(root);
+            FrameworkActivityCameraBinding binding = EnsureComponent<FrameworkActivityCameraBinding>(root);
+            SetSerialized(binding, "assignedActivity", expectedActivity);
             SetSerialized(binding, "activityCameraRig", rig);
             SetSerialized(binding, "policy", (int)policy);
             SetSerialized(binding, "anchors", anchors);
             SetSerialized(binding, "director", director);
 
             ValidateObjectReference(adapter, "activity", expectedActivity, $"ActivityLocalVisibilityAdapter activity on '{rootName}'");
-            ValidateObjectReference(binding, "director", director, $"FirstGameActivityCameraBinding director on '{rootName}'");
-            ValidateObjectReference(binding, "anchors", anchors, $"FirstGameActivityCameraBinding anchors on '{rootName}'");
+            ValidateObjectReference(binding, "assignedActivity", expectedActivity, $"FrameworkActivityCameraBinding assignedActivity on '{rootName}'");
+            ValidateObjectReference(binding, "director", director, $"FrameworkActivityCameraBinding director on '{rootName}'");
+            ValidateObjectReference(binding, "anchors", anchors, $"FrameworkActivityCameraBinding anchors on '{rootName}'");
 
             if (rig != null)
             {
-                ValidateObjectReference(binding, "activityCameraRig", rig, $"FirstGameActivityCameraBinding activityCameraRig on '{rootName}'");
+                ValidateObjectReference(binding, "activityCameraRig", rig, $"FrameworkActivityCameraBinding activityCameraRig on '{rootName}'");
             }
 
             return binding;

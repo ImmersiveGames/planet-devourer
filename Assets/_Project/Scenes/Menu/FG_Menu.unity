@@ -594,6 +594,7 @@ GameObject:
   - component: {fileID: 1493343955}
   - component: {fileID: 1493343954}
   - component: {fileID: 1493343953}
+  - component: {fileID: 1493343956}
   - component: {fileID: 1493343952}
   m_Layer: 0
   m_Name: FirstGameCameraRoot
@@ -611,9 +612,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1493343951}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0960906c7c1a0a42a8ba590175ac9cd, type: 3}
+  m_Script: {fileID: 11500000, guid: 5135a38f2e374489a8f050b06202a348, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Project.Runtime::Project._Project.Scripts.Runtime.GameCamera.FirstGameRouteCameraBinding
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Camera.FrameworkRouteCameraBinding
   routeCameraRig: {fileID: 121593283}
   routeAnchors: {fileID: 0}
   director: {fileID: 1493343953}
@@ -627,15 +628,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 1493343951}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0dec9253b05ec97d2eae0a722918b21, type: 3}
+  m_Script: {fileID: 11500000, guid: bd366fd4ae22408caa7a98a8369e28a4, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Project.Runtime::Project._Project.Scripts.Runtime.GameCamera.FirstGameCameraDirector
-  operationalCamera: {fileID: 1634023018}
-  cinemachineBrain: {fileID: 1634023021}
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Camera.FrameworkCameraDirector
   defaultCameraRig: {fileID: 121593283}
+  defaultAnchors: {fileID: 0}
   routePriority: 20
   activityPriority: 100
+  setRigActiveState: 1
+  rigApplier: {fileID: 1493343956}
   logTransitions: 1
+--- !u!114 &1493343956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1493343951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b00bd2bc2764a0a951760ca6da056ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Camera.Cinemachine::Immersive.Framework.Camera.Cinemachine.FrameworkCinemachineRigApplier
 --- !u!114 &1493343954
 MonoBehaviour:
   m_ObjectHideFlags: 0
