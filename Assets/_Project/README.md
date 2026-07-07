@@ -123,10 +123,25 @@ PlayerPrototype
 
   PlayerInput
   FirstGamePlayerMover
+
+  PlayerActorDeclaration
+    actorId = firstgame.player
+    playerInput = PlayerInput
+
+  PlayerSlotDeclaration
+    slotId = player.1
+    playerInput = PlayerInput
+
+  PlayerSlotOccupancy
+    player.1 -> firstgame.player
+    source = PlayerActorDeclaration
+
   UnityPlayerInputGateAdapter
+    sourceSlot = PlayerSlotDeclaration
 
   UnityResetSubjectAdapter
-    subjectId = firstgame.player
+    sourcePlayerActor = PlayerActorDeclaration
+    resolved subjectId = Actor:firstgame.player
     scope = Activity
 
   UnityTransformResetParticipant
@@ -148,6 +163,7 @@ O jogo nao deve acessar `ResetRegistry` diretamente. Componentes de gameplay par
 Ids esperados:
 
 ```text
+Actor:firstgame.player
 firstgame.player
 firstgame.player.resettable-state
 firstgame.reset.player
@@ -267,7 +283,7 @@ activityState='Active'
 
 ```text
 Unity Reset Subject Adapter registered reset subject
-subjectId='firstgame.player'
+subjectId='Actor:firstgame.player'
 scope='Activity'
 participants='2'
 ```
@@ -278,7 +294,7 @@ participants='2'
 Object Reset Request completed
 reason='firstgame.reset.player'
 status='Succeeded'
-subjectId='firstgame.player'
+subjectId='Actor:firstgame.player'
 subjects='1'
 participants='2'
 blockingIssues='0'
