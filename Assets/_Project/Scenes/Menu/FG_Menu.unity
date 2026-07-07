@@ -1046,9 +1046,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 930000000001}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0df80799a0b34c54b7d7cf52c7bb9901, type: 3}
+  m_Script: {fileID: 11500000, guid: 5a3b4887a49e44418412067c3bba9238, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Project.Runtime::Project._Project.Scripts.Runtime.Audio.FirstGameBgmDirector
+  m_EditorClassIdentifier: Immersive.Framework.Audio::Immersive.Framework.Audio.FrameworkBgmDirector
   audioRuntimeHost: {fileID: 930000000004}
   logTransitions: 1
 --- !u!114 &930000000006
@@ -1060,9 +1060,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 930000000001}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd5526acfd984a5395d1729a02b012ee, type: 3}
+  m_Script: {fileID: 11500000, guid: 9e897e69eb024346b779e4ec8224ed4b, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Project.Runtime::Project._Project.Scripts.Runtime.Audio.FirstGameRouteBgmBinding
+  m_EditorClassIdentifier: Immersive.Framework.Audio::Immersive.Framework.Audio.FrameworkRouteBgmBinding
   routeBgm: {fileID: 11400000, guid: 8571959e9d584503a8b78e6f20e64285, type: 2}
   director: {fileID: 930000000005}
   startupActivityBgmBinding: {fileID: 0}
