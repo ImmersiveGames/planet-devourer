@@ -3,22 +3,20 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 namespace FirstGame.FrameworkIntegration.Editor
 {
     /// <summary>
-    /// FIRSTGAME editor-only validation for real PlayerPrototype wiring against the accepted F52 PlayerControl/PlayerInput chain.
-    /// This tool does not create test objects, read InputActions, enable movement, spawn actors, execute gameplay or save scenes.
+    /// FIRSTGAME editor-only validation for real player wiring against the accepted F52 PlayerControl/PlayerInput chain.
+    /// This tool resolves player identity from canonical declarations, not from GameObject.name.
+    /// It does not create test objects, read InputActions, enable movement, spawn actors, execute gameplay or save scenes.
     /// </summary>
     public static class FirstGameRealPlayerBindingValidator
     {
         private const string ValidateMenuPath = "FIRSTGAME/Immersive Framework/Validate Real Player Binding";
         private const string EnsureSelectedMenuPath = "FIRSTGAME/Immersive Framework/Ensure Selected Player Binding Components";
         private const string CleanupPreflightMenuPath = "FIRSTGAME/Immersive Framework/Cleanup F53A Preflight Proof Assets";
-
-        private const string CanonicalPlayerObjectName = "PlayerPrototype";
-        private const string CanonicalPlayerSlotId = "player.1";
-        private const string CanonicalGameplayActionMap = "Player";
 
         private static readonly string[] F53APreflightAssetPaths =
         {
@@ -30,27 +28,27 @@ namespace FirstGame.FrameworkIntegration.Editor
         [MenuItem(ValidateMenuPath)]
         public static void ValidateRealPlayerBinding()
         {
-            PlayerInput playerInput = FindRealPlayerInput();
-            ValidationSnapshot snapshot = BuildSnapshot(playerInput);
+            ValidationSnapshot snapshot = BuildSnapshotFromCanonicalResolver(Selection.activeGameObject);
             LogValidation(snapshot, null);
         }
 
         [MenuItem(EnsureSelectedMenuPath)]
         public static void EnsureSelectedPlayerBindingComponents()
         {
-            GameObject selected = Selection.activeGameObject;
-            PlayerInput playerInput = FindPlayerInputFromSelection(selected);
-
-            if (playerInput == null)
+            Scene scene = SceneManager.GetActiveScene();
+            if (!FirstGamePlayerIdentityResolver.TryResolveCanonicalPlayer(
+                    scene,
+                    Selection.activeGameObject,
+                    out FirstGameResolvedPlayer resolvedPlayer,
+                    out string failureReason))
             {
-                Debug.LogError(
-                    "[F53B_FIRSTGAME_REAL_PLAYER_BINDING] status='Failed' " +
-                    "failureReason='MissingSelectedPlayerInput' " +
-                    "message='Select the real FIRSTGAME PlayerPrototype or a child/parent containing PlayerInput before ensuring binding components.'.");
+                LogValidation(ValidationSnapshot.Failed(failureReason), "ensure-selected");
                 return;
             }
 
-            GameObject target = playerInput.gameObject;
+            GameObject target = resolvedPlayer.GameObject;
+            PlayerInput playerInput = resolvedPlayer.PlayerInput;
+
             Undo.SetCurrentGroupName("Ensure FIRSTGAME Player Binding Components");
             int undoGroup = Undo.GetCurrentGroup();
 
@@ -66,7 +64,7 @@ namespace FirstGame.FrameworkIntegration.Editor
             EditorSceneManager.MarkSceneDirty(target.scene);
             Undo.CollapseUndoOperations(undoGroup);
 
-            ValidationSnapshot snapshot = BuildSnapshot(playerInput);
+            ValidationSnapshot snapshot = BuildSnapshot(resolvedPlayer, "None");
             LogValidation(snapshot, "ensure-selected");
         }
 
@@ -99,64 +97,19 @@ namespace FirstGame.FrameworkIntegration.Editor
                 "paths='Assets/_Project/Scripts/FrameworkProof; Assets/_Project/Scripts/Editor/FrameworkProof; Assets/_Project/Documentation/F53A-PlayerBinding-Usability-Proof.md'.");
         }
 
-        private static PlayerInput FindRealPlayerInput()
+        private static ValidationSnapshot BuildSnapshotFromCanonicalResolver(GameObject selectedObject)
         {
-            PlayerInput selectedInput = FindPlayerInputFromSelection(Selection.activeGameObject);
-            if (selectedInput != null)
+            Scene scene = SceneManager.GetActiveScene();
+            if (!FirstGamePlayerIdentityResolver.TryResolveCanonicalPlayer(
+                    scene,
+                    selectedObject,
+                    out FirstGameResolvedPlayer resolvedPlayer,
+                    out string failureReason))
             {
-                return selectedInput;
+                return ValidationSnapshot.Failed(failureReason);
             }
 
-            PlayerInput[] inputs = Object.FindObjectsByType<PlayerInput>(FindObjectsSortMode.None);
-            PlayerInput fallback = null;
-
-            for (int i = 0; i < inputs.Length; i++)
-            {
-                PlayerInput input = inputs[i];
-                if (input == null)
-                {
-                    continue;
-                }
-
-                if (input.name == CanonicalPlayerObjectName)
-                {
-                    return input;
-                }
-
-                if (fallback == null && HasActionMap(input, CanonicalGameplayActionMap))
-                {
-                    fallback = input;
-                }
-
-                if (fallback == null)
-                {
-                    fallback = input;
-                }
-            }
-
-            return fallback;
-        }
-
-        private static PlayerInput FindPlayerInputFromSelection(GameObject selected)
-        {
-            if (selected == null)
-            {
-                return null;
-            }
-
-            PlayerInput input = selected.GetComponent<PlayerInput>();
-            if (input != null)
-            {
-                return input;
-            }
-
-            input = selected.GetComponentInParent<PlayerInput>();
-            if (input != null)
-            {
-                return input;
-            }
-
-            return selected.GetComponentInChildren<PlayerInput>();
+            return BuildSnapshot(resolvedPlayer, "None");
         }
 
         private static T EnsureComponent<T>(GameObject target) where T : Component
@@ -170,17 +123,18 @@ namespace FirstGame.FrameworkIntegration.Editor
             return Undo.AddComponent<T>(target);
         }
 
-        private static ValidationSnapshot BuildSnapshot(PlayerInput playerInput)
+        private static ValidationSnapshot BuildSnapshot(FirstGameResolvedPlayer resolvedPlayer, string resolverFailureReason)
         {
-            GameObject target = playerInput != null ? playerInput.gameObject : null;
+            GameObject target = resolvedPlayer.GameObject;
+            PlayerInput playerInput = resolvedPlayer.PlayerInput;
             bool hasPlayerInput = playerInput != null;
             bool hasInputActions = playerInput != null && playerInput.actions != null;
-            bool hasActionMap = HasActionMap(playerInput, CanonicalGameplayActionMap);
+            bool hasActionMap = FirstGamePlayerIdentityResolver.HasExpectedGameplayActionMap(playerInput);
             bool hasControlTarget = target != null && target.GetComponent<PlayerControlBindingTargetBehaviour>() != null;
             bool hasBridgeTarget = target != null && target.GetComponent<UnityPlayerInputBridgeTargetBehaviour>() != null;
             bool hasActivationTarget = target != null && target.GetComponent<UnityPlayerInputActivationTargetBehaviour>() != null;
-            bool canonicalObject = target != null && target.name == CanonicalPlayerObjectName;
-            bool succeeded = hasPlayerInput && hasInputActions && hasActionMap && hasControlTarget && hasBridgeTarget && hasActivationTarget;
+            bool canonicalPlayerIdentity = resolvedPlayer.HasExpectedIdentity;
+            bool succeeded = canonicalPlayerIdentity && hasPlayerInput && hasInputActions && hasActionMap && hasControlTarget && hasBridgeTarget && hasActivationTarget;
 
             return new ValidationSnapshot(
                 succeeded,
@@ -191,18 +145,26 @@ namespace FirstGame.FrameworkIntegration.Editor
                 hasControlTarget,
                 hasBridgeTarget,
                 hasActivationTarget,
-                canonicalObject,
-                BuildFailureReason(hasPlayerInput, hasInputActions, hasActionMap, hasControlTarget, hasBridgeTarget, hasActivationTarget));
-        }
-
-        private static bool HasActionMap(PlayerInput playerInput, string actionMapName)
-        {
-            return playerInput != null &&
-                   playerInput.actions != null &&
-                   playerInput.actions.FindActionMap(actionMapName, false) != null;
+                canonicalPlayerIdentity,
+                resolvedPlayer.IdentitySource,
+                resolvedPlayer.ResolutionSource,
+                resolvedPlayer.ResolvedByName,
+                resolvedPlayer.ActorId,
+                resolvedPlayer.PlayerSlotId,
+                BuildFailureReason(
+                    resolverFailureReason,
+                    canonicalPlayerIdentity,
+                    hasPlayerInput,
+                    hasInputActions,
+                    hasActionMap,
+                    hasControlTarget,
+                    hasBridgeTarget,
+                    hasActivationTarget));
         }
 
         private static string BuildFailureReason(
+            string resolverFailureReason,
+            bool canonicalPlayerIdentity,
             bool hasPlayerInput,
             bool hasInputActions,
             bool hasActionMap,
@@ -210,6 +172,16 @@ namespace FirstGame.FrameworkIntegration.Editor
             bool hasBridgeTarget,
             bool hasActivationTarget)
         {
+            if (!string.IsNullOrWhiteSpace(resolverFailureReason) && resolverFailureReason != "None")
+            {
+                return resolverFailureReason;
+            }
+
+            if (!canonicalPlayerIdentity)
+            {
+                return "MissingCanonicalPlayerIdentity";
+            }
+
             if (!hasPlayerInput)
             {
                 return "MissingPlayerInput";
@@ -254,7 +226,7 @@ namespace FirstGame.FrameworkIntegration.Editor
         {
             SerializedObject serialized = new SerializedObject(component);
             SetStringIfExists(serialized, "bridgeTargetName", $"FIRSTGAME {playerObjectName} Unity PlayerInput Bridge Target");
-            SetStringIfExists(serialized, "expectedPlayerSlotId", CanonicalPlayerSlotId);
+            SetStringIfExists(serialized, "expectedPlayerSlotId", FirstGamePlayerIdentityResolver.ExpectedPlayerSlotIdRaw);
             SetObjectIfExists(serialized, "playerInput", playerInput);
             serialized.ApplyModifiedPropertiesWithoutUndo();
         }
@@ -263,9 +235,9 @@ namespace FirstGame.FrameworkIntegration.Editor
         {
             SerializedObject serialized = new SerializedObject(component);
             SetStringIfExists(serialized, "activationTargetName", $"FIRSTGAME {playerObjectName} Unity PlayerInput Activation Target");
-            SetStringIfExists(serialized, "expectedPlayerSlotId", CanonicalPlayerSlotId);
+            SetStringIfExists(serialized, "expectedPlayerSlotId", FirstGamePlayerIdentityResolver.ExpectedPlayerSlotIdRaw);
             SetObjectIfExists(serialized, "playerInput", playerInput);
-            SetStringIfExists(serialized, "actionMapName", CanonicalGameplayActionMap);
+            SetStringIfExists(serialized, "actionMapName", FirstGamePlayerIdentityResolver.ExpectedGameplayActionMap);
             serialized.ApplyModifiedPropertiesWithoutUndo();
         }
 
@@ -297,9 +269,14 @@ namespace FirstGame.FrameworkIntegration.Editor
                 $"mode='{modeText}' " +
                 $"playerObject='{snapshot.PlayerObjectName}' " +
                 $"canonicalPlayerObject='{snapshot.CanonicalPlayerObject}' " +
+                $"identitySource='{snapshot.IdentitySource}' " +
+                $"resolutionSource='{snapshot.ResolutionSource}' " +
+                $"resolvedByName='{snapshot.ResolvedByName}' " +
+                $"actorId='{snapshot.ActorId}' " +
+                $"playerSlotId='{snapshot.PlayerSlotId}' " +
                 $"playerInput='{snapshot.HasPlayerInput}' " +
                 $"inputActions='{snapshot.HasInputActions}' " +
-                $"expectedGameplayActionMap='Player' " +
+                $"expectedGameplayActionMap='{FirstGamePlayerIdentityResolver.ExpectedGameplayActionMap}' " +
                 $"expectedGameplayActionMapFound='{snapshot.HasExpectedActionMap}' " +
                 $"playerControlBindingTarget='{snapshot.HasPlayerControlBindingTarget}' " +
                 $"unityPlayerInputBridgeTarget='{snapshot.HasUnityPlayerInputBridgeTarget}' " +
@@ -320,6 +297,11 @@ namespace FirstGame.FrameworkIntegration.Editor
                 bool hasUnityPlayerInputBridgeTarget,
                 bool hasUnityPlayerInputActivationTarget,
                 bool canonicalPlayerObject,
+                string identitySource,
+                string resolutionSource,
+                bool resolvedByName,
+                string actorId,
+                string playerSlotId,
                 string failureReason)
             {
                 Succeeded = succeeded;
@@ -331,6 +313,11 @@ namespace FirstGame.FrameworkIntegration.Editor
                 HasUnityPlayerInputBridgeTarget = hasUnityPlayerInputBridgeTarget;
                 HasUnityPlayerInputActivationTarget = hasUnityPlayerInputActivationTarget;
                 CanonicalPlayerObject = canonicalPlayerObject;
+                IdentitySource = string.IsNullOrWhiteSpace(identitySource) ? "<none>" : identitySource;
+                ResolutionSource = string.IsNullOrWhiteSpace(resolutionSource) ? "<none>" : resolutionSource;
+                ResolvedByName = resolvedByName;
+                ActorId = string.IsNullOrWhiteSpace(actorId) ? "<none>" : actorId;
+                PlayerSlotId = string.IsNullOrWhiteSpace(playerSlotId) ? "<none>" : playerSlotId;
                 FailureReason = failureReason;
             }
 
@@ -352,7 +339,37 @@ namespace FirstGame.FrameworkIntegration.Editor
 
             public bool CanonicalPlayerObject { get; }
 
+            public string IdentitySource { get; }
+
+            public string ResolutionSource { get; }
+
+            public bool ResolvedByName { get; }
+
+            public string ActorId { get; }
+
+            public string PlayerSlotId { get; }
+
             public string FailureReason { get; }
+
+            public static ValidationSnapshot Failed(string failureReason)
+            {
+                return new ValidationSnapshot(
+                    false,
+                    "<none>",
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    false,
+                    "<none>",
+                    "<none>",
+                    false,
+                    "<none>",
+                    "<none>",
+                    string.IsNullOrWhiteSpace(failureReason) ? "Unknown" : failureReason);
+            }
         }
     }
 }

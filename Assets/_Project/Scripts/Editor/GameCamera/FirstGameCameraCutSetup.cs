@@ -1,8 +1,10 @@
 using Immersive.Framework.ActivityFlow;
+using Immersive.Framework.Actors;
 using Immersive.Framework.Authoring;
 using Immersive.Framework.Camera;
 using Immersive.Framework.Camera.Cinemachine;
 using Immersive.Framework.RouteLifecycle;
+using Immersive.Framework.PlayerSlots;
 using Unity.Cinemachine;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -28,9 +30,18 @@ namespace Project.Editor.GameCamera
         private const string ActivityCPath = "Assets/_Project/ScriptableObjects/ImmersiveFramework/Activity/FG_Activity_C_RouteFallback.asset";
         private const string ActivityDPath = "Assets/_Project/ScriptableObjects/ImmersiveFramework/Activity/FG_Activity_D_StopBgm.asset";
 
+        private const string ExpectedActorIdRaw = "firstgame.player";
+        private const string ExpectedActorIdDiagnostic = "Actor:firstgame.player";
+        private const string ExpectedPlayerSlotIdRaw = "player.1";
+        private const string ExpectedPlayerSlotIdDiagnostic = "PlayerSlot:player.1";
+        private const string ExpectedGameplayActionMap = "Player";
+        private const string PlayerInputTypeFullName = "UnityEngine.InputSystem.PlayerInput";
+        private const string PlayerInputActionsPropertyName = "m_Actions";
+        private const string CanonicalIdentitySource = "PlayerActorDeclaration+PlayerSlotDeclaration";
+
         private static bool hasBlockingIssue;
 
-        [MenuItem("Tools/FIRSTGAME/Camera/Configure Route-Activity Camera")]
+        [MenuItem("FIRSTGAME/Immersive Framework/Configure Route-Activity Camera")]
         public static void ConfigureCameraCut()
         {
             hasBlockingIssue = false;
@@ -125,15 +136,28 @@ namespace Project.Editor.GameCamera
             FrameworkCinemachineRigApplier rigApplier = EnsureComponent<FrameworkCinemachineRigApplier>(root);
             FrameworkRouteCameraBinding routeCameraBinding = EnsureComponent<FrameworkRouteCameraBinding>(root);
 
-            GameObject player = FindInScene(scene, "PlayerPrototype");
-            if (player == null)
+            if (!TryResolveCanonicalPlayer(
+                    scene,
+                    Selection.activeGameObject,
+                    out FirstGameCameraResolvedPlayer resolvedPlayer,
+                    out string playerFailureReason))
             {
-                Debug.LogWarning("[FIRSTGAME_CAMERA_SETUP] PlayerPrototype was not found. Camera rigs will be positioned but not assigned tracking targets.");
+                ReportBlockingIssue($"[FIRSTGAME_CAMERA_SETUP] Canonical FIRSTGAME player was not resolved. failureReason='{playerFailureReason}'.");
+                return;
             }
+
+            Debug.Log(
+                "[FIRSTGAME_CAMERA_SETUP] Canonical FIRSTGAME player resolved. " +
+                $"playerObject='{resolvedPlayer.PlayerObjectName}' " +
+                $"identitySource='{resolvedPlayer.IdentitySource}' " +
+                $"resolutionSource='{resolvedPlayer.ResolutionSource}' " +
+                $"resolvedByName='{resolvedPlayer.ResolvedByName}' " +
+                $"actorId='{resolvedPlayer.ActorId}' " +
+                $"playerSlotId='{resolvedPlayer.PlayerSlotId}'.");
 
             GameObject anchorsObject = EnsureRoot(scene, "FirstGameCameraAnchors");
             FrameworkCameraAnchorHost anchors = EnsureComponent<FrameworkCameraAnchorHost>(anchorsObject);
-            Transform target = player != null ? player.transform : null;
+            Transform target = resolvedPlayer.Transform;
             SetSerialized(anchors, "trackingTarget", target);
             SetSerialized(anchors, "lookAtTarget", target);
 
@@ -170,6 +194,8 @@ namespace Project.Editor.GameCamera
             ValidateObjectReference(routeCameraBinding, "routeAnchors", anchors, "FrameworkRouteCameraBinding routeAnchors on Gameplay camera root");
             ValidateObjectReference(routeCameraBinding, "director", director, "FrameworkRouteCameraBinding director on Gameplay camera root");
             ValidateObjectReference(routeCameraBinding, "startupActivityCameraBinding", activityABinding, "FrameworkRouteCameraBinding startupActivityCameraBinding on Gameplay camera root");
+            ValidateObjectReference(anchors, "trackingTarget", target, "FrameworkCameraAnchorHost trackingTarget on Gameplay camera anchors");
+            ValidateObjectReference(anchors, "lookAtTarget", target, "FrameworkCameraAnchorHost lookAtTarget on Gameplay camera anchors");
 
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);
@@ -314,6 +340,472 @@ namespace Project.Editor.GameCamera
             return null;
         }
 
+        private static bool TryResolveCanonicalPlayer(
+            Scene scene,
+            GameObject selectedObject,
+            out FirstGameCameraResolvedPlayer resolvedPlayer,
+            out string failureReason)
+        {
+            resolvedPlayer = default;
+            failureReason = "None";
+
+            if (!scene.IsValid())
+            {
+                failureReason = "InvalidScene";
+                return false;
+            }
+
+            if (TryResolveFromSelection(scene, selectedObject, out resolvedPlayer, out failureReason))
+            {
+                return true;
+            }
+
+            if (!string.Equals(failureReason, "None", System.StringComparison.Ordinal))
+            {
+                return false;
+            }
+
+            if (TryResolveByActorId(scene, out resolvedPlayer, out failureReason))
+            {
+                return true;
+            }
+
+            if (!string.Equals(failureReason, "NoMatchingPlayerActorDeclaration", System.StringComparison.Ordinal))
+            {
+                return false;
+            }
+
+            if (TryResolveBySlotId(scene, out resolvedPlayer, out failureReason))
+            {
+                return true;
+            }
+
+            if (!string.Equals(failureReason, "NoMatchingPlayerSlotDeclaration", System.StringComparison.Ordinal))
+            {
+                return false;
+            }
+
+            return TryResolveByCoherentPlayerInput(scene, out resolvedPlayer, out failureReason);
+        }
+
+        private static bool TryResolveFromSelection(
+            Scene scene,
+            GameObject selectedObject,
+            out FirstGameCameraResolvedPlayer resolvedPlayer,
+            out string failureReason)
+        {
+            resolvedPlayer = default;
+            failureReason = "None";
+
+            if (selectedObject == null || selectedObject.scene != scene)
+            {
+                return false;
+            }
+
+            Component selectedInput = FindRelatedPlayerInputComponent(selectedObject);
+            PlayerActorDeclaration selectedActor = FindRelatedComponent<PlayerActorDeclaration>(selectedObject);
+            PlayerSlotDeclaration selectedSlot = FindRelatedComponent<PlayerSlotDeclaration>(selectedObject);
+
+            if (selectedInput == null && selectedActor == null && selectedSlot == null)
+            {
+                return false;
+            }
+
+            GameObject target = selectedInput != null
+                ? selectedInput.gameObject
+                : selectedActor != null
+                    ? selectedActor.gameObject
+                    : selectedSlot.gameObject;
+
+            if (!TryBuildCandidate(target, "Selection", out FirstGameCameraPlayerCandidate candidate, out failureReason))
+            {
+                return false;
+            }
+
+            return TryValidateCandidate(candidate, out resolvedPlayer, out failureReason);
+        }
+
+        private static bool TryResolveByActorId(
+            Scene scene,
+            out FirstGameCameraResolvedPlayer resolvedPlayer,
+            out string failureReason)
+        {
+            resolvedPlayer = default;
+            failureReason = "NoMatchingPlayerActorDeclaration";
+            FirstGameCameraPlayerCandidate match = default;
+            int matches = 0;
+
+            foreach (PlayerActorDeclaration actorDeclaration in FindSceneComponents<PlayerActorDeclaration>(scene))
+            {
+                if (actorDeclaration == null || !IsExpectedActorId(actorDeclaration.ActorId.ToString()))
+                {
+                    continue;
+                }
+
+                if (!TryBuildCandidate(actorDeclaration.gameObject, "PlayerActorDeclaration", out FirstGameCameraPlayerCandidate candidate, out string candidateFailure))
+                {
+                    failureReason = candidateFailure;
+                    return false;
+                }
+
+                match = candidate;
+                matches++;
+            }
+
+            if (matches == 0)
+            {
+                return false;
+            }
+
+            if (matches > 1)
+            {
+                failureReason = "MultipleMatchingPlayerActorDeclarations";
+                return false;
+            }
+
+            return TryValidateCandidate(match, out resolvedPlayer, out failureReason);
+        }
+
+        private static bool TryResolveBySlotId(
+            Scene scene,
+            out FirstGameCameraResolvedPlayer resolvedPlayer,
+            out string failureReason)
+        {
+            resolvedPlayer = default;
+            failureReason = "NoMatchingPlayerSlotDeclaration";
+            FirstGameCameraPlayerCandidate match = default;
+            int matches = 0;
+
+            foreach (PlayerSlotDeclaration slotDeclaration in FindSceneComponents<PlayerSlotDeclaration>(scene))
+            {
+                if (slotDeclaration == null || !IsExpectedPlayerSlotId(slotDeclaration.PlayerSlotId.ToString()))
+                {
+                    continue;
+                }
+
+                if (!TryBuildCandidate(slotDeclaration.gameObject, "PlayerSlotDeclaration", out FirstGameCameraPlayerCandidate candidate, out string candidateFailure))
+                {
+                    failureReason = candidateFailure;
+                    return false;
+                }
+
+                match = candidate;
+                matches++;
+            }
+
+            if (matches == 0)
+            {
+                return false;
+            }
+
+            if (matches > 1)
+            {
+                failureReason = "MultipleMatchingPlayerSlotDeclarations";
+                return false;
+            }
+
+            return TryValidateCandidate(match, out resolvedPlayer, out failureReason);
+        }
+
+        private static bool TryResolveByCoherentPlayerInput(
+            Scene scene,
+            out FirstGameCameraResolvedPlayer resolvedPlayer,
+            out string failureReason)
+        {
+            resolvedPlayer = default;
+            failureReason = "NoCoherentPlayerInputCandidate";
+            FirstGameCameraPlayerCandidate match = default;
+            int matches = 0;
+
+            foreach (Component playerInput in FindScenePlayerInputComponents(scene))
+            {
+                if (playerInput == null)
+                {
+                    continue;
+                }
+
+                if (!TryBuildCandidate(playerInput.gameObject, "PlayerInput", out FirstGameCameraPlayerCandidate candidate, out _))
+                {
+                    continue;
+                }
+
+                if (!candidate.HasExpectedIdentity)
+                {
+                    continue;
+                }
+
+                match = candidate;
+                matches++;
+            }
+
+            if (matches == 0)
+            {
+                return false;
+            }
+
+            if (matches > 1)
+            {
+                failureReason = "MultipleCoherentPlayerInputCandidates";
+                return false;
+            }
+
+            return TryValidateCandidate(match, out resolvedPlayer, out failureReason);
+        }
+
+        private static bool TryBuildCandidate(
+            GameObject target,
+            string resolutionSource,
+            out FirstGameCameraPlayerCandidate candidate,
+            out string failureReason)
+        {
+            candidate = default;
+            failureReason = "None";
+
+            if (target == null)
+            {
+                failureReason = "MissingPlayerCandidateGameObject";
+                return false;
+            }
+
+            PlayerActorDeclaration actorDeclaration = target.GetComponent<PlayerActorDeclaration>();
+            PlayerSlotDeclaration slotDeclaration = target.GetComponent<PlayerSlotDeclaration>();
+            Component playerInput = FindPlayerInputOnGameObject(target);
+
+            candidate = new FirstGameCameraPlayerCandidate(target, actorDeclaration, slotDeclaration, playerInput, resolutionSource);
+            return true;
+        }
+
+        private static bool TryValidateCandidate(
+            FirstGameCameraPlayerCandidate candidate,
+            out FirstGameCameraResolvedPlayer resolvedPlayer,
+            out string failureReason)
+        {
+            resolvedPlayer = default;
+            failureReason = "None";
+
+            if (candidate.GameObject == null)
+            {
+                failureReason = "MissingPlayerCandidateGameObject";
+                return false;
+            }
+
+            if (candidate.ActorDeclaration == null)
+            {
+                failureReason = "MissingPlayerActorDeclaration";
+                return false;
+            }
+
+            if (candidate.SlotDeclaration == null)
+            {
+                failureReason = "MissingPlayerSlotDeclaration";
+                return false;
+            }
+
+            if (candidate.PlayerInput == null)
+            {
+                failureReason = "MissingPlayerInput";
+                return false;
+            }
+
+            if (!candidate.HasExpectedActorId && !candidate.HasExpectedPlayerSlotId)
+            {
+                failureReason = "UnexpectedPlayerIdentity";
+                return false;
+            }
+
+            if (!candidate.HasExpectedActorId || !candidate.HasExpectedPlayerSlotId)
+            {
+                failureReason = "DivergentPlayerActorAndSlotDeclaration";
+                return false;
+            }
+
+            if (!HasPlayerInputActions(candidate.PlayerInput))
+            {
+                failureReason = "MissingInputActions";
+                return false;
+            }
+
+            if (!HasExpectedGameplayActionMap(candidate.PlayerInput))
+            {
+                failureReason = "MissingPlayerActionMap";
+                return false;
+            }
+
+            resolvedPlayer = new FirstGameCameraResolvedPlayer(
+                candidate.GameObject,
+                candidate.ActorDeclaration,
+                candidate.SlotDeclaration,
+                candidate.PlayerInput,
+                candidate.ResolutionSource,
+                CanonicalIdentitySource,
+                resolvedByName: false);
+            return true;
+        }
+
+        private static bool HasPlayerInputActions(Component playerInput)
+        {
+            return TryGetPlayerInputActions(playerInput, out _);
+        }
+
+        private static bool HasExpectedGameplayActionMap(Component playerInput)
+        {
+            if (!TryGetPlayerInputActions(playerInput, out Object actions))
+            {
+                return false;
+            }
+
+            System.Reflection.MethodInfo findActionMap = actions.GetType().GetMethod(
+                "FindActionMap",
+                new[] { typeof(string), typeof(bool) });
+
+            if (findActionMap == null)
+            {
+                return false;
+            }
+
+            object result = findActionMap.Invoke(actions, new object[] { ExpectedGameplayActionMap, false });
+            return result != null;
+        }
+
+        private static bool TryGetPlayerInputActions(Component playerInput, out Object actions)
+        {
+            actions = null;
+            if (!IsPlayerInputComponent(playerInput))
+            {
+                return false;
+            }
+
+            SerializedObject serializedObject = new SerializedObject(playerInput);
+            SerializedProperty actionsProperty = serializedObject.FindProperty(PlayerInputActionsPropertyName);
+            if (actionsProperty == null)
+            {
+                return false;
+            }
+
+            actions = actionsProperty.objectReferenceValue;
+            return actions != null;
+        }
+
+        private static Component FindRelatedPlayerInputComponent(GameObject selectedObject)
+        {
+            if (selectedObject == null)
+            {
+                return null;
+            }
+
+            Component component = FindPlayerInputOnGameObject(selectedObject);
+            if (component != null)
+            {
+                return component;
+            }
+
+            Transform current = selectedObject.transform.parent;
+            while (current != null)
+            {
+                component = FindPlayerInputOnGameObject(current.gameObject);
+                if (component != null)
+                {
+                    return component;
+                }
+
+                current = current.parent;
+            }
+
+            Component[] children = selectedObject.GetComponentsInChildren<Component>(true);
+            for (int i = 0; i < children.Length; i++)
+            {
+                if (IsPlayerInputComponent(children[i]))
+                {
+                    return children[i];
+                }
+            }
+
+            return null;
+        }
+
+        private static Component[] FindScenePlayerInputComponents(Scene scene)
+        {
+            System.Collections.Generic.List<Component> matches = new System.Collections.Generic.List<Component>();
+            foreach (GameObject root in scene.GetRootGameObjects())
+            {
+                Component[] components = root.GetComponentsInChildren<Component>(true);
+                for (int i = 0; i < components.Length; i++)
+                {
+                    if (IsPlayerInputComponent(components[i]))
+                    {
+                        matches.Add(components[i]);
+                    }
+                }
+            }
+
+            return matches.ToArray();
+        }
+
+        private static Component FindPlayerInputOnGameObject(GameObject target)
+        {
+            if (target == null)
+            {
+                return null;
+            }
+
+            Component[] components = target.GetComponents<Component>();
+            for (int i = 0; i < components.Length; i++)
+            {
+                if (IsPlayerInputComponent(components[i]))
+                {
+                    return components[i];
+                }
+            }
+
+            return null;
+        }
+
+        private static bool IsPlayerInputComponent(Component component)
+        {
+            return component != null &&
+                   string.Equals(component.GetType().FullName, PlayerInputTypeFullName, System.StringComparison.Ordinal);
+        }
+
+        private static T FindRelatedComponent<T>(GameObject selectedObject) where T : Component
+        {
+            T component = selectedObject.GetComponent<T>();
+            if (component != null)
+            {
+                return component;
+            }
+
+            component = selectedObject.GetComponentInParent<T>();
+            if (component != null)
+            {
+                return component;
+            }
+
+            return selectedObject.GetComponentInChildren<T>(true);
+        }
+
+        private static T[] FindSceneComponents<T>(Scene scene) where T : Component
+        {
+            System.Collections.Generic.List<T> components = new System.Collections.Generic.List<T>();
+            foreach (GameObject root in scene.GetRootGameObjects())
+            {
+                components.AddRange(root.GetComponentsInChildren<T>(true));
+            }
+
+            return components.ToArray();
+        }
+
+        private static bool IsExpectedActorId(string value)
+        {
+            return string.Equals(value, ExpectedActorIdRaw, System.StringComparison.Ordinal) ||
+                   string.Equals(value, ExpectedActorIdDiagnostic, System.StringComparison.Ordinal);
+        }
+
+        private static bool IsExpectedPlayerSlotId(string value)
+        {
+            return string.Equals(value, ExpectedPlayerSlotIdRaw, System.StringComparison.Ordinal) ||
+                   string.Equals(value, ExpectedPlayerSlotIdDiagnostic, System.StringComparison.Ordinal);
+        }
+
         private static T LoadRequiredAsset<T>(string path) where T : Object
         {
             T asset = AssetDatabase.LoadAssetAtPath<T>(path);
@@ -408,6 +900,82 @@ namespace Project.Editor.GameCamera
             {
                 ReportBlockingIssue($"[FIRSTGAME_CAMERA_SETUP] Object reference was not assigned. context='{context}' expected='{FormatObject(expected)}' actual='{FormatObject(actual)}'.");
             }
+        }
+
+        private readonly struct FirstGameCameraPlayerCandidate
+        {
+            internal FirstGameCameraPlayerCandidate(
+                GameObject gameObject,
+                PlayerActorDeclaration actorDeclaration,
+                PlayerSlotDeclaration slotDeclaration,
+                Component playerInput,
+                string resolutionSource)
+            {
+                GameObject = gameObject;
+                ActorDeclaration = actorDeclaration;
+                SlotDeclaration = slotDeclaration;
+                PlayerInput = playerInput;
+                ResolutionSource = resolutionSource;
+            }
+
+            public GameObject GameObject { get; }
+
+            public PlayerActorDeclaration ActorDeclaration { get; }
+
+            public PlayerSlotDeclaration SlotDeclaration { get; }
+
+            public Component PlayerInput { get; }
+
+            public string ResolutionSource { get; }
+
+            internal bool HasExpectedActorId => ActorDeclaration != null && IsExpectedActorId(ActorDeclaration.ActorId.ToString());
+
+            internal bool HasExpectedPlayerSlotId => SlotDeclaration != null && IsExpectedPlayerSlotId(SlotDeclaration.PlayerSlotId.ToString());
+
+            public bool HasExpectedIdentity => HasExpectedActorId && HasExpectedPlayerSlotId;
+        }
+
+        private readonly struct FirstGameCameraResolvedPlayer
+        {
+            public FirstGameCameraResolvedPlayer(
+                GameObject gameObject,
+                PlayerActorDeclaration actorDeclaration,
+                PlayerSlotDeclaration slotDeclaration,
+                Component playerInput,
+                string resolutionSource,
+                string identitySource,
+                bool resolvedByName)
+            {
+                GameObject = gameObject;
+                ActorDeclaration = actorDeclaration;
+                SlotDeclaration = slotDeclaration;
+                PlayerInput = playerInput;
+                ResolutionSource = resolutionSource;
+                IdentitySource = identitySource;
+                ResolvedByName = resolvedByName;
+            }
+
+            public GameObject GameObject { get; }
+
+            public Transform Transform => GameObject != null ? GameObject.transform : null;
+
+            public PlayerActorDeclaration ActorDeclaration { get; }
+
+            public PlayerSlotDeclaration SlotDeclaration { get; }
+
+            public Component PlayerInput { get; }
+
+            public string ResolutionSource { get; }
+
+            public string IdentitySource { get; }
+
+            public bool ResolvedByName { get; }
+
+            public string PlayerObjectName => GameObject != null ? GameObject.name : "<none>";
+
+            public string ActorId => ActorDeclaration != null ? ActorDeclaration.ActorId.ToString() : "<none>";
+
+            public string PlayerSlotId => SlotDeclaration != null ? SlotDeclaration.PlayerSlotId.ToString() : "<none>";
         }
 
         private static void ReportBlockingIssue(string message)
