@@ -1,6 +1,5 @@
 using Immersive.Framework.PlayerBinding;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -15,86 +14,12 @@ namespace FirstGame.FrameworkIntegration.Editor
     public static class FirstGameRealPlayerBindingValidator
     {
         private const string ValidateMenuPath = "FIRSTGAME/Immersive Framework/Validate Real Player Binding";
-        private const string EnsureSelectedMenuPath = "FIRSTGAME/Immersive Framework/Ensure Selected Player Binding Components";
-        private const string CleanupPreflightMenuPath = "FIRSTGAME/Immersive Framework/Cleanup F53A Preflight Proof Assets";
-
-        private static readonly string[] F53APreflightAssetPaths =
-        {
-            "Assets/_Project/Scripts/FrameworkProof",
-            "Assets/_Project/Scripts/Editor/FrameworkProof",
-            "Assets/_Project/Documentation/F53A-PlayerBinding-Usability-Proof.md"
-        };
 
         [MenuItem(ValidateMenuPath)]
         public static void ValidateRealPlayerBinding()
         {
             ValidationSnapshot snapshot = BuildSnapshotFromCanonicalResolver(Selection.activeGameObject);
             LogValidation(snapshot, null);
-        }
-
-        [MenuItem(EnsureSelectedMenuPath)]
-        public static void EnsureSelectedPlayerBindingComponents()
-        {
-            Scene scene = SceneManager.GetActiveScene();
-            if (!FirstGamePlayerIdentityResolver.TryResolveCanonicalPlayer(
-                    scene,
-                    Selection.activeGameObject,
-                    out FirstGameResolvedPlayer resolvedPlayer,
-                    out string failureReason))
-            {
-                LogValidation(ValidationSnapshot.Failed(failureReason), "ensure-selected");
-                return;
-            }
-
-            GameObject target = resolvedPlayer.GameObject;
-            PlayerInput playerInput = resolvedPlayer.PlayerInput;
-
-            Undo.SetCurrentGroupName("Ensure FIRSTGAME Player Binding Components");
-            int undoGroup = Undo.GetCurrentGroup();
-
-            PlayerControlBindingTargetBehaviour controlTarget = EnsureComponent<PlayerControlBindingTargetBehaviour>(target);
-            UnityPlayerInputBridgeTargetBehaviour bridgeTarget = EnsureComponent<UnityPlayerInputBridgeTargetBehaviour>(target);
-            UnityPlayerInputActivationTargetBehaviour activationTarget = EnsureComponent<UnityPlayerInputActivationTargetBehaviour>(target);
-
-            ConfigurePlayerControlTarget(controlTarget, target.name);
-            ConfigureBridgeTarget(bridgeTarget, target.name, playerInput);
-            ConfigureActivationTarget(activationTarget, target.name, playerInput);
-
-            EditorUtility.SetDirty(target);
-            EditorSceneManager.MarkSceneDirty(target.scene);
-            Undo.CollapseUndoOperations(undoGroup);
-
-            ValidationSnapshot snapshot = BuildSnapshot(resolvedPlayer, "None");
-            LogValidation(snapshot, "ensure-selected");
-        }
-
-        [MenuItem(CleanupPreflightMenuPath)]
-        public static void CleanupF53APreflightProofAssets()
-        {
-            int removed = 0;
-            for (int i = 0; i < F53APreflightAssetPaths.Length; i++)
-            {
-                string path = F53APreflightAssetPaths[i];
-                if (!AssetDatabase.IsValidFolder(path) && AssetDatabase.LoadAssetAtPath<Object>(path) == null)
-                {
-                    continue;
-                }
-
-                if (AssetDatabase.DeleteAsset(path))
-                {
-                    removed++;
-                }
-                else
-                {
-                    Debug.LogWarning($"[F53B_FIRSTGAME_PREFLIGHT_CLEANUP] status='Partial' failedPath='{path}'.");
-                }
-            }
-
-            AssetDatabase.Refresh();
-            Debug.Log(
-                "[F53B_FIRSTGAME_PREFLIGHT_CLEANUP] " +
-                $"status='Succeeded' removed='{removed}' " +
-                "paths='Assets/_Project/Scripts/FrameworkProof; Assets/_Project/Scripts/Editor/FrameworkProof; Assets/_Project/Documentation/F53A-PlayerBinding-Usability-Proof.md'.");
         }
 
         private static ValidationSnapshot BuildSnapshotFromCanonicalResolver(GameObject selectedObject)
@@ -110,17 +35,6 @@ namespace FirstGame.FrameworkIntegration.Editor
             }
 
             return BuildSnapshot(resolvedPlayer, "None");
-        }
-
-        private static T EnsureComponent<T>(GameObject target) where T : Component
-        {
-            T component = target.GetComponent<T>();
-            if (component != null)
-            {
-                return component;
-            }
-
-            return Undo.AddComponent<T>(target);
         }
 
         private static ValidationSnapshot BuildSnapshot(FirstGameResolvedPlayer resolvedPlayer, string resolverFailureReason)
@@ -213,50 +127,6 @@ namespace FirstGame.FrameworkIntegration.Editor
             }
 
             return "None";
-        }
-
-        private static void ConfigurePlayerControlTarget(PlayerControlBindingTargetBehaviour component, string playerObjectName)
-        {
-            SerializedObject serialized = new SerializedObject(component);
-            SetStringIfExists(serialized, "bindingTargetName", $"FIRSTGAME {playerObjectName} PlayerControl Binding Target");
-            serialized.ApplyModifiedPropertiesWithoutUndo();
-        }
-
-        private static void ConfigureBridgeTarget(UnityPlayerInputBridgeTargetBehaviour component, string playerObjectName, PlayerInput playerInput)
-        {
-            SerializedObject serialized = new SerializedObject(component);
-            SetStringIfExists(serialized, "bridgeTargetName", $"FIRSTGAME {playerObjectName} Unity PlayerInput Bridge Target");
-            SetStringIfExists(serialized, "expectedPlayerSlotId", FirstGamePlayerIdentityResolver.ExpectedPlayerSlotIdRaw);
-            SetObjectIfExists(serialized, "playerInput", playerInput);
-            serialized.ApplyModifiedPropertiesWithoutUndo();
-        }
-
-        private static void ConfigureActivationTarget(UnityPlayerInputActivationTargetBehaviour component, string playerObjectName, PlayerInput playerInput)
-        {
-            SerializedObject serialized = new SerializedObject(component);
-            SetStringIfExists(serialized, "activationTargetName", $"FIRSTGAME {playerObjectName} Unity PlayerInput Activation Target");
-            SetStringIfExists(serialized, "expectedPlayerSlotId", FirstGamePlayerIdentityResolver.ExpectedPlayerSlotIdRaw);
-            SetObjectIfExists(serialized, "playerInput", playerInput);
-            SetStringIfExists(serialized, "actionMapName", FirstGamePlayerIdentityResolver.ExpectedGameplayActionMap);
-            serialized.ApplyModifiedPropertiesWithoutUndo();
-        }
-
-        private static void SetStringIfExists(SerializedObject serialized, string propertyName, string value)
-        {
-            SerializedProperty property = serialized.FindProperty(propertyName);
-            if (property != null)
-            {
-                property.stringValue = value;
-            }
-        }
-
-        private static void SetObjectIfExists(SerializedObject serialized, string propertyName, Object value)
-        {
-            SerializedProperty property = serialized.FindProperty(propertyName);
-            if (property != null)
-            {
-                property.objectReferenceValue = value;
-            }
         }
 
         private static void LogValidation(ValidationSnapshot snapshot, string mode)
