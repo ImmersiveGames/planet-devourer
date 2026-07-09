@@ -105,9 +105,7 @@ Assets/_Project/Documentation/F53F-FIRSTGAME-DELTA-MANIFEST.md.meta
 ```text
 FIRSTGAME > Immersive Framework > Validate Real Player Binding
 FIRSTGAME > Immersive Framework > Configure Route-Activity Camera
-FIRSTGAME > Immersive Framework > Validate Canonical Player Binding Facade
-FIRSTGAME > Immersive Framework > Apply Canonical Player Binding Facade
-FIRSTGAME > Immersive Framework > Run Canonical Player Binding Facade Repair Proof
+FIRSTGAME > Immersive Framework > Player Composer Pilot > Configure Selected Player Composer
 ```
 
 ## Menus Removidos Ou Movidos
@@ -132,8 +130,6 @@ Tools > FIRSTGAME > ...
 | Item | Classificacao | Motivo |
 | --- | --- | --- |
 | `FirstGamePlayerIdentityResolver.cs` | KEEP_CANONICAL | Fonte editor-only canonica para resolver o player por `PlayerActorDeclaration`, `PlayerSlotDeclaration` e `PlayerInput`, sem `GameObject.name`. |
-| `FirstGameCanonicalPlayerBindingAuthoringFacade.cs` | KEEP_CANONICAL | Valida e aplica a cadeia canonica completa: identity, F52 targets e camera anchors. |
-| `FirstGameCanonicalPlayerBindingFacadeRepairProof.cs` | KEEP_CANONICAL | Smoke operacional do repair path exigido pelo corte. |
 | `FirstGameRealPlayerBindingValidator.cs` | KEEP_SUPPORT | Smoke rapido de suporte para F52 real player binding; menus de apply/cleanup foram removidos. |
 | `FirstGameCameraCutSetup.cs` | KEEP_CANONICAL | Tool canonico para configurar camera route/activity sob `FIRSTGAME > Immersive Framework`. |
 | `F53F-Player-Binding-Operational-Guide.md` | KEEP_CANONICAL | Guia operacional unico depois da limpeza F53G. |
@@ -146,7 +142,7 @@ Tools > FIRSTGAME > ...
 | Item | Classificacao | Motivo |
 | --- | --- | --- |
 | `FirstGameRealPlayerCameraTargetValidator.cs` | REMOVE_OBSOLETE | Validator F53C2 intermediario; a facade valida os mesmos camera anchors. |
-| `FirstGameFullPlayerBindingChainValidator.cs` | REMOVE_OBSOLETE | Validator F53C3 intermediario; substituido por `Validate Canonical Player Binding Facade`. |
+| `FirstGameFullPlayerBindingChainValidator.cs` | REMOVE_OBSOLETE | Validator F53C3 intermediario; substituido pelo fluxo oficial `PlayerComposer`. |
 | F53B-F53E docs e manifests | REMOVE_OBSOLETE | Conteudo operacional consolidado em F53F e neste F53G manifest. |
 | F53C1-B1/B2/B3 manifests | REMOVE_OBSOLETE | Hotfix history removido da navegacao ativa; Git history preserva detalhe. |
 | `F53F-FIRSTGAME-DELTA-MANIFEST.md` | REMOVE_OBSOLETE | Substituido pelo manifesto F53G como inventario atual. |
@@ -170,31 +166,16 @@ Assets/_Project/Scenes/Gameplay/FG_Gameplay.unity
 Rodar:
 
 ```text
-FIRSTGAME > Immersive Framework > Validate Canonical Player Binding Facade
+FIRSTGAME > Immersive Framework > Player Composer Pilot > Configure Selected Player Composer
 ```
 
 Esperado:
 
 ```text
-[F53D_FIRSTGAME_PLAYER_BINDING_FACADE] status='Succeeded'
-resolvedByName='False'
-facadeCentralizedReferences='True'
-failureReason='None'
+[FIRSTGAME][PlayerComposerPilot] PlayerComposer validation succeeded
 ```
 
-Rodar:
-
-```text
-FIRSTGAME > Immersive Framework > Run Canonical Player Binding Facade Repair Proof
-```
-
-Esperado:
-
-```text
-[F53E_FIRSTGAME_PLAYER_BINDING_FACADE_REPAIR_PROOF] status='Succeeded'
-repairSucceeded='True'
-typedReferencesRepaired='True'
-failureReason='None'
+No Inspector oficial do `PlayerComposer`, rodar `Validate` e `Apply/Rebuild` duas vezes.
 ```
 
 Suporte opcional mantido:
@@ -220,15 +201,15 @@ failureReason='None'
 4. Menus FIRSTGAME estao consolidados.
 5. Tools temporarios/duplicados foram removidos ou justificados.
 6. Docs obsoletas foram removidas ou consolidadas no F53F/F53G.
-7. Facade validate continua PASS.
-8. Facade repair proof continua PASS.
+7. PlayerComposer Validate continua PASS.
+8. PlayerComposer Apply/Rebuild continua idempotente.
 9. Nenhum lookup funcional por GameObject.name voltou.
 10. Manifest explica exatamente o que foi mantido/removido e por que.
 ```
 
 ## Ganho Arquitetural
 
-- FIRSTGAME fica com um fluxo operacional curto e focado na facade canonica.
+- FIRSTGAME fica com um fluxo operacional curto e focado no `PlayerComposer` oficial.
 - A cadeia de player continua baseada em `PlayerActorDeclaration`, `PlayerSlotDeclaration`, `PlayerInput` e referencias tipadas.
 - Menus intermediarios nao competem mais com o caminho canonico.
 - Docs de proof/hotfix nao poluem a navegacao ativa.

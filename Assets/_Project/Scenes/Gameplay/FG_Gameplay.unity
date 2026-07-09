@@ -194,6 +194,150 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &188376373
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 188376374}
+  - component: {fileID: 188376379}
+  - component: {fileID: 188376378}
+  - component: {fileID: 188376377}
+  - component: {fileID: 188376376}
+  - component: {fileID: 188376375}
+  m_Layer: 0
+  m_Name: _Bindings
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &188376374
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 188376373}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 832724743}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &188376375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 188376373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e070a4b770b14d9bb0cf658fb5a30173, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Camera.FrameworkCameraAnchorHost
+  trackingTarget: {fileID: 826901118}
+  lookAtTarget: {fileID: 251812031}
+--- !u!114 &188376376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 188376373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1877c8417aa54150ae23a9e2caf2952f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerSlots.PlayerSlotOccupancy
+  slotDeclaration: {fileID: 1030083297}
+  slotId: player.1
+  actorDeclaration: {fileID: 0}
+  playerActorDeclaration: {fileID: 1030083296}
+  occupiedActorId: player.actor
+  displayName: Player Slot Occupancy
+  reason: player-composer.apply
+--- !u!114 &188376377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 188376373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db10ed8cf51d4014a70875feb64ad709, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerBinding.UnityPlayerInputActivationTargetBehaviour
+  activationTargetName: Unity PlayerInput Activation Target
+  expectedPlayerSlotId: player.1
+  playerInput: {fileID: 1030083291}
+  actionMapName: Player
+--- !u!114 &188376378
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 188376373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 48ef635800cf42eca265c6d286a03d9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerBinding.UnityPlayerInputBridgeTargetBehaviour
+  bridgeTargetName: Unity PlayerInput Bridge Target
+  expectedPlayerSlotId: player.1
+  playerInput: {fileID: 1030083291}
+--- !u!114 &188376379
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 188376373}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1be8f3b12da64448b69d551730e1a048, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerBinding.PlayerControlBindingTargetBehaviour
+  bindingTargetName: Player Control Binding Target
+--- !u!1 &251812030
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 251812031}
+  m_Layer: 0
+  m_Name: LookAtTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &251812031
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 251812030}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1768523723}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &266167363
 GameObject:
   m_ObjectHideFlags: 0
@@ -781,6 +925,69 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &826901117
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 826901118}
+  m_Layer: 0
+  m_Name: CameraTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &826901118
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 826901117}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1768523723}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &832724742
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 832724743}
+  m_Layer: 0
+  m_Name: _Framework
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &832724743
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 832724742}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 188376374}
+  m_Father: {fileID: 1030083287}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &884104869
 GameObject:
   m_ObjectHideFlags: 0
@@ -1250,6 +1457,7 @@ GameObject:
   - component: {fileID: 1030083301}
   - component: {fileID: 1030083300}
   - component: {fileID: 1030083299}
+  - component: {fileID: 1030083302}
   m_Layer: 0
   m_Name: PlayerPrototype
   m_TagString: Untagged
@@ -1271,6 +1479,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1283593780}
+  - {fileID: 1768523723}
+  - {fileID: 832724743}
   m_Father: {fileID: 1895561843}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1030083289
@@ -1441,10 +1651,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26cc512b3155464caed4dc48a6c9de6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Actors.PlayerActorDeclaration
-  actorId: firstgame.player
-  displayName: First Game Player
+  actorId: player.actor
+  displayName: PlayerPrototype
   playerInput: {fileID: 1030083291}
-  reason: firstgame.player.actor
+  reason: player-composer.apply
 --- !u!114 &1030083297
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1458,9 +1668,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerSlots.PlayerSlotDeclaration
   slotId: player.1
-  displayName: Player 1
+  displayName: PlayerPrototype
   playerInput: {fileID: 1030083291}
-  reason: firstgame.player.slot
+  reason: player-composer.apply
 --- !u!114 &1030083298
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1524,6 +1734,71 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerBinding.PlayerControlBindingTargetBehaviour
   bindingTargetName: FIRSTGAME PlayerPrototype PlayerControl Binding Target
+--- !u!114 &1030083302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1030083286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5f97092359840da932627d1a0d12089, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerAuthoring.PlayerComposer
+  recipe: {fileID: 0}
+  actorId: player.actor
+  playerSlotId: player.1
+  playerInput: {fileID: 1030083291}
+  gameplayActionMap: Player
+  cameraTarget: {fileID: 826901118}
+  lookAtTarget: {fileID: 251812031}
+  resetEnabled: 0
+  validationMode: 0
+  frameworkBindingsRoot: {fileID: 188376374}
+  createBindingsRootIfMissing: 1
+  createAnchorsIfMissing: 1
+  inputBindingRequired: 1
+  cameraBindingRequired: 1
+  resetScope: Activity
+  resetParticipantPolicy: 0
+  materializeSlotOccupancy: 1
+  materializePassiveEntryViewControl: 0
+  logApplyRebuildDiagnostics: 1
+  lastApplyRebuildStatus: ApplySucceeded
+  lastBlockingIssue: 
+  lastMaterializationSummary: 'created=0; repaired=0; alreadyValid=13; skippedByPolicy=2;
+    blocked=0
+
+    already-valid:bindings-root:assigned:_Bindings
+
+    already-valid:container:Anchors
+
+    already-valid:anchor:Anchors/CameraTarget
+
+    already-valid:container:Anchors
+
+    already-valid:anchor:Anchors/LookAtTarget
+
+    already-valid:PlayerActorDeclaration
+
+    already-valid:PlayerSlotDeclaration
+
+    already-valid:root:UnityPlayerInputGateAdapter
+
+    skipped-by-policy:reset-subject:reset-disabled
+
+    already-valid:binding:PlayerControlBindingTargetBehaviour
+
+    already-valid:binding:UnityPlayerInputBridgeTargetBehaviour
+
+    already-valid:binding:UnityPlayerInputActivationTargetBehaviour
+
+    already-valid:binding:PlayerSlotOccupancy
+
+    already-valid:binding:FrameworkCameraAnchorHost
+
+    skipped-by-policy:reset-participant:None'
 --- !u!1 &1283593779
 GameObject:
   m_ObjectHideFlags: 0
@@ -3004,6 +3279,39 @@ Transform:
   m_Children:
   - {fileID: 392959444}
   m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1768523722
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1768523723}
+  m_Layer: 0
+  m_Name: Anchors
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1768523723
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1768523722}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 826901118}
+  - {fileID: 251812031}
+  m_Father: {fileID: 1030083287}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1773504391
 GameObject:

@@ -1,14 +1,14 @@
 # F53F - FIRSTGAME Player Binding Operational Guide
 
-Status: Canonical after F53G cleanup
+Status: Superseded by official PlayerComposer authoring flow
 Date: 2026-07-09
 Scope: `Assets/_Project`
 
 ## Objective
 
-Keep one operational guide for the accepted FIRSTGAME player binding workflow after F53C1-F53F. Historical proof docs and per-cut manifests were removed by F53G because their useful content is represented here and in the F53G cleanup manifest.
+Keep one operational guide for the accepted FIRSTGAME player binding evidence after F53C1-F53F. The active authoring workflow is now the official package `PlayerComposer`.
 
-This guide does not define new runtime behavior. It only describes the current editor tooling and smoke flow.
+This guide does not define new runtime behavior. It only describes support evidence and points designers to the official Composer flow.
 
 ## Canonical Identity
 
@@ -31,7 +31,7 @@ resolvedByName='False'
 failureReason='None'
 ```
 
-## Canonical Menus
+## Current Menus
 
 All current tools live under:
 
@@ -71,38 +71,9 @@ resolvedByName='False'
 Route/Activity camera setup configured
 ```
 
-### Validate Canonical Player Binding Facade
+### PlayerComposer Pilot
 
-Purpose: canonical validation for identity, PlayerInput/F52 references and camera anchor references.
-
-Expected log:
-
-```text
-[F53D_FIRSTGAME_PLAYER_BINDING_FACADE] status='Succeeded'
-mode='validate'
-resolvedByName='False'
-facadeCentralizedReferences='True'
-failureReason='None'
-```
-
-### Apply Canonical Player Binding Facade
-
-Purpose: repair authoring drift by reapplying typed references and expected IDs/action-map values.
-
-This tool may configure existing authoring components. It must not create gameplay behavior, runtime lifecycle, movement, actor spawning or save/progression.
-
-### Run Canonical Player Binding Facade Repair Proof
-
-Purpose: create controlled temporary drift, invoke the facade apply path, and prove the drift was repaired.
-
-Expected log:
-
-```text
-[F53E_FIRSTGAME_PLAYER_BINDING_FACADE_REPAIR_PROOF] status='Succeeded'
-repairSucceeded='True'
-typedReferencesRepaired='True'
-failureReason='None'
-```
+Purpose: configure the official package `PlayerComposer` intent on the selected `PlayerPrototype`, then use the official Inspector Validate and Apply/Rebuild actions.
 
 ## Recommended Smoke
 
@@ -117,10 +88,10 @@ Run:
 ```text
 1. FIRSTGAME > Immersive Framework > Validate Real Player Binding
 2. FIRSTGAME > Immersive Framework > Configure Route-Activity Camera
-3. FIRSTGAME > Immersive Framework > Validate Canonical Player Binding Facade
-4. FIRSTGAME > Immersive Framework > Apply Canonical Player Binding Facade
-5. FIRSTGAME > Immersive Framework > Run Canonical Player Binding Facade Repair Proof
-6. FIRSTGAME > Immersive Framework > Validate Canonical Player Binding Facade
+3. FIRSTGAME > Immersive Framework > Player Composer Pilot > Configure Selected Player Composer
+4. In the official PlayerComposer Inspector, run Validate
+5. Run Apply/Rebuild
+6. Run Apply/Rebuild again to confirm idempotence
 ```
 
 All successful logs must keep:
@@ -224,21 +195,22 @@ The expected `Player` action map was not found in the assigned `InputActionAsset
 
 ### `CameraAnchorTargetMismatch`
 
-The camera anchor target drifted. Run:
+The camera anchor target drifted. Use the official PlayerComposer flow:
 
 ```text
-FIRSTGAME > Immersive Framework > Apply Canonical Player Binding Facade
+FIRSTGAME > Immersive Framework > Player Composer Pilot > Configure Selected Player Composer
+PlayerComposer Inspector > Apply/Rebuild
 ```
 
 Then validate again.
 
 ### `UnityPlayerInputBridgeReferenceMismatch`
 
-The bridge target points to the wrong `PlayerInput` reference. Run the facade apply path.
+The bridge target points to the wrong `PlayerInput` reference. Run the official PlayerComposer Apply/Rebuild path.
 
 ### `UnityPlayerInputActivationActionMapMismatch`
 
-The activation target action map drifted from `Player`. Run the facade apply path.
+The activation target action map drifted from `Player`. Run the official PlayerComposer Apply/Rebuild path.
 
 ## Commit Message
 
