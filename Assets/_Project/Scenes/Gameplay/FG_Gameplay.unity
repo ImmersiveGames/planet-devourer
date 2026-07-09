@@ -1746,7 +1746,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5f97092359840da932627d1a0d12089, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerAuthoring.PlayerComposer
-  recipe: {fileID: 0}
+  recipe: {fileID: 11400000, guid: b3de241f7cbfbb043bc4076f0098ae35, type: 2}
   actorId: player.actor
   playerSlotId: player.1
   playerInput: {fileID: 1030083291}
