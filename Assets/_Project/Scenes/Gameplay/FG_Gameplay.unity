@@ -1337,57 +1337,6 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &1030083296
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1030083286}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26cc512b3155464caed4dc48a6c9de6d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Actors.PlayerActorDeclaration
-  actorId: firstgame.player
-  displayName: First Game Player
-  playerInput: {fileID: 1030083291}
-  reason: firstgame.player.actor
---- !u!114 &1030083297
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1030083286}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c690b91b7ac4cd3aa015da4df9cae9e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerSlots.PlayerSlotDeclaration
-  slotId: player.1
-  displayName: Player 1
-  playerInput: {fileID: 1030083291}
-  reason: firstgame.player.slot
---- !u!114 &1030083298
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1030083286}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1877c8417aa54150ae23a9e2caf2952f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerSlots.PlayerSlotOccupancy
-  slotDeclaration: {fileID: 1030083297}
-  slotId: 
-  actorDeclaration: {fileID: 0}
-  playerActorDeclaration: {fileID: 1030083296}
-  occupiedActorId: 
-  displayName: Player 1 occupies First Game Player
-  reason: firstgame.player.occupancy
 --- !u!114 &1030083292
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1477,6 +1426,57 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::_Project.Scripts.FirstGamePlayerResetProbe
   baselineStateValue: 0
   runtimeStateValue: 0
+--- !u!114 &1030083296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1030083286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26cc512b3155464caed4dc48a6c9de6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Actors.PlayerActorDeclaration
+  actorId: firstgame.player
+  displayName: First Game Player
+  playerInput: {fileID: 1030083291}
+  reason: firstgame.player.actor
+--- !u!114 &1030083297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1030083286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c690b91b7ac4cd3aa015da4df9cae9e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerSlots.PlayerSlotDeclaration
+  slotId: player.1
+  displayName: Player 1
+  playerInput: {fileID: 1030083291}
+  reason: firstgame.player.slot
+--- !u!114 &1030083298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1030083286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1877c8417aa54150ae23a9e2caf2952f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerSlots.PlayerSlotOccupancy
+  slotDeclaration: {fileID: 1030083297}
+  slotId: 
+  actorDeclaration: {fileID: 0}
+  playerActorDeclaration: {fileID: 1030083296}
+  occupiedActorId: 
+  displayName: Player 1 occupies First Game Player
+  reason: firstgame.player.occupancy
 --- !u!1 &1283593779
 GameObject:
   m_ObjectHideFlags: 0
@@ -2729,18 +2729,6 @@ MonoBehaviour:
   setRigActiveState: 1
   rigApplier: {fileID: 1636445102}
   logTransitions: 1
---- !u!114 &1636445102
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1636445097}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b00bd2bc2764a0a951760ca6da056ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Camera.Cinemachine::Immersive.Framework.Camera.Cinemachine.FrameworkCinemachineRigApplier
 --- !u!114 &1636445100
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2771,6 +2759,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1636445102
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1636445097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6b00bd2bc2764a0a951760ca6da056ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Camera.Cinemachine::Immersive.Framework.Camera.Cinemachine.FrameworkCinemachineRigApplier
 --- !u!1 &1668637430
 GameObject:
   m_ObjectHideFlags: 0

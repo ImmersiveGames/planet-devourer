@@ -1,0 +1,17 @@
+{
+  "name": "FirstGame.FrameworkProof.Runtime",
+  "rootNamespace": "FirstGame.FrameworkProof",
+  "references": [
+    "Immersive.Framework.Runtime",
+    "Unity.InputSystem"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
+}
