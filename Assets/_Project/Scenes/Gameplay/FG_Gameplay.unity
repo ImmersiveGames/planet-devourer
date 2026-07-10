@@ -3176,6 +3176,7 @@ MonoBehaviour:
   routeAnchors: {fileID: 702700976}
   director: {fileID: 1636445099}
   startupActivityCameraBinding: {fileID: 940000000012}
+  cinemachineOutputSource: {fileID: 0}
 --- !u!114 &1636445099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4584,6 +4585,7 @@ MonoBehaviour:
   policy: 1
   anchors: {fileID: 702700976}
   director: {fileID: 1636445099}
+  cinemachineOutputSource: {fileID: 0}
 --- !u!114 &940000000013
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4601,6 +4603,7 @@ MonoBehaviour:
   policy: 1
   anchors: {fileID: 702700976}
   director: {fileID: 1636445099}
+  cinemachineOutputSource: {fileID: 0}
 --- !u!1 &940000000101
 GameObject:
   m_ObjectHideFlags: 0
@@ -4683,6 +4686,7 @@ MonoBehaviour:
   policy: 2
   anchors: {fileID: 702700976}
   director: {fileID: 1636445099}
+  cinemachineOutputSource: {fileID: 0}
 --- !u!1 &940000000201
 GameObject:
   m_ObjectHideFlags: 0
@@ -4765,6 +4769,7 @@ MonoBehaviour:
   policy: 2
   anchors: {fileID: 702700976}
   director: {fileID: 1636445099}
+  cinemachineOutputSource: {fileID: 0}
 --- !u!1 &940000000301
 GameObject:
   m_ObjectHideFlags: 0
