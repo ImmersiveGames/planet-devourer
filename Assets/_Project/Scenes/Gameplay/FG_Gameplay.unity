@@ -150,7 +150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCamera
   Priority:
     Enabled: 1
-    m_Value: 100
+    m_Value: 10
   OutputChannel: 1
   StandbyUpdate: 2
   m_StreamingVersion: 20241001
@@ -384,7 +384,6 @@ GameObject:
   - component: {fileID: 301498764}
   - component: {fileID: 301498763}
   - component: {fileID: 940000000011}
-  - component: {fileID: 940000000013}
   m_Layer: 0
   m_Name: ActivityB_ContentRoot
   m_TagString: Untagged
@@ -1266,7 +1265,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8575a15ff5648c08162e48198cfa4d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.CameraAuthoring.CameraComposer
-  recipe: {fileID: 0}
+  recipe: {fileID: 11400000, guid: f552e908094c3d04ca74662310f9d373, type: 2}
   mode: 30
   ownershipScope: 30
   targetSourceKind: 20
@@ -1275,19 +1274,18 @@ MonoBehaviour:
   explicitLookAtTarget: {fileID: 0}
   followRequirement: 20
   lookAtRequirement: 10
-  priority: 100
+  priority: 10
   unityCamera: {fileID: 981371609}
   cinemachineCamera: {fileID: 161261614}
-  createUnityCameraIfMissing: 0
+  createUnityCameraIfMissing: 1
   createCinemachineCameraIfMissing: 1
-  unityCameraObjectName: FIRSTGAME Unity Camera
-  cinemachineCameraObjectName: FIRSTGAME Cinemachine Camera
+  unityCameraObjectName: Unity Camera
+  cinemachineCameraObjectName: Cinemachine Camera
   logApplyRebuildDiagnostics: 1
-  lastApplyRebuildStatus: ApplySucceeded
+  lastApplyRebuildStatus: ValidationSucceeded
   lastBlockingIssue: 
   lastTargetResolutionSummary: Camera target requirements satisfied.
-  lastMaterializationSummary: created='0' repaired='0' alreadyValid='6' skipped='0'
-    blocked='0'
+  lastMaterializationSummary: Validation completed. No materialization was changed.
   lastResolvedFollowTarget: {fileID: 826901118}
   lastResolvedLookAtTarget: {fileID: 251812031}
 --- !u!4 &990005316
@@ -3075,7 +3073,6 @@ GameObject:
   - component: {fileID: 1710407295}
   - component: {fileID: 1710407294}
   - component: {fileID: 940000000010}
-  - component: {fileID: 940000000012}
   m_Layer: 0
   m_Name: ActivityA_ContentRoot
   m_TagString: Untagged
@@ -4257,34 +4254,6 @@ MonoBehaviour:
   activityBgm: {fileID: 0}
   policy: 1
   director: {fileID: 940000000005}
---- !u!114 &940000000012
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1710407293}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e71c46c946434d719dd5e84ea24f3f5a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Camera.FrameworkActivityCameraBinding
-  policy: 1
-  cinemachineOutputSource: {fileID: 0}
---- !u!114 &940000000013
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 301498762}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e71c46c946434d719dd5e84ea24f3f5a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Camera.FrameworkActivityCameraBinding
-  policy: 1
-  cinemachineOutputSource: {fileID: 0}
 --- !u!1 &940000000101
 GameObject:
   m_ObjectHideFlags: 0
@@ -4296,7 +4265,6 @@ GameObject:
   - component: {fileID: 940000000102}
   - component: {fileID: 940000000103}
   - component: {fileID: 940000000104}
-  - component: {fileID: 940000000105}
   m_Layer: 0
   m_Name: ActivityC_RouteFallback_ContentRoot
   m_TagString: Untagged
@@ -4350,20 +4318,6 @@ MonoBehaviour:
   activityBgm: {fileID: 0}
   policy: 2
   director: {fileID: 940000000005}
---- !u!114 &940000000105
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 940000000101}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e71c46c946434d719dd5e84ea24f3f5a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Camera.FrameworkActivityCameraBinding
-  policy: 2
-  cinemachineOutputSource: {fileID: 0}
 --- !u!1 &940000000201
 GameObject:
   m_ObjectHideFlags: 0
@@ -4375,7 +4329,6 @@ GameObject:
   - component: {fileID: 940000000202}
   - component: {fileID: 940000000203}
   - component: {fileID: 940000000204}
-  - component: {fileID: 940000000205}
   m_Layer: 0
   m_Name: ActivityD_StopBgm_ContentRoot
   m_TagString: Untagged
@@ -4429,20 +4382,6 @@ MonoBehaviour:
   activityBgm: {fileID: 0}
   policy: 3
   director: {fileID: 940000000005}
---- !u!114 &940000000205
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 940000000201}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e71c46c946434d719dd5e84ea24f3f5a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Camera.FrameworkActivityCameraBinding
-  policy: 2
-  cinemachineOutputSource: {fileID: 0}
 --- !u!1 &940000000301
 GameObject:
   m_ObjectHideFlags: 0
