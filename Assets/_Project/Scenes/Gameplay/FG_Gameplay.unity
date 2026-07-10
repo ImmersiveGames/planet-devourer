@@ -3172,10 +3172,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5135a38f2e374489a8f050b06202a348, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Camera.FrameworkRouteCameraBinding
-  routeCameraRig: {fileID: 1493343951}
-  routeAnchors: {fileID: 702700976}
-  director: {fileID: 1636445099}
-  startupActivityCameraBinding: {fileID: 940000000012}
   cinemachineOutputSource: {fileID: 0}
 --- !u!114 &1636445099
 MonoBehaviour:
@@ -3196,6 +3192,15 @@ MonoBehaviour:
   setRigActiveState: 1
   rigApplier: {fileID: 1636445102}
   logTransitions: 1
+  currentRouteRig: {fileID: 0}
+  currentRouteAnchors: {fileID: 0}
+  currentActivityRig: {fileID: 0}
+  currentActivityAnchors: {fileID: 0}
+  retainedActivityRigForCurrentRoute: {fileID: 0}
+  retainedActivityAnchorsForCurrentRoute: {fileID: 0}
+  currentEffectiveRig: {fileID: 0}
+  currentActivityPolicy: 0
+  hasActiveActivityCameraBinding: 0
 --- !u!114 &1636445100
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4580,11 +4585,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e71c46c946434d719dd5e84ea24f3f5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Camera.FrameworkActivityCameraBinding
-  assignedActivity: {fileID: 11400000, guid: fef5f07f33f4f414aa773ce34674ae4d, type: 2}
-  activityCameraRig: {fileID: 121593283}
   policy: 1
-  anchors: {fileID: 702700976}
-  director: {fileID: 1636445099}
   cinemachineOutputSource: {fileID: 0}
 --- !u!114 &940000000013
 MonoBehaviour:
@@ -4598,11 +4599,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e71c46c946434d719dd5e84ea24f3f5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Camera.FrameworkActivityCameraBinding
-  assignedActivity: {fileID: 11400000, guid: fca11b7213d48be4e8901c831b6be686, type: 2}
-  activityCameraRig: {fileID: 0}
   policy: 1
-  anchors: {fileID: 702700976}
-  director: {fileID: 1636445099}
   cinemachineOutputSource: {fileID: 0}
 --- !u!1 &940000000101
 GameObject:
@@ -4681,11 +4678,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e71c46c946434d719dd5e84ea24f3f5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Camera.FrameworkActivityCameraBinding
-  assignedActivity: {fileID: 11400000, guid: e7bb23a0d0974c2ba202d4606d18c55e, type: 2}
-  activityCameraRig: {fileID: 0}
   policy: 2
-  anchors: {fileID: 702700976}
-  director: {fileID: 1636445099}
   cinemachineOutputSource: {fileID: 0}
 --- !u!1 &940000000201
 GameObject:
@@ -4764,11 +4757,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e71c46c946434d719dd5e84ea24f3f5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Camera.FrameworkActivityCameraBinding
-  assignedActivity: {fileID: 11400000, guid: e1c407db31df430c96bb06e9787653a1, type: 2}
-  activityCameraRig: {fileID: 0}
   policy: 2
-  anchors: {fileID: 702700976}
-  director: {fileID: 1636445099}
   cinemachineOutputSource: {fileID: 0}
 --- !u!1 &940000000301
 GameObject:

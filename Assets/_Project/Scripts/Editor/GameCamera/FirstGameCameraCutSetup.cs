@@ -78,34 +78,27 @@ namespace Project.Editor.GameCamera
 
             GameObject root = EnsureRoot(scene, "FirstGameCameraRoot");
             RouteContentBinding routeContentBinding = EnsureComponent<RouteContentBinding>(root);
-            FrameworkCameraDirector director = EnsureComponent<FrameworkCameraDirector>(root);
-            FrameworkCinemachineRigApplier rigApplier = EnsureComponent<FrameworkCinemachineRigApplier>(root);
             FrameworkRouteCameraBinding routeCameraBinding = EnsureComponent<FrameworkRouteCameraBinding>(root);
 
             GameObject menuRig = EnsureCinemachineRig(scene, "MenuRoute_CameraRig", new Vector3(0f, 1f, -10f), Quaternion.identity);
+            Transform menuTarget = EnsureRoot(scene, "MenuCameraTarget").transform;
+            FrameworkCinemachineCameraOutputSource menuOutput = EnsureCinemachineOutputSource(
+                menuRig,
+                "firstgame.menu.route",
+                menuRig.GetComponent<CinemachineCamera>(),
+                mainCamera.GetComponent<CinemachineBrain>(),
+                menuTarget,
+                menuTarget,
+                20);
 
             SetSerialized(routeContentBinding, "route", menuRoute);
             SetSerialized(routeContentBinding, "localContentId", "firstgame.menu.route.camera");
             SetSerialized(routeContentBinding, "requiredness", 10);
 
-            SetSerialized(director, "defaultCameraRig", menuRig);
-            SetSerialized(director, "defaultAnchors", (Object)null);
-            SetSerialized(director, "routePriority", 20);
-            SetSerialized(director, "activityPriority", 100);
-            SetSerialized(director, "setRigActiveState", true);
-            SetSerialized(director, "rigApplier", rigApplier);
-            SetSerialized(director, "logTransitions", true);
-
-            SetSerialized(routeCameraBinding, "routeCameraRig", menuRig);
-            SetSerialized(routeCameraBinding, "routeAnchors", (Object)null);
-            SetSerialized(routeCameraBinding, "director", director);
-            SetSerialized(routeCameraBinding, "startupActivityCameraBinding", (Object)null);
-
-            menuRig.SetActive(false);
+            SetSerialized(routeCameraBinding, "cinemachineOutputSource", menuOutput);
 
             ValidateObjectReference(routeContentBinding, "route", menuRoute, "RouteContentBinding route on Menu camera root");
-            ValidateObjectReference(routeCameraBinding, "routeCameraRig", menuRig, "FrameworkRouteCameraBinding routeCameraRig on Menu camera root");
-            ValidateObjectReference(routeCameraBinding, "director", director, "FrameworkRouteCameraBinding director on Menu camera root");
+            ValidateObjectReference(routeCameraBinding, "cinemachineOutputSource", menuOutput, "FrameworkRouteCameraBinding CinemachineOutputSource on Menu camera root");
 
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);
@@ -132,8 +125,6 @@ namespace Project.Editor.GameCamera
 
             GameObject root = EnsureRoot(scene, "FirstGameCameraRoot");
             RouteContentBinding routeContentBinding = EnsureComponent<RouteContentBinding>(root);
-            FrameworkCameraDirector director = EnsureComponent<FrameworkCameraDirector>(root);
-            FrameworkCinemachineRigApplier rigApplier = EnsureComponent<FrameworkCinemachineRigApplier>(root);
             FrameworkRouteCameraBinding routeCameraBinding = EnsureComponent<FrameworkRouteCameraBinding>(root);
 
             if (!TryResolveCanonicalPlayer(
@@ -155,47 +146,41 @@ namespace Project.Editor.GameCamera
                 $"actorId='{resolvedPlayer.ActorId}' " +
                 $"playerSlotId='{resolvedPlayer.PlayerSlotId}'.");
 
-            GameObject anchorsObject = EnsureRoot(scene, "FirstGameCameraAnchors");
-            FrameworkCameraAnchorHost anchors = EnsureComponent<FrameworkCameraAnchorHost>(anchorsObject);
             Transform target = resolvedPlayer.Transform;
-            SetSerialized(anchors, "trackingTarget", target);
-            SetSerialized(anchors, "lookAtTarget", target);
 
             GameObject routeRig = EnsureCinemachineRig(scene, "GameplayRoute_CameraRig", new Vector3(0f, 5f, -10f), Quaternion.Euler(25f, 0f, 0f));
             GameObject activityARig = EnsureCinemachineRig(scene, "ActivityA_CameraRig", new Vector3(0f, 3.5f, -7f), Quaternion.Euler(18f, 0f, 0f));
+            FrameworkCinemachineCameraOutputSource routeOutput = EnsureCinemachineOutputSource(
+                routeRig,
+                "firstgame.gameplay.route",
+                routeRig.GetComponent<CinemachineCamera>(),
+                mainCamera.GetComponent<CinemachineBrain>(),
+                target,
+                target,
+                20);
+            FrameworkCinemachineCameraOutputSource activityAOutput = EnsureCinemachineOutputSource(
+                activityARig,
+                "firstgame.activity.a",
+                activityARig.GetComponent<CinemachineCamera>(),
+                mainCamera.GetComponent<CinemachineBrain>(),
+                target,
+                target,
+                100);
 
             SetSerialized(routeContentBinding, "route", gameplayRoute);
             SetSerialized(routeContentBinding, "localContentId", "firstgame.gameplay.route.camera");
             SetSerialized(routeContentBinding, "requiredness", 10);
 
-            SetSerialized(director, "defaultCameraRig", routeRig);
-            SetSerialized(director, "defaultAnchors", anchors);
-            SetSerialized(director, "routePriority", 20);
-            SetSerialized(director, "activityPriority", 100);
-            SetSerialized(director, "setRigActiveState", true);
-            SetSerialized(director, "rigApplier", rigApplier);
-            SetSerialized(director, "logTransitions", true);
+            FrameworkActivityCameraBinding activityABinding = EnsureActivityBinding(scene, "ActivityA_ContentRoot", activityA, FrameworkCameraActivityPolicy.UseOwn, activityAOutput);
+            EnsureActivityBinding(scene, "ActivityB_ContentRoot", activityB, FrameworkCameraActivityPolicy.UseRoute, null);
+            EnsureActivityBinding(scene, "ActivityC_RouteFallback_ContentRoot", activityC, FrameworkCameraActivityPolicy.UseRoute, null);
+            EnsureActivityBinding(scene, "ActivityD_StopBgm_ContentRoot", activityD, FrameworkCameraActivityPolicy.UseRoute, null);
 
-            FrameworkActivityCameraBinding activityABinding = EnsureActivityBinding(scene, "ActivityA_ContentRoot", activityA, activityARig, FrameworkCameraActivityPolicy.UseOwnOrRetainActivityUntilRouteExit, anchors, director);
-            EnsureActivityBinding(scene, "ActivityB_ContentRoot", activityB, null, FrameworkCameraActivityPolicy.UseOwnOrRetainActivityUntilRouteExit, anchors, director);
-            EnsureActivityBinding(scene, "ActivityC_RouteFallback_ContentRoot", activityC, null, FrameworkCameraActivityPolicy.UseRoute, anchors, director);
-            EnsureActivityBinding(scene, "ActivityD_StopBgm_ContentRoot", activityD, null, FrameworkCameraActivityPolicy.UseRoute, anchors, director);
-
-            SetSerialized(routeCameraBinding, "routeCameraRig", routeRig);
-            SetSerialized(routeCameraBinding, "routeAnchors", anchors);
-            SetSerialized(routeCameraBinding, "director", director);
-            SetSerialized(routeCameraBinding, "startupActivityCameraBinding", activityABinding);
-
-            routeRig.SetActive(false);
-            activityARig.SetActive(false);
+            SetSerialized(routeCameraBinding, "cinemachineOutputSource", routeOutput);
 
             ValidateObjectReference(routeContentBinding, "route", gameplayRoute, "RouteContentBinding route on Gameplay camera root");
-            ValidateObjectReference(routeCameraBinding, "routeCameraRig", routeRig, "FrameworkRouteCameraBinding routeCameraRig on Gameplay camera root");
-            ValidateObjectReference(routeCameraBinding, "routeAnchors", anchors, "FrameworkRouteCameraBinding routeAnchors on Gameplay camera root");
-            ValidateObjectReference(routeCameraBinding, "director", director, "FrameworkRouteCameraBinding director on Gameplay camera root");
-            ValidateObjectReference(routeCameraBinding, "startupActivityCameraBinding", activityABinding, "FrameworkRouteCameraBinding startupActivityCameraBinding on Gameplay camera root");
-            ValidateObjectReference(anchors, "trackingTarget", target, "FrameworkCameraAnchorHost trackingTarget on Gameplay camera anchors");
-            ValidateObjectReference(anchors, "lookAtTarget", target, "FrameworkCameraAnchorHost lookAtTarget on Gameplay camera anchors");
+            ValidateObjectReference(routeCameraBinding, "cinemachineOutputSource", routeOutput, "FrameworkRouteCameraBinding CinemachineOutputSource on Gameplay camera root");
+            ValidateObjectReference(activityABinding, "cinemachineOutputSource", activityAOutput, "FrameworkActivityCameraBinding CinemachineOutputSource on Activity A");
 
             EditorSceneManager.MarkSceneDirty(scene);
             EditorSceneManager.SaveScene(scene);
@@ -205,10 +190,8 @@ namespace Project.Editor.GameCamera
             Scene scene,
             string rootName,
             ActivityAsset expectedActivity,
-            GameObject rig,
             FrameworkCameraActivityPolicy policy,
-            FrameworkCameraAnchorHost anchors,
-            FrameworkCameraDirector director)
+            FrameworkCinemachineCameraOutputSource outputSource)
         {
             GameObject root = FindInScene(scene, rootName);
             if (root == null)
@@ -221,21 +204,10 @@ namespace Project.Editor.GameCamera
             SetSerialized(adapter, "activity", expectedActivity);
 
             FrameworkActivityCameraBinding binding = EnsureComponent<FrameworkActivityCameraBinding>(root);
-            SetSerialized(binding, "assignedActivity", expectedActivity);
-            SetSerialized(binding, "activityCameraRig", rig);
             SetSerialized(binding, "policy", (int)policy);
-            SetSerialized(binding, "anchors", anchors);
-            SetSerialized(binding, "director", director);
 
             ValidateObjectReference(adapter, "activity", expectedActivity, $"ActivityLocalVisibilityAdapter activity on '{rootName}'");
-            ValidateObjectReference(binding, "assignedActivity", expectedActivity, $"FrameworkActivityCameraBinding assignedActivity on '{rootName}'");
-            ValidateObjectReference(binding, "director", director, $"FrameworkActivityCameraBinding director on '{rootName}'");
-            ValidateObjectReference(binding, "anchors", anchors, $"FrameworkActivityCameraBinding anchors on '{rootName}'");
-
-            if (rig != null)
-            {
-                ValidateObjectReference(binding, "activityCameraRig", rig, $"FrameworkActivityCameraBinding activityCameraRig on '{rootName}'");
-            }
+            ValidateObjectReference(binding, "cinemachineOutputSource", outputSource, $"FrameworkActivityCameraBinding CinemachineOutputSource on '{rootName}'");
 
             return binding;
         }
@@ -281,6 +253,27 @@ namespace Project.Editor.GameCamera
             EnsureComponent<CinemachineCamera>(rig);
             RemoveForbiddenCameraComponents(rig, removeCamera: true, removeBrain: true);
             return rig;
+        }
+
+        private static FrameworkCinemachineCameraOutputSource EnsureCinemachineOutputSource(
+            GameObject owner,
+            string outputId,
+            CinemachineCamera camera,
+            CinemachineBrain brain,
+            Transform followTarget,
+            Transform lookAtTarget,
+            int priority)
+        {
+            FrameworkCinemachineCameraOutputSource source = EnsureComponent<FrameworkCinemachineCameraOutputSource>(owner);
+            SetSerialized(source, "cinemachineCamera", camera);
+            SetSerialized(source, "cinemachineBrain", brain);
+            SetSerialized(source, "followTarget", followTarget);
+            SetSerialized(source, "lookAtTarget", lookAtTarget);
+            SetSerialized(source, "priority", priority);
+            SetSerialized(source, "required", true);
+            SetSerialized(source, "outputId", outputId);
+            SetSerialized(source, "displayName", outputId);
+            return source;
         }
 
         private static void RemoveForbiddenCameraComponents(GameObject owner, bool removeCamera, bool removeBrain)
