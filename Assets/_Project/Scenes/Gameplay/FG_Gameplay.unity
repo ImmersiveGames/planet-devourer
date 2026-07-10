@@ -801,6 +801,7 @@ GameObject:
   - component: {fileID: 958087661}
   - component: {fileID: 958087660}
   - component: {fileID: 958087659}
+  - component: {fileID: 958087666}
   m_Layer: 0
   m_Name: PlayerPrototype
   m_TagString: Untagged
@@ -992,6 +993,26 @@ Transform:
   - {fileID: 1621381108}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &958087666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 958087658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31d057f3664016f43be06bbeac79b7c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FirstGame.Gameplay.FirstGameTestPlayerMovement
+  playerInput: {fileID: 958087664}
+  characterController: {fileID: 958087659}
+  actionMapName: Player
+  moveActionName: Move
+  moveSpeed: 5
+  gravity: 20
+  faceMovementDirection: 1
+  rotationSpeed: 720
 --- !u!1 &981371607
 GameObject:
   m_ObjectHideFlags: 0
