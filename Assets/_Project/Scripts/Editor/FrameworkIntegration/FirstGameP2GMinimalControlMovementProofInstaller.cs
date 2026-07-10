@@ -7,8 +7,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-
-namespace FirstGame.FrameworkIntegration.Editor
+namespace FirstGame.FrameworkIntegration.Editor._Project.Scripts.Editor.FrameworkIntegration
 {
     /// <summary>
     /// Installs the P2G consumer proof on the existing real FIRSTGAME player.

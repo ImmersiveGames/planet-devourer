@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3e5fd4dfb42c4f7881a842598f950ba9, type: 3}
-  m_Name: PlayerRecipe
+  m_Name: FG_PlayerRecipe
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerAuthoring.PlayerRecipe
   actorId: player.actor
   playerSlotId: player.1

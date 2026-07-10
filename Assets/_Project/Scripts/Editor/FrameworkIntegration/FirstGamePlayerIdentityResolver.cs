@@ -3,8 +3,7 @@ using Immersive.Framework.PlayerSlots;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-
-namespace FirstGame.FrameworkIntegration.Editor
+namespace FirstGame.FrameworkIntegration.Editor._Project.Scripts.Editor.FrameworkIntegration
 {
     /// <summary>
     /// FIRSTGAME editor-only resolver for the real player identity.

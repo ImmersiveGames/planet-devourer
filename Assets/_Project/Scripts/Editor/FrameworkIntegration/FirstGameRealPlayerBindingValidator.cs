@@ -3,8 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-
-namespace FirstGame.FrameworkIntegration.Editor
+namespace FirstGame.FrameworkIntegration.Editor._Project.Scripts.Editor.FrameworkIntegration
 {
     /// <summary>
     /// FIRSTGAME editor-only validation for real player wiring against the accepted F52 PlayerControl/PlayerInput chain.

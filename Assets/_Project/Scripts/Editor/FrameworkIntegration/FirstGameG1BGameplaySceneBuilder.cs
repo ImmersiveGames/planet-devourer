@@ -8,8 +8,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
-namespace FirstGame.FrameworkIntegration.Editor
+namespace FirstGame.FrameworkIntegration.Editor._Project.Scripts.Editor.FrameworkIntegration
 {
     public static class FirstGameG1BGameplaySceneBuilder
     {
@@ -249,7 +248,7 @@ namespace FirstGame.FrameworkIntegration.Editor
 
         private static void RemoveObsoleteComponents(Scene scene)
         {
-            foreach (MonoBehaviour component in UnityEngine.Object.FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include, FindObjectsSortMode.None))
+            foreach (MonoBehaviour component in UnityEngine.Object.FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include))
             {
                 if (component == null || component.gameObject.scene != scene)
                 {
@@ -282,7 +281,7 @@ namespace FirstGame.FrameworkIntegration.Editor
 
         private static T FindSingleInScene<T>(Scene scene, string label) where T : Component
         {
-            T[] matches = UnityEngine.Object.FindObjectsByType<T>(FindObjectsInactive.Include, FindObjectsSortMode.None)
+            T[] matches = UnityEngine.Object.FindObjectsByType<T>(FindObjectsInactive.Include)
                 .Where(value => value != null && value.gameObject.scene == scene)
                 .ToArray();
 
@@ -296,7 +295,7 @@ namespace FirstGame.FrameworkIntegration.Editor
 
         private static T FindFirstInScene<T>(Scene scene) where T : Component
         {
-            return UnityEngine.Object.FindObjectsByType<T>(FindObjectsInactive.Include, FindObjectsSortMode.None)
+            return UnityEngine.Object.FindObjectsByType<T>(FindObjectsInactive.Include)
                 .FirstOrDefault(value => value != null && value.gameObject.scene == scene);
         }
 
