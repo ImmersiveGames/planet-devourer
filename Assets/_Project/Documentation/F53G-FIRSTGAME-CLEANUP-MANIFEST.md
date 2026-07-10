@@ -104,7 +104,7 @@ Assets/_Project/Documentation/F53F-FIRSTGAME-DELTA-MANIFEST.md.meta
 
 ```text
 FIRSTGAME > Immersive Framework > Validate Real Player Binding
-FIRSTGAME > Immersive Framework > Configure Route-Activity Camera
+FIRSTGAME > Immersive Framework > Configure Route-Activity Camera (Legacy / Diagnostic)
 FIRSTGAME > Immersive Framework > Player Composer Pilot > Configure Selected Player Composer
 ```
 
@@ -131,7 +131,7 @@ Tools > FIRSTGAME > ...
 | --- | --- | --- |
 | `FirstGamePlayerIdentityResolver.cs` | KEEP_CANONICAL | Fonte editor-only canonica para resolver o player por `PlayerActorDeclaration`, `PlayerSlotDeclaration` e `PlayerInput`, sem `GameObject.name`. |
 | `FirstGameRealPlayerBindingValidator.cs` | KEEP_SUPPORT | Smoke rapido de suporte para F52 real player binding; menus de apply/cleanup foram removidos. |
-| `FirstGameCameraCutSetup.cs` | KEEP_CANONICAL | Tool canonico para configurar camera route/activity sob `FIRSTGAME > Immersive Framework`. |
+| `FirstGameCameraCutSetup.cs` | LEGACY_DIAGNOSTIC | Mantido para regressão Route/Activity; o fluxo principal é o `CameraComposer Proof`. |
 | `F53F-Player-Binding-Operational-Guide.md` | KEEP_CANONICAL | Guia operacional unico depois da limpeza F53G. |
 | `Documentation/Camera/POST-RESET-H2-FIRSTGAME-Camera-Route-Activity.md` | KEEP_SUPPORT | Documento de camera route/activity fora da cadeia F53 player binding. |
 | `ScriptableObjects/ImmersiveFramework` | KEEP_CANONICAL | Assets reais de Route/Activity/GameApplication; sem lixo F53. |

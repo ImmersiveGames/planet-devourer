@@ -58,9 +58,9 @@ unityPlayerInputActivationTarget='True'
 failureReason='None'
 ```
 
-### Configure Route-Activity Camera
+### Configure Route-Activity Camera (Legacy / Diagnostic)
 
-Purpose: configure the existing FIRSTGAME route/activity camera setup and assign typed `Transform` targets through `FrameworkCameraAnchorHost`.
+Purpose: compatibility diagnostic for the existing FIRSTGAME Route/Activity camera setup. It is not the primary Camera Product Surface; use the CameraComposer Proof below for current camera authoring.
 
 Expected log evidence:
 
@@ -86,12 +86,13 @@ Assets/_Project/Scenes/Gameplay/FG_Gameplay.unity
 Run:
 
 ```text
-1. FIRSTGAME > Immersive Framework > Validate Real Player Binding
-2. FIRSTGAME > Immersive Framework > Configure Route-Activity Camera
-3. FIRSTGAME > Immersive Framework > Player Composer Pilot > Configure Selected Player Composer
-4. In the official PlayerComposer Inspector, run Validate
-5. Run Apply/Rebuild
-6. Run Apply/Rebuild again to confirm idempotence
+1. FIRSTGAME > Immersive Framework > Camera Composer Proof > Configure Gameplay CameraComposer Proof
+2. FIRSTGAME > Immersive Framework > Player Composer Pilot > Configure Selected Player Composer
+3. In the official PlayerComposer Inspector, run Validate
+4. Run Apply/Rebuild
+5. Run Apply/Rebuild again to confirm idempotence
+
+Run `Configure Route-Activity Camera` only when explicitly validating legacy lifecycle compatibility.
 ```
 
 All successful logs must keep:
