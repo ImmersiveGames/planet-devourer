@@ -1464,6 +1464,7 @@ GameObject:
   - component: {fileID: 1030083300}
   - component: {fileID: 1030083299}
   - component: {fileID: 1030083302}
+  - component: {fileID: 1030083303}
   m_Layer: 0
   m_Name: PlayerPrototype
   m_TagString: Untagged
@@ -1755,16 +1756,20 @@ MonoBehaviour:
   recipe: {fileID: 11400000, guid: b3de241f7cbfbb043bc4076f0098ae35, type: 2}
   actorId: player.actor
   playerSlotId: player.1
-  playerInput: {fileID: 1030083291}
-  gameplayActionMap: Player
   cameraTarget: {fileID: 826901118}
   lookAtTarget: {fileID: 251812031}
   resetEnabled: 0
   validationMode: 0
+  controlEnabled: 1
+  playerInput: {fileID: 1030083291}
+  gameplayActionMap: Player
+  controlTarget: {fileID: 0}
+  controlStartupPolicy: 0
+  inputBindingRequired: 1
+  gateParticipation: 1
   frameworkBindingsRoot: {fileID: 188376374}
   createBindingsRootIfMissing: 1
   createAnchorsIfMissing: 1
-  inputBindingRequired: 1
   cameraBindingRequired: 1
   resetScope: Activity
   resetParticipantPolicy: 0
@@ -1803,6 +1808,28 @@ MonoBehaviour:
     already-valid:binding:PlayerSlotOccupancy
 
     skipped-by-policy:reset-participant:None'
+--- !u!114 &1030083303
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1030083286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6277a84611584675a2135352ddb32f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FirstGame.Player.FirstGameP2GMinimalControlMovementProof
+  playerInput: {fileID: 1030083291}
+  gateAdapter: {fileID: 1030083292}
+  movementConsumer: {fileID: 1030083290}
+  movementTarget: {fileID: 1030083287}
+  gameplayActionMapName: Player
+  moveActionName: Move
+  runOnStart: 1
+  minimumDisplacement: 0.05
+  movementObservationFrames: 1200
+  throwOnFailure: 0
 --- !u!1 &1283593779
 GameObject:
   m_ObjectHideFlags: 0
