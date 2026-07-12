@@ -311,7 +311,7 @@ MonoBehaviour:
     AngularDampingMode: 0
     RotationDamping: {x: 1, y: 1, z: 1}
     QuaternionDamping: 1
-  FollowOffset: {x: 0, y: 0, z: -10}
+  FollowOffset: {x: 0, y: 12, z: -14}
 --- !u!1 &137002266
 GameObject:
   m_ObjectHideFlags: 0
@@ -2161,7 +2161,7 @@ MonoBehaviour:
     AngularDampingMode: 0
     RotationDamping: {x: 1, y: 1, z: 1}
     QuaternionDamping: 1
-  FollowOffset: {x: 0, y: 0, z: -10}
+  FollowOffset: {x: 8, y: 10, z: -8}
 --- !u!1 &1253143984
 GameObject:
   m_ObjectHideFlags: 0
@@ -2439,6 +2439,7 @@ MonoBehaviour:
   explicitLookAtTarget: {fileID: 0}
   followRequirement: 20
   lookAtRequirement: 10
+  followOffset: {x: 0, y: 5, z: -8}
   cinemachineCamera: {fileID: 1917526802}
   createCinemachineCameraIfMissing: 1
   cinemachineCameraObjectName: Cinemachine Camera
@@ -2929,6 +2930,7 @@ MonoBehaviour:
   explicitLookAtTarget: {fileID: 2098183792}
   followRequirement: 20
   lookAtRequirement: 10
+  followOffset: {x: 8, y: 10, z: -8}
   cinemachineCamera: {fileID: 1250693705}
   createCinemachineCameraIfMissing: 1
   cinemachineCameraObjectName: Activity Override Cinemachine Camera
@@ -2993,6 +2995,7 @@ MonoBehaviour:
   explicitLookAtTarget: {fileID: 1638734336}
   followRequirement: 20
   lookAtRequirement: 10
+  followOffset: {x: 0, y: 12, z: -14}
   cinemachineCamera: {fileID: 104017132}
   createCinemachineCameraIfMissing: 1
   cinemachineCameraObjectName: Route Cinemachine Camera
@@ -3130,7 +3133,7 @@ MonoBehaviour:
     AngularDampingMode: 0
     RotationDamping: {x: 1, y: 1, z: 1}
     QuaternionDamping: 1
-  FollowOffset: {x: 0, y: 0, z: -10}
+  FollowOffset: {x: 0, y: 5, z: -8}
 --- !u!1 &1976642957
 GameObject:
   m_ObjectHideFlags: 0

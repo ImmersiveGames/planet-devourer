@@ -45,6 +45,17 @@ Activity 100
 > Route 10
 ```
 
+## Follow framing
+
+| Rig | Follow Offset | Intent |
+|---|---|---|
+| Route | `(0, 12, -14)` | Wide gameplay overview |
+| Local Player | `(0, 5, -8)` | Playable follow framing |
+| Activity | `(8, 10, -8)` | Distinct lateral override |
+
+These values are also serialized in each `CameraRigComposer`, so a later
+Apply/Rebuild preserves the intended framing.
+
 ## Canonical references
 
 ```text
