@@ -1,101 +1,48 @@
-using Immersive.Foundation.Events;
 using Immersive.Framework.Camera;
-using Immersive.Framework.GameFlow;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace FirstGame.Gameplay.Diagnostics
 {
     /// <summary>
-    /// FIRSTGAME-only controls for the manual C9M consumer validation.
-    /// Uses public framework boundaries and never selects or applies a camera winner.
+    /// Visible FIRSTGAME proof surface for explicit camera override authority.
+    /// It never selects a winner or mutates Cinemachine directly.
     /// </summary>
     [DisallowMultipleComponent]
-    public sealed class FirstGameC9MCameraValidationControls : MonoBehaviour
+    public sealed class FirstGameC9MCameraValidationControls :
+        MonoBehaviour,
+        ICameraOutputSessionConsumer,
+        ISessionCameraOverrideConsumer
     {
-        private const string LogPrefix = "[C9M_FIRSTGAME_CAMERA]";
-        private const int ControlsWindowId = 9031;
+        private const string LogPrefix =
+            "[FIRSTGAME_CAMERA_OVERRIDE]";
 
-        [Header("Canonical Flow")]
-        [SerializeField] private ActivityRequestTrigger activityRequestTrigger;
+        private const int WindowId = 9031;
 
-        [Header("Camera Evidence")]
-        [SerializeField] private CameraOutputSessionBinding outputSession;
-        [SerializeField] private RouteCameraRequestBinding routeBinding;
-        [SerializeField] private LocalPlayerCameraRequestBinding playerBinding;
-        [SerializeField] private ActivityCameraRequestBinding activityBinding;
+        [SerializeField]
+        private CameraOutputSessionBinding outputSession;
 
-        [Header("Manual Keys")]
-        [SerializeField] private Key clearActivityKey = Key.F6;
-        [SerializeField] private Key requestActivityKey = Key.F7;
-        [SerializeField] private Key releasePlayerKey = Key.F8;
-        [SerializeField] private Key restorePlayerKey = Key.F9;
-        [SerializeField] private Key captureEvidenceKey = Key.F10;
+        [SerializeField]
+        private LocalPlayerCameraRequestBinding playerBinding;
 
-        [Header("Visible Controls")]
-        [SerializeField] private bool showControls = true;
-        [SerializeField] private Rect controlsRect = new Rect(12f, 12f, 310f, 260f);
+        [SerializeField]
+        private ActivityCameraOverrideBinding activityOverride;
 
-        private IEventBinding activityRequestEvents;
+        [SerializeField]
+        private RouteCameraOverrideBinding routeOverride;
 
-        private void OnEnable()
-        {
-            if (activityRequestTrigger != null)
-            {
-                activityRequestEvents =
-                    activityRequestTrigger.SubscribeRequestEvents(OnActivityRequestEvent);
-            }
-        }
+        [SerializeField]
+        private SessionCameraOverrideBinding sessionOverride;
+
+        [SerializeField]
+        private bool showControls = true;
+
+        [SerializeField]
+        private Rect controlsRect =
+            new Rect(12f, 12f, 330f, 300f);
 
         private void Start()
         {
             CaptureEvidence("gameplay-entry");
-            Debug.Log(
-                $"{LogPrefix} controls-ready='True' " +
-                $"clearActivity='{clearActivityKey}' requestActivity='{requestActivityKey}' " +
-                $"releasePlayer='{releasePlayerKey}' restorePlayer='{restorePlayerKey}' " +
-                $"captureEvidence='{captureEvidenceKey}'.",
-                this);
-        }
-
-        private void OnDisable()
-        {
-            activityRequestEvents?.Dispose();
-            activityRequestEvents = null;
-        }
-
-        private void Update()
-        {
-            Keyboard keyboard = Keyboard.current;
-            if (keyboard == null)
-            {
-                return;
-            }
-
-            if (keyboard[clearActivityKey].wasPressedThisFrame)
-            {
-                ClearActivity();
-            }
-
-            if (keyboard[requestActivityKey].wasPressedThisFrame)
-            {
-                RequestActivity();
-            }
-
-            if (keyboard[releasePlayerKey].wasPressedThisFrame)
-            {
-                SetPlayerEligibility(false);
-            }
-
-            if (keyboard[restorePlayerKey].wasPressedThisFrame)
-            {
-                SetPlayerEligibility(true);
-            }
-
-            if (keyboard[captureEvidenceKey].wasPressedThisFrame)
-            {
-                CaptureEvidence("manual-capture");
-            }
         }
 
         private void OnGUI()
@@ -106,195 +53,237 @@ namespace FirstGame.Gameplay.Diagnostics
             }
 
             controlsRect = GUI.Window(
-                ControlsWindowId,
+                WindowId,
                 controlsRect,
                 DrawControls,
-                "C9M Camera Validation");
+                "Camera Override Authority");
         }
 
         private void DrawControls(int windowId)
         {
-            GUILayout.Label("Activity > Player > Route");
+            GUILayout.Label(
+                "Player < Activity < Route < Session");
 
-            if (GUILayout.Button("F6 - Clear Activity"))
+            DrawButton(
+                "Activity Override",
+                activityOverride,
+                true);
+
+            DrawButton(
+                "Activity Release",
+                activityOverride,
+                false);
+
+            DrawButton(
+                "Route Override",
+                routeOverride,
+                true);
+
+            DrawButton(
+                "Route Release",
+                routeOverride,
+                false);
+
+            DrawButton(
+                "Session Override",
+                sessionOverride,
+                true);
+
+            DrawButton(
+                "Session Release",
+                sessionOverride,
+                false);
+
+            if (GUILayout.Button("Capture Evidence"))
             {
-                ClearActivity();
+                CaptureEvidence("manual-capture");
             }
 
-            if (GUILayout.Button("F7 - Request Activity"))
-            {
-                RequestActivity();
-            }
-
-            if (GUILayout.Button("F8 - Release Player Camera"))
-            {
-                ReleaseLocalPlayerCamera();
-            }
-
-            if (GUILayout.Button("F9 - Restore Player Camera"))
-            {
-                RestoreLocalPlayerCamera();
-            }
-
-            if (GUILayout.Button("F10 - Capture Evidence"))
-            {
-                CaptureCameraEvidence();
-            }
-
-            GUI.DragWindow(new Rect(0f, 0f, 10000f, 24f));
+            GUI.DragWindow(
+                new Rect(0f, 0f, 10000f, 24f));
         }
 
-        public void ClearActivity()
+        private void DrawButton(
+            string label,
+            ScopedCameraOverrideBinding binding,
+            bool request)
         {
-            if (!TryValidateActivityTrigger("clear-activity"))
+            if (GUILayout.Button(label))
             {
+                Execute(
+                    label,
+                    binding,
+                    request);
+            }
+        }
+
+        public void RequestActivityOverride()
+        {
+            Execute(
+                "activity-request",
+                activityOverride,
+                true);
+        }
+
+        public void ReleaseActivityOverride()
+        {
+            Execute(
+                "activity-release",
+                activityOverride,
+                false);
+        }
+
+        public void RequestRouteOverride()
+        {
+            Execute(
+                "route-request",
+                routeOverride,
+                true);
+        }
+
+        public void ReleaseRouteOverride()
+        {
+            Execute(
+                "route-release",
+                routeOverride,
+                false);
+        }
+
+        public void RequestSessionOverride()
+        {
+            Execute(
+                "session-request",
+                sessionOverride,
+                true);
+        }
+
+        public void ReleaseSessionOverride()
+        {
+            Execute(
+                "session-release",
+                sessionOverride,
+                false);
+        }
+
+        private void Execute(
+            string action,
+            ScopedCameraOverrideBinding binding,
+            bool request)
+        {
+            if (binding == null)
+            {
+                Debug.LogError(
+                    $"{LogPrefix} action='{action}' " +
+                    "status='Blocked' " +
+                    "reason='override binding missing'.",
+                    this);
                 return;
             }
 
-            activityRequestTrigger.ClearActivity();
-        }
-
-        public void RequestActivity()
-        {
-            if (!TryValidateActivityTrigger("request-activity"))
-            {
-                return;
-            }
-
-            activityRequestTrigger.RequestActivity();
-        }
-
-        public void ReleaseLocalPlayerCamera()
-        {
-            SetPlayerEligibility(false);
-        }
-
-        public void RestoreLocalPlayerCamera()
-        {
-            SetPlayerEligibility(true);
-        }
-
-        public void CaptureCameraEvidence()
-        {
-            CaptureEvidence("manual-api-capture");
-        }
-
-        private void SetPlayerEligibility(bool eligible)
-        {
-            if (playerBinding == null)
-            {
-                LogBlocked(
-                    eligible ? "restore-player" : "release-player",
-                    "LocalPlayerCameraRequestBinding reference is missing.");
-                return;
-            }
-
-            bool succeeded = playerBinding.SetLocalPlayerEligible(eligible);
-            string step = eligible ? "player-eligible" : "player-released";
+            CameraOverrideResult result =
+                request
+                    ? binding.RequestOverride()
+                    : binding.ReleaseOverride();
 
             Debug.Log(
-                $"{LogPrefix} action='{step}' succeeded='{succeeded}' " +
-                $"bindingStatus='{playerBinding.LastStatus}' " +
-                $"diagnostic='{playerBinding.LastDiagnostic}'.",
+                $"{LogPrefix} action='{action}' " +
+                $"operation='{result.Operation}' " +
+                $"succeeded='{result.Succeeded}' " +
+                $"active='{result.IsActive}' " +
+                $"diagnostic='{result.Diagnostic}'.",
                 this);
 
-            CaptureEvidence(step);
+            CaptureEvidence(action);
         }
 
-        private void OnActivityRequestEvent(ActivityRequestTriggerEvent requestEvent)
-        {
-            if (requestEvent == null || !requestEvent.IsCompleted)
-            {
-                return;
-            }
-
-            string step = requestEvent.ClearsActivity
-                ? "activity-cleared"
-                : "activity-requested";
-
-            Debug.Log(
-                $"{LogPrefix} action='{step}' outcome='{requestEvent.Outcome}' " +
-                $"succeeded='{requestEvent.Succeeded}' message='{requestEvent.Message}'.",
-                this);
-
-            CaptureEvidence(step);
-        }
-
-        private bool TryValidateActivityTrigger(string action)
-        {
-            if (activityRequestTrigger == null)
-            {
-                LogBlocked(action, "ActivityRequestTrigger reference is missing.");
-                return false;
-            }
-
-            if (activityRequestTrigger.IsRequestInFlight)
-            {
-                LogBlocked(action, "An Activity request is already in flight.");
-                return false;
-            }
-
-            return true;
-        }
-
-        private void CaptureEvidence(string step)
+        private void CaptureEvidence(
+            string step)
         {
             if (outputSession == null)
             {
-                LogBlocked(step, "CameraOutputSessionBinding reference is missing.");
+                Debug.LogError(
+                    $"{LogPrefix} step='{step}' " +
+                    "status='Blocked' " +
+                    "reason='camera output session is not attached'.",
+                    this);
                 return;
             }
 
-            if (!outputSession.TryGetSession(out CameraOutputSession session, out string diagnostic))
+            if (!outputSession.TryGetSession(
+                    out CameraOutputSession session,
+                    out string diagnostic))
             {
-                LogBlocked(step, diagnostic);
+                Debug.LogError(
+                    $"{LogPrefix} step='{step}' " +
+                    "status='Blocked' " +
+                    $"reason='{diagnostic}'.",
+                    this);
                 return;
             }
 
-            CameraOutputContextSnapshot snapshot = session.Context.CaptureSnapshot();
-            string winnerRequest = snapshot.HasWinner
-                ? snapshot.Winner.RequestId.ToString()
-                : "none";
-            string winnerOwner = snapshot.HasWinner
-                ? snapshot.Winner.Owner.ToString()
-                : "none";
-            string winnerRig = snapshot.HasWinner && snapshot.Winner.Rig.Composer != null
-                ? snapshot.Winner.Rig.Composer.name
-                : "none";
-            int winnerPrecedence = snapshot.HasWinner
-                ? snapshot.Winner.Policy.Precedence
-                : 0;
+            CameraOutputContextSnapshot snapshot =
+                session.Context.CaptureSnapshot();
+
+            string winner =
+                snapshot.HasWinner
+                    ? snapshot.Winner.RequestId.ToString()
+                    : "none";
+
+            string owner =
+                snapshot.HasWinner
+                    ? snapshot.Winner.Owner.ToString()
+                    : "none";
+
+            int precedence =
+                snapshot.HasWinner
+                    ? snapshot.Winner.Policy.Precedence
+                    : 0;
 
             Debug.Log(
-                $"{LogPrefix} evidence step='{step}' output='{snapshot.OutputId}' " +
-                $"requests='{snapshot.AdmittedRequestCount}' hasWinner='{snapshot.HasWinner}' " +
-                $"winnerRequest='{winnerRequest}' winnerOwner='{winnerOwner}' " +
-                $"winnerPrecedence='{winnerPrecedence}' winnerRig='{winnerRig}' " +
-                $"routeStatus='{StatusOf(routeBinding)}' playerStatus='{StatusOf(playerBinding)}' " +
-                $"activityStatus='{StatusOf(activityBinding)}' blockingIssues='0'.",
+                $"{LogPrefix} step='{step}' " +
+                $"requests='{snapshot.AdmittedRequestCount}' " +
+                $"winner='{winner}' " +
+                $"owner='{owner}' " +
+                $"precedence='{precedence}' " +
+                $"player='{StatusOf(playerBinding)}' " +
+                $"activity='{StatusOf(activityOverride)}' " +
+                $"route='{StatusOf(routeOverride)}' " +
+                $"session='{StatusOf(sessionOverride)}'.",
                 this);
         }
 
-        private void LogBlocked(string action, string reason)
+        private static string StatusOf(
+            LocalPlayerCameraRequestBinding binding)
         {
-            Debug.LogError(
-                $"{LogPrefix} action='{action}' status='Blocked' reason='{reason}' blockingIssues='1'.",
-                this);
+            return binding != null
+                ? binding.LastStatus
+                : "Missing";
         }
 
-        private static string StatusOf(RouteCameraRequestBinding binding)
+        private static string StatusOf(
+            ScopedCameraOverrideBinding binding)
         {
-            return binding != null ? binding.LastStatus : "Missing";
+            return binding != null
+                ? binding.LastStatus
+                : "Missing";
         }
 
-        private static string StatusOf(LocalPlayerCameraRequestBinding binding)
+        public void AttachOutputSession(
+            CameraOutputSessionBinding binding)
         {
-            return binding != null ? binding.LastStatus : "Missing";
+            outputSession = binding;
         }
 
-        private static string StatusOf(ActivityCameraRequestBinding binding)
+        public void DetachOutputSession(
+            string reason)
         {
-            return binding != null ? binding.LastStatus : "Missing";
+            outputSession = null;
+        }
+
+        public void AttachSessionCameraOverride(
+            SessionCameraOverrideBinding binding)
+        {
+            sessionOverride = binding;
         }
     }
 }
