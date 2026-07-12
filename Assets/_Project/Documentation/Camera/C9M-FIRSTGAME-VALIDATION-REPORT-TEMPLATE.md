@@ -32,6 +32,16 @@ warnings:
 
 ## Runtime evidence
 
+Controls used:
+
+```text
+F6 Activity clear
+F7 Activity request
+F8 Player Camera release
+F9 Player Camera restore
+F10 Evidence capture
+```
+
 ### Gameplay entry
 
 ```text
@@ -39,6 +49,7 @@ Route binding status:
 Player binding status:
 Activity binding status:
 Winner:
+Evidence log:
 ```
 
 ### Activity release
@@ -48,6 +59,7 @@ Activity binding status:
 Player binding status:
 Winner:
 Visual result:
+Evidence log:
 ```
 
 ### Activity re-entry
@@ -56,6 +68,7 @@ Visual result:
 Activity binding status:
 Winner:
 Visual result:
+Evidence log:
 ```
 
 ### Player release
@@ -65,6 +78,7 @@ Player binding status:
 Route binding status:
 Winner:
 Visual result:
+Evidence log:
 ```
 
 ### Route exit

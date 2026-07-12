@@ -443,6 +443,23 @@ The framework request precedence is the authority. Cinemachine remains the prese
 
 # 11. Manual validation sequence
 
+The committed `FirstGameC9MCameraValidationControls` component exposes the
+canonical operations without disabling lifecycle objects:
+
+```text
+F6  Clear the current Activity through ActivityRequestTrigger
+F7  Request FG Activity A through ActivityRequestTrigger
+F8  Set Local Player camera eligibility to false
+F9  Set Local Player camera eligibility to true
+F10 Capture current output/winner evidence without changing state
+```
+
+Each completed operation emits one `[C9M_FIRSTGAME_CAMERA] evidence` record
+containing the admitted request count, winner request, typed owner,
+precedence, rig and the three binding statuses. The controller observes and
+reports the framework state; it never selects a winner or changes a rig
+directly.
+
 ## Test A — Gameplay entry
 
 Enter the Gameplay Route normally.
@@ -460,7 +477,8 @@ When the startup Activity is not intended to override immediately, configure the
 
 ## Test B — Activity release
 
-Clear or complete the Activity through the real framework flow.
+Press `F6`. This invokes `ActivityRequestTrigger.ClearActivity()` through the
+real framework flow.
 
 Expected:
 
@@ -473,7 +491,8 @@ visible camera returns to Player rig
 
 ## Test C — Activity re-entry
 
-Start the Activity again.
+Press `F7`. This invokes `ActivityRequestTrigger.RequestActivity()` for the
+real `FG Activity A` asset.
 
 Expected:
 
@@ -485,13 +504,14 @@ visible camera changes to Activity rig
 
 ## Test D — Player eligibility release
 
-After leaving the Activity, call on the Player binding:
+After leaving the Activity, press `F8`. This calls on the Player binding:
 
 ```csharp
 SetLocalPlayerEligible(false)
 ```
 
-For a manual Inspector-only proof, temporarily disable the component or Player object only when doing so does not invalidate the intended gameplay lifecycle.
+Do not disable the component or `PlayerPrototype`; that would mix Camera
+eligibility evidence with unrelated Player lifetime and input changes.
 
 Expected:
 
@@ -501,7 +521,7 @@ Route binding: still Published
 Winner: Route
 ```
 
-Re-enable eligibility:
+Press `F9` to re-enable eligibility:
 
 ```csharp
 SetLocalPlayerEligible(true)
@@ -541,6 +561,12 @@ Expected representative evidence:
 [FRAMEWORK_CAMERA] Activity Camera Request Binding status='Released'
 [FRAMEWORK_CAMERA] Local Player Camera Request Binding status='Released'
 [FRAMEWORK_CAMERA] Route Camera Request Binding status='Released'
+
+[C9M_FIRSTGAME_CAMERA] evidence step='gameplay-entry' ... winnerOwner='Activity:...' winnerPrecedence='100' ... blockingIssues='0'
+[C9M_FIRSTGAME_CAMERA] evidence step='activity-cleared' ... winnerOwner='LocalPlayer:player.1' winnerPrecedence='50' ... blockingIssues='0'
+[C9M_FIRSTGAME_CAMERA] evidence step='activity-requested' ... winnerOwner='Activity:...' winnerPrecedence='100' ... blockingIssues='0'
+[C9M_FIRSTGAME_CAMERA] evidence step='player-released' ... winnerOwner='Route:...' winnerPrecedence='10' ... blockingIssues='0'
+[C9M_FIRSTGAME_CAMERA] evidence step='player-eligible' ... winnerOwner='LocalPlayer:player.1' winnerPrecedence='50' ... blockingIssues='0'
 ```
 
 The exact winner must follow:

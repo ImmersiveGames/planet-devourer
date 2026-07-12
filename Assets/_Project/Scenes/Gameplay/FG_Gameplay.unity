@@ -227,6 +227,7 @@ GameObject:
   m_Component:
   - component: {fileID: 104017133}
   - component: {fileID: 104017132}
+  - component: {fileID: 104017134}
   m_Layer: 0
   m_Name: Route Cinemachine Camera
   m_TagString: Untagged
@@ -286,12 +287,31 @@ Transform:
   m_GameObject: {fileID: 104017131}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1857566420}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &104017134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 104017131}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b617507da6d07e749b7efdb34e1173e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineFollow
+  TrackerSettings:
+    BindingMode: 4
+    PositionDamping: {x: 1, y: 1, z: 1}
+    AngularDampingMode: 0
+    RotationDamping: {x: 1, y: 1, z: 1}
+    QuaternionDamping: 1
+  FollowOffset: {x: 0, y: 0, z: -10}
 --- !u!1 &137002266
 GameObject:
   m_ObjectHideFlags: 0
@@ -611,7 +631,7 @@ Transform:
   m_GameObject: {fileID: 196729989}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: -11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1028,6 +1048,8 @@ GameObject:
   m_Component:
   - component: {fileID: 483362360}
   - component: {fileID: 483362361}
+  - component: {fileID: 483362362}
+  - component: {fileID: 483362363}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -1062,6 +1084,49 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 483362359}
   m_Enabled: 1
+--- !u!114 &483362362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 483362359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88595ccde21347ea987cfbba6c100c2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.GameFlow.ActivityRequestTrigger
+  targetActivity: {fileID: 11400000, guid: fef5f07f33f4f414aa773ce34674ae4d, type: 2}
+  reason: C9M FIRSTGAME manual camera validation
+--- !u!114 &483362363
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 483362359}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bf4795b79824c31aa921ab5edb83d12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FirstGame.Gameplay.Diagnostics.FirstGameC9MCameraValidationControls
+  activityRequestTrigger: {fileID: 483362362}
+  outputSession: {fileID: 196729991}
+  routeBinding: {fileID: 1105480030}
+  playerBinding: {fileID: 958087667}
+  activityBinding: {fileID: 1581495994}
+  clearActivityKey: 99
+  requestActivityKey: 100
+  releasePlayerKey: 101
+  restorePlayerKey: 102
+  captureEvidenceKey: 103
+  showControls: 1
+  controlsRect:
+    serializedVersion: 2
+    x: 12
+    y: 12
+    width: 310
+    height: 260
 --- !u!1 &503597080
 GameObject:
   m_ObjectHideFlags: 0
@@ -2012,6 +2077,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1250693706}
   - component: {fileID: 1250693705}
+  - component: {fileID: 1250693707}
   m_Layer: 0
   m_Name: Activity Override Cinemachine Camera
   m_TagString: Untagged
@@ -2071,12 +2137,31 @@ Transform:
   m_GameObject: {fileID: 1250693704}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -5.88, y: 3.33, z: -14.65}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1857425753}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1250693707
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1250693704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b617507da6d07e749b7efdb34e1173e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineFollow
+  TrackerSettings:
+    BindingMode: 4
+    PositionDamping: {x: 1, y: 1, z: 1}
+    AngularDampingMode: 0
+    RotationDamping: {x: 1, y: 1, z: 1}
+    QuaternionDamping: 1
+  FollowOffset: {x: 0, y: 0, z: -10}
 --- !u!1 &1253143984
 GameObject:
   m_ObjectHideFlags: 0
@@ -2361,7 +2446,7 @@ MonoBehaviour:
   lastApplyRebuildStatus: ApplySucceeded
   lastBlockingIssue: 
   lastTargetResolutionSummary: Camera target requirements satisfied.
-  lastMaterializationSummary: created='0' repaired='0' alreadyValid='3' skipped='2'
+  lastMaterializationSummary: created='1' repaired='0' alreadyValid='3' skipped='2'
     blocked='0'
   lastResolvedFollowTarget: {fileID: 20637048}
   lastResolvedLookAtTarget: {fileID: 1649278150}
@@ -2851,7 +2936,7 @@ MonoBehaviour:
   lastApplyRebuildStatus: ApplySucceeded
   lastBlockingIssue: 
   lastTargetResolutionSummary: Camera target requirements satisfied.
-  lastMaterializationSummary: created='0' repaired='0' alreadyValid='3' skipped='2'
+  lastMaterializationSummary: created='1' repaired='0' alreadyValid='3' skipped='2'
     blocked='0'
   lastResolvedFollowTarget: {fileID: 617020926}
   lastResolvedLookAtTarget: {fileID: 2098183792}
@@ -2915,7 +3000,7 @@ MonoBehaviour:
   lastApplyRebuildStatus: ApplySucceeded
   lastBlockingIssue: 
   lastTargetResolutionSummary: Camera target requirements satisfied.
-  lastMaterializationSummary: created='0' repaired='0' alreadyValid='3' skipped='2'
+  lastMaterializationSummary: created='1' repaired='0' alreadyValid='3' skipped='2'
     blocked='0'
   lastResolvedFollowTarget: {fileID: 1638734336}
   lastResolvedLookAtTarget: {fileID: 1638734336}
@@ -2961,6 +3046,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1917526803}
   - component: {fileID: 1917526802}
+  - component: {fileID: 1917526804}
   m_Layer: 0
   m_Name: Cinemachine Camera
   m_TagString: Untagged
@@ -3020,12 +3106,31 @@ Transform:
   m_GameObject: {fileID: 1917526801}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalPosition: {x: 0, y: 1, z: -11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1451328727}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1917526804
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1917526801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b617507da6d07e749b7efdb34e1173e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineFollow
+  TrackerSettings:
+    BindingMode: 4
+    PositionDamping: {x: 1, y: 1, z: 1}
+    AngularDampingMode: 0
+    RotationDamping: {x: 1, y: 1, z: 1}
+    QuaternionDamping: 1
+  FollowOffset: {x: 0, y: 0, z: -10}
 --- !u!1 &1976642957
 GameObject:
   m_ObjectHideFlags: 0
