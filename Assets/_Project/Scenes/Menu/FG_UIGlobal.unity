@@ -1173,7 +1173,7 @@ Transform:
   m_GameObject: {fileID: 1187041057}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 22, z: -18}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1235,12 +1235,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a4f28c7e16d45a6b9c1d2e3f4a5b607, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Camera.SessionCameraOverrideBinding
-  scopeId: 
-  requestId: 
+  scopeId: firstgame.session.camera
+  requestId: firstgame.camera.request.session
   rigComposer: {fileID: 2043518815}
   targetSource: {fileID: 1321527879}
-  precedence: 0
-  tieBreakerId: 
+  precedence: 300
+  tieBreakerId: firstgame.session
   logDiagnostics: 1
   overrideActive: 0
   ownerActive: 0
@@ -2404,7 +2404,7 @@ Transform:
   m_GameObject: {fileID: 2043518813}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 22, z: -18}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2430,17 +2430,18 @@ MonoBehaviour:
   explicitLookAtTarget: {fileID: 1321527879}
   followRequirement: 20
   lookAtRequirement: 10
-  followOffset: {x: 0, y: 5, z: -8}
-  cinemachineCamera: {fileID: 0}
+  followOffset: {x: 0, y: 14, z: -18}
+  cinemachineCamera: {fileID: 2043518817}
   createCinemachineCameraIfMissing: 1
   cinemachineCameraObjectName: Cinemachine Camera
   logApplyRebuildDiagnostics: 1
-  lastApplyRebuildStatus: 
+  lastApplyRebuildStatus: ApplySucceeded
   lastBlockingIssue: 
-  lastTargetResolutionSummary: 
-  lastMaterializationSummary: 
-  lastResolvedFollowTarget: {fileID: 0}
-  lastResolvedLookAtTarget: {fileID: 0}
+  lastTargetResolutionSummary: Camera target requirements satisfied.
+  lastMaterializationSummary: created='0' repaired='2' alreadyValid='3' skipped='2'
+    blocked='0'
+  lastResolvedFollowTarget: {fileID: 1321527879}
+  lastResolvedLookAtTarget: {fileID: 1321527879}
 --- !u!114 &2043518816
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2454,12 +2455,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineFollow
   TrackerSettings:
-    BindingMode: 4
+    BindingMode: 5
     PositionDamping: {x: 1, y: 1, z: 1}
     AngularDampingMode: 0
     RotationDamping: {x: 1, y: 1, z: 1}
     QuaternionDamping: 1
-  FollowOffset: {x: 0, y: 0, z: -10}
+  FollowOffset: {x: 0, y: 14, z: -18}
 --- !u!114 &2043518817
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2467,7 +2468,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2043518813}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
   m_Name: 
@@ -2480,7 +2481,7 @@ MonoBehaviour:
   m_StreamingVersion: 20241001
   m_LegacyPriority: 0
   Target:
-    TrackingTarget: {fileID: 0}
+    TrackingTarget: {fileID: 1321527879}
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
