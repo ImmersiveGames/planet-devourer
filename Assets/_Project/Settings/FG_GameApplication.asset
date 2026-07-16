@@ -14,6 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.GameApplicationAsset
   applicationName: Game Application
   startupRoute: {fileID: 11400000, guid: 5b6fb2a4340e15c418e39f9feb720657, type: 2}
+  localPlayerSlots:
+  - {fileID: 11400000, guid: 7a4d3979cf17db74980e31ff7f59be4a, type: 2}
+  - {fileID: 11400000, guid: 064148c667f84d9459048e8ef718a99e, type: 2}
+  playerActorSelectionPolicyProfile: {fileID: 11400000, guid: b9a56f115e1635c4f919377b05d9f631, type: 2}
   globalUiScenePolicy: 1
   globalUiScenePath: Assets/_Project/Scenes/Menu/FG_UIGlobal.unity
   globalUiSceneName: FG_UIGlobal

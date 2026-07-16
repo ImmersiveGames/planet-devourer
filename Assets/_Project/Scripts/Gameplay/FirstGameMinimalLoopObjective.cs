@@ -1,12 +1,13 @@
 using Immersive.Framework.Reset;
 using Immersive.Framework.Reset.Unity;
 using UnityEngine;
-
-namespace FirstGame.Gameplay
+namespace _Project.Scripts.Gameplay
 {
     [DisallowMultipleComponent]
     public sealed class FirstGameMinimalLoopObjective : MonoBehaviour, IUnityResettable, IUnityResettableMetadata
     {
+        private static readonly int _baseColor = Shader.PropertyToID("_BaseColor");
+        private static readonly int _color = Shader.PropertyToID("_Color");
         [Header("Identity")]
         [SerializeField] private string objectiveId = "firstgame.minimal-loop.goal";
 
@@ -138,8 +139,8 @@ namespace FirstGame.Gameplay
 
             _propertyBlock ??= new MaterialPropertyBlock();
             objectiveRenderer.GetPropertyBlock(_propertyBlock);
-            _propertyBlock.SetColor("_BaseColor", color);
-            _propertyBlock.SetColor("_Color", color);
+            _propertyBlock.SetColor(_baseColor, color);
+            _propertyBlock.SetColor(_color, color);
             objectiveRenderer.SetPropertyBlock(_propertyBlock);
         }
     }

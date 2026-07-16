@@ -1,14 +1,13 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
-namespace FirstGame.Gameplay
+namespace _Project.Scripts.Gameplay
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(PlayerInput))]
     [RequireComponent(typeof(CharacterController))]
-    [AddComponentMenu("FIRSTGAME/Gameplay/Test Player Movement")]
-    public sealed class FirstGameTestPlayerMovement : MonoBehaviour
+    [AddComponentMenu("FIRST GAME/Gameplay/PreAuthored Player Movement")]
+    public sealed class FirstGamePreAuthoredPlayerMovement : MonoBehaviour
     {
         [Header("References")]
         [SerializeField] private PlayerInput playerInput;
@@ -30,8 +29,8 @@ namespace FirstGame.Gameplay
         [Min(0f)]
         [SerializeField] private float rotationSpeed = 720f;
 
-        private InputAction moveAction;
-        private float verticalVelocity;
+        private InputAction _moveAction;
+        private float _verticalVelocity;
 
         private void Reset()
         {
@@ -60,13 +59,13 @@ namespace FirstGame.Gameplay
 
         private void Update()
         {
-            if (moveAction == null || !moveAction.enabled)
+            if (_moveAction == null || !_moveAction.enabled)
             {
                 ApplyGravityOnly();
                 return;
             }
 
-            Vector2 input = moveAction.ReadValue<Vector2>();
+            Vector2 input = _moveAction.ReadValue<Vector2>();
             Vector3 planarDirection = new Vector3(input.x, 0f, input.y);
 
             if (planarDirection.sqrMagnitude > 1f)
@@ -78,7 +77,7 @@ namespace FirstGame.Gameplay
 
             Vector3 velocity =
                 planarDirection * moveSpeed
-                + Vector3.up * verticalVelocity;
+                + Vector3.up * _verticalVelocity;
 
             characterController.Move(
                 velocity * Time.deltaTime);
@@ -114,19 +113,19 @@ namespace FirstGame.Gameplay
             if (playerInput == null)
             {
                 throw new InvalidOperationException(
-                    $"{nameof(FirstGameTestPlayerMovement)} requires PlayerInput.");
+                    $"{nameof(FirstGamePreAuthoredPlayerMovement)} requires PlayerInput.");
             }
 
             if (characterController == null)
             {
                 throw new InvalidOperationException(
-                    $"{nameof(FirstGameTestPlayerMovement)} requires CharacterController.");
+                    $"{nameof(FirstGamePreAuthoredPlayerMovement)} requires CharacterController.");
             }
 
             if (playerInput.actions == null)
             {
                 throw new InvalidOperationException(
-                    $"{nameof(FirstGameTestPlayerMovement)} requires PlayerInput.actions.");
+                    $"{nameof(FirstGamePreAuthoredPlayerMovement)} requires PlayerInput.actions.");
             }
         }
 
@@ -140,27 +139,27 @@ namespace FirstGame.Gameplay
             if (actionMap == null)
             {
                 throw new InvalidOperationException(
-                    $"{nameof(FirstGameTestPlayerMovement)} could not find action map " +
+                    $"{nameof(FirstGamePreAuthoredPlayerMovement)} could not find action map " +
                     $"'{actionMapName}' in PlayerInput.actions.");
             }
 
-            moveAction =
+            _moveAction =
                 actionMap.FindAction(
                     moveActionName,
                     throwIfNotFound: false);
 
-            if (moveAction == null)
+            if (_moveAction == null)
             {
                 throw new InvalidOperationException(
-                    $"{nameof(FirstGameTestPlayerMovement)} could not find action " +
+                    $"{nameof(FirstGamePreAuthoredPlayerMovement)} could not find action " +
                     $"'{actionMapName}/{moveActionName}'.");
             }
 
-            if (moveAction.type != InputActionType.Value
-                && moveAction.type != InputActionType.PassThrough)
+            if (_moveAction.type != InputActionType.Value
+                && _moveAction.type != InputActionType.PassThrough)
             {
                 throw new InvalidOperationException(
-                    $"{nameof(FirstGameTestPlayerMovement)} requires " +
+                    $"{nameof(FirstGamePreAuthoredPlayerMovement)} requires " +
                     $"'{actionMapName}/{moveActionName}' to be Value or PassThrough.");
             }
         }
@@ -170,21 +169,19 @@ namespace FirstGame.Gameplay
             UpdateVerticalVelocity();
 
             characterController.Move(
-                Vector3.up
-                * verticalVelocity
-                * Time.deltaTime);
+                Vector3.up * (_verticalVelocity * Time.deltaTime));
         }
 
         private void UpdateVerticalVelocity()
         {
             if (characterController.isGrounded
-                && verticalVelocity < 0f)
+                && _verticalVelocity < 0f)
             {
-                verticalVelocity = -2f;
+                _verticalVelocity = -2f;
                 return;
             }
 
-            verticalVelocity -= gravity * Time.deltaTime;
+            _verticalVelocity -= gravity * Time.deltaTime;
         }
     }
 }

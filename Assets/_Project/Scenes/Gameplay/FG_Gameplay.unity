@@ -1117,7 +1117,7 @@ GameObject:
   - component: {fileID: 958087659}
   - component: {fileID: 958087666}
   m_Layer: 0
-  m_Name: PlayerPrototype
+  m_Name: PreAuthoredPlayerPrototype
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

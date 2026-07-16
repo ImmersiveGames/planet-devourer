@@ -2,8 +2,7 @@ using Immersive.Framework.ActivityRestart;
 using Immersive.Framework.ObjectReset;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
-namespace FirstGame.Gameplay
+namespace _Project.Scripts.Gameplay
 {
     [DisallowMultipleComponent]
     public sealed class FirstGameMinimalLoopControls : MonoBehaviour
