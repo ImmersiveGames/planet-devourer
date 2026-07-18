@@ -6,6 +6,9 @@ O workspace está na baseline de higiene H6A: o package permanece instalado e o 
 
 ## Estado atual
 
+O caminho legado de teclado para Pause foi removido. Este corte nao configura
+um substituto canonico de Pause.
+
 - rotas, activities, loading, pause, reset, áudio, UI e conteúdo de gameplay permanecem no projeto;
 - `InputSystem_Actions.inputactions`, movimento e targets neutros permanecem reutilizáveis;
 - integrações antigas de Player/Slot/Binding/Camera foram removidas;
