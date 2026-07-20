@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6d702c1ba364e70ad76a85eb5f1b842, type: 3}
   m_Name: FG_Activity_D_StopBgm
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.ActivityAsset
+  activityId: fg.activity.d.stop.bgm
   activityName: FG Activity D Stop BGM
   description: FIRSTGAME BGM policy integration scenario.
+  playerParticipationProjectionProfile: {fileID: 0}
+  playerParticipationRequirementsProfile: {fileID: 0}
   activityContentProfile: {fileID: 0}
   visualTransitionMode: 10
   transitionGateMode: 30
