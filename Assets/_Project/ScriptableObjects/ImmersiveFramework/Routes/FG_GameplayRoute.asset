@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a35fe899a80d2d64dac72e8bfe3079df, type: 3}
   m_Name: FG_GameplayRoute
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.RouteAsset
+  routeId: 9645f1f587df4e42a3fdd0b5e743d318
   routeName: Gameplay Route
   primaryScenePath: Assets/_Project/Scenes/Gameplay/FG_Gameplay.unity
   primarySceneName: FG_Gameplay

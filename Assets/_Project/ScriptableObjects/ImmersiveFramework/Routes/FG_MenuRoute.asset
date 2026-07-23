@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a35fe899a80d2d64dac72e8bfe3079df, type: 3}
   m_Name: FG_MenuRoute
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.RouteAsset
+  routeId: 77e59dc6e3a14a42997689c524f8394b
   routeName: Menu Route
   primaryScenePath: Assets/_Project/Scenes/Menu/FG_Menu.unity
   primarySceneName: FG_Menu
