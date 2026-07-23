@@ -17,7 +17,9 @@ MonoBehaviour:
   localPlayerSlots:
   - {fileID: 11400000, guid: 7a4d3979cf17db74980e31ff7f59be4a, type: 2}
   - {fileID: 11400000, guid: 064148c667f84d9459048e8ef718a99e, type: 2}
-  playerActorSelectionPolicyProfile: {fileID: 11400000, guid: b9a56f115e1635c4f919377b05d9f631, type: 2}
+  - {fileID: 11400000, guid: b6abffe80d2bed449a7b2da7a2789273, type: 2}
+  - {fileID: 11400000, guid: b4838b1f75e5fa347a1ee6c39c4304ce, type: 2}
+  playerActorSelectionDuplicatePolicy: 10
   globalUiScenePolicy: 1
   globalUiScenePath: Assets/_Project/Scenes/Menu/FG_UIGlobal.unity
   globalUiSceneName: FG_UIGlobal
