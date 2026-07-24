@@ -21,6 +21,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: b4838b1f75e5fa347a1ee6c39c4304ce, type: 2}
   playerActorSelectionDuplicatePolicy: 10
   globalUiScenePolicy: 1
-  globalUiScenePath: Assets/_Project/Scenes/Menu/FG_UIGlobal.unity
-  globalUiSceneName: FG_UIGlobal
+  globalUiScenePath: Assets/_Project/Scenes/System/UIGlobal.unity
+  globalUiSceneName: UIGlobal
   validationMode: 1
