@@ -15,8 +15,10 @@ MonoBehaviour:
   activityId: fg.activity.a
   activityName: FG Activity A
   description: 
-  playerParticipationProjectionProfile: {fileID: 0}
-  playerParticipationRequirementsProfile: {fileID: 0}
+  playerParticipationProjectionMode: 10
+  playerParticipationZeroParticipantPolicy: 0
+  playerParticipationExplicitSlotProfiles: []
+  playerParticipationRequirementLevel: 40
   activityContentProfile: {fileID: 0}
   visualTransitionMode: 10
   transitionGateMode: 30
