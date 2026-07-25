@@ -124,13 +124,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.SceneLocalPlayerAdmissionAuthoring
   playerSlotProfile: {fileID: 11400000, guid: 7a4d3979cf17db74980e31ff7f59be4a, type: 2}
-  localPlayerHost: {fileID: 4055642973086950345}
   actorProfile: {fileID: 11400000, guid: 8a70d0858e7a2674b96e5698efc542a7, type: 2}
   sceneLogicalPlayerActor: {fileID: 6843114799758863182}
   admissionTiming: 0
-  lastAuthoringStatus: 170
-  lastAuthoringDiagnostic: Scene Logical Player Actor prefab source 'Actor_PlayerSceneProvided'
-    does not match Actor Profile 'ActorProfile' Logical Actor Host prefab 'Actor_PlayerSceneProvided'.
+  evidenceActorProfile: {fileID: 11400000, guid: 8a70d0858e7a2674b96e5698efc542a7, type: 2}
+  evidenceLogicalActorHostPrefab: {fileID: 8997398367740276396, guid: 924a30e9cb3b844439f33bff2db9e85a, type: 3}
+  evidenceDiagnostic: Profile='ActorProfile' sourcePrefab='Actor_PlayerSceneProvided'
+    actor='Actor_PlayerSceneProvided'.
+  lastAuthoringStatus: 10
+  lastAuthoringDiagnostic: Scene-Provided Player authoring and internal profile evidence
+    are valid.
 --- !u!1001 &4205851333942080991
 PrefabInstance:
   m_ObjectHideFlags: 0

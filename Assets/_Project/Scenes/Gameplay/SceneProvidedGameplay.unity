@@ -1930,11 +1930,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 700440662034760322, guid: a51c2f5cb2122db4ba32142776a9f0ae, type: 3}
-      propertyPath: lastAuthoringDiagnostic
-      value: Scene Logical Player Actor prefab source 'Player_SceneProvided' does
-        not match Actor Profile 'ActorProfile' Logical Actor Host prefab 'Actor_PlayerSceneProvided'.
-      objectReference: {fileID: 0}
     - target: {fileID: 6362609549567565620, guid: a51c2f5cb2122db4ba32142776a9f0ae, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
