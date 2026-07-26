@@ -484,13 +484,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 840739183}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2756825, y: 0, z: 0, w: 0.96124876}
+  m_LocalRotation: {x: 0.27563733, y: 0, z: 0, w: 0.96126175}
   m_LocalPosition: {x: 0, y: 5, z: -8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1637344166}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 32, y: 0, z: 0}
 --- !u!114 &840739185
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -509,8 +509,8 @@ MonoBehaviour:
   targetSource: {fileID: 0}
   explicitFollowTarget: {fileID: 390252688}
   explicitLookAtTarget: {fileID: 390252688}
-  followRequirement: 20
-  lookAtRequirement: 10
+  followRequirement: 0
+  lookAtRequirement: 0
   followOffset: {x: 0, y: 5, z: -8}
   cinemachineCamera: {fileID: 840739188}
   createCinemachineCameraIfMissing: 0
