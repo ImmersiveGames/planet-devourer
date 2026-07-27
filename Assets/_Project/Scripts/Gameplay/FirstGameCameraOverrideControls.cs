@@ -1,3 +1,4 @@
+using System;
 using Immersive.Framework.Camera;
 using UnityEngine;
 
@@ -10,19 +11,56 @@ namespace FirstGame.Gameplay
     {
         [SerializeField] private ActivityCameraOverrideBinding activityCamera;
         [SerializeField] private RouteCameraOverrideBinding routeCamera;
-        [SerializeField] private SessionCameraOverrideBinding sessionCamera;
 
-        public void RequestActivityCamera() => activityCamera.RequestOverride();
-        public void ReleaseActivityCamera() => activityCamera.ReleaseOverride();
-        public void RequestRouteCamera() => routeCamera.RequestOverride();
-        public void ReleaseRouteCamera() => routeCamera.ReleaseOverride();
-        public void RequestSessionCamera() => sessionCamera.RequestOverride();
-        public void ReleaseSessionCamera() => sessionCamera.ReleaseOverride();
+        private void Awake()
+        {
+            ValidateReferences();
+        }
+
+        public void RequestActivityCamera() =>
+            RequireActivityCamera().RequestOverride();
+
+        public void ReleaseActivityCamera() =>
+            RequireActivityCamera().ReleaseOverride();
+
+        public void RequestRouteCamera() =>
+            RequireRouteCamera().RequestOverride();
+
+        public void ReleaseRouteCamera() =>
+            RequireRouteCamera().ReleaseOverride();
 
         public void ReturnToPlayerCamera()
         {
-            routeCamera.ReleaseOverride();
-            activityCamera.ReleaseOverride();
+            RequireRouteCamera().ReleaseOverride();
+            RequireActivityCamera().ReleaseOverride();
+        }
+
+        private void ValidateReferences()
+        {
+            RequireActivityCamera();
+            RequireRouteCamera();
+        }
+
+        private ActivityCameraOverrideBinding RequireActivityCamera()
+        {
+            if (activityCamera == null)
+            {
+                throw new InvalidOperationException(
+                    "FirstGameCameraOverrideControls requires an explicit Activity Camera binding.");
+            }
+
+            return activityCamera;
+        }
+
+        private RouteCameraOverrideBinding RequireRouteCamera()
+        {
+            if (routeCamera == null)
+            {
+                throw new InvalidOperationException(
+                    "FirstGameCameraOverrideControls requires an explicit Route Camera binding.");
+            }
+
+            return routeCamera;
         }
     }
 }

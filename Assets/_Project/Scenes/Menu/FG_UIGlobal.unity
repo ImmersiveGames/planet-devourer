@@ -2358,7 +2358,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d1bda0d2aa64f85a2a0d71755cd1003, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.CameraAuthoring.CameraRigComposer
-  recipe: {fileID: 0}
   presentationIntent: 10
   targetSourceKind: 10
   preAuthoredPlayerComposer: {fileID: 0}
@@ -2368,8 +2367,6 @@ MonoBehaviour:
   lookAtRequirement: 10
   followOffset: {x: 0, y: 14, z: -18}
   cinemachineCamera: {fileID: 2043518817}
-  createCinemachineCameraIfMissing: 1
-  cinemachineCameraObjectName: Cinemachine Camera
   logApplyRebuildDiagnostics: 1
   lastApplyRebuildStatus: ApplySucceeded
   lastBlockingIssue: 
