@@ -165,6 +165,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 700440662034760322, guid: a51c2f5cb2122db4ba32142776a9f0ae, type: 3}
+      propertyPath: lastAuthoringStatus
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 700440662034760322, guid: a51c2f5cb2122db4ba32142776a9f0ae, type: 3}
+      propertyPath: lastAuthoringDiagnostic
+      value: Scene-Provided Player authoring and internal profile evidence are valid.
+      objectReference: {fileID: 0}
     - target: {fileID: 6362609549567565620, guid: a51c2f5cb2122db4ba32142776a9f0ae, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
