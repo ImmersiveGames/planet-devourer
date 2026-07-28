@@ -553,6 +553,74 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 296228914}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1001 &395380047
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 5555727128277765452, guid: d4eb17a3773974f47945bd2f9f60778d, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5555727128277765452, guid: d4eb17a3773974f47945bd2f9f60778d, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5555727128277765452, guid: d4eb17a3773974f47945bd2f9f60778d, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5555727128277765452, guid: d4eb17a3773974f47945bd2f9f60778d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5555727128277765452, guid: d4eb17a3773974f47945bd2f9f60778d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5555727128277765452, guid: d4eb17a3773974f47945bd2f9f60778d, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5555727128277765452, guid: d4eb17a3773974f47945bd2f9f60778d, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5555727128277765452, guid: d4eb17a3773974f47945bd2f9f60778d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5555727128277765452, guid: d4eb17a3773974f47945bd2f9f60778d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5555727128277765452, guid: d4eb17a3773974f47945bd2f9f60778d, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5730042664484561184, guid: d4eb17a3773974f47945bd2f9f60778d, type: 3}
+      propertyPath: m_Name
+      value: Player_SceneProvided_With_Reset
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d4eb17a3773974f47945bd2f9f60778d, type: 3}
+--- !u!114 &395380048 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7912896333495645953, guid: d4eb17a3773974f47945bd2f9f60778d, type: 3}
+  m_PrefabInstance: {fileID: 395380047}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71ee52cb6da64fb691d51a321688c072, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Reset.Unity.UnityResetSubjectAdapter
 --- !u!1 &461016743
 GameObject:
   m_ObjectHideFlags: 0
@@ -1074,74 +1142,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 883604845}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1001 &913974252
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 5555727128277765452, guid: d4eb17a3773974f47945bd2f9f60778d, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5555727128277765452, guid: d4eb17a3773974f47945bd2f9f60778d, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5555727128277765452, guid: d4eb17a3773974f47945bd2f9f60778d, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5555727128277765452, guid: d4eb17a3773974f47945bd2f9f60778d, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5555727128277765452, guid: d4eb17a3773974f47945bd2f9f60778d, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5555727128277765452, guid: d4eb17a3773974f47945bd2f9f60778d, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5555727128277765452, guid: d4eb17a3773974f47945bd2f9f60778d, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5555727128277765452, guid: d4eb17a3773974f47945bd2f9f60778d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5555727128277765452, guid: d4eb17a3773974f47945bd2f9f60778d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5555727128277765452, guid: d4eb17a3773974f47945bd2f9f60778d, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5730042664484561184, guid: d4eb17a3773974f47945bd2f9f60778d, type: 3}
-      propertyPath: m_Name
-      value: Player_SceneProvided With_Reset
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: d4eb17a3773974f47945bd2f9f60778d, type: 3}
---- !u!114 &913974253 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7912896333495645953, guid: d4eb17a3773974f47945bd2f9f60778d, type: 3}
-  m_PrefabInstance: {fileID: 913974252}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71ee52cb6da64fb691d51a321688c072, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Reset.Unity.UnityResetSubjectAdapter
 --- !u!1 &1145588706
 GameObject:
   m_ObjectHideFlags: 0
@@ -1290,7 +1290,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ObjectReset.ObjectResetTrigger
   targetSubject:
-    subjectAdapter: {fileID: 913974253}
+    subjectAdapter: {fileID: 395380048}
     subjectId: 
   reason: firstgame.player.transform-reset.button
   allowNoParticipants: 0
@@ -2479,7 +2479,6 @@ GameObject:
   - component: {fileID: 2122655329}
   - component: {fileID: 2122655328}
   - component: {fileID: 2122655327}
-  - component: {fileID: 2122655326}
   m_Layer: 5
   m_Name: btn_Reset Activity
   m_TagString: Untagged
@@ -2507,19 +2506,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &2122655326
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2122655324}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 58e94e8580dc4e85af879169ac33dd7c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Pause.PauseRequestTrigger
-  reason: qa.pause.toggle
 --- !u!114 &2122655327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2563,20 +2549,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2122655328}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2122655326}
-        m_TargetAssemblyTypeName: Immersive.Framework.Pause.PauseRequestTrigger,
-          Immersive.Framework.Runtime
-        m_MethodName: RequestPause
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &2122655328
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2622,4 +2595,4 @@ SceneRoots:
   - {fileID: 1546352308}
   - {fileID: 1895561843}
   - {fileID: 10686767}
-  - {fileID: 913974252}
+  - {fileID: 395380047}
