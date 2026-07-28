@@ -220,6 +220,12 @@ Manual Play Mode proof remains a separate state and is not inferred from source 
 
 ## 9. Immediate next work
 
+`PLAYER-DIAG-1` now adds a host-scoped persistent diagnostic projection for the
+last Scene-Provided admission/release operation. The focused manual teardown
+matrix remains pending; see
+`FIRSTGAME-SCENE-PROVIDED-PLAYER-VALIDATION-2026-07-28.md`. This comparison
+baseline does not change the pending runtime-provisioned Player roadmap.
+
 ### Close current scenario
 
 Record the Scene-Provided Player with Camera scenario:

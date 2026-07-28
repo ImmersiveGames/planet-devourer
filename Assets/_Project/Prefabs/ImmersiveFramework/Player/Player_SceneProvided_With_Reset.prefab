@@ -50,7 +50,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6543832230755283800, guid: a51c2f5cb2122db4ba32142776a9f0ae, type: 3}
       propertyPath: m_Name
-      value: Player_SceneProvided With_Reset
+      value: Player_SceneProvided_With_Reset
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -100,7 +100,7 @@ MonoBehaviour:
   unregisterOnDisable: 1
   retryUntilRuntimeAvailable: 1
   idGeneration: 10
-  subjectId: 
+  subjectId: reset.subject.1a7c3270d6a74fd1ae73ca48880c064c
   runtimeSubjectIdPrefix: 
   scope: 20
   displayName: Scene Provided Player
