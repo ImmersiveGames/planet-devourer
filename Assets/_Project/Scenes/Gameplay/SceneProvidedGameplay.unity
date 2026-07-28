@@ -605,6 +605,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player_SceneProvided_With_Reset
       objectReference: {fileID: 0}
+    - target: {fileID: 7912896333495645953, guid: d4eb17a3773974f47945bd2f9f60778d, type: 3}
+      propertyPath: subjectId
+      value: reset.subject.1a7c3270d6a74fd1ae73ca48880c064c
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
