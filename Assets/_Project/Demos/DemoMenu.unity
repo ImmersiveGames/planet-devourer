@@ -323,7 +323,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.GameFlow.RouteRequestTrigger
   targetRoute: {fileID: 11400000, guid: f2c6fbb7662057d4e97dc384ca23426d, type: 2}
-  reason: demo.rote.A
+  reason: demo.route.a
 --- !u!114 &955527766
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -17,5 +17,11 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Project/Demos/DemoRouteActivity/Scenes/DemoRouteActivity_CenarioB.unity
     guid: 372e9a36f6cbf7d4c82d22f4efe2204f
+  - enabled: 1
+    path: Assets/_Project/Demos/DemoRouteActivity/Scenes/AdditivesAtctivitys/Activity1Add.unity
+    guid: 61882768d4dad3647afa71bf44b65274
+  - enabled: 1
+    path: Assets/_Project/Demos/DemoRouteActivity/Scenes/AdditivesAtctivitys/Activity2Add.unity
+    guid: 36d2df69262a974459040acb9a952883
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

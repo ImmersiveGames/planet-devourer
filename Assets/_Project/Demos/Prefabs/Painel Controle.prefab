@@ -148,7 +148,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.GameFlow.RouteRequestTrigger
   targetRoute: {fileID: 11400000, guid: f2c6fbb7662057d4e97dc384ca23426d, type: 2}
-  reason: toRotaA
+  reason: demo.route.a
 --- !u!1 &2507006441880943360
 GameObject:
   m_ObjectHideFlags: 0
@@ -621,7 +621,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.GameFlow.ActivityRequestTrigger
   targetActivity: {fileID: 11400000, guid: 6686bb2e720242044b30aadf2aaad7bc, type: 2}
-  reason: demo.ativity.1
+  reason: demo.activity.1
 --- !u!1 &4697796429306531817
 GameObject:
   m_ObjectHideFlags: 0
@@ -1044,7 +1044,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.GameFlow.RouteRequestTrigger
   targetRoute: {fileID: 11400000, guid: a6e97ff59ce86c240a846dce3774ac42, type: 2}
-  reason: tomenu
+  reason: demo.route.menu
 --- !u!1 &6604373273138022347
 GameObject:
   m_ObjectHideFlags: 0
@@ -1193,7 +1193,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.GameFlow.RouteRequestTrigger
   targetRoute: {fileID: 11400000, guid: 4eb7edef17a36434d8f2837ff6742ecb, type: 2}
-  reason: toRotaA
+  reason: demo.route.b
 --- !u!1 &6757175175025561787
 GameObject:
   m_ObjectHideFlags: 0
@@ -1479,7 +1479,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.GameFlow.ActivityRequestTrigger
   targetActivity: {fileID: 11400000, guid: 6aced2da4085f07449f5337c18d1ec8d, type: 2}
-  reason: demo.ativity.2
+  reason: demo.activity.2
 --- !u!1 &8886439791021443802
 GameObject:
   m_ObjectHideFlags: 0
