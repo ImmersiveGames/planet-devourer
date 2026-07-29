@@ -13,107 +13,89 @@ Failed
 Blocked
 ```
 
-A scenario is `Passed` only after its result is executed in Unity and recorded with the package revision, FIRSTGAME revision and relevant diagnostic evidence.
+A scenario is `Passed` only after execution in Unity and recorded evidence.
 
-## Evidence record template
+## Evidence template
 
 ```text
 Scenario:
 Date:
 Unity version:
-FIRSTGAME commit:
-Framework commit/package version:
+FIRSTGAME SHA:
+Framework SHA:
 Starting scene:
-Steps executed:
-Expected result:
+Steps:
 Observed result:
-Diagnostics inspected:
+Diagnostics:
 Status:
-Notes / UX friction:
+UX notes:
+```
+
+Current validated references:
+
+```text
+FIRSTGAME
+  116225d50a3c6af976355715d3216c0cb80852eb
+
+Framework
+  bdb76a06a3b75adc9ac7fa5d3e63fbe457ed5ae2
+
+QA
+  64f900a5c26ab07ad37f2e7d6e578e8efcfb72a4
 ```
 
 ---
 
-## TS-01 — Application boot and menu Routes
+## TS-01 — Application boot and focused Route navigation
 
 ### Goal
 
-Prove that Player-independent navigation remains usable before any Player is required.
-
-### Preconditions
-
-```text
-FG_UIGlobal and FG_Menu enabled in Build Settings
-FG_GameApplication assigned to bootstrap
-startup Route configured
-```
+Prove that Player-independent menu navigation can enter and leave the focused Scene-Provided fixture.
 
 ### Steps
 
-1. Start Play Mode from the supported application entry.
-2. Confirm the menu becomes visible.
-3. Select `Start Game`.
-4. Confirm the general gameplay Route enters.
-5. Return to the menu through the authored framework path.
-6. Select `Player Local Test`.
-7. Confirm `FG_PlayerSceneProvider` loads `SceneProvidedGameplay`.
-8. Return to the menu again.
+```text
+Menu
+→ Player Local Test
+→ SceneProvidedGameplay
+→ Menu
+```
 
 ### Expected evidence
 
-```text
-no Player is required to navigate Routes
-route request result is explicit
-primary scenes load and release correctly
-menu is restored after exit
-second navigation does not retain previous Route scope
-```
+- boot succeeds;
+- Route request succeeds;
+- primary scene changes;
+- Activity becomes Ready;
+- return to Menu succeeds;
+- no blocking issue.
 
-### Current status
+### Status
 
-`Not Run` in this document.
+`Passed` for the focused `Player Local Test` Route.
+
+The general `Start Game` branch is not reclassified by this specific freeze.
 
 ---
 
-## TS-02 — Persistent Content and Camera Output
+## TS-02 — Persistent Content and physical Camera Output
 
 ### Goal
 
-Prove that the physical Camera Output remains Session-owned while contextual Camera requests change.
-
-### Preconditions
-
-```text
-Conteiner Scene configured as Persistent Content
-Camera Output authoring valid
-one general or Player Camera request available
-```
-
-### Steps
-
-1. Enter Play Mode and inspect the persistent Camera Output.
-2. Enter the general gameplay Route.
-3. Enter the Scene-Provided Player Route.
-4. Confirm the same physical Camera Output remains authoritative.
-5. Confirm the active contextual request changes when expected.
-6. Exit to the menu.
-7. Confirm the prior/default Camera state is restored.
-8. Repeat the transition.
+Prove that one Session-owned physical Camera Output remains authoritative while the Player publishes contextual gameplay Camera evidence.
 
 ### Expected evidence
 
-```text
-one physical Camera Output
-no Camera.main lookup
-no duplicate Unity Camera or AudioListener
-scoped request selected while its scope is active
-previous/default state restored on release
-second entry does not duplicate request identity
-```
+- one physical Camera Output;
+- no duplicate Unity Camera or AudioListener;
+- Player Camera request active during Gameplay;
+- request released on exit;
+- Menu output restored;
+- reentry does not duplicate the request.
 
-### Current status
+### Status
 
-`Not Run` in this document.
+`Passed` in the Scene-Provided baseline.
 
 ---
 
@@ -121,81 +103,34 @@ second entry does not duplicate request identity
 
 ### Goal
 
-Prove that authored Pause controls can change logical Pause without an admitted Player binding.
+Prove authored Pause without a Player binding.
 
-### Preconditions
+### Status
 
-```text
-PauseRequestTrigger composed in a valid lifecycle scope
-application-only execution available
-no Player required for the selected test
-```
+`Not Run` by the `PLAYER-DIAG-1` freeze.
 
-### Steps
-
-1. Enter a context with no admitted Player requirement.
-2. Invoke the authored Pause control.
-3. Confirm logical Pause and presentation change.
-4. Confirm `Time.timeScale` follows the configured policy.
-5. Resume.
-6. Exit and re-enter the context.
-
-### Expected evidence
-
-```text
-Pause request port is bound
-LastExecutionMode reports ApplicationOnly
-no Player action map mutation is claimed
-resume restores the prior state
-scope exit releases the request binding
-```
-
-### Current status
-
-`Not Run` in this document.
+This scenario remains separate from Player-bound Pause.
 
 ---
 
-## TS-04 — Player-bound Pause and input gate
+## TS-04 — Player-bound Pause and input Gate
 
 ### Goal
 
-Prove that physical Pause input belongs to the admitted official Player and that gameplay input is gated/restored correctly.
-
-### Preconditions
-
-```text
-Player_SceneProvided_With_Pause or equivalent composed variant
-PausePlayerInputBinding references the PlayerInput
-UnityPlayerInputGateAdapter references the gameplay action map
-Scene-Provided Player is admitted
-```
-
-### Steps
-
-1. Enter the focused Player Route.
-2. Confirm movement input is initially accepted.
-3. Invoke Pause through the Player's authored Pause action.
-4. Confirm logical Pause activates.
-5. Confirm gameplay input is blocked according to policy.
-6. Confirm the Pause/global action remains available.
-7. Resume.
-8. Confirm gameplay input is restored.
-9. Exit the Route and verify bindings release.
+Prove that physical Pause input belongs to the admitted Player and gameplay input restores correctly.
 
 ### Expected evidence
 
-```text
-one eligible Player binding
-PausePlayerInputBinding reports bound
-UnityPlayerInputGateAdapter changes only the intended action map
-no second global Player exists
-previous input state is restored
-```
+- one eligible Player binding;
+- Pause toggles logical state;
+- gameplay action map is gated;
+- Pause/global action remains available;
+- Resume restores gameplay input;
+- exit releases binding.
 
-### Current status
+### Status
 
-`Not Run` in this document.
+`Passed` in the Scene-Provided comparison baseline.
 
 ---
 
@@ -203,90 +138,115 @@ previous input state is restored
 
 ### Goal
 
-Prove the current Route Primary Scene Player composition.
-
-### Preconditions
-
-```text
-FG_PlayerSceneProvider primary scene is SceneProvidedGameplay
-Activity_PlayerLocalProvider projects the configured Slot
-Player_SceneProvided authoring validates
-nested Actor prefab matches ActorProfile.LogicalActorHostPrefab
-```
+Prove the Route Primary Scene Player composition.
 
 ### Steps
 
 1. Enter through `Player Local Test`.
-2. Inspect Slot reservation/admission evidence.
-3. Confirm exactly one Logical Player is joined.
-4. Confirm the configured `PlayerSlotId` is used.
-5. Confirm the scene-existing Local Player Host is admitted, not provisioned again.
-6. Confirm the nested Logical Actor is adopted, not duplicated.
-7. Confirm Activity readiness reaches the configured requirement.
-8. Exit the Route.
-9. Confirm contextual Actor, host and Slot evidence release in order.
-10. Enter again and verify no duplicate admission.
+2. Confirm one active admission.
+3. Confirm `PlayerSlot:player.1`.
+4. Confirm the scene-existing Host is used.
+5. Confirm the nested Actor is adopted.
+6. Confirm Activity readiness.
+7. Exit to Menu.
+8. Confirm release.
+9. Reenter.
+10. Confirm no residual admission or duplicate Player.
 
-### Expected evidence
+### Recorded evidence
+
+During Gameplay:
 
 ```text
-Scene-Provided source recorded
-external scene ownership preserved
-one Slot assignment
-one Host identity
-one current Actor correlation
-no PlayerInputManager provisioning call
-no object-name or playerIndex identity inference
+Active Count = 1
+Occupied Slot Count = 1
+Last Operation = AdmitSceneLocalPlayer
+Last Status = SucceededAdmitted
+Last Slot = PlayerSlot:player.1
+Host Evidence Present = Yes
 ```
 
-### Current status
+After release:
 
-`Running` — this is the current focused integration scenario.
+```text
+Active Count = 0
+Occupied Slot Count = 0
+Last Operation = ReleaseSceneLocalPlayer
+Last Status = SucceededReleased
+Release Succeeded = Yes
+Host Evidence Present = No
+```
+
+### Status
+
+`Passed`.
 
 ---
 
-## TS-06 — Scene-Provided Player gameplay Camera
+## TS-05R — Scene-Provided Activity Restart and teardown
 
 ### Goal
 
-Prove the Player Camera request through the persistent output authority.
-
-### Preconditions
-
-```text
-TS-05 admission succeeds
-Player_SceneProvided_With_Camera is instantiated
-CameraRigComposer validates
-PlayerGameplayCameraAuthoring references that rig
-persistent Camera Output is valid
-```
+Prove Activity Restart, readmission/reentry, release and runtime teardown without invalid identity formatting.
 
 ### Steps
 
-1. Enter the focused Player Route.
-2. Confirm CameraRigComposer targets resolve to the Player Actor hierarchy.
-3. Confirm the local Cinemachine Camera exists and is not the physical output.
-4. Confirm Player Camera eligibility becomes available only after required Player/Actor evidence.
-5. Move the Player and verify Follow behavior.
-6. Pause and resume.
-7. Exit to the menu.
-8. Confirm the Player Camera request releases and the previous output state returns.
-9. Re-enter and verify identity/request duplication does not occur.
+```text
+Menu
+→ Gameplay
+→ move Player
+→ Activity Restart
+→ verify Player remains valid
+→ Menu
+→ inspect release snapshot
+→ Stop Play Mode
+```
+
+### Recorded evidence
+
+```text
+Activity Restart status = Succeeded
+resetStatus = Succeeded
+resetSubjects = 2
+resetParticipants = 2
+clearStatus = Succeeded
+reentryStatus = Succeeded
+blockingIssues = 0
+```
+
+The tester manually confirmed valid readmission after Restart.
+
+Not reproduced:
+
+```text
+ArgumentException: Framework identity value must be valid
+```
+
+### Status
+
+`Passed`.
+
+---
+
+## TS-06 — Scene-Provided gameplay Camera
+
+### Goal
+
+Prove the Player gameplay Camera through the persistent physical output.
 
 ### Expected evidence
 
-```text
-explicit Follow/LookAt targets
-one CameraRigComposer authority for the rig
-one PlayerGameplayCameraAuthoring participation declaration
-one persistent Camera Output
-request precedence applied explicitly
-release restores previous/default request
-```
+- explicit Follow/LookAt targets;
+- one local Camera rig request;
+- one persistent physical output;
+- Camera follows the Player;
+- Pause/Resume does not corrupt the output;
+- exit releases the request;
+- reentry remains stable.
 
-### Current status
+### Status
 
-`Running` — current focused integration scenario.
+`Passed`.
 
 ---
 
@@ -299,41 +259,27 @@ Prove runtime-created local Player provisioning through the official path.
 ### Preconditions
 
 ```text
-new dedicated Route and scene
-Persistent Content provisioning composition
+dedicated Route and scene
 manual-join PlayerInputManager
 LocalPlayerProvisioningAuthoring
 LocalPlayerProvisioningHostRegistration
 Player prefab with empty Actor Mount
-explicit authorized join command
+authorized join command
 ```
 
-### Steps
+### Required proof
 
-1. Enter the dedicated Manager-Provisioned test Route.
-2. Issue one explicit authorized join.
-3. Confirm the first configured free Slot is reserved.
-4. Confirm `PlayerInputManager` creates exactly one Host.
-5. Confirm the Host validates and is admitted.
-6. Confirm the typed Slot assignment commits.
-7. Confirm the Actor is selected/prepared according to policy.
-8. Exit and confirm physical/contextual teardown.
-9. Re-enter and confirm Slot reuse.
-10. Run a negative provisioning case and confirm explicit rollback.
+- Slot reserved before provisioning;
+- exactly one Host created;
+- Host validates and commits;
+- Actor selected/prepared;
+- failed join rolls back Slot and Host evidence;
+- exit permits Slot reuse;
+- no `playerIndex` identity authority.
 
-### Expected evidence
+### Status
 
-```text
-framework reserves Slot before provisioning
-PlayerInputManager is only the technical Host provisioner
-playerIndex is diagnostic only
-failed join releases reservation and Host evidence
-successful exit permits Slot reuse
-```
-
-### Current status
-
-`Blocked` by missing FIRSTGAME assembly, not by package runtime.
+`Not Run` — next consumer integration scenario.
 
 ---
 
@@ -343,18 +289,22 @@ successful exit permits Slot reuse
 
 Reserved future proof for a Logical Player whose Session identity survives Route and Activity changes.
 
-### Current status
+### Status
 
 `Blocked` by Framework.
 
-Do not create a local workaround. The package must first provide:
+Do not create a FIRSTGAME workaround. The package must first provide official authoring, admission, lifetime and reconciliation contracts.
+
+---
+
+## Open technical finding
+
+Reset unload sequence may include:
 
 ```text
-official authoring surface
-admission request/result contract
-physical ownership declaration
-Slot assignment policy
-Actor/materialization reconciliation
-Session versus contextual release diagnostics
-QA proof
+SceneReleasing unregister
+→ update-retry register
+→ on-disable unregister
 ```
+
+This finding is outside Player scenario acceptance and requires a separate Reset lifecycle test.

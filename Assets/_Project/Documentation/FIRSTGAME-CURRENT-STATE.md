@@ -4,56 +4,48 @@ Status: Current
 Last updated: 2026-07-28  
 Repository: `ImmersiveGames/planet-devourer`
 
-## Inspected Git baseline
+## 1. Inspected and validated baseline
 
 ```text
-planet-devourer head
-  ef66f6230cdde576d5ad88ec9ab09bb5466fa963
+planet-devourer
+  116225d50a3c6af976355715d3216c0cb80852eb
 
-com.immersive.framework head used for documentation comparison
-  91cdb98b1bbf33cc6a48aa08614dafc4713e4344
+com.immersive.framework
+  bdb76a06a3b75adc9ac7fa5d3e63fbe457ed5ae2
 
-QAFramework head inspected for context
-  4c8fea40949143b2f663de8a6361a7f13ab51a43
+QAFramework
+  64f900a5c26ab07ad37f2e7d6e578e8efcfb72a4
 ```
 
-This document records repository-visible state. A manual Unity result is not considered passed merely because the required assets exist.
+Repository-visible state and manual Unity proof are recorded separately. The Scene-Provided Player baseline now has both.
 
-## 1. Application and scene topology
+## 2. Application and scene topology
 
-`FG_GameApplication.asset` currently provides:
+`FG_GameApplication.asset` provides:
 
 ```text
 startup Route
 four ordered local Player Slot Profiles
 Actor duplicate-selection policy
-Persistent Content container scene
+Persistent Content scene
 ```
 
-The enabled scenes are:
+Enabled scenes include:
 
-| Order | Scene | Current role |
-|---:|---|---|
-| 0 | `FG_UIGlobal` | bootstrap/global UI composition |
-| 1 | `FG_Menu` | development entry menu |
-| 2 | `FG_Gameplay` | general gameplay route scene |
-| 3 | `Conteiner Scene` | Persistent Content and persistent output composition |
-| 4 | `SceneProvidedGameplay` | focused Scene-Provided Player test scene |
+| Scene | Role |
+|---|---|
+| `FG_UIGlobal` | bootstrap/global UI composition |
+| `FG_Menu` | development entry menu |
+| `FG_Gameplay` | general gameplay Route |
+| `Conteiner Scene` | Persistent Content and physical Camera Output |
+| `SceneProvidedGameplay` | focused Scene-Provided Player fixture |
 
-## 2. Menu and Routes
-
-The menu contains two current route requests:
-
-| Menu entry | Request reason | Target intent |
-|---|---|---|
-| `Start Game` | `firstgame.start.game` | general gameplay path |
-| `Player Local Test` | `firstgame.playerlocal.test` | focused local Player path |
-
-The focused local Player Route is:
+## 3. Focused Route
 
 ```text
-Asset
-  Assets/_Project/ScriptableObjects/ImmersiveFramework/Routes/FG_PlayerSceneProvider.asset
+Route asset
+  Assets/_Project/ScriptableObjects/ImmersiveFramework/Routes/
+    FG_PlayerSceneProvider.asset
 
 Route name
   FG Player Scene Provider
@@ -62,69 +54,38 @@ Primary scene
   Assets/_Project/Scenes/Gameplay/SceneProvidedGameplay.unity
 
 Startup Activity
-  Activity_PlayerLocalProvider
+  Activity Player Local Provider
 ```
 
-## 3. Persistent Content and Camera Output
-
-The application references:
+Menu entry:
 
 ```text
-Assets/_Project/Scenes/System/Conteiner Scene.unity
+Player Local Test
+  reason = firstgame.playerlocal.test
 ```
 
-as Persistent Content.
+## 4. Persistent Content
 
-The scene contains the persistent presentation hierarchy and the physical Camera Output. Recent Git history also contains scoped/session Camera override work and persistent-output authoring changes.
+`Conteiner Scene` owns the Session presentation composition:
 
-Current classification:
+- persistent physical Camera Output;
+- transition surface;
+- loading surface;
+- Pause presentation;
+- persistent `FrameworkRuntimeHost`.
 
-| Evidence | State |
-|---|---|
-| Serialized Persistent Content scene | Present in Git |
-| Persistent physical Camera Output | Present in Git |
-| Session/scoped override implementation | Present in Git |
-| Full manual transition result | Record in `TEST-SCENARIOS.md` |
-
-## 4. Pause composition
-
-The repository contains separate Pause usage shapes:
-
-```text
-application-only authored Pause request
-Player-bound physical Pause input
-Player input gate behavior
-```
-
-The current Player variant includes:
-
-```text
-PausePlayerInputBinding
-UnityPlayerInputGateAdapter
-```
-
-`Global` remains an action map on the official Player `PlayerInput`; it is not a second global Player.
-
-Current classification:
-
-| Pause path | State |
-|---|---|
-| Application-only Pause runtime/product path | Runtime Implemented |
-| External authored Pause control | Present in Git |
-| Player Pause prefab variant | Present in Git |
-| Player input gate adapter | Present in Git |
-| Manual proof across Route enter/exit | Must be recorded |
+The host now exposes `Scene-Provided Admissions` under `Advanced / Debug`.
 
 ## 5. Scene-Provided Player composition
 
-The canonical prefab boundaries currently exist:
+Canonical shape:
 
 ```text
 Actor_PlayerSceneProvided
   PlayerActorDeclaration
-  Actor-owned gameplay components
+  Actor gameplay components
   movement
-  Camera anchors
+  Camera targets
   Visual
 
 Player_SceneProvided
@@ -135,127 +96,112 @@ Player_SceneProvided
     Actor_PlayerSceneProvided
 ```
 
-The outer prefab has serialized evidence for:
-
-```text
-Player Slot Profile
-Actor Profile
-scene Logical Player Actor
-ActorProfile-compatible nested prefab source
-valid authoring status
-```
-
-The focused scene instantiates:
+Focused prefab instance:
 
 ```text
 Player_SceneProvided_With_Camera
 ```
 
-Current classification:
+The fixture also includes:
 
-| Evidence | State |
-|---|---|
-| Base Actor prefab | Present in Git |
-| Base Scene-Provided Player prefab | Authoring Ready |
-| Route Primary Scene integration | Present in Git |
-| Package runtime Route Primary Scene admission | Runtime Implemented |
-| Focused Play Mode admission/release pass | Current validation focus |
+- `PlayerGameplayCameraAuthoring`;
+- `CameraRigComposer`;
+- local Cinemachine Camera;
+- `UnityPlayerInputGateAdapter`;
+- `PausePlayerInputBinding`;
+- Reset Subject/Participant authoring.
 
-## 6. Player Camera composition
+## 6. Approved runtime proof
 
-`Player_SceneProvided_With_Camera.prefab` currently adds:
+The Scene-Provided baseline is approved for:
 
 ```text
-CameraRigComposer
-local CinemachineCamera
-CinemachineFollow
-PlayerGameplayCameraAuthoring
-UnityPlayerInputGateAdapter
+boot
+Menu → Gameplay
+one admitted Logical Player
+PlayerSlot:player.1
+scene-owned physical Host
+adopted Logical Actor
+Activity Ready
+movement
+Player gameplay Camera
+Pause / Resume
+Object Reset
+Group Reset
+Activity Restart
+Gameplay → Menu
+release
+same-session reentry
+Stop Play Mode
 ```
 
-The serialized Composer contains explicit Follow/LookAt targets, the materialized Cinemachine Camera reference and a successful Apply/Rebuild result.
+Active persistent diagnostic:
 
-The Player Actor contains `PlayerGameplayCameraAuthoring` referencing the same rig.
+```text
+Active Count = 1
+Occupied Slot Count = 1
+Last Status = SucceededAdmitted
+Host Evidence Present = Yes
+```
 
-Current classification:
+Released persistent diagnostic:
 
-| Evidence | State |
-|---|---|
-| Camera rig authoring | Authoring Ready |
-| Cinemachine materialization | Present in Git |
-| Player Camera eligibility authoring | Present in Git |
-| Persistent physical output | Present in Git |
-| Runtime arbitration/restoration manual proof | Current validation focus |
+```text
+Active Count = 0
+Occupied Slot Count = 0
+Last Status = SucceededReleased
+Release Succeeded = Yes
+Host Evidence Present = No
+```
+
+The previous `Framework identity value must be valid` teardown exception was not reproduced after Activity Restart.
+
+See `FIRSTGAME-SCENE-PROVIDED-PLAYER-VALIDATION-2026-07-28.md`.
 
 ## 7. Player source coverage
 
-| Source | Framework architecture | Package runtime | FIRSTGAME consumer proof |
-|---|---|---|---|
-| Scene-Provided | Accepted | Implemented | Current focused scenario |
-| Manager-Provisioned | Accepted | Implemented | Not yet rebuilt on current package surface |
-| Session-Persistent | Accepted | Not implemented | Blocked by Framework |
+| Source | Package status | FIRSTGAME status |
+|---|---|---|
+| Scene-Provided | Implemented | **Comparison baseline approved** |
+| Manager-Provisioned | Implemented | Next consumer assembly |
+| Session-Persistent | Not implemented | Blocked by package |
+| second Player / multiplayer | Future scope | Not tested |
 
-All sources must converge into the same Session-scoped `PlayerParticipationRuntimeContext` and typed `PlayerSlotId` authority.
+All sources must converge into the same Session `PlayerParticipationRuntimeContext` and typed Slot authority.
 
-## 8. Known documentation discrepancy closed by this package
+## 8. Current documentation state
 
-Before this update, repository documentation contained two misleading statements:
+The current guides now state that:
 
-```text
-FIRSTGAME README
-  claimed canonical Player/Camera/Pause integration was not authored
+- Route Primary Scene admission is implemented;
+- the Scene-Provided consumer path is manually approved;
+- persistent release diagnostics are available;
+- the persistent snapshot is diagnostic only;
+- `Last Actor` is the stable authored Actor identity;
+- post-operation counters and Host-evidence state are explicit;
+- the QA formatting smoke is an Editor menu smoke.
 
-Framework Player documentation
-  claimed Route Primary Scene admission was not runtime-complete
-```
+## 9. Open finding
 
-Current Git contradicts both statements:
+During scene unload, Reset Subjects may briefly register again through `update-retry` after SceneReleasing has unregistered them, then unregister during `on-disable`.
 
-```text
-FIRSTGAME contains the Scene-Provided Player, Pause and Camera compositions
-Framework runtime contains Route Primary Scene admission support
-```
+This is non-blocking for the approved Player baseline and must be handled in a separate Reset cut.
 
-Manual Play Mode proof remains a separate state and is not inferred from source presence.
+## 10. Immediate next work
 
-## 9. Immediate next work
-
-`PLAYER-DIAG-1` now adds a host-scoped persistent diagnostic projection for the
-last Scene-Provided admission/release operation. The focused manual teardown
-matrix remains pending; see
-`FIRSTGAME-SCENE-PROVIDED-PLAYER-VALIDATION-2026-07-28.md`. This comparison
-baseline does not change the pending runtime-provisioned Player roadmap.
-
-### Close current scenario
-
-Record the Scene-Provided Player with Camera scenario:
+Create a dedicated Manager-Provisioned comparison fixture:
 
 ```text
-enter Route
-admit one Logical Player
-bind the configured Slot
-adopt the existing Logical Actor
-enable movement/input
-publish and select Player Camera request
-pause and resume
-exit Route
-release contextual evidence
-re-enter without duplicates
-```
-
-### Then assemble Manager-Provisioned
-
-Create a separate Route and scene using:
-
-```text
-PlayerInputManager
-LocalPlayerProvisioningAuthoring
-LocalPlayerProvisioningHostRegistration
-Player prefab with PlayerInput + LocalPlayerHostAuthoring + empty Actor Mount
-explicit framework-authorized join
+new Route and scene
+Persistent Content provisioning registration
+manual-join PlayerInputManager
+Player prefab with PlayerInput + LocalPlayerHostAuthoring
+empty Actor Mount
+authorized join command
 ordered Slot reservation
+explicit rollback proof
 ```
 
-### Do not assemble Session-Persistent locally
+Preserve the current movement, Camera, Pause and reset behavior so the comparison measures the Player source UX rather than unrelated gameplay changes.
 
-Wait for an official package authoring/runtime cut. FIRSTGAME must not invent the missing Session authority or admission contract.
+Do not build a Session-Persistent workaround in FIRSTGAME.
