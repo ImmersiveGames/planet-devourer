@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GA_M03_Readiness
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.GameApplicationAsset
   applicationName: GA M03 Readiness
-  startupRoute: {fileID: 0}
+  startupRoute: {fileID: 11400000, guid: d64a13ce9d1a8df4d95ab33130d5de4c, type: 2}
   localPlayerSlots: []
   playerActorSelectionDuplicatePolicy: 10
   persistentContent:

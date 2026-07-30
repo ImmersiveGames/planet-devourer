@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.RouteAsset
   routeId: 22e225aebe9b4910ba18c9d2e7f21acd
   routeName: Route M03 Readiness
-  primaryScenePath: 
-  primarySceneName: 
+  primaryScenePath: Assets/_Project/FrameworkModels/M03_ActivityReadiness/Scenes/M03_Route.unity
+  primarySceneName: M03_Route
   routeContentProfile: {fileID: 0}
-  startupActivity: {fileID: 0}
+  startupActivity: {fileID: 11400000, guid: 6d3b5a9285523ca4e9cdb47aad73fb02, type: 2}
   transitionGateMode: 30
   description: Scaffold asset for M03 Activity Readiness. Configure references and
     feature-specific contracts manually in the Unity Inspector.
