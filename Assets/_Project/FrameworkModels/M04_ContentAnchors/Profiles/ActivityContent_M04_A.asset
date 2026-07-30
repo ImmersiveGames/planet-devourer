@@ -17,7 +17,7 @@ MonoBehaviour:
   - contentId: m04.activity-a.scene
     scenePath: Assets/_Project/FrameworkModels/M04_ContentAnchors/Scenes/M04_ActivityA_Add.unity
     sceneName: M04_ActivityA_Add
-    requiredness: 0
+    requiredness: 10
     loadMode: 0
     releasePolicy: 0
   description: Scaffold asset for M04 Content Anchors. Configure references and feature-specific
