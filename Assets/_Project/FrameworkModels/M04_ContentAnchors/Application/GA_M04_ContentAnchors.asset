@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: GA_M04_ContentAnchors
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.GameApplicationAsset
   applicationName: GA M04 ContentAnchors
-  startupRoute: {fileID: 0}
+  startupRoute: {fileID: 11400000, guid: 206f6d7fa8c34db49a9ed5cddf7cd1bb, type: 2}
   localPlayerSlots: []
   playerActorSelectionDuplicatePolicy: 10
   persistentContent:
-    containerScene: {fileID: 0}
+    containerScene: {fileID: 102900000, guid: aae12116c7a7e494d898c421ecb024b9, type: 3}
   validationMode: 1
