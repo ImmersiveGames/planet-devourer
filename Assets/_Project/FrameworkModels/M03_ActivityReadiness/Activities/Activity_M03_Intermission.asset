@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6d702c1ba364e70ad76a85eb5f1b842, type: 3}
+  m_Name: Activity_M03_Intermission
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.ActivityAsset
+  activityId: 661e11effc654800afbaad8ec1bb4baf
+  activityName: Activity M03 Intermission
+  description: Neutral happy-path Activity used to release and re-enter Activity
+    M03 Preparation.
+  playerParticipationProjectionMode: 0
+  playerParticipationZeroParticipantPolicy: 0
+  playerParticipationExplicitSlotProfiles: []
+  playerParticipationRequirementLevel: 0
+  activityContentProfile: {fileID: 11400000, guid: a824f014166b0b94f9c2ff2859cc7908, type: 2}
+  visualTransitionMode: 0
+  transitionGateMode: 10
