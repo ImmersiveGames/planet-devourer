@@ -123,6 +123,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2672836944945957340}
+  - component: {fileID: 5721959505152860086}
   m_Layer: 0
   m_Name: Framework Components (Configure Manually)
   m_TagString: Untagged
@@ -145,6 +146,53 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5836289922150398079}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5721959505152860086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1616932750483128509}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91d47366dba142cab077ee5dd55dfbf8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.SceneLifecycle.SceneLifecycleEvents
+  available:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2832747360156188760}
+        m_TargetAssemblyTypeName: FirstGame.FrameworkModels.M02.M02LifecycleVisualPresenter,
+          Assembly-CSharp
+        m_MethodName: OnAvailable
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  releasing:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2832747360156188760}
+        m_TargetAssemblyTypeName: FirstGame.FrameworkModels.M02.M02LifecycleVisualPresenter,
+          Assembly-CSharp
+        m_MethodName: OnReleasing
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  lastEvent: Initial
+  availableCount: 0
+  releasingCount: 0
 --- !u!1 &2402378056875710597
 GameObject:
   m_ObjectHideFlags: 0
@@ -293,6 +341,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3622398280330949174}
+  - component: {fileID: 2832747360156188760}
   m_Layer: 0
   m_Name: Bindings (Configure Manually)
   m_TagString: Untagged
@@ -315,3 +364,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 5836289922150398079}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2832747360156188760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5985451645424718264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d5c44c10d8245fb8ddd4dba5e1c1151, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FirstGame.FrameworkModels.M02.M02LifecycleVisualPresenter
+  visualPlaceholder: {fileID: 5866126442203521444}
+  label: {fileID: 3756974763377383685}
+  initialLabel: Scene Initial
+  lastEvent: Initial
+  receivedEventCount: 0

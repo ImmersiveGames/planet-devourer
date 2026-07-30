@@ -12,7 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49994376dc9c4f14a401c2a75aa2be55, type: 3}
   m_Name: ActivityContent_M02_A
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.ActivityContentProfileAsset
-  profileId: 
-  scenes: []
+  profileId: m02.activity-a.profile
+  scenes:
+  - contentId: m02.activity-a.scene
+    scenePath: Assets/_Project/FrameworkModels/M02_LifecycleEvents/Scenes/M02_ActivityA_Add.unity
+    sceneName: M02_ActivityA_Add
+    requiredness: 10
+    loadMode: 0
+    releasePolicy: 0
   description: Scaffold asset for M02 Lifecycle Events. Configure references and
     feature-specific contracts manually in the Unity Inspector.

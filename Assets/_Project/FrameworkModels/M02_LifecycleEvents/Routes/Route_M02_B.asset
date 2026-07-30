@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.RouteAsset
   routeId: 842b6ab59adc465b871417810325e725
   routeName: Route M02 B
-  primaryScenePath: 
-  primarySceneName: 
+  primaryScenePath: Assets/_Project/FrameworkModels/M02_LifecycleEvents/Scenes/M02_RouteB.unity
+  primarySceneName: M02_RouteB
   routeContentProfile: {fileID: 0}
-  startupActivity: {fileID: 0}
+  startupActivity: {fileID: 11400000, guid: ec7f515f64978094283dfb06eb7fdecd, type: 2}
   transitionGateMode: 30
   description: Scaffold asset for M02 Lifecycle Events. Configure references and
     feature-specific contracts manually in the Unity Inspector.

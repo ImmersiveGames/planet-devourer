@@ -3,82 +3,105 @@
 Status: Authoring  
 Roadmap order: 2  
 Started: 2026-07-30  
-Current checkpoint: independent application foundation and authoring graph
+Current checkpoint: complete independent authoring foundation
 
 ## Purpose
 
-Demonstrar objetos reagindo ao lifecycle oficial de Scene, Route e Activity sem implementar um lifecycle
-paralelo no jogo consumidor.
+Demonstrar objetos reagindo ao lifecycle oficial de Scene, Route e Activity sem implementar uma autoridade
+paralela no jogo consumidor.
+
+## Startup semantics
+
+O M02 possui três conceitos diferentes que não devem ser confundidos:
+
+```text
+Unity entry scene / Build Profile index 0
+  M02_Boot
+
+Game Application startup
+  Startup Route = Route_M02_A
+
+Startup Route scene
+  Route_M02_A.Primary Scene = M02_RouteA
+
+Application persistent content
+  Content Scene = M02_PersistentContent
+```
+
+`GameApplicationAsset` não possui um campo "Startup Scene". Ele inicia uma `Startup Route`; a Route resolve
+sua própria `Primary Scene`.
 
 ## Independence rule
 
 ```text
-M02 owns its Game Application, Routes, Activities, Profiles and scenes.
-M02 does not reuse the M01 Menu, Routes, Activities or Persistent Content.
+M02 owns its Game Application, Routes, Activities, Profiles, scenes and Persistent Content.
+M02 does not reuse M01_PersistentContent or any M01 Route/Activity asset.
 M02 has zero Local Player Slots.
 Consumer scripts present lifecycle evidence but do not own or trigger lifecycle.
 ```
 
-## Materialize scaffold
+Mesmo que `M01_PersistentContent` carregue tecnicamente, reutilizá-la acopla os modelos e invalida a prova de
+isolamento. A cena persistente deve ser uma cópia própria criada a partir da fonte oficial do package.
 
-Run once, if the unified scaffold has not already been materialized:
+## Materialize the complete foundation
+
+Apply the current M02 correction ZIP, let Unity compile, then run:
 
 ```text
-Tools > Immersive Framework > FIRSTGAME > Scaffolds > Create Missing M02-M16
+Tools
+→ Immersive Framework
+→ FIRSTGAME
+→ M02
+→ Resolve Application Foundation
 ```
 
-Then run:
+Esse comando agora é autocontido. Ele:
 
 ```text
-Tools > Immersive Framework > FIRSTGAME > M02 > Resolve Application Foundation
-```
-
-The M02 resolver:
-
-```text
+creates every missing M02 authoring asset;
+creates the five missing non-persistent scenes;
+creates the three lifecycle placeholder prefabs;
 creates M02_PersistentContent from the official package source scene;
-removes only generated Main Camera/EventSystem objects from known M02 Boot/Route scenes;
-preserves existing files;
-does not assign Game Application references;
-does not add lifecycle components;
+removes only generated Main Camera/EventSystem objects from recognized M02 Boot/Route scenes;
+preserves all existing assets, scenes and prefabs;
+does not assign cross-asset references;
+does not add lifecycle participants;
+does not install bootstrap objects;
 does not change Build Profiles or ProjectSettings.
 ```
 
-## Planned authoring assets
+O comando separado `Create Missing Scaffold` permanece disponível para materializar apenas assets, cenas e
+prefabs sem resolver Persistent Content.
+
+## Expected inventory
 
 ```text
-Application/GA_M02_Lifecycle.asset
-Routes/Route_M02_A.asset
-Routes/Route_M02_B.asset
-Activities/Activity_M02_A.asset
-Activities/Activity_M02_B.asset
-Profiles/ActivityContent_M02_A.asset
-Profiles/ActivityContent_M02_B.asset
+M02_LifecycleEvents/
+├── Application/
+│   └── GA_M02_Lifecycle.asset
+├── Routes/
+│   ├── Route_M02_A.asset
+│   └── Route_M02_B.asset
+├── Activities/
+│   ├── Activity_M02_A.asset
+│   └── Activity_M02_B.asset
+├── Profiles/
+│   ├── ActivityContent_M02_A.asset
+│   └── ActivityContent_M02_B.asset
+├── Scenes/
+│   ├── M02_PersistentContent.unity
+│   ├── M02_Boot.unity
+│   ├── M02_RouteA.unity
+│   ├── M02_RouteB.unity
+│   ├── M02_ActivityA_Add.unity
+│   └── M02_ActivityB_Add.unity
+└── Prefabs/
+    ├── PF_M02_SceneLifecycleObject.prefab
+    ├── PF_M02_RouteLifecycleObject.prefab
+    └── PF_M02_ActivityLifecycleObject.prefab
 ```
 
-## Planned scenes
-
-```text
-Scenes/M02_PersistentContent.unity
-Scenes/M02_Boot.unity
-Scenes/M02_RouteA.unity
-Scenes/M02_RouteB.unity
-Scenes/M02_ActivityA_Add.unity
-Scenes/M02_ActivityB_Add.unity
-```
-
-## Planned prefabs
-
-```text
-Prefabs/PF_M02_SceneLifecycleObject.prefab
-Prefabs/PF_M02_RouteLifecycleObject.prefab
-Prefabs/PF_M02_ActivityLifecycleObject.prefab
-```
-
-The prefabs are visible placeholders with manual framework/binding mount points. No lifecycle participant is
-installed by the scaffold.
-
-## Authoring graph — first block
+## Authoring graph
 
 ### Activity Content A
 
@@ -148,6 +171,17 @@ Local Player Slots: Empty
 Validation Mode: Standard
 ```
 
+## Build Profile
+
+```text
+0 — M02_Boot
+1 — M02_PersistentContent
+2 — M02_RouteA
+3 — M02_RouteB
+4 — M02_ActivityA_Add
+5 — M02_ActivityB_Add
+```
+
 ## Planned Play Mode flow
 
 ```text
@@ -160,18 +194,18 @@ Boot
 
 There is no Menu step in this isolated model.
 
-## Product behavior target
+## Current acceptance gate
 
-```text
-Scene lifecycle
-  visible response when a scene becomes available and before it releases.
+Do not add lifecycle participants until:
 
-Route lifecycle
-  visible response when Route A/B enters and exits.
-
-Activity lifecycle
-  visible response when Activity A/B enters and exits.
-```
+- [ ] The complete inventory above exists.
+- [ ] `M02_PersistentContent` is assigned to the Game Application.
+- [ ] Both Profiles validate.
+- [ ] Both Activities validate with `No Slots`.
+- [ ] Route A starts Activity A.
+- [ ] Route B starts Activity B.
+- [ ] `GA_M02_Lifecycle` validates with zero Slots.
+- [ ] The six M02 scenes are enabled in the active Build Profile.
 
 ## Consumer code boundary
 
@@ -193,40 +227,41 @@ create a singleton or service locator;
 use a QA probe as the presentation layer.
 ```
 
-## Current acceptance gate
+## Lifecycle callback bindings
 
-Do not add lifecycle participants until:
-
-- [ ] `M02_PersistentContent` exists.
-- [ ] Both Profiles validate.
-- [ ] Both Activities validate with `No Slots`.
-- [ ] Route A starts Activity A.
-- [ ] Route B starts Activity B.
-- [ ] `GA_M02_Lifecycle` validates with zero Slots.
-- [ ] The six M02 scenes are enabled in the active Build Profile.
-
-## UX review
-
-Record:
+The M02 prefabs use the official Inspector surfaces and a local visual-only
+presenter (`FirstGame.FrameworkModels.M02.M02LifecycleVisualPresenter`):
 
 ```text
-how the designer finds the correct participant;
-whether Enter and Exit are clear in the Inspector;
-whether callbacks are UnityEvents or typed adapters;
-where requiredness is configured;
-repeated assignments;
-hidden dependencies;
-Composer/Recipe/Template opportunities.
+PF_M02_SceneLifecycleObject
+  SceneLifecycleEvents.Available / Releasing
+  -> presenter.OnAvailable / OnReleasing
+
+PF_M02_RouteLifecycleObject
+  RouteContentBinding (Route assigned per scene instance)
+  RouteContentLifecycleEvents.Entered / Exited
+  -> presenter.OnEntered / OnExited
+
+PF_M02_ActivityLifecycleObject
+  ActivityLocalVisibilityAdapter (Activity assigned per scene instance)
+  ActivityContentLifecycleEvents.Entered / Exited
+  -> presenter.OnEntered / OnExited
 ```
 
-## QA follow-ups
+The presenter has explicit references to `Visual Placeholder` and `Label`; it
+only displays the received event and does not resolve or control lifecycle.
+The Advanced / Debug fields on the official components expose counters and the
+last received event.
 
-```text
-exact callback order;
-idempotency;
-required/optional participant failure;
-exception during Enter/Exit;
-reentry repetition.
-```
+`Framework Components (Configure Manually)` and `Bindings (Configure Manually)`
+are organizational children of the prefab root. Framework discovery begins at
+the explicit loaded scene roots and traverses descendants, including inactive
+objects; it is not a global search. Route and Activity assets plus
+`localContentId` remain explicit and prevent callbacks crossing scope
+boundaries.
 
-Do not implement negative cases inside FIRSTGAME.
+## Build Profile note
+
+The M02 Build Profile remains unchanged. The lifecycle components react only
+to scenes already loaded by the official Game Application flow; they do not add
+scenes or observe `SceneManager` directly.

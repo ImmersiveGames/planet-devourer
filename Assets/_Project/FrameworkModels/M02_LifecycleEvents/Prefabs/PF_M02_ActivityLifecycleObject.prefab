@@ -9,6 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3894337679492632625}
+  - component: {fileID: 7407077703305309755}
+  - component: {fileID: 4843011262909892681}
   m_Layer: 0
   m_Name: Framework Components (Configure Manually)
   m_TagString: Untagged
@@ -31,6 +33,65 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7098273224184519577}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7407077703305309755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2925455165560308976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 186d5c674b9947cbb89d1c02ae9e8317, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ActivityFlow.ActivityLocalVisibilityAdapter
+  activity: {fileID: 0}
+  localContentId: m02.activity-lifecycle
+  requiredness: 0
+--- !u!114 &4843011262909892681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2925455165560308976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c6587a7a3534ec1be3705820bbce3ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ActivityFlow.ActivityContentLifecycleEvents
+  entered:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5950501605629006274}
+        m_TargetAssemblyTypeName: FirstGame.FrameworkModels.M02.M02LifecycleVisualPresenter,
+          Assembly-CSharp
+        m_MethodName: OnEntered
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  exited:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5950501605629006274}
+        m_TargetAssemblyTypeName: FirstGame.FrameworkModels.M02.M02LifecycleVisualPresenter,
+          Assembly-CSharp
+        m_MethodName: OnExited
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4663414486459769839
 GameObject:
   m_ObjectHideFlags: 0
@@ -152,6 +213,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5274685885621346706}
+  - component: {fileID: 5950501605629006274}
   m_Layer: 0
   m_Name: Bindings (Configure Manually)
   m_TagString: Untagged
@@ -174,6 +236,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7098273224184519577}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5950501605629006274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7460129216171758011}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d5c44c10d8245fb8ddd4dba5e1c1151, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FirstGame.FrameworkModels.M02.M02LifecycleVisualPresenter
+  visualPlaceholder: {fileID: 7729486979709492880}
+  label: {fileID: 1423449291757693590}
+  initialLabel: Activity Initial
+  lastEvent: Initial
+  receivedEventCount: 0
 --- !u!1 &8820361932484103235
 GameObject:
   m_ObjectHideFlags: 0

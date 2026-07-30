@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ce6d27d442ac76449f283afbc33d04f, type: 3}
   m_Name: GA_M02_Lifecycle
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.GameApplicationAsset
-  applicationName: GA M02 Lifecycle
-  startupRoute: {fileID: 0}
+  applicationName: M02 Lifecycle Events
+  startupRoute: {fileID: 11400000, guid: 958acae0f454abb44bc36cb76c4ffd48, type: 2}
   localPlayerSlots: []
   playerActorSelectionDuplicatePolicy: 10
   persistentContent:
-    containerScene: {fileID: 0}
+    containerScene: {fileID: 102900000, guid: aae12116c7a7e494d898c421ecb024b9, type: 3}
   validationMode: 1
