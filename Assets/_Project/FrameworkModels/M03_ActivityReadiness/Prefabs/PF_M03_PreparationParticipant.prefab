@@ -148,6 +148,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5854163612897232839}
+  - component: {fileID: 7594143458629057859}
   m_Layer: 0
   m_Name: Framework Components (Configure Manually)
   m_TagString: Untagged
@@ -170,6 +171,56 @@ Transform:
   m_Children: []
   m_Father: {fileID: 881077985867702630}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7594143458629057859
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3101091960795829967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba0e958713b174a4a984ab00d196f0f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ActivityFlow.ActivityReadinessParticipant
+  participantId: m03.preparation
+  requiredness: 20
+  order: 0
+  preparationStarted:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8957286448208801309}
+        m_TargetAssemblyTypeName: FirstGame.FrameworkModels.ActivityReadiness.M03PreparationSequence,
+          Assembly-CSharp
+        m_MethodName: BeginPreparation
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  preparationReleased:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8957286448208801309}
+        m_TargetAssemblyTypeName: FirstGame.FrameworkModels.ActivityReadiness.M03PreparationSequence,
+          Assembly-CSharp
+        m_MethodName: ReleasePreparation
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  state: 0
+  lastReason: 
+  occurrence: 0
 --- !u!1 &4935922679302477734
 GameObject:
   m_ObjectHideFlags: 0
@@ -293,6 +344,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8772935696651756935}
+  - component: {fileID: 8957286448208801309}
   m_Layer: 0
   m_Name: Bindings (Configure Manually)
   m_TagString: Untagged
@@ -315,3 +367,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 881077985867702630}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8957286448208801309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7673140806617117446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e9b50af3e2780b4eafe679837575ba4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FirstGame.FrameworkModels.ActivityReadiness.M03PreparationSequence
+  readinessParticipant: {fileID: 7594143458629057859}
+  preparationVisual: {fileID: 3406966593474882063}
+  preparationDuration: 1.5
+  preparedLocalPosition: {x: 0, y: 5, z: 0}

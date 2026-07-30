@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6568457635110725051}
+  - component: {fileID: 5450740189043386800}
   m_Layer: 0
   m_Name: Bindings (Configure Manually)
   m_TagString: Untagged
@@ -31,6 +32,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1554666188203339265}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5450740189043386800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 97527064386787286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e5c2d4a5a0671d4c8c64bd01c01bb31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FirstGame.FrameworkModels.ActivityReadiness.M03ReadinessPresenter
+  statusLabel: {fileID: 7974092277031744006}
+  detailLabel: {fileID: 0}
+  waitingVisual: {fileID: 0}
+  readyVisual: {fileID: 0}
+  preparedContent: {fileID: 0}
 --- !u!1 &603023417771956126
 GameObject:
   m_ObjectHideFlags: 0
@@ -256,6 +274,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2926197627462963114}
+  - component: {fileID: 4964287534584643711}
   m_Layer: 0
   m_Name: Framework Components (Configure Manually)
   m_TagString: Untagged
@@ -278,6 +297,29 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1554666188203339265}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4964287534584643711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6722294660116831786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5dc1bae4ad9a2a3489c2436d610b609c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ActivityFlow.ActivityReadinessEvents
+  preparing:
+    m_PersistentCalls:
+      m_Calls: []
+  ready:
+    m_PersistentCalls:
+      m_Calls: []
+  notReady:
+    m_PersistentCalls:
+      m_Calls: []
+  lastReason: 
+  lastRevision: 0
 --- !u!1 &8500326454074854372
 GameObject:
   m_ObjectHideFlags: 0
