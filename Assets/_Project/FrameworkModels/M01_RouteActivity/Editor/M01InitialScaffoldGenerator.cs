@@ -25,6 +25,11 @@ namespace FirstGame.FrameworkModels.M01.Editor
         private const string PrefabsFolder = Root + "/Prefabs";
         private const string MaterialsFolder = Root + "/Materials";
 
+        private const string PersistentContentSourceScenePath =
+            "Packages/com.immersive.framework/Editor/SceneTemplates/PersistentContent/PersistentContentTemplateSource.unity";
+        private const string PersistentContentScenePath =
+            ScenesFolder + "/M01_PersistentContent.unity";
+
         private static readonly List<string> Created = new List<string>();
         private static readonly List<string> Preserved = new List<string>();
 
@@ -54,6 +59,7 @@ namespace FirstGame.FrameworkModels.M01.Editor
             EnsureFolder(MaterialsFolder);
 
             CreateAuthoringAssets();
+            CreatePersistentContentSceneIfMissing();
             MaterialSet materials = CreateMaterials();
             CreatePrefabs();
 
@@ -82,9 +88,51 @@ namespace FirstGame.FrameworkModels.M01.Editor
         }
 
         [MenuItem(
-            "Tools/Immersive Framework/FIRSTGAME/M01/Select Model Folder",
+            "Tools/Immersive Framework/FIRSTGAME/M01/Resolve Application Foundation",
             false,
             102)]
+        private static void ResolveApplicationFoundation()
+        {
+            SceneSetup[] previousSetup =
+                EditorSceneManager.GetSceneManagerSetup();
+
+            if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
+            {
+                return;
+            }
+
+            Created.Clear();
+            Preserved.Clear();
+            EnsureFolder(ScenesFolder);
+
+            try
+            {
+                CreatePersistentContentSceneIfMissing();
+                RemoveGeneratedSceneAuthorities();
+            }
+            finally
+            {
+                RestorePreviousSceneSetup(previousSetup);
+            }
+
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+
+            string summary =
+                $"M01 application foundation resolved. created={Created.Count} preserved={Preserved.Count}. " +
+                "Assign M01_PersistentContent as the Game Application Content Scene, then validate again.";
+
+            Debug.Log(summary);
+            EditorUtility.DisplayDialog(
+                "M01 Application Foundation",
+                summary,
+                "OK");
+        }
+
+        [MenuItem(
+            "Tools/Immersive Framework/FIRSTGAME/M01/Select Model Folder",
+            false,
+            103)]
         private static void SelectModelFolder()
         {
             UnityEngine.Object folder =
@@ -195,6 +243,137 @@ namespace FirstGame.FrameworkModels.M01.Editor
             CreateSceneIfMissing(
                 ScenesFolder + "/M01_ActivityB_Add.unity",
                 () => BuildActivityBScene(materials));
+        }
+
+
+        private static void CreatePersistentContentSceneIfMissing()
+        {
+            SceneAsset existing =
+                AssetDatabase.LoadAssetAtPath<SceneAsset>(
+                    PersistentContentScenePath);
+            if (existing != null)
+            {
+                Preserved.Add(PersistentContentScenePath);
+                return;
+            }
+
+            SceneAsset source =
+                AssetDatabase.LoadAssetAtPath<SceneAsset>(
+                    PersistentContentSourceScenePath);
+            if (source == null)
+            {
+                throw new InvalidOperationException(
+                    $"M01 scaffold requires the official Persistent Content source scene at '{PersistentContentSourceScenePath}'. No fallback scene is created.");
+            }
+
+            EnsurePathAvailableForCreation(
+                PersistentContentScenePath);
+
+            if (!AssetDatabase.CopyAsset(
+                    PersistentContentSourceScenePath,
+                    PersistentContentScenePath))
+            {
+                throw new InvalidOperationException(
+                    $"M01 scaffold failed to create '{PersistentContentScenePath}' from the official Persistent Content source scene.");
+            }
+
+            AssetDatabase.ImportAsset(
+                PersistentContentScenePath,
+                ImportAssetOptions.ForceUpdate);
+            Created.Add(PersistentContentScenePath);
+        }
+
+        private static void RemoveGeneratedSceneAuthorities()
+        {
+            (string ScenePath, string RootName)[] scenes =
+            {
+                (ScenesFolder + "/M01_Boot.unity", "M01_Boot_Root"),
+                (ScenesFolder + "/M01_Menu.unity", "M01_Menu_Root"),
+                (ScenesFolder + "/M01_Gameplay.unity", "M01_Gameplay_Root")
+            };
+
+            for (int index = 0; index < scenes.Length; index++)
+            {
+                string scenePath = scenes[index].ScenePath;
+                SceneAsset sceneAsset =
+                    AssetDatabase.LoadAssetAtPath<SceneAsset>(scenePath);
+                if (sceneAsset == null)
+                {
+                    continue;
+                }
+
+                Scene scene =
+                    EditorSceneManager.OpenScene(
+                        scenePath,
+                        OpenSceneMode.Single);
+                GameObject scaffoldRoot =
+                    scene.GetRootGameObjects()
+                        .FirstOrDefault(
+                            root => string.Equals(
+                                root.name,
+                                scenes[index].RootName,
+                                StringComparison.Ordinal));
+                if (scaffoldRoot == null)
+                {
+                    Debug.LogWarning(
+                        $"M01 application foundation preserved '{scenePath}' because generated root '{scenes[index].RootName}' was not found.");
+                    continue;
+                }
+
+                bool changed = false;
+                EventSystem[] eventSystems =
+                    scaffoldRoot.GetComponentsInChildren<EventSystem>(true);
+                for (int eventSystemIndex = 0;
+                     eventSystemIndex < eventSystems.Length;
+                     eventSystemIndex++)
+                {
+                    EventSystem eventSystem =
+                        eventSystems[eventSystemIndex];
+                    if (eventSystem == null ||
+                        !string.Equals(
+                            eventSystem.gameObject.name,
+                            "EventSystem",
+                            StringComparison.Ordinal))
+                    {
+                        continue;
+                    }
+
+                    UnityEngine.Object.DestroyImmediate(
+                        eventSystem.gameObject);
+                    changed = true;
+                }
+
+                Camera[] cameras =
+                    scaffoldRoot.GetComponentsInChildren<Camera>(true);
+                for (int cameraIndex = 0;
+                     cameraIndex < cameras.Length;
+                     cameraIndex++)
+                {
+                    Camera camera = cameras[cameraIndex];
+                    if (camera == null ||
+                        !string.Equals(
+                            camera.gameObject.name,
+                            "Main Camera",
+                            StringComparison.Ordinal))
+                    {
+                        continue;
+                    }
+
+                    UnityEngine.Object.DestroyImmediate(
+                        camera.gameObject);
+                    changed = true;
+                }
+
+                if (changed)
+                {
+                    EditorSceneManager.MarkSceneDirty(scene);
+                    if (!EditorSceneManager.SaveScene(scene))
+                    {
+                        throw new InvalidOperationException(
+                            $"M01 application foundation failed to save '{scenePath}' after removing generated persistent authorities.");
+                    }
+                }
+            }
         }
 
         private static void CreatePrefabs()
@@ -319,15 +498,6 @@ namespace FirstGame.FrameworkModels.M01.Editor
         {
             GameObject root = new GameObject(rootName);
 
-            GameObject cameraObject = new GameObject("Main Camera");
-            cameraObject.tag = "MainCamera";
-            cameraObject.transform.SetParent(root.transform, false);
-            cameraObject.transform.position = new Vector3(0f, 6.5f, -11f);
-            Camera camera = cameraObject.AddComponent<Camera>();
-            camera.clearFlags = CameraClearFlags.SolidColor;
-            camera.backgroundColor = new Color(0.035f, 0.045f, 0.06f, 1f);
-            cameraObject.transform.LookAt(new Vector3(0f, 1f, 0f));
-
             GameObject lightObject = new GameObject("Directional Light");
             lightObject.transform.SetParent(root.transform, false);
             lightObject.transform.rotation =
@@ -403,28 +573,10 @@ namespace FirstGame.FrameworkModels.M01.Editor
                 mountRect.sizeDelta = new Vector2(720f, 360f);
             }
 
-            CreateEventSystem(parent);
+            // UI input authority belongs to the Persistent Content Scene.
+            // Route and Activity scenes must not create a second EventSystem.
         }
 
-        private static void CreateEventSystem(Transform parent)
-        {
-            GameObject eventSystemObject = new GameObject("EventSystem");
-            eventSystemObject.transform.SetParent(parent, false);
-            eventSystemObject.AddComponent<EventSystem>();
-
-            Type inputSystemModule =
-                Type.GetType(
-                    "UnityEngine.InputSystem.UI.InputSystemUIInputModule, Unity.InputSystem");
-
-            if (inputSystemModule != null &&
-                typeof(BaseInputModule).IsAssignableFrom(inputSystemModule))
-            {
-                eventSystemObject.AddComponent(inputSystemModule);
-                return;
-            }
-
-            eventSystemObject.AddComponent<StandaloneInputModule>();
-        }
 
         private static GameObject CreateNavigationPanel(
             string name,

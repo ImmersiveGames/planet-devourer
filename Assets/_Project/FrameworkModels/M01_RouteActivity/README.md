@@ -2,7 +2,7 @@
 
 Status: Authoring  
 Started: 2026-07-29  
-Current checkpoint: initial scaffold and authoring graph configuration
+Current checkpoint: Game Application foundation and local validation scope
 
 ## Purpose
 
@@ -19,7 +19,8 @@ Tools
 └── Immersive Framework
     └── FIRSTGAME
         └── M01
-            └── Create Missing Scaffold
+            ├── Create Missing Scaffold
+            └── Resolve Application Foundation
 ```
 
 A ferramenta:
@@ -32,7 +33,9 @@ não preenche referências entre assets;
 não altera ProjectSettings ou Build Profiles;
 não instala bootstrap;
 não adiciona triggers do framework;
-não executa gameplay.
+não executa gameplay;
+cria a cena persistente do M01 a partir da fonte oficial do package;
+remove Camera e EventSystem gerados nas cenas de Route/Boot para preservar uma única autoridade persistente.
 ```
 
 Stable IDs de Route e Activity são gerados como metadado técnico de criação. A configuração de produto permanece aberta.
@@ -79,6 +82,7 @@ The Game Application contains only its display name when created by the scaffold
 ## Generated scenes
 
 ```text
+Scenes/M01_PersistentContent.unity
 Scenes/M01_Boot.unity
 Scenes/M01_Menu.unity
 Scenes/M01_Gameplay.unity
@@ -86,7 +90,7 @@ Scenes/M01_ActivityA_Add.unity
 Scenes/M01_ActivityB_Add.unity
 ```
 
-The scenes contain simple visual content, clear hierarchy roots, cameras and UI mounts where appropriate. They do not contain framework bootstrap, request triggers or authored Route/Activity references.
+`M01_PersistentContent` is copied from the official package source scene and owns the physical Camera, EventSystem, loading and transition presentation required by the current application contract. Route and Boot scenes keep visual content and UI mounts, but do not own a second Camera or EventSystem. No scene contains request destinations or authored Route/Activity references.
 
 ## Generated prefabs
 
@@ -105,8 +109,9 @@ The navigation prefabs contain visual Unity UI buttons with empty `On Click` eve
 1. Apply the ZIP to `planet-devourer`.
 2. Let Unity compile.
 3. Run `Tools > Immersive Framework > FIRSTGAME > M01 > Create Missing Scaffold`.
-4. Confirm the dialog reports created and preserved files.
-5. Do not run a second repair or overwrite action; this tool intentionally has none.
+4. Run `Tools > Immersive Framework > FIRSTGAME > M01 > Resolve Application Foundation`.
+5. Confirm `M01_PersistentContent` exists and that `M01_Boot`, `M01_Menu` and `M01_Gameplay` no longer contain a generated `Main Camera` or `EventSystem`.
+6. Both commands are idempotent and preserve existing assets.
 
 ### 2. Configure Activity Content Profiles
 
@@ -181,11 +186,11 @@ Additional Content = None
 ```text
 Startup Route = Route_M01_Menu
 Local Player Slots = empty
-Persistent Content = empty for this isolated model
+Persistent Content / Content Scene = M01_PersistentContent
 Validation Mode = Standard
 ```
 
-Run the validation available on both Activities, both Profiles, both Routes and the Game Application. Do not add Player, Camera, Reset or Pause to satisfy unrelated warnings.
+Run the validation available on both Activities, both Profiles, both Routes and the Game Application. Zero Local Player Slots is valid because both Activities use `Projection = No Slots`. Unrelated Actor Profiles from M06/M07 must not appear in local Game Application validation; they remain visible only in explicit project audits. Do not add Player, Route-local Camera, Reset or Pause to silence unrelated findings.
 
 ## Next block
 
@@ -237,7 +242,7 @@ The three prefabs are candidates for reuse. They are not considered official tem
 | Creation | Asset creation is scaffolded because creation coverage is already accepted in QA. | Removes repetitive setup from the consumer test. | FIRSTGAME workflow |
 | Activity composition | Current Activity scene declaration requires an Activity Content Profile. | Supporting assets must be visible in the model structure. | Package/docs |
 | Inspector | To record during configuration. | — | Package |
-| Validation | To record after the first complete authoring graph validation. | — | Package/QA |
+| Validation | Local Game Application validation previously mixed project-wide Actor Profile findings and treated zero Slots as an error. | Blocked isolated models. | Fixed in package and covered by QA smoke |
 | Runtime | Not started. | — | Package/QA |
 
 Questions to record:
