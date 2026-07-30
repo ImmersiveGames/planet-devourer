@@ -2,7 +2,7 @@
 
 Status: Authoring  
 Started: 2026-07-29  
-Current checkpoint: Game Application foundation and local validation scope
+Current checkpoint: zero-Player boot and Route/Activity runtime composition
 
 ## Purpose
 
@@ -192,6 +192,47 @@ Validation Mode = Standard
 
 Run the validation available on both Activities, both Profiles, both Routes and the Game Application. Zero Local Player Slots is valid because both Activities use `Projection = No Slots`. Unrelated Actor Profiles from M06/M07 must not appear in local Game Application validation; they remain visible only in explicit project audits. Do not add Player, Route-local Camera, Reset or Pause to silence unrelated findings.
 
+
+
+## Zero-Player runtime rule
+
+The M01 Game Application intentionally has zero Local Player Slots. Runtime behavior must be:
+
+```text
+configured Slots = 0
+→ Player participation runtime is NotConfigured;
+→ no PlayerParticipationRuntimeHostModule;
+→ no PlayerActorPreparationRuntimeHostModule;
+→ no PlayerGameplayRuntimeHostModule;
+→ no SceneLocalPlayerAdmissionRuntimeHostModule;
+→ Game Flow boots Route_M01_Menu normally;
+→ no fallback Player, Slot or host is created.
+```
+
+After applying the runtime correction, enter Play Mode from `M01_Boot` and run:
+
+```text
+Tools
+→ Immersive Framework
+→ FIRSTGAME
+→ M01
+→ Run Zero Player Boot Smoke
+```
+
+Expected log:
+
+```text
+[M01_ZERO_PLAYER_BOOT_SMOKE]
+status='Passed'
+cases='5'
+configuredSlots='0'
+playerRuntime='NotConfigured'
+sceneAdmission='NotConfigured'
+startupScene='M01_Menu'
+```
+
+A Game Application with one or more configured Slots still composes the complete Player runtime and preserves all existing Player validation and runtime invariants.
+
 ## Next block
 
 After the authoring graph validates:
@@ -203,7 +244,7 @@ mount PF_M01_CurrentContextDisplay where it remains readable;
 add RouteRequestTrigger and ActivityRequestTrigger;
 configure explicit destinations and request reasons;
 configure M01_Boot and framework application selection;
-add the five scenes to the active Build Profile;
+add the six M01 scenes to the active Build Profile;
 run the complete Play Mode flow.
 ```
 
@@ -243,7 +284,8 @@ The three prefabs are candidates for reuse. They are not considered official tem
 | Activity composition | Current Activity scene declaration requires an Activity Content Profile. | Supporting assets must be visible in the model structure. | Package/docs |
 | Inspector | To record during configuration. | — | Package |
 | Validation | Local Game Application validation previously mixed project-wide Actor Profile findings and treated zero Slots as an error. | Blocked isolated models. | Fixed in package and covered by QA smoke |
-| Runtime | Not started. | — | Package/QA |
+| Runtime | Bootstrap previously composed Player runtime unconditionally and rejected zero Slots. | Blocked Route/Activity-only applications. | Fixed by conditional runtime composition; QA and M01 Play Mode smoke required |
+| Runtime | Scene Local Player admission still required Player Participation after the zero-Slot bootstrap correction. | Boot failed before the startup Route in a Player-free model. | Fixed as an explicit NotConfigured path; no admission module or fallback is created |
 
 Questions to record:
 
