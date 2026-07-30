@@ -847,6 +847,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1699436655}
     m_Modifications:
+    - target: {fileID: 136882441940836577, guid: 8a5e3c0499fb1564894f65aa093dde51, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1008229148615529389, guid: 8a5e3c0499fb1564894f65aa093dde51, type: 3}
       propertyPath: reason
       value: m01.route-gameplay
@@ -973,27 +977,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9083012748646404469, guid: 8a5e3c0499fb1564894f65aa093dde51, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9083012748646404469, guid: 8a5e3c0499fb1564894f65aa093dde51, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9083012748646404469, guid: 8a5e3c0499fb1564894f65aa093dde51, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 452
       objectReference: {fileID: 0}
     - target: {fileID: 9083012748646404469, guid: 8a5e3c0499fb1564894f65aa093dde51, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 72
       objectReference: {fileID: 0}
     - target: {fileID: 9083012748646404469, guid: 8a5e3c0499fb1564894f65aa093dde51, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 250
       objectReference: {fileID: 0}
     - target: {fileID: 9083012748646404469, guid: 8a5e3c0499fb1564894f65aa093dde51, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -60
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

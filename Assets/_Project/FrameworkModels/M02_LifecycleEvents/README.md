@@ -1,84 +1,159 @@
 # M02 — Lifecycle Events
 
-Status: Authoring  
+Status: Closed — FIRSTGAME proof passed  
 Roadmap order: 2  
 Started: 2026-07-30  
-Current checkpoint: complete independent authoring foundation
+Closed in FIRSTGAME: 2026-07-30  
+QAFramework regression: Deferred by roadmap decision
 
 ## Purpose
 
-Demonstrar objetos reagindo ao lifecycle oficial de Scene, Route e Activity sem implementar uma autoridade
-paralela no jogo consumidor.
+Demonstrar que um usuário do framework consegue autorar objetos que reagem ao lifecycle oficial de Scene,
+Route e Activity por Inspector, sem criar autoridade paralela no jogo consumidor.
+
+O M02 é diferente do M01:
+
+```text
+M01
+  prova que Route e Activity transitam corretamente.
+
+M02
+  prova que objetos autorados pelo consumidor recebem e apresentam os callbacks reais.
+```
+
+## Closure status
+
+```text
+Package authoring surface       Passed
+FIRSTGAME manual authoring      Passed
+FIRSTGAME Play Mode smoke       Passed
+Route A → Route B → Route A     Passed
+Activity idempotence            Passed
+QAFramework deterministic QA    Deferred
+```
+
+O adiamento de QA não invalida a prova de produto do FIRSTGAME. Ele apenas mantém os casos sintéticos e
+negativos fora deste corte.
+
+## Official surfaces used
+
+```text
+Scene
+  SceneLifecycleEvents
+  → SceneLifecycleRuntime
+  → Available / Releasing UnityEvents
+
+Route
+  RouteContentBinding
+  + RouteContentLifecycleEvents
+  → Entered / Exited UnityEvents
+
+Activity
+  ActivityLocalVisibilityAdapter
+  + ActivityContentLifecycleEvents
+  → Entered / Exited UnityEvents
+```
+
+`SceneLifecycleEvents` foi adicionado ao package como ponte pública de Inspector. Route e Activity reutilizam
+as superfícies oficiais que já existiam.
+
+## Consumer presentation
+
+```text
+FirstGame.FrameworkModels.M02.M02LifecycleVisualPresenter
+```
+
+Responsabilidades permitidas:
+
+```text
+atualizar Label;
+atualizar Visual Placeholder;
+armazenar o último evento;
+manter contador local de apresentação;
+emitir log estruturado [M02_LIFECYCLE].
+```
+
+O presenter não resolve Route ou Activity, não observa `SceneManager`, não usa polling e não decide lifecycle.
+
+## Authoring hierarchy
+
+Os componentes técnicos podem ficar no root ou em descendentes dos roots explícitos da cena. A hierarquia é
+organização do usuário, não identidade runtime.
+
+```text
+PF_M02_SceneLifecycleObject
+├── Visual Placeholder
+├── Label
+├── Framework Components (Configure Manually)
+│   └── SceneLifecycleEvents
+└── Bindings (Configure Manually)
+    └── M02LifecycleVisualPresenter
+
+PF_M02_RouteLifecycleObject
+├── Visual Placeholder
+├── Label
+├── Framework Components (Configure Manually)
+│   ├── RouteContentBinding
+│   └── RouteContentLifecycleEvents
+└── Bindings (Configure Manually)
+    └── M02LifecycleVisualPresenter
+
+PF_M02_ActivityLifecycleObject
+├── Visual Placeholder
+├── Label
+├── Framework Components (Configure Manually)
+│   ├── ActivityLocalVisibilityAdapter
+│   └── ActivityContentLifecycleEvents
+└── Bindings (Configure Manually)
+    └── M02LifecycleVisualPresenter
+```
+
+A descoberta parte dos roots explícitos entregues pelo runtime e atravessa descendentes, inclusive inativos.
+Não existe busca global. Route/Activity assets e `localContentId` continuam explícitos e preservam as
+fronteiras de escopo.
+
+## Per-instance assignments
+
+O prefab-base permanece reutilizável. A identidade específica é atribuída como override da instância:
+
+```text
+M02_RouteA
+  PF_M02_RouteLifecycleObject.Route = Route_M02_A
+
+M02_RouteB
+  PF_M02_RouteLifecycleObject.Route = Route_M02_B
+
+M02_ActivityA_Add
+  PF_M02_ActivityLifecycleObject.Activity = Activity_M02_A
+
+M02_ActivityB_Add
+  PF_M02_ActivityLifecycleObject.Activity = Activity_M02_B
+```
+
+Não aplicar essas referências ao prefab-base.
 
 ## Startup semantics
 
-O M02 possui três conceitos diferentes que não devem ser confundidos:
-
 ```text
-Unity entry scene / Build Profile index 0
+Build Profile index 0
   M02_Boot
 
-Game Application startup
+Game Application
   Startup Route = Route_M02_A
-
-Startup Route scene
-  Route_M02_A.Primary Scene = M02_RouteA
-
-Application persistent content
   Content Scene = M02_PersistentContent
+
+Route_M02_A
+  Primary Scene = M02_RouteA
+  First Activity = Activity_M02_A
 ```
 
-`GameApplicationAsset` não possui um campo "Startup Scene". Ele inicia uma `Startup Route`; a Route resolve
-sua própria `Primary Scene`.
+O M02 possui zero Local Player Slots e não reutiliza assets do M01.
 
-## Independence rule
-
-```text
-M02 owns its Game Application, Routes, Activities, Profiles, scenes and Persistent Content.
-M02 does not reuse M01_PersistentContent or any M01 Route/Activity asset.
-M02 has zero Local Player Slots.
-Consumer scripts present lifecycle evidence but do not own or trigger lifecycle.
-```
-
-Mesmo que `M01_PersistentContent` carregue tecnicamente, reutilizá-la acopla os modelos e invalida a prova de
-isolamento. A cena persistente deve ser uma cópia própria criada a partir da fonte oficial do package.
-
-## Materialize the complete foundation
-
-Apply the current M02 correction ZIP, let Unity compile, then run:
-
-```text
-Tools
-→ Immersive Framework
-→ FIRSTGAME
-→ M02
-→ Resolve Application Foundation
-```
-
-Esse comando agora é autocontido. Ele:
-
-```text
-creates every missing M02 authoring asset;
-creates the five missing non-persistent scenes;
-creates the three lifecycle placeholder prefabs;
-creates M02_PersistentContent from the official package source scene;
-removes only generated Main Camera/EventSystem objects from recognized M02 Boot/Route scenes;
-preserves all existing assets, scenes and prefabs;
-does not assign cross-asset references;
-does not add lifecycle participants;
-does not install bootstrap objects;
-does not change Build Profiles or ProjectSettings.
-```
-
-O comando separado `Create Missing Scaffold` permanece disponível para materializar apenas assets, cenas e
-prefabs sem resolver Persistent Content.
-
-## Expected inventory
+## Inventory
 
 ```text
 M02_LifecycleEvents/
-├── Application/
-│   └── GA_M02_Lifecycle.asset
+├── Application/GA_M02_Lifecycle.asset
 ├── Routes/
 │   ├── Route_M02_A.asset
 │   └── Route_M02_B.asset
@@ -101,167 +176,128 @@ M02_LifecycleEvents/
     └── PF_M02_ActivityLifecycleObject.prefab
 ```
 
-## Authoring graph
-
-### Activity Content A
+## Validated Play Mode flow
 
 ```text
-Content ID: m02.activity-a.scene
-Scene: M02_ActivityA_Add
-Requiredness: Required
-Load Mode: Additive
-Release Policy: Release On Activity Change
+M02_Boot
+→ Route A + Activity A
+→ request Activity A again: IgnoredAlreadyActive
+→ Activity B
+→ Route B + Activity B
+→ request Activity B again: IgnoredAlreadyActive
+→ Route A + Activity A
 ```
 
-### Activity Content B
-
-```text
-Content ID: m02.activity-b.scene
-Scene: M02_ActivityB_Add
-Requiredness: Required
-Load Mode: Additive
-Release Policy: Release On Activity Change
-```
-
-### Activity A
-
-```text
-Activity Content Profile: ActivityContent_M02_A
-Projection: No Slots
-Zero Participants: Allowed
-Requirement Level: None
-Visual Transition: Seamless
-Block During Transition: Lifecycle Requests Only
-```
-
-### Activity B
-
-```text
-Activity Content Profile: ActivityContent_M02_B
-Projection: No Slots
-Zero Participants: Allowed
-Requirement Level: None
-Visual Transition: Seamless
-Block During Transition: Lifecycle Requests Only
-```
-
-### Route A
-
-```text
-Primary Scene: M02_RouteA
-First Activity: Activity_M02_A
-Additional Content: None
-```
-
-### Route B
-
-```text
-Primary Scene: M02_RouteB
-First Activity: Activity_M02_B
-Additional Content: None
-```
-
-### Game Application
-
-```text
-Application Name: M02 Lifecycle Events
-Content Scene: M02_PersistentContent
-Startup Route: Route_M02_A
-Local Player Slots: Empty
-Validation Mode: Standard
-```
-
-## Build Profile
-
-```text
-0 — M02_Boot
-1 — M02_PersistentContent
-2 — M02_RouteA
-3 — M02_RouteB
-4 — M02_ActivityA_Add
-5 — M02_ActivityB_Add
-```
-
-## Planned Play Mode flow
+Observed consumer events:
 
 ```text
 Boot
-→ Route A + Activity A
-→ Activity B
-→ Route B + Activity B
-→ Route A + Activity A
+  Route A: Scene Available
+  Route A: Entered
+  Activity A: Entered
+
+Activity A → B
+  Activity A: Exited
+  Activity B: Entered
+
+Route A → B
+  Activity B: Exited
+  Route A: Exited
+  Route A: Scene Releasing
+  Route B: Scene Available
+  Route B: Entered
+  Activity B: Entered
+
+Route B → A
+  Activity B: Exited
+  Route B: Exited
+  Route B: Scene Releasing
+  Route A: Scene Available
+  Route A: Entered
+  Activity A: Entered
 ```
 
-There is no Menu step in this isolated model.
-
-## Current acceptance gate
-
-Do not add lifecycle participants until:
-
-- [ ] The complete inventory above exists.
-- [ ] `M02_PersistentContent` is assigned to the Game Application.
-- [ ] Both Profiles validate.
-- [ ] Both Activities validate with `No Slots`.
-- [ ] Route A starts Activity A.
-- [ ] Route B starts Activity B.
-- [ ] `GA_M02_Lifecycle` validates with zero Slots.
-- [ ] The six M02 scenes are enabled in the active Build Profile.
-
-## Consumer code boundary
-
-Allowed:
+Runtime evidence:
 
 ```text
-update label, material, light, animation or local counter;
-store the last event for presentation;
-receive callbacks from an official participant/binding.
+routeContentEnterBindings = 1
+routeContentEnterReceivers = 1
+routeContentExitBindings = 1
+routeContentExitReceivers = 1
+activityContentEnterBindings = 1
+activityContentEnterReceivers = 1
+activityContentExitBindings = 1
+activityContentExitReceivers = 1
+failed = 0
+blockingIssues = 0
+activitySceneLedgerStale = 0
 ```
 
-Not allowed:
+Requests para a Activity já ativa produzem `IgnoredAlreadyActive`, zero side effects e nenhum novo log de
+Enter/Exit do presenter.
+
+## Product findings
+
+### UX-M02-001 — M01 navigation names are model-specific
+
+Os prefabs visuais de navegação do M01 puderam ser reutilizados, mas seus nomes ainda são específicos do M01.
+Destino futuro: `FIRSTGAME Shared/Navigation` ou template oficial quando o shape amadurecer.
+
+### UX-M02-002 — Scene lifecycle needed a public Inspector bridge
+
+A superfície pública `SceneLifecycleEvents` foi criada no package e validada no FIRSTGAME.
+
+### UX-M02-003 — Prefab restructuring can stale scene overrides
+
+Mover `RouteContentBinding` para outro GameObject alterou seu `fileID`. As cenas mantiveram overrides apontando
+para o componente removido, produzindo zero bindings apesar de a descoberta hierárquica estar correta.
+
+Regra prática:
 
 ```text
-invoke Enter/Exit manually;
-resolve the active Route/Activity through global lookup;
-replace framework lifecycle authority;
-create a singleton or service locator;
-use a QA probe as the presentation layer.
+após mover ou recriar componentes dentro de prefab,
+revisar overrides de instância e referências serializadas.
 ```
 
-## Lifecycle callback bindings
+Uma validação futura pode detectar overrides órfãos, mas isso não bloqueia o modelo atual.
 
-The M02 prefabs use the official Inspector surfaces and a local visual-only
-presenter (`FirstGame.FrameworkModels.M02.M02LifecycleVisualPresenter`):
+### UX-M02-004 — Initial presentation is not a framework event
+
+O presenter atual também registra o estado visual inicial. Isso faz o primeiro callback real aparecer com
+contador maior que um. A limpeza é local e não bloqueante; não exige alteração no package.
+
+## Deferred QA follow-up
 
 ```text
-PF_M02_SceneLifecycleObject
-  SceneLifecycleEvents.Available / Releasing
-  -> presenter.OnAvailable / OnReleasing
-
-PF_M02_RouteLifecycleObject
-  RouteContentBinding (Route assigned per scene instance)
-  RouteContentLifecycleEvents.Entered / Exited
-  -> presenter.OnEntered / OnExited
-
-PF_M02_ActivityLifecycleObject
-  ActivityLocalVisibilityAdapter (Activity assigned per scene instance)
-  ActivityContentLifecycleEvents.Entered / Exited
-  -> presenter.OnEntered / OnExited
+QA-M02-001
+Feature: Activity lifecycle authoring
+Contract: repeated request for the active Activity does not duplicate Enter/Exit
+Status: Deferred by roadmap decision
+Destination: QAFramework
 ```
 
-The presenter has explicit references to `Visual Placeholder` and `Label`; it
-only displays the received event and does not resolve or control lifecycle.
-The Advanced / Debug fields on the official components expose counters and the
-last received event.
+Casos de falha de receiver, required/optional e ordem sintética permanecem fora do FIRSTGAME e poderão ser
+formalizados no QAFramework em corte posterior.
 
-`Framework Components (Configure Manually)` and `Bindings (Configure Manually)`
-are organizational children of the prefab root. Framework discovery begins at
-the explicit loaded scene roots and traverses descendants, including inactive
-objects; it is not a global search. Route and Activity assets plus
-`localContentId` remain explicit and prevent callbacks crossing scope
-boundaries.
+## Closure criteria
 
-## Build Profile note
+- [x] Usuário consegue criar e organizar os três prefabs de lifecycle.
+- [x] Usuário consegue atribuir Route e Activity por override de instância.
+- [x] UnityEvents são explícitos e compreensíveis no Inspector.
+- [x] Scene Available/Releasing chegam ao presenter.
+- [x] Route Enter/Exit chegam ao presenter.
+- [x] Activity Enter/Exit chegam ao presenter.
+- [x] Reentrada Route B → Route A restaura Activity A.
+- [x] Requests `IgnoredAlreadyActive` não duplicam callbacks.
+- [x] Logs `[M02_LIFECYCLE]` comprovam a cadeia até o consumidor.
+- [x] `blockingIssues = 0`, `failed = 0` e ledger sem stale.
+- [ ] Regressão sintética no QAFramework — deferred, não bloqueante para o roadmap atual.
 
-The M02 Build Profile remains unchanged. The lifecycle components react only
-to scenes already loaded by the official Game Application flow; they do not add
-scenes or observe `SceneManager` directly.
+## Next model
+
+```text
+M03 — Activity Readiness
+```
+
+O próximo modelo deve provar required/optional readiness e a experiência de diagnóstico correspondente, sem
+reabrir o M02.

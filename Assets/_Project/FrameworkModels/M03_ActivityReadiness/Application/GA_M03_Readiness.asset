@@ -17,5 +17,5 @@ MonoBehaviour:
   localPlayerSlots: []
   playerActorSelectionDuplicatePolicy: 10
   persistentContent:
-    containerScene: {fileID: 0}
+    containerScene: {fileID: 102900000, guid: aae12116c7a7e494d898c421ecb024b9, type: 3}
   validationMode: 1
