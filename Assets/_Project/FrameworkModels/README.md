@@ -1,6 +1,6 @@
 # FIRSTGAME Framework Models
 
-Status: folder architecture ready  
+Status: M01 authoring active  
 Date: 2026-07-29
 
 This directory contains independent, designer-readable demonstration models for the Immersive Framework.
@@ -16,6 +16,8 @@ This directory contains independent, designer-readable demonstration models for 
 
 ## Current cut
 
-This cut creates folder roots only. It does not create scenes, prefabs, assets, scripts, bootstrap code, or runtime behavior.
+`F0 Folder Architecture` is closed. `M01_RouteActivity` has entered `Authoring`.
 
-Next implementation cut: `M02_LifecycleEvents`.
+The current change creates only the internal folders and README required to start M01. It does not create scenes, prefabs, ScriptableObject assets, scripts, bootstrap code, or runtime behavior.
+
+Current roadmap checkpoint: `M01 — Etapa 1: Game Application`.
