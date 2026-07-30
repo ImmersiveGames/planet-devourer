@@ -20,6 +20,6 @@ MonoBehaviour:
   playerParticipationZeroParticipantPolicy: 0
   playerParticipationExplicitSlotProfiles: []
   playerParticipationRequirementLevel: 0
-  activityContentProfile: {fileID: 0}
+  activityContentProfile: {fileID: 11400000, guid: dbb4f3f0f9b1f8245896518a5193a26f, type: 2}
   visualTransitionMode: 0
   transitionGateMode: 10

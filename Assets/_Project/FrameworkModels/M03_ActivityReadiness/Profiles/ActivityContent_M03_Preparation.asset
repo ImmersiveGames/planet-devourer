@@ -12,7 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49994376dc9c4f14a401c2a75aa2be55, type: 3}
   m_Name: ActivityContent_M03_Preparation
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.ActivityContentProfileAsset
-  profileId: 
-  scenes: []
+  profileId: m03.activity.profile
+  scenes:
+  - contentId: m03.activity.preparation
+    scenePath: Assets/_Project/FrameworkModels/M03_ActivityReadiness/Scenes/M03_Activity_Add.unity
+    sceneName: M03_Activity_Add
+    requiredness: 10
+    loadMode: 0
+    releasePolicy: 0
   description: Scaffold asset for M03 Activity Readiness. Configure references and
     feature-specific contracts manually in the Unity Inspector.

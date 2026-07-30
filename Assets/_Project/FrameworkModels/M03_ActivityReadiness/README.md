@@ -1,79 +1,156 @@
-# M03 — Activity Readiness
-
-Status: Pending — scaffold available  
-Roadmap order: 3
+# M03 Activity Readiness
 
 ## Purpose
 
-Demonstrar uma Activity aguardando uma preparação válida antes de ficar Ready.
+This model demonstrates an Activity that waits for a valid visual preparation before becoming Ready.
 
-The creation scaffold is preparation only. This model becomes `Authoring` when its configuration starts in roadmap order.
+## What This Model Demonstrates
 
-## Materialize scaffold
+- Required `ActivityReadinessParticipant`;
+- preparation started by the runtime;
+- official presentation through `ActivityReadinessEvents`;
+- aggregate Waiting/NotReady;
+- `CompletePreparation()` when the visual sequence finishes;
+- Ready, cleanup, and re-entry.
 
-Run:
+## Required Package Features
 
-```text
-Tools > Immersive Framework > FIRSTGAME > Scaffolds > Create Missing M02-M16
-```
+- `ActivityReadinessParticipant`;
+- `ActivityReadinessEvents`;
+- `GameApplicationAsset`;
+- `RouteAsset`;
+- `ActivityAsset`;
+- official Route and Activity navigation triggers used by the selected composition.
 
-The command is idempotent and preserves existing files.
+## Assets To Create Manually
 
-## Planned authoring assets
+- `Application/GA_M03_Readiness.asset`
+- `Routes/Route_M03_Readiness.asset`
+- `Activities/Activity_M03_Preparation.asset`
 
-- `Application/GA_M03_Readiness.asset` (GameApplication)
-- `Routes/Route_M03_Readiness.asset` (Route)
-- `Activities/Activity_M03_Preparation.asset` (Activity)
-- `Profiles/ActivityContent_M03_Preparation.asset` (ActivityContent)
-
-Common assets receive only an asset name, designer-facing name, description and required creation identity when applicable. No reference graph is assigned. Optional types are created only when their current ScriptableObject class exists.
-
-## Generated scenes
+## Scenes To Create Manually
 
 - `Scenes/M03_Boot.unity`
 - `Scenes/M03_Route.unity`
 - `Scenes/M03_Activity_Add.unity`
 
-Route/Boot scenes contain a camera, light, ground, visual markers and explicit manual mount roots. Additive scenes contain only owned visual content and manual mount roots. No framework bootstrap or lifecycle component is installed.
-
-## Generated prefabs
+## Prefabs To Assemble Manually
 
 - `Prefabs/PF_M03_PreparationParticipant.prefab`
 - `Prefabs/PF_M03_ReadinessDisplay.prefab`
 - `Prefabs/PF_M03_PreparedContent.prefab`
 
-Each prefab is a visible placeholder with empty `Framework Components` and `Bindings` mount points. Add the official feature components manually.
+## Recommended Prefab Composition
 
-## Configuration focus
-
-1. Configurar o grafo Application → Route → Activity.
-2. Associar M03_Activity_Add ao Profile.
-3. Adicionar o participant oficial de preparação.
-4. Expor Preparing e Ready sem timer controlador de demo.
-
-## Play Mode flow
+`PF_M03_PreparationParticipant`
 
 ```text
-entrar na Activity → observar preparação → observar Ready → usar conteúdo → sair
+Prefab Root
+├── Preparation Visual
+├── ActivityReadinessParticipant
+└── M03PreparationSequence
 ```
 
-## UX review
+Wire `ActivityReadinessParticipant.PreparationStarted` to `M03PreparationSequence.BeginPreparation` and `PreparationReleased` to `M03PreparationSequence.ReleasePreparation`. The sequence must reference that same participant explicitly.
 
-Record:
+`PF_M03_ReadinessDisplay`
 
-- number of configuration steps;
-- technical fields shown before designer intent;
-- repeated assignments;
-- hidden dependencies;
-- missing Composer, Recipe, Profile or template opportunities;
-- whether normal diagnostics are sufficient without opening code.
+```text
+Prefab Root
+├── Waiting Visual
+├── Ready Visual
+├── Status Label
+├── ActivityReadinessEvents
+└── M03ReadinessPresenter
+```
+
+Wire the official UnityEvents manually:
+
+- `ActivityReadinessEvents.preparing` → `M03ReadinessPresenter.ShowPreparing`
+- `ActivityReadinessEvents.ready` → `M03ReadinessPresenter.ShowReady`
+- `ActivityReadinessEvents.notReady` → `M03ReadinessPresenter.ShowNotReady`
+- `ActivityReadinessParticipant.PreparationReleased` → `M03ReadinessPresenter.ResetPresentation`
+
+`PF_M03_PreparedContent` is simple visual or interactive content, initially disabled and enabled only by `ShowReady`.
+
+## Setup
+
+1. Create the Game Application.
+2. Create the Route.
+3. Create the Activity.
+4. Associate the scenes.
+5. Place the three prefabs in the Activity additive scene.
+6. Set a Participant Id.
+7. Set Requiredness to Required.
+8. Wire `PreparationStarted` and `PreparationReleased`.
+9. Wire `ActivityReadinessEvents` to the presenter.
+10. Validate every Inspector reference.
+11. Save the assets and scenes.
+12. Enter Play Mode.
+
+## Inspector Checklist
+
+- Participant Id is filled.
+- Requiredness is Required.
+- `M03PreparationSequence` points to the same participant.
+- The preparation visual is configured.
+- `ActivityReadinessEvents` has its callbacks.
+- The presenter has labels and visual roots.
+- Prepared content starts unavailable.
+- No reference belongs to another model.
+
+## Play Mode Flow
+
+```text
+Boot → Route → Activity enters → Waiting → visual preparation → Ready
+→ prepared content available → leave Route or Activity → re-enter → preparation repeats
+```
+
+## Expected Result
+
+- Waiting appears immediately after Activity entry.
+- Prepared content remains unavailable.
+- The visual sequence finishes.
+- Ready appears and prepared content becomes available.
+- No new Activity request is executed.
+- Exit resets the visual.
+- Re-entry repeats the flow.
+
+## Reusable Pieces
+
+- `ActivityReadinessParticipant` is framework functionality.
+- `ActivityReadinessEvents` is framework functionality.
+- `M03PreparationSequence` is a consumer example.
+- `M03ReadinessPresenter` is consumer presentation.
+- Visuals can change without changing the contract.
+
+## UX Findings
+
+| Area | Observation | Impact | Destination |
+|---|---|---|---|
+| Creation |  |  |  |
+| Inspector |  |  |  |
+| Composition |  |  |  |
+| Runtime |  |  |  |
+| Diagnostics |  |  |  |
+| Reuse |  |  |  |
+
+- Is the participant → readiness relation clear?
+- Is Requiredness easy to find?
+- Are the required UnityEvents obvious?
+- Is it clear that the presenter is not the authority?
+- Is the Waiting reason visible without opening code?
+- Does re-entry require additional configuration?
+- Would a Composer reduce errors without hiding contracts?
 
 ## QA Follow-ups
 
-- required participant failure
-- optional failure
-- timeout
-- participant ausente
-- late completion
+Record, without implementing, the following scenarios in `C:\Projetos\QAFramework`:
 
-Do not implement these cases in FIRSTGAME. Transfer confirmed technical scenarios to QAFramework.
+- required participant failure;
+- optional participant failure;
+- participant missing;
+- duplicate completion;
+- late completion;
+- stale occurrence;
+- replacement during preparation.
