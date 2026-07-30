@@ -12,7 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49994376dc9c4f14a401c2a75aa2be55, type: 3}
   m_Name: ActivityContent_M01_B
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.ActivityContentProfileAsset
-  profileId: 
-  scenes: []
+  profileId: m01.activity-b.profile
+  scenes:
+  - contentId: m01.activity-b.scene
+    scenePath: Assets/_Project/FrameworkModels/M01_RouteActivity/Scenes/M01_ActivityB_Add.unity
+    sceneName: M01_ActivityB_Add
+    requiredness: 10
+    loadMode: 0
+    releasePolicy: 0
   description: Activity-owned scene declaration for M01 Activity B. Add M01_ActivityB_Add
     manually.

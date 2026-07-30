@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.RouteAsset
   routeId: c74b9b545452455db166dd101ef65340
   routeName: M01 Gameplay
-  primaryScenePath: 
-  primarySceneName: 
+  primaryScenePath: Assets/_Project/FrameworkModels/M01_RouteActivity/Scenes/M01_Gameplay.unity
+  primarySceneName: M01_Gameplay
   routeContentProfile: {fileID: 0}
-  startupActivity: {fileID: 0}
+  startupActivity: {fileID: 11400000, guid: 221b2797bea83ae4aaf989ec121a0612, type: 2}
   transitionGateMode: 30
   description: Gameplay Route for the M01 Route and Activity model. Configure its
     Primary Scene and First Activity manually.

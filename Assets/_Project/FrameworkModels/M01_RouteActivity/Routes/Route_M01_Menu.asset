@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.RouteAsset
   routeId: 286aa9aff5e24d74a2e542c1ce1014f1
   routeName: M01 Menu
-  primaryScenePath: 
-  primarySceneName: 
+  primaryScenePath: Assets/_Project/FrameworkModels/M01_RouteActivity/Scenes/M01_Menu.unity
+  primarySceneName: M01_Menu
   routeContentProfile: {fileID: 0}
   startupActivity: {fileID: 0}
   transitionGateMode: 30

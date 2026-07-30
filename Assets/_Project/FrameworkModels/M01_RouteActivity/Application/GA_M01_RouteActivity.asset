@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ce6d27d442ac76449f283afbc33d04f, type: 3}
   m_Name: GA_M01_RouteActivity
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.GameApplicationAsset
-  applicationName: GA_M01_RouteActivity
-  startupRoute: {fileID: 0}
+  applicationName: M01 Route and Activity
+  startupRoute: {fileID: 11400000, guid: 94bdfdcb046694442877f82430c24b94, type: 2}
   localPlayerSlots: []
-  playerActorSelectionDuplicatePolicy: 0
+  playerActorSelectionDuplicatePolicy: 10
   persistentContent:
     containerScene: {fileID: 0}
   validationMode: 1
