@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/_Project/Scenes/Shared/Shared_PersistentContent.unity
     guid: aae12116c7a7e494d898c421ecb024b9
   - enabled: 1
-    path: Assets/_Project/Scenes/RotesContents/Sample_Envoirement.unity
+    path: Assets/_Project/Scenes/RotesContents/Sample_Environment.unity
     guid: 7ce94dc53fc9b924898f33010881cedf
   - enabled: 1
     path: Assets/_Project/Scenes/Sample_MenuHub.unity
