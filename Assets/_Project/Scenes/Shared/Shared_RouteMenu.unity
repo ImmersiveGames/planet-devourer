@@ -231,6 +231,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 705338810}
     m_Modifications:
+    - target: {fileID: 1008229148615529389, guid: 8a5e3c0499fb1564894f65aa093dde51, type: 3}
+      propertyPath: reason
+      value: toforest
+      objectReference: {fileID: 0}
+    - target: {fileID: 1008229148615529389, guid: 8a5e3c0499fb1564894f65aa093dde51, type: 3}
+      propertyPath: targetRoute
+      value: 
+      objectReference: {fileID: 11400000, guid: 7e4d2299105322346b92d5efd4112c01, type: 2}
+    - target: {fileID: 4247016141830090073, guid: 8a5e3c0499fb1564894f65aa093dde51, type: 3}
+      propertyPath: m_Text
+      value: Forest (Rote)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4629446134165234820, guid: 8a5e3c0499fb1564894f65aa093dde51, type: 3}
+      propertyPath: reason
+      value: tofields
+      objectReference: {fileID: 0}
+    - target: {fileID: 4629446134165234820, guid: 8a5e3c0499fb1564894f65aa093dde51, type: 3}
+      propertyPath: targetRoute
+      value: 
+      objectReference: {fileID: 11400000, guid: dff698745eea1c44981467d25c739e2f, type: 2}
+    - target: {fileID: 6635868728673354540, guid: 8a5e3c0499fb1564894f65aa093dde51, type: 3}
+      propertyPath: m_Text
+      value: Fields (Rote)
+      objectReference: {fileID: 0}
     - target: {fileID: 6849845423206683457, guid: 8a5e3c0499fb1564894f65aa093dde51, type: 3}
       propertyPath: m_Name
       value: PF_RouteNavigation
@@ -465,6 +489,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: PF_ActivityNavigation
       objectReference: {fileID: 0}
+    - target: {fileID: 1406201091408546898, guid: 7a6741ece9071b143b2cc32ea932057d, type: 3}
+      propertyPath: m_Text
+      value: Chikens (activity)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1426509055645993186, guid: 7a6741ece9071b143b2cc32ea932057d, type: 3}
+      propertyPath: reason
+      value: add.cows
+      objectReference: {fileID: 0}
+    - target: {fileID: 1426509055645993186, guid: 7a6741ece9071b143b2cc32ea932057d, type: 3}
+      propertyPath: targetActivity
+      value: 
+      objectReference: {fileID: 11400000, guid: fc97914517d3ff84b8f079ac99f22889, type: 2}
+    - target: {fileID: 2272659429147529842, guid: 7a6741ece9071b143b2cc32ea932057d, type: 3}
+      propertyPath: m_Text
+      value: Cows (activity)
+      objectReference: {fileID: 0}
     - target: {fileID: 5783707766041921449, guid: 7a6741ece9071b143b2cc32ea932057d, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -513,6 +553,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9059352182433243934, guid: 7a6741ece9071b143b2cc32ea932057d, type: 3}
+      propertyPath: reason
+      value: activity.chikens
+      objectReference: {fileID: 0}
+    - target: {fileID: 9059352182433243934, guid: 7a6741ece9071b143b2cc32ea932057d, type: 3}
+      propertyPath: targetActivity
+      value: 
+      objectReference: {fileID: 11400000, guid: e30fdbe54626d4a47abe2ec3e74c9822, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
