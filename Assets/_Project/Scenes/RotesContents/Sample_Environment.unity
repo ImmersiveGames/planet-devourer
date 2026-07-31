@@ -129,6 +129,8 @@ GameObject:
   m_Component:
   - component: {fileID: 19067683}
   - component: {fileID: 19067684}
+  - component: {fileID: 19067686}
+  - component: {fileID: 19067685}
   m_Layer: 0
   m_Name: Bee To Cows Acivities
   m_TagString: Untagged
@@ -168,6 +170,65 @@ MonoBehaviour:
   activity: {fileID: 11400000, guid: fc97914517d3ff84b8f079ac99f22889, type: 2}
   localContentId: bee.cow
   requiredness: 0
+--- !u!114 &19067685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 19067682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70f74e1210bd4f428c99dd90f4f6a68e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FirstGame.Diagnostics.LifecycleCanvasEventReporter
+  presenter: {fileID: 1376220661}
+  scope: 2
+  identity: Sample_Activities_Cows
+--- !u!114 &19067686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 19067682}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c6587a7a3534ec1be3705820bbce3ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ActivityFlow.ActivityContentLifecycleEvents
+  entered:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 19067685}
+        m_TargetAssemblyTypeName: FirstGame.Diagnostics.LifecycleCanvasEventReporter,
+          Assembly-CSharp
+        m_MethodName: ReportEntered
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  exited:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 19067685}
+        m_TargetAssemblyTypeName: FirstGame.Diagnostics.LifecycleCanvasEventReporter,
+          Assembly-CSharp
+        m_MethodName: ReportExited
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &126470506
 GameObject:
   m_ObjectHideFlags: 0
@@ -1827,6 +1888,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1340802717}
   m_Mesh: {fileID: -185447317763182327, guid: 1e875cb4a4c9f1f428d2352750f83e07, type: 3}
+--- !u!114 &1376220661 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8749976202600838082, guid: d245106d1012252439779d3ff78ed239, type: 3}
+  m_PrefabInstance: {fileID: 3023678846610447868}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 696137ca5fc44ad4b84cc9413f90ea9c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FirstGame.Diagnostics.LifecycleCanvasPresenter
 --- !u!1 &1412696350
 GameObject:
   m_ObjectHideFlags: 0
@@ -1927,8 +1999,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1509643809}
   - component: {fileID: 1509643810}
+  - component: {fileID: 1509643812}
+  - component: {fileID: 1509643811}
   m_Layer: 0
-  m_Name: Apple To Chikens Activities
+  m_Name: Apple To chickens Activities
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1974,8 +2048,67 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ActivityFlow.ActivityLocalVisibilityAdapter
   activity: {fileID: 11400000, guid: e30fdbe54626d4a47abe2ec3e74c9822, type: 2}
-  localContentId: apple.chikens
+  localContentId: apple.chickens
   requiredness: 0
+--- !u!114 &1509643811
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1509643808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70f74e1210bd4f428c99dd90f4f6a68e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FirstGame.Diagnostics.LifecycleCanvasEventReporter
+  presenter: {fileID: 1376220661}
+  scope: 2
+  identity: Sample_Activites_Chikens
+--- !u!114 &1509643812
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1509643808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c6587a7a3534ec1be3705820bbce3ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ActivityFlow.ActivityContentLifecycleEvents
+  entered:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1509643811}
+        m_TargetAssemblyTypeName: FirstGame.Diagnostics.LifecycleCanvasEventReporter,
+          Assembly-CSharp
+        m_MethodName: ReportEntered
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  exited:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1509643811}
+        m_TargetAssemblyTypeName: FirstGame.Diagnostics.LifecycleCanvasEventReporter,
+          Assembly-CSharp
+        m_MethodName: ReportExited
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1551750529
 GameObject:
   m_ObjectHideFlags: 0
@@ -2953,6 +3086,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 893287889768981838, guid: d245106d1012252439779d3ff78ed239, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: -800
+      objectReference: {fileID: 0}
+    - target: {fileID: 893287889768981838, guid: d245106d1012252439779d3ff78ed239, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 320
+      objectReference: {fileID: 0}
+    - target: {fileID: 893287889768981838, guid: d245106d1012252439779d3ff78ed239, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2132265880483397935, guid: d245106d1012252439779d3ff78ed239, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2977,6 +3122,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas-Lifecyle
       objectReference: {fileID: 0}
+    - target: {fileID: 2790674364302255882, guid: d245106d1012252439779d3ff78ed239, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4569443263222287016, guid: d245106d1012252439779d3ff78ed239, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -3016,6 +3165,22 @@ PrefabInstance:
     - target: {fileID: 4610023247229751337, guid: d245106d1012252439779d3ff78ed239, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5923753960670989341, guid: d245106d1012252439779d3ff78ed239, type: 3}
+      propertyPath: m_fontSize
+      value: 72
+      objectReference: {fileID: 0}
+    - target: {fileID: 5923753960670989341, guid: d245106d1012252439779d3ff78ed239, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6226092677294877957, guid: d245106d1012252439779d3ff78ed239, type: 3}
+      propertyPath: m_fontSize
+      value: 28
+      objectReference: {fileID: 0}
+    - target: {fileID: 6226092677294877957, guid: d245106d1012252439779d3ff78ed239, type: 3}
+      propertyPath: m_enableAutoSizing
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6229006044089306015, guid: d245106d1012252439779d3ff78ed239, type: 3}
       propertyPath: m_AnchorMax.y
@@ -3170,7 +3335,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 3121516115430358763, guid: d245106d1012252439779d3ff78ed239, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d245106d1012252439779d3ff78ed239, type: 3}

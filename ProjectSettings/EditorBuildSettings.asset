@@ -24,7 +24,7 @@ EditorBuildSettings:
     path: Assets/_Project/Scenes/RotesContents/Additives/Sample_Add_Forest.unity
     guid: a0b71624384a5ca43ab172a4340d3418
   - enabled: 1
-    path: Assets/_Project/Scenes/AtivitiesContents/SampleChikens.unity
+    path: Assets/_Project/Scenes/AtivitiesContents/SampleChickens.unity
     guid: ab23e2951ca3b9f438c158baba0654f7
   - enabled: 1
     path: Assets/_Project/Scenes/AtivitiesContents/SampleCows.unity

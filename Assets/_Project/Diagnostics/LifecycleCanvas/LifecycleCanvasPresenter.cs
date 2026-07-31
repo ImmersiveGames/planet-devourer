@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Text;
 using TMPro;
 using UnityEngine;
@@ -13,14 +12,10 @@ namespace FirstGame.Diagnostics
     {
         private const string MissingIdentity = "<MISSING IDENTITY>";
         private const string MissingScene = "<NO SCENE>";
-        private const string NotObserved = "NOT OBSERVED";
 
-        [Header("Lifecycle Report")]
+        [Header("On-Demand Lifecycle Check")]
         [SerializeField]
         private TMP_Text reportValue;
-
-        [SerializeField, Min(1)]
-        private int visibleTimelineEntries = 12;
 
         [Header("Console Diagnostics")]
         [SerializeField]
@@ -35,71 +30,23 @@ namespace FirstGame.Diagnostics
         [SerializeField]
         private bool includeSourcePath = true;
 
-        private readonly Dictionary<CallbackKey, CallbackState> configuredCallbacks =
-            new Dictionary<CallbackKey, CallbackState>();
-
-        private readonly Queue<LifecycleEventRecord> timeline =
-            new Queue<LifecycleEventRecord>();
+        private readonly Dictionary<SourceKey, SourceState> observedSources =
+            new Dictionary<SourceKey, SourceState>();
 
         private bool initializationAttempted;
         private bool isReady;
+        private bool hasLastEvent;
         private int sequence;
-        private ScopeState sceneState;
-        private ScopeState routeState;
-        private ScopeState activityState;
+        private LifecycleEventRecord lastEvent;
 
         public bool IsReady => isReady;
         public int Sequence => sequence;
-        public int ConfiguredCallbackCount => configuredCallbacks.Count;
-        public int ObservedCallbackCount => configuredCallbacks.Values.Count(state => state.ObservedCount > 0);
-        public int PendingCallbackCount => ConfiguredCallbackCount - ObservedCallbackCount;
+        public int ObservedSourceCount => observedSources.Count;
         public string RenderedReport => reportValue != null ? reportValue.text : string.Empty;
 
         private void Awake()
         {
             Initialize();
-        }
-
-        private void OnValidate()
-        {
-            visibleTimelineEntries = Mathf.Max(1, visibleTimelineEntries);
-        }
-
-        public void RegisterConfiguredReporter(
-            LifecycleCanvasScope scope,
-            string identity,
-            Component source)
-        {
-            if (!isReady && !Initialize())
-            {
-                return;
-            }
-
-            string normalizedIdentity = NormalizeIdentity(identity, scope, null, source);
-            GameObject sourceObject = source != null ? source.gameObject : gameObject;
-            string sourcePath = BuildTransformPath(sourceObject.transform);
-            string sourceScene = ResolveSceneName(sourceObject);
-            int sourceInstanceId = source != null ? source.GetEntityId() : GetEntityId();
-
-            foreach (LifecycleCanvasEventKind eventKind in GetExpectedEvents(scope))
-            {
-                var key = new CallbackKey(sourceInstanceId, eventKind);
-                if (configuredCallbacks.ContainsKey(key))
-                {
-                    continue;
-                }
-
-                configuredCallbacks.Add(
-                    key,
-                    new CallbackState(
-                        scope,
-                        eventKind,
-                        normalizedIdentity,
-                        sourcePath,
-                        sourceScene));
-            }
-
-            RenderReport();
         }
 
         public void RecordEvent(
@@ -122,13 +69,11 @@ namespace FirstGame.Diagnostics
                 return;
             }
 
-            RegisterConfiguredReporter(scope, identity, source);
-
             string normalizedIdentity = NormalizeIdentity(identity, scope, eventKind, source);
             GameObject sourceObject = source != null ? source.gameObject : gameObject;
             string sourcePath = BuildTransformPath(sourceObject.transform);
             string sourceScene = ResolveSceneName(sourceObject);
-            int sourceInstanceId = source != null ? source.GetEntityId() : GetEntityId();
+            EntityId sourceEntityId = source != null ? source.GetEntityId() : GetEntityId();
 
             sequence++;
 
@@ -142,43 +87,35 @@ namespace FirstGame.Diagnostics
                 sourcePath,
                 sourceScene);
 
-            var key = new CallbackKey(sourceInstanceId, eventKind);
-            if (!configuredCallbacks.TryGetValue(key, out CallbackState callbackState))
+            var key = new SourceKey(sourceEntityId, scope);
+            if (!observedSources.TryGetValue(key, out SourceState sourceState))
             {
-                callbackState = new CallbackState(
+                sourceState = new SourceState(
+                    sequence,
                     scope,
-                    eventKind,
                     normalizedIdentity,
                     sourcePath,
                     sourceScene);
-                configuredCallbacks.Add(key, callbackState);
+                observedSources.Add(key, sourceState);
             }
-
-            callbackState.Observe(record);
-            ApplyNavigationState(record);
-
-            timeline.Enqueue(record);
-            while (timeline.Count > visibleTimelineEntries)
+            else
             {
-                timeline.Dequeue();
+                sourceState.RefreshIdentity(normalizedIdentity, sourcePath, sourceScene);
             }
+
+            sourceState.Observe(record);
+            lastEvent = record;
+            hasLastEvent = true;
 
             RenderReport();
 
             if (writeConsoleLog)
             {
-                Debug.Log(FormatConsoleLog(record), sourceObject);
+                Debug.Log(FormatConsoleLog(record, sourceState), sourceObject);
             }
         }
 
-        [ContextMenu("Clear Timeline")]
-        public void ClearTimeline()
-        {
-            timeline.Clear();
-            RenderReport();
-        }
-
-        [ContextMenu("Reset Lifecycle Report")]
+        [ContextMenu("Reset On-Demand Lifecycle Check")]
         public void ResetReport()
         {
             if (!isReady && !Initialize())
@@ -187,16 +124,9 @@ namespace FirstGame.Diagnostics
             }
 
             sequence = 0;
-            timeline.Clear();
-            sceneState = default;
-            routeState = default;
-            activityState = default;
-
-            foreach (CallbackState callback in configuredCallbacks.Values)
-            {
-                callback.ResetObservation();
-            }
-
+            hasLastEvent = false;
+            lastEvent = default;
+            observedSources.Clear();
             RenderReport();
         }
 
@@ -224,33 +154,9 @@ namespace FirstGame.Diagnostics
                 return false;
             }
 
-            visibleTimelineEntries = Mathf.Max(1, visibleTimelineEntries);
             isReady = true;
             RenderReport();
             return true;
-        }
-
-        private void ApplyNavigationState(LifecycleEventRecord record)
-        {
-            var state = new ScopeState(record.EventKind, record.Identity, record.Sequence);
-
-            switch (record.Scope)
-            {
-                case LifecycleCanvasScope.Scene:
-                    sceneState = state;
-                    break;
-
-                case LifecycleCanvasScope.Route:
-                    routeState = state;
-                    break;
-
-                case LifecycleCanvasScope.Activity:
-                    activityState = state;
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(record.Scope), record.Scope, null);
-            }
         }
 
         private void RenderReport()
@@ -260,177 +166,108 @@ namespace FirstGame.Diagnostics
                 return;
             }
 
-            var builder = new StringBuilder(2048);
-            int configured = ConfiguredCallbackCount;
-            int observed = ObservedCallbackCount;
-            int pending = configured - observed;
+            if (observedSources.Count == 0)
+            {
+                reportValue.text =
+                    "<b>WAITING FOR LIFECYCLE CALLBACK</b>\n" +
+                    "A Route, Activity or Scene will appear only after its callback is received.";
+                return;
+            }
 
-            builder.Append("<b>EXECUTION SUMMARY</b>")
-                .AppendLine()
-                .Append("Callbacks configured: ").Append(configured)
-                .Append("  |  observed: ").Append(observed)
-                .Append("  |  pending: ").Append(pending)
-                .Append("  |  events received: ").Append(sequence)
-                .AppendLine()
+            var orderedSources = new List<SourceState>(observedSources.Values);
+            orderedSources.Sort((left, right) => left.FirstSequence.CompareTo(right.FirstSequence));
+
+            var builder = new StringBuilder(512);
+            builder.Append("<b>EVENTS RECEIVED: ")
+                .Append(sequence)
+                .AppendLine("</b>")
                 .AppendLine();
 
-            builder.AppendLine("<b>CURRENT NAVIGATION</b>");
-            AppendScopeState(builder, "Scene", sceneState);
-            AppendScopeState(builder, "Route", routeState);
-            AppendScopeState(builder, "Activity", activityState);
-            builder.AppendLine();
-
-            builder.AppendLine("<b>CONFIGURED CALLBACKS</b>");
-            if (configuredCallbacks.Count == 0)
+            foreach (SourceState source in orderedSources)
             {
-                builder.AppendLine("No lifecycle callback reporters registered.");
-            }
-            else
-            {
-                IEnumerable<CallbackState> callbacks = configuredCallbacks.Values
-                    .OrderBy(callback => callback.Scope)
-                    .ThenBy(callback => callback.Identity, StringComparer.Ordinal)
-                    .ThenBy(callback => callback.EventKind)
-                    .ThenBy(callback => callback.SourcePath, StringComparer.Ordinal);
-
-                foreach (CallbackState callback in callbacks)
-                {
-                    AppendCallbackState(builder, callback);
-                }
+                AppendSourceStatus(builder, source);
             }
 
             builder.AppendLine();
-            builder.Append("<b>EVENT TIMELINE</b>  ")
-                .Append(timeline.Count)
-                .Append('/')
-                .Append(visibleTimelineEntries)
-                .AppendLine();
+            builder.Append("<b>LAST:</b> ");
 
-            if (timeline.Count == 0)
+            if (!hasLastEvent)
             {
-                builder.Append("No lifecycle events received.");
+                builder.Append("NONE");
             }
             else
             {
-                LifecycleEventRecord[] records = timeline.ToArray();
-                for (int index = records.Length - 1; index >= 0; index--)
-                {
-                    AppendTimelineRecord(builder, records[index]);
-                    if (index > 0)
-                    {
-                        builder.AppendLine();
-                    }
-                }
+                builder.Append(lastEvent.Scope.ToString().ToUpperInvariant())
+                    .Append(" | ")
+                    .Append(lastEvent.Identity)
+                    .Append(" | ")
+                    .Append(ToDisplayName(lastEvent.EventKind));
             }
 
             reportValue.text = builder.ToString();
         }
 
-        private static void AppendScopeState(
-            StringBuilder builder,
-            string label,
-            ScopeState state)
+        private static void AppendSourceStatus(StringBuilder builder, SourceState source)
         {
-            builder.Append(label.PadRight(9));
+            builder.Append("<b>")
+                .Append(source.Scope.ToString().ToUpperInvariant())
+                .Append("</b> | ")
+                .Append(source.Identity)
+                .Append(" | ");
 
-            if (!state.HasValue)
+            if (source.Scope == LifecycleCanvasScope.Scene)
             {
-                builder.AppendLine(NotObserved);
-                return;
-            }
-
-            builder.Append(ToDisplayName(state.EventKind).PadRight(11))
-                .Append(" | ")
-                .Append(state.Identity)
-                .Append(" | last=#")
-                .Append(state.Sequence.ToString("D3", CultureInfo.InvariantCulture))
-                .AppendLine();
-        }
-
-        private void AppendCallbackState(StringBuilder builder, CallbackState callback)
-        {
-            builder.Append(callback.ObservedCount > 0 ? "[OK] " : "[--] ")
-                .Append(callback.Scope.ToString().ToUpperInvariant())
-                .Append(' ')
-                .Append(ToDisplayName(callback.EventKind))
-                .Append(" | ")
-                .Append(callback.Identity);
-
-            if (callback.ObservedCount > 0)
-            {
-                builder.Append(" | count=")
-                    .Append(callback.ObservedCount)
-                    .Append(" last=#")
-                    .Append(callback.LastSequence.ToString("D3", CultureInfo.InvariantCulture));
-
-                if (includeFrame)
-                {
-                    builder.Append(" F")
-                        .Append(callback.LastFrame.ToString("D4", CultureInfo.InvariantCulture));
-                }
-
-                if (includeUnscaledTime)
-                {
-                    builder.Append(' ')
-                        .Append(callback.LastUnscaledTime.ToString("0.000", CultureInfo.InvariantCulture))
-                        .Append('s');
-                }
+                AppendEventStatus(builder, LifecycleCanvasEventKind.Available, source.AvailableCount);
+                builder.Append(" | ");
+                AppendEventStatus(builder, LifecycleCanvasEventKind.Releasing, source.ReleasingCount);
             }
             else
             {
-                builder.Append(" | waiting");
-            }
-
-            if (includeSourcePath)
-            {
-                builder.Append(" | ").Append(callback.SourcePath);
+                AppendEventStatus(builder, LifecycleCanvasEventKind.Entered, source.EnteredCount);
+                builder.Append(" | ");
+                AppendEventStatus(builder, LifecycleCanvasEventKind.Exited, source.ExitedCount);
             }
 
             builder.AppendLine();
         }
 
-        private void AppendTimelineRecord(StringBuilder builder, LifecycleEventRecord record)
+        private static void AppendEventStatus(
+            StringBuilder builder,
+            LifecycleCanvasEventKind eventKind,
+            int observedCount)
         {
-            builder.Append('#')
-                .Append(record.Sequence.ToString("D3", CultureInfo.InvariantCulture));
+            builder.Append(ToDisplayName(eventKind)).Append(": ");
 
-            if (includeFrame)
+            if (observedCount <= 0)
             {
-                builder.Append("  F")
-                    .Append(record.Frame.ToString("D4", CultureInfo.InvariantCulture));
+                builder.Append("WAITING");
+                return;
             }
 
-            if (includeUnscaledTime)
+            builder.Append("CALLED");
+            if (observedCount > 1)
             {
-                builder.Append("  ")
-                    .Append(record.UnscaledTime.ToString("0.000", CultureInfo.InvariantCulture))
-                    .Append('s');
-            }
-
-            builder.Append("  ")
-                .Append(record.Scope.ToString().ToUpperInvariant())
-                .Append(' ')
-                .Append(ToDisplayName(record.EventKind))
-                .Append(" | ")
-                .Append(record.Identity);
-
-            if (includeSourcePath)
-            {
-                builder.Append(" | ").Append(record.SourcePath);
+                builder.Append(" x").Append(observedCount);
             }
         }
 
-        private string FormatConsoleLog(LifecycleEventRecord record)
+        private string FormatConsoleLog(LifecycleEventRecord record, SourceState sourceState)
         {
-            var builder = new StringBuilder(384);
+            var builder = new StringBuilder(512);
             builder.Append("[FIRSTGAME_LIFECYCLE]")
                 .Append(" sequence='").Append(record.Sequence).Append('\'')
-                .Append(" scope='").Append(record.Scope).Append('\'')
+                .Append(" senderType='").Append(record.Scope).Append('\'')
+                .Append(" sender='").Append(Escape(record.Identity)).Append('\'')
                 .Append(" event='").Append(record.EventKind).Append('\'')
-                .Append(" identity='").Append(Escape(record.Identity)).Append('\'')
-                .Append(" source='").Append(Escape(record.SourcePath)).Append('\'')
-                .Append(" scene='").Append(Escape(record.SourceScene)).Append('\'')
-                .Append(" callbackObserved='True'");
+                .Append(" callbackObserved='True'")
+                .Append(" sourceEventCount='").Append(sourceState.GetCount(record.EventKind)).Append('\'')
+                .Append(" observedSources='").Append(ObservedSourceCount).Append('\'')
+                .Append(" scene='").Append(Escape(record.SourceScene)).Append('\'');
+
+            if (includeSourcePath)
+            {
+                builder.Append(" source='").Append(Escape(record.SourcePath)).Append('\'');
+            }
 
             if (includeFrame)
             {
@@ -450,7 +287,7 @@ namespace FirstGame.Diagnostics
         private static string NormalizeIdentity(
             string identity,
             LifecycleCanvasScope scope,
-            LifecycleCanvasEventKind? eventKind,
+            LifecycleCanvasEventKind eventKind,
             Component source)
         {
             string normalized = identity?.Trim() ?? string.Empty;
@@ -461,30 +298,9 @@ namespace FirstGame.Diagnostics
 
             Debug.LogError(
                 "[FIRSTGAME_LIFECYCLE] Lifecycle callback reporter has an empty identity. " +
-                $"scope='{scope}' event='{eventKind?.ToString() ?? "Registration"}'.",
+                $"scope='{scope}' event='{eventKind}'.",
                 source);
             return MissingIdentity;
-        }
-
-        private static IEnumerable<LifecycleCanvasEventKind> GetExpectedEvents(
-            LifecycleCanvasScope scope)
-        {
-            switch (scope)
-            {
-                case LifecycleCanvasScope.Scene:
-                    yield return LifecycleCanvasEventKind.Available;
-                    yield return LifecycleCanvasEventKind.Releasing;
-                    break;
-
-                case LifecycleCanvasScope.Route:
-                case LifecycleCanvasScope.Activity:
-                    yield return LifecycleCanvasEventKind.Entered;
-                    yield return LifecycleCanvasEventKind.Exited;
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(scope), scope, null);
-            }
         }
 
         private static bool IsSupportedPair(
@@ -497,20 +313,42 @@ namespace FirstGame.Diagnostics
                        eventKind == LifecycleCanvasEventKind.Releasing;
             }
 
-            return eventKind == LifecycleCanvasEventKind.Entered ||
-                   eventKind == LifecycleCanvasEventKind.Exited;
+            if (scope == LifecycleCanvasScope.Route || scope == LifecycleCanvasScope.Activity)
+            {
+                return eventKind == LifecycleCanvasEventKind.Entered ||
+                       eventKind == LifecycleCanvasEventKind.Exited;
+            }
+
+            return false;
         }
 
         private static string ToDisplayName(LifecycleCanvasEventKind eventKind)
         {
-            return eventKind.ToString().ToUpperInvariant();
+            switch (eventKind)
+            {
+                case LifecycleCanvasEventKind.Available:
+                    return "AVAILABLE";
+                case LifecycleCanvasEventKind.Releasing:
+                    return "RELEASING";
+                case LifecycleCanvasEventKind.Entered:
+                    return "ENTERED";
+                case LifecycleCanvasEventKind.Exited:
+                    return "EXITED";
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(eventKind), eventKind, null);
+            }
         }
 
         private static string ResolveSceneName(GameObject sourceObject)
         {
-            return sourceObject.scene.IsValid() && !string.IsNullOrWhiteSpace(sourceObject.scene.name)
-                ? sourceObject.scene.name
-                : MissingScene;
+            if (sourceObject == null || !sourceObject.scene.IsValid())
+            {
+                return MissingScene;
+            }
+
+            return string.IsNullOrWhiteSpace(sourceObject.scene.name)
+                ? MissingScene
+                : sourceObject.scene.name;
         }
 
         private static string BuildTransformPath(Transform current)
@@ -539,96 +377,106 @@ namespace FirstGame.Diagnostics
                 .Replace("\n", "\\n");
         }
 
-        private readonly struct CallbackKey : IEquatable<CallbackKey>
+        private readonly struct SourceKey : IEquatable<SourceKey>
         {
-            public CallbackKey(int sourceInstanceId, LifecycleCanvasEventKind eventKind)
+            public SourceKey(EntityId sourceEntityId, LifecycleCanvasScope scope)
             {
-                SourceInstanceId = sourceInstanceId;
-                EventKind = eventKind;
+                SourceEntityId = sourceEntityId;
+                Scope = scope;
             }
 
-            private int SourceInstanceId { get; }
-            private LifecycleCanvasEventKind EventKind { get; }
+            private EntityId SourceEntityId { get; }
+            private LifecycleCanvasScope Scope { get; }
 
-            public bool Equals(CallbackKey other)
+            public bool Equals(SourceKey other)
             {
-                return SourceInstanceId == other.SourceInstanceId && EventKind == other.EventKind;
+                return SourceEntityId.Equals(other.SourceEntityId) && Scope == other.Scope;
             }
 
             public override bool Equals(object obj)
             {
-                return obj is CallbackKey other && Equals(other);
+                return obj is SourceKey other && Equals(other);
             }
 
             public override int GetHashCode()
             {
                 unchecked
                 {
-                    return (SourceInstanceId * 397) ^ (int)EventKind;
+                    return (SourceEntityId.GetHashCode() * 397) ^ (int)Scope;
                 }
             }
         }
 
-        private sealed class CallbackState
+        private sealed class SourceState
         {
-            public CallbackState(
+            public SourceState(
+                int firstSequence,
                 LifecycleCanvasScope scope,
-                LifecycleCanvasEventKind eventKind,
                 string identity,
                 string sourcePath,
                 string sourceScene)
             {
+                FirstSequence = firstSequence;
                 Scope = scope;
-                EventKind = eventKind;
                 Identity = identity;
                 SourcePath = sourcePath;
                 SourceScene = sourceScene;
             }
 
+            public int FirstSequence { get; }
             public LifecycleCanvasScope Scope { get; }
-            public LifecycleCanvasEventKind EventKind { get; }
-            public string Identity { get; }
-            public string SourcePath { get; }
-            public string SourceScene { get; }
-            public int ObservedCount { get; private set; }
-            public int LastSequence { get; private set; }
-            public int LastFrame { get; private set; }
-            public double LastUnscaledTime { get; private set; }
+            public string Identity { get; private set; }
+            public string SourcePath { get; private set; }
+            public string SourceScene { get; private set; }
+            public int AvailableCount { get; private set; }
+            public int ReleasingCount { get; private set; }
+            public int EnteredCount { get; private set; }
+            public int ExitedCount { get; private set; }
+
+            public void RefreshIdentity(string identity, string sourcePath, string sourceScene)
+            {
+                Identity = identity;
+                SourcePath = sourcePath;
+                SourceScene = sourceScene;
+            }
 
             public void Observe(LifecycleEventRecord record)
             {
-                ObservedCount++;
-                LastSequence = record.Sequence;
-                LastFrame = record.Frame;
-                LastUnscaledTime = record.UnscaledTime;
+                switch (record.EventKind)
+                {
+                    case LifecycleCanvasEventKind.Available:
+                        AvailableCount++;
+                        break;
+                    case LifecycleCanvasEventKind.Releasing:
+                        ReleasingCount++;
+                        break;
+                    case LifecycleCanvasEventKind.Entered:
+                        EnteredCount++;
+                        break;
+                    case LifecycleCanvasEventKind.Exited:
+                        ExitedCount++;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
 
-            public void ResetObservation()
+            public int GetCount(LifecycleCanvasEventKind eventKind)
             {
-                ObservedCount = 0;
-                LastSequence = 0;
-                LastFrame = 0;
-                LastUnscaledTime = 0d;
+                switch (eventKind)
+                {
+                    case LifecycleCanvasEventKind.Available:
+                        return AvailableCount;
+                    case LifecycleCanvasEventKind.Releasing:
+                        return ReleasingCount;
+                    case LifecycleCanvasEventKind.Entered:
+                        return EnteredCount;
+                    case LifecycleCanvasEventKind.Exited:
+                        return ExitedCount;
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(eventKind), eventKind, null);
+                }
             }
-        }
-
-        private readonly struct ScopeState
-        {
-            public ScopeState(
-                LifecycleCanvasEventKind eventKind,
-                string identity,
-                int sequence)
-            {
-                HasValue = true;
-                EventKind = eventKind;
-                Identity = identity;
-                Sequence = sequence;
-            }
-
-            public bool HasValue { get; }
-            public LifecycleCanvasEventKind EventKind { get; }
-            public string Identity { get; }
-            public int Sequence { get; }
         }
 
         private readonly struct LifecycleEventRecord
