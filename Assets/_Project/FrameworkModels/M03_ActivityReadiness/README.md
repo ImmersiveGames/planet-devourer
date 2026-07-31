@@ -1,5 +1,8 @@
 # M03 Activity Readiness
 
+Status: Closed  
+Validation date: 2026-07-31
+
 ## Purpose
 
 O M03 demonstra que uma Activity pode estar carregada e ativa, mas ainda não estar pronta para uso.
@@ -21,12 +24,21 @@ O movimento não é a regra de readiness. Ele é apenas a representação visual
 ## Status
 
 ```text
-FIRSTGAME authoring: Passed
-FIRSTGAME initial Waiting → Ready: Passed
-FIRSTGAME exit and re-entry: Passed
-Package runtime bridge: Passed
-Negative QA coverage: Deferred to QAFramework
+Package authoring surface       Passed
+FIRSTGAME manual authoring      Passed
+FIRSTGAME Play Mode review      Passed
+FIRSTGAME exit and re-entry     Passed
+Post-removal regression         Passed
+Roadmap status                  Closed
+Validation date                 2026-07-31
+Negative QA coverage            Deferred to QAFramework
 ```
+
+## Validation Record
+
+Em 2026-07-31, M01, M02 e M03 foram executados novamente manualmente em Play Mode. Os três modelos continuaram funcionando e não foi observada regressão causada pela remoção do domínio anterior.
+
+Este registro não representa compilação automatizada, execução de CI, profiling ou cobertura completa de casos negativos. Os cenários negativos e regressões técnicas ampliadas continuam sob responsabilidade do QAFramework.
 
 ## Documentation
 
@@ -240,6 +252,18 @@ Preparation occurrence 1
 → Ready
 ```
 
+## Validated Checklist
+
+- [x] Activity entra em estado de preparação.
+- [x] O participant oficial participa da readiness.
+- [x] Preparing/Waiting é apresentado visualmente.
+- [x] Ready é apresentado após a conclusão.
+- [x] A Activity não depende do controlador geral da demo para declarar readiness.
+- [x] A troca de Activity libera a ocorrência anterior.
+- [x] A reentrada inicia nova preparação.
+- [x] Não foi observado estado stale na reentrada.
+- [x] M01–M03 continuam funcionando após a remoção do domínio anterior.
+
 ## Expected Result
 
 - `Waiting` appears when preparation starts;
@@ -281,3 +305,12 @@ See [UX Findings and QA Follow-ups](Documentation/M03_UX_FINDINGS_AND_QA_FOLLOWU
 ## QA Follow-ups
 
 Negative and regression scenarios belong to `QAFramework`, not to the FIRSTGAME happy-path model. They are listed in the QA follow-up document and remain deferred until an official QA cut is opened.
+
+Examples that remain outside this manual happy-path validation include:
+
+- required participant failure;
+- optional participant failure;
+- timeout;
+- participant absent;
+- fault injection;
+- stress and repeated transition coverage.

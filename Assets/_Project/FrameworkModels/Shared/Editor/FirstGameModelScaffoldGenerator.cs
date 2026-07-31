@@ -16,7 +16,7 @@ namespace FirstGame.FrameworkModels.Editor
         private static readonly List<string> MissingTypes = new List<string>();
         private static readonly List<string> Errors = new List<string>();
 
-        [MenuItem("Tools/Immersive Framework/FIRSTGAME/Scaffolds/Create Missing M02-M16", false, 90)]
+        [MenuItem("Tools/Immersive Framework/FIRSTGAME/Scaffolds/Create Missing M02, M03, M06-M16", false, 90)]
         private static void CreateAllMissingScaffolds()
         {
             SceneSetup[] previousSetup = EditorSceneManager.GetSceneManagerSetup();
@@ -32,7 +32,7 @@ namespace FirstGame.FrameworkModels.Editor
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
             }
-            string summary = $"FIRSTGAME M02-M16 scaffold finished. created={Created.Count}, preserved={Preserved.Count}, missingTypes={MissingTypes.Count}, errors={Errors.Count}.";
+            string summary = $"FIRSTGAME M02, M03, M06-M16 scaffold finished. created={Created.Count}, preserved={Preserved.Count}, missingTypes={MissingTypes.Count}, errors={Errors.Count}.";
             Debug.Log(summary);
             foreach (string missing in MissingTypes) Debug.LogWarning(missing);
             foreach (string error in Errors) Debug.LogError(error);
@@ -347,30 +347,6 @@ namespace FirstGame.FrameworkModels.Editor
                 },
                 new[] { "M03_Boot", "M03_Route", "M03_Activity_Add" },
                 new[] { "PF_M03_PreparationParticipant", "PF_M03_ReadinessDisplay", "PF_M03_PreparedContent" }),
-            new ModelSpec(
-                4, "M04", "M04_ContentAnchors", "Content Anchors",
-                new[]
-                {
-                    new AssetSpec("GameApplication", "Application", "GA_M04_ContentAnchors", "GA M04 ContentAnchors", "Scaffold asset for M04 Content Anchors. Configure references and feature-specific contracts manually in the Unity Inspector.", new[] { "Immersive.Framework.Authoring.GameApplicationAsset", "GameApplicationAsset" }),
-                    new AssetSpec("Route", "Routes", "Route_M04_ContentAnchors", "Route M04 ContentAnchors", "Scaffold asset for M04 Content Anchors. Configure references and feature-specific contracts manually in the Unity Inspector.", new[] { "Immersive.Framework.Authoring.RouteAsset", "RouteAsset" }),
-                    new AssetSpec("Activity", "Activities", "Activity_M04_A", "Activity M04 A", "Scaffold asset for M04 Content Anchors. Configure references and feature-specific contracts manually in the Unity Inspector.", new[] { "Immersive.Framework.Authoring.ActivityAsset", "ActivityAsset" }),
-                    new AssetSpec("Activity", "Activities", "Activity_M04_B", "Activity M04 B", "Scaffold asset for M04 Content Anchors. Configure references and feature-specific contracts manually in the Unity Inspector.", new[] { "Immersive.Framework.Authoring.ActivityAsset", "ActivityAsset" }),
-                    new AssetSpec("ActivityContent", "Profiles", "ActivityContent_M04_A", "ActivityContent M04 A", "Scaffold asset for M04 Content Anchors. Configure references and feature-specific contracts manually in the Unity Inspector.", new[] { "Immersive.Framework.Authoring.ActivityContentProfileAsset", "ActivityContentProfileAsset" }),
-                    new AssetSpec("ActivityContent", "Profiles", "ActivityContent_M04_B", "ActivityContent M04 B", "Scaffold asset for M04 Content Anchors. Configure references and feature-specific contracts manually in the Unity Inspector.", new[] { "Immersive.Framework.Authoring.ActivityContentProfileAsset", "ActivityContentProfileAsset" }),
-                },
-                new[] { "M04_Boot", "M04_Route", "M04_ActivityA_Add", "M04_ActivityB_Add" },
-                new[] { "PF_M04_RouteRootAnchor", "PF_M04_ActivityRootAnchor", "PF_M04_ActivitySlotAnchor", "PF_M04_LocalPointAnchor", "PF_M04_AnchorStatusDisplay" }),
-            new ModelSpec(
-                5, "M05", "M05_AnchorMaterialization", "Anchor Materialization",
-                new[]
-                {
-                    new AssetSpec("GameApplication", "Application", "GA_M05_Materialization", "GA M05 Materialization", "Scaffold asset for M05 Anchor Materialization. Configure references and feature-specific contracts manually in the Unity Inspector.", new[] { "Immersive.Framework.Authoring.GameApplicationAsset", "GameApplicationAsset" }),
-                    new AssetSpec("Route", "Routes", "Route_M05_Materialization", "Route M05 Materialization", "Scaffold asset for M05 Anchor Materialization. Configure references and feature-specific contracts manually in the Unity Inspector.", new[] { "Immersive.Framework.Authoring.RouteAsset", "RouteAsset" }),
-                    new AssetSpec("Activity", "Activities", "Activity_M05_Materialization", "Activity M05 Materialization", "Scaffold asset for M05 Anchor Materialization. Configure references and feature-specific contracts manually in the Unity Inspector.", new[] { "Immersive.Framework.Authoring.ActivityAsset", "ActivityAsset" }),
-                    new AssetSpec("ActivityContent", "Profiles", "ActivityContent_M05_Materialization", "ActivityContent M05 Materialization", "Scaffold asset for M05 Anchor Materialization. Configure references and feature-specific contracts manually in the Unity Inspector.", new[] { "Immersive.Framework.Authoring.ActivityContentProfileAsset", "ActivityContentProfileAsset" }),
-                },
-                new[] { "M05_Boot", "M05_Route", "M05_Activity_Add" },
-                new[] { "PF_M05_Anchor", "PF_M05_MaterializedContent", "PF_M05_MaterializationBridge" }),
             new ModelSpec(
                 6, "M06", "M06_SceneProvidedPlayer", "Scene-Provided Player",
                 new[]

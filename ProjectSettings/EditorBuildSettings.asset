@@ -48,27 +48,6 @@ EditorBuildSettings:
     path: Assets/_Project/FrameworkModels/M03_ActivityReadiness/Scenes/M03_Route.unity
     guid: c3bfc213948d9164db500f89306d4aa9
   - enabled: 1
-    path: Assets/_Project/FrameworkModels/M04_ContentAnchors/Scenes/M04_ActivityA_Add.unity
-    guid: 50fe8ce8fc8d01b43901fc94fd11da40
-  - enabled: 1
-    path: Assets/_Project/FrameworkModels/M04_ContentAnchors/Scenes/M04_ActivityB_Add.unity
-    guid: 7bfbaa93f61f79c4da443fcc39d6a057
-  - enabled: 1
-    path: Assets/_Project/FrameworkModels/M04_ContentAnchors/Scenes/M04_Boot.unity
-    guid: 899864d94ee24414a95526c8e5328d9d
-  - enabled: 1
-    path: Assets/_Project/FrameworkModels/M04_ContentAnchors/Scenes/M04_Route.unity
-    guid: ce8388a37a4b4f54fbbcee03b526b021
-  - enabled: 1
-    path: Assets/_Project/FrameworkModels/M05_AnchorMaterialization/Scenes/M05_Activity_Add.unity
-    guid: b6c9ca6a7b68ae14e80beaa88c95f811
-  - enabled: 1
-    path: Assets/_Project/FrameworkModels/M05_AnchorMaterialization/Scenes/M05_Boot.unity
-    guid: bb09d8950f530934cbec466bfb81c61e
-  - enabled: 1
-    path: Assets/_Project/FrameworkModels/M05_AnchorMaterialization/Scenes/M05_Route.unity
-    guid: 96969330c064b7247975d168fce820af
-  - enabled: 1
     path: Assets/_Project/FrameworkModels/M06_SceneProvidedPlayer/Scenes/M06_Activity_Add.unity
     guid: dd3304394e5666347a92791f2cff50e4
   - enabled: 1
