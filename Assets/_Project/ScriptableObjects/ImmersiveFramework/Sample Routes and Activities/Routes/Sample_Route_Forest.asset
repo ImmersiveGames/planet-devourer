@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.RouteAsset
   routeId: 8b8f5ada44084fd6a4131416ec593660
   routeName: Sample Forest
-  primaryScenePath: Assets/_Project/Scenes/Sample Routes and Activities/RotesContents/Sample_Environment.unity
+  primaryScenePath: Assets/_Project/Scenes/Sample Routes and Activities/Sample_Environment.unity
   primarySceneName: Sample_Environment
   routeContentProfile: {fileID: 11400000, guid: 22ac75e71324af945b788c737dd26728, type: 2}
   startupActivity: {fileID: 11400000, guid: e30fdbe54626d4a47abe2ec3e74c9822, type: 2}

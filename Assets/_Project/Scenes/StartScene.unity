@@ -318,7 +318,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6439143972939865019, guid: 9026db1f15c3b4f4688ad884152b0111, type: 3}
       propertyPath: m_Text
-      value: Sample 02
+      value: Activity Readiness
       objectReference: {fileID: 0}
     - target: {fileID: 8424407624059485224, guid: 9026db1f15c3b4f4688ad884152b0111, type: 3}
       propertyPath: m_SizeDelta.y
