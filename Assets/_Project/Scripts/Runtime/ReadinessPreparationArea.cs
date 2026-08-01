@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Immersive.Framework.ActivityFlow;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace Project._Project.Scripts.Runtime
 {
@@ -11,11 +10,6 @@ namespace Project._Project.Scripts.Runtime
     {
         private const string LogPrefix =
             "[FIRSTGAME_M03_ACTIVITY_READINESS]";
-
-        [Serializable]
-        private sealed class ProgressEvent : UnityEvent<float>
-        {
-        }
 
         [Header("Readiness")]
         [SerializeField]
@@ -32,15 +26,12 @@ namespace Project._Project.Scripts.Runtime
         [SerializeField]
         private Transform[] subjects = Array.Empty<Transform>();
 
-        [Header("Presentation")]
-        [SerializeField]
-        private ProgressEvent progressChanged =
-            new ProgressEvent();
-
         private bool _isObserving;
         private bool _completionSent;
         private int _lastInsideCount = -1;
         private float _progress;
+
+        public event Action<float> ProgressChanged;
 
         public float Progress => _progress;
 
@@ -51,14 +42,11 @@ namespace Project._Project.Scripts.Runtime
         {
             StopObservation();
 
-            if (!TryValidateConfiguration(
-                    out string error))
+            if (!TryValidateConfiguration(out string error))
             {
                 Debug.LogError(
-                    $"{LogPrefix} area-observation='rejected' " +
-                    $"reason='{error}'.",
+                    $"{LogPrefix} area-observation='rejected' reason='{error}'.",
                     this);
-
                 return;
             }
 
@@ -69,17 +57,15 @@ namespace Project._Project.Scripts.Runtime
             EvaluateArea();
 
             Debug.Log(
-                $"{LogPrefix} area-observation='started' " +
-                $"subjects='{subjects.Length}'.",
+                $"{LogPrefix} area-observation='started' subjects='{subjects.Length}'.",
                 this);
         }
 
         public void ReleaseObservation()
         {
             StopObservation();
-
             _progress = 0f;
-            progressChanged?.Invoke(_progress);
+            ProgressChanged?.Invoke(_progress);
 
             Debug.Log(
                 $"{LogPrefix} area-observation='released'.",
@@ -88,65 +74,44 @@ namespace Project._Project.Scripts.Runtime
 
         private void Update()
         {
-            if (!_isObserving)
+            if (_isObserving)
             {
-                return;
+                EvaluateArea();
             }
-
-            EvaluateArea();
         }
 
         private void EvaluateArea()
         {
             int insideCount = 0;
 
-            for (int index = 0;
-                 index < subjects.Length;
-                 index++)
+            for (int index = 0; index < subjects.Length; index++)
             {
-                Transform subject =
-                    subjects[index];
-
-                if (IsInsideVolume(
-                        subject.position))
+                Transform subject = subjects[index];
+                if (IsInsideVolume(subject.position))
                 {
                     insideCount++;
                 }
             }
 
-            _progress =
-                subjects.Length > 0
-                    ? (float)insideCount /
-                      subjects.Length
-                    : 0f;
+            _progress = subjects.Length > 0
+                ? (float)insideCount / subjects.Length
+                : 0f;
 
-            if (insideCount !=
-                _lastInsideCount)
+            if (insideCount != _lastInsideCount)
             {
-                _lastInsideCount =
-                    insideCount;
-
-                progressChanged?.Invoke(
-                    _progress);
+                _lastInsideCount = insideCount;
+                ProgressChanged?.Invoke(_progress);
 
                 Debug.Log(
-                    $"{LogPrefix} area-progress=" +
-                    $"'{insideCount}/{subjects.Length}' " +
-                    $"normalized='{_progress:0.00}'.",
+                    $"{LogPrefix} area-progress='{insideCount}/{subjects.Length}' normalized='{_progress:0.00}'.",
                     this);
             }
 
-            bool allSubjectsInside =
-                insideCount ==
-                subjects.Length;
-
-            if (!allSubjectsInside ||
-                _completionSent)
+            bool allSubjectsInside = insideCount == subjects.Length;
+            if (allSubjectsInside && !_completionSent)
             {
-                return;
+                CompleteReadiness();
             }
-
-            CompleteReadiness();
         }
 
         private void CompleteReadiness()
@@ -154,57 +119,32 @@ namespace Project._Project.Scripts.Runtime
             _completionSent = true;
             _isObserving = false;
 
-            if (participant.State !=
-                ActivityReadinessParticipantState.Preparing)
+            if (participant.State != ActivityReadinessParticipantState.Preparing)
             {
                 Debug.LogWarning(
-                    $"{LogPrefix} completion='rejected-locally' " +
-                    $"participantState='{participant.State}' " +
-                    $"occurrence='{participant.Occurrence}'.",
+                    $"{LogPrefix} completion='rejected-locally' participantState='{participant.State}' occurrence='{participant.Occurrence}'.",
                     this);
-
                 return;
             }
 
             participant.CompletePreparation();
 
             Debug.Log(
-                $"{LogPrefix} completion='submitted' " +
-                $"condition='all-subjects-inside' " +
-                $"subjects='{subjects.Length}' " +
-                $"occurrence='{participant.Occurrence}'.",
+                $"{LogPrefix} completion='submitted' condition='all-subjects-inside' subjects='{subjects.Length}' occurrence='{participant.Occurrence}'.",
                 this);
         }
 
-        private bool IsInsideVolume(
-            Vector3 worldPosition)
+        private bool IsInsideVolume(Vector3 worldPosition)
         {
-            Transform volumeTransform =
-                preparationVolume.transform;
+            Transform volumeTransform = preparationVolume.transform;
+            Vector3 localPosition = volumeTransform.InverseTransformPoint(worldPosition);
+            Vector3 relativePosition = localPosition - preparationVolume.center;
+            Vector3 halfSize = preparationVolume.size * 0.5f;
+            halfSize += Vector3.one * positionTolerance;
 
-            Vector3 localPosition =
-                volumeTransform.InverseTransformPoint(
-                    worldPosition);
-
-            Vector3 relativePosition =
-                localPosition -
-                preparationVolume.center;
-
-            Vector3 halfSize =
-                preparationVolume.size *
-                0.5f;
-
-            halfSize +=
-                Vector3.one *
-                positionTolerance;
-
-            return
-                Mathf.Abs(relativePosition.x) <=
-                halfSize.x &&
-                Mathf.Abs(relativePosition.y) <=
-                halfSize.y &&
-                Mathf.Abs(relativePosition.z) <=
-                halfSize.z;
+            return Mathf.Abs(relativePosition.x) <= halfSize.x
+                && Mathf.Abs(relativePosition.y) <= halfSize.y
+                && Mathf.Abs(relativePosition.z) <= halfSize.z;
         }
 
         private void StopObservation()
@@ -214,72 +154,49 @@ namespace Project._Project.Scripts.Runtime
             _lastInsideCount = -1;
         }
 
-        private bool TryValidateConfiguration(
-            out string error)
+        private bool TryValidateConfiguration(out string error)
         {
             if (participant == null)
             {
-                error =
-                    "Activity Readiness Participant is missing.";
-
+                error = "Activity Readiness Participant is missing.";
                 return false;
             }
 
             if (preparationVolume == null)
             {
-                error =
-                    "Preparation Volume is missing.";
-
+                error = "Preparation Volume is missing.";
                 return false;
             }
 
-            if (subjects == null ||
-                subjects.Length == 0)
+            if (subjects == null || subjects.Length == 0)
             {
-                error =
-                    "No preparation subjects are configured.";
-
+                error = "No preparation subjects are configured.";
                 return false;
             }
 
-            var uniqueSubjects =
-                new HashSet<Transform>();
+            var uniqueSubjects = new HashSet<Transform>();
 
-            for (int index = 0;
-                 index < subjects.Length;
-                 index++)
+            for (int index = 0; index < subjects.Length; index++)
             {
-                Transform subject =
-                    subjects[index];
+                Transform subject = subjects[index];
 
                 if (subject == null)
                 {
-                    error =
-                        $"Subject {index + 1} is missing.";
-
+                    error = $"Subject {index + 1} is missing.";
                     return false;
                 }
 
                 if (!uniqueSubjects.Add(subject))
                 {
-                    error =
-                        $"Subject '{subject.name}' " +
-                        "is configured more than once.";
-
+                    error = $"Subject '{subject.name}' is configured more than once.";
                     return false;
                 }
             }
 
-            Vector3 size =
-                preparationVolume.size;
-
-            if (size.x <= 0f ||
-                size.y <= 0f ||
-                size.z <= 0f)
+            Vector3 size = preparationVolume.size;
+            if (size.x <= 0f || size.y <= 0f || size.z <= 0f)
             {
-                error =
-                    "Preparation Volume must have a positive size.";
-
+                error = "Preparation Volume must have a positive size.";
                 return false;
             }
 
