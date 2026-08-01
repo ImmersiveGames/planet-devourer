@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35f657670d594601a6d7dcb3ba9c61c4, type: 3}
+  m_Name: SinglePlayerSlotProfile
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.PlayerSlotProfile
+  playerSlotId: player.1
+  displayName: Player 1
+  description: Scene-provided local player slot used by the M06 sample.
+  accentColor: {r: 0.1333333, g: 0.5450981, b: 0.1333333, a: 1}
+  icon: {fileID: 21300000, guid: 34f2c6a3e1699814dad515cd8d7e100f, type: 3}
+  displayOrder: 0
+  defaultActorProfile: {fileID: 11400000, guid: d8311ad69ca750944ba24512f934376d, type: 2}

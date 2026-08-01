@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Demo02-GameApplication
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.GameApplicationAsset
   applicationName: Demo 02 Game Application
-  startupRoute: {fileID: 0}
-  localPlayerSlots: []
-  playerActorSelectionDuplicatePolicy: 10
+  startupRoute: {fileID: 11400000, guid: 24ef365ec00bc01459e2e31d4ad8a4b7, type: 2}
+  localPlayerSlots:
+  - {fileID: 11400000, guid: 806c8a7c323335343a78011c9c4c8e01, type: 2}
+  playerActorSelectionDuplicatePolicy: 20
   persistentContent:
-    containerScene: {fileID: 0}
+    containerScene: {fileID: 102900000, guid: aae12116c7a7e494d898c421ecb024b9, type: 3}
   validationMode: 1

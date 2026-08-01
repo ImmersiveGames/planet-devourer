@@ -161,7 +161,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2343602685820285676, guid: 9026db1f15c3b4f4688ad884152b0111, type: 3}
       propertyPath: m_Text
-      value: LocalProvisionedPlayer
+      value: Local Provisioned Player
       objectReference: {fileID: 0}
     - target: {fileID: 2815494128871741121, guid: 9026db1f15c3b4f4688ad884152b0111, type: 3}
       propertyPath: m_Pivot.x
@@ -245,12 +245,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3093015850601284664, guid: 9026db1f15c3b4f4688ad884152b0111, type: 3}
       propertyPath: reason
-      value: to-fields-route
+      value: to-local-player
       objectReference: {fileID: 0}
     - target: {fileID: 3093015850601284664, guid: 9026db1f15c3b4f4688ad884152b0111, type: 3}
       propertyPath: targetRoute
       value: 
-      objectReference: {fileID: 11400000, guid: dff698745eea1c44981467d25c739e2f, type: 2}
+      objectReference: {fileID: 11400000, guid: c960c401c09b31c499cf5dbfaa6da464, type: 2}
     - target: {fileID: 4030347373930516694, guid: 9026db1f15c3b4f4688ad884152b0111, type: 3}
       propertyPath: m_AnchorMax.y
       value: 1

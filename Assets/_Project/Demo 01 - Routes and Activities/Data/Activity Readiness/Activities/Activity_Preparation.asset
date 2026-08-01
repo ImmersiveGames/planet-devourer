@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c6d702c1ba364e70ad76a85eb5f1b842, type: 3}
-  m_Name: Sample_Activities_Cows
+  m_Name: Activity_Preparation
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.ActivityAsset
-  activityId: e0c1102ea45643aa9101151c707fa21d
-  activityName: Sample Activity Cows
-  description: 
+  activityId: 03d617ac3b6e4366b2dd9389bd9f7d9b
+  activityName: Activity Preparation
+  description: Prepares scene-authored objects before the Activity becomes ready.
   playerParticipationProjectionMode: 0
   playerParticipationZeroParticipantPolicy: 0
   playerParticipationExplicitSlotProfiles: []
   playerParticipationRequirementLevel: 0
-  activityContentProfile: {fileID: 11400000, guid: 2d70f82f0dd48744ab578379cfc65529, type: 2}
+  activityContentProfile: {fileID: 11400000, guid: 97b6a0fe96003834aa9d3875a6a66551, type: 2}
   visualTransitionMode: 0
   transitionGateMode: 10

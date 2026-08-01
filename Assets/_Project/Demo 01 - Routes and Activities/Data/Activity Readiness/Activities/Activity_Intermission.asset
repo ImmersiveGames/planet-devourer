@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c6d702c1ba364e70ad76a85eb5f1b842, type: 3}
-  m_Name: Sample_Activites_Chickens
+  m_Name: Activity_Intermission
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.ActivityAsset
-  activityId: b2c2c5df57644e37bb44e47d945c0b3f
-  activityName: Sample Activity Chickens
+  activityId: dc0ce3a6be574a0787933dd2fa00c47c
+  activityName: Activity Intermission
   description: 
   playerParticipationProjectionMode: 0
   playerParticipationZeroParticipantPolicy: 0
   playerParticipationExplicitSlotProfiles: []
   playerParticipationRequirementLevel: 0
-  activityContentProfile: {fileID: 11400000, guid: d8638a4efbc05e54d86bc55aac04666b, type: 2}
+  activityContentProfile: {fileID: 11400000, guid: 3286a344b31fc1648970dbd815f2b68f, type: 2}
   visualTransitionMode: 0
   transitionGateMode: 10
