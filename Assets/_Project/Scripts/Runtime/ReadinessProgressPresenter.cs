@@ -1,3 +1,4 @@
+using Immersive.Framework.ActivityFlow;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -14,6 +15,10 @@ namespace Project._Project.Scripts.Runtime
         [SerializeField]
         private ReadinessPreparationArea progressSource;
 
+        [Header("Framework Readiness")]
+        [SerializeField]
+        private ActivityReadinessEvents readinessEvents;
+
         [Header("Progress")]
         [SerializeField]
         private Image progressFill;
@@ -24,35 +29,37 @@ namespace Project._Project.Scripts.Runtime
         [SerializeField]
         private TMP_Text statusLabel;
 
+        [Header("Diagnostics")]
+        [SerializeField]
+        private TMP_Text diagnosticsLabel;
+
         [Header("Ready Content")]
         [SerializeField]
         private GameObject preparedContent;
 
         [Header("Presentation")]
         [SerializeField]
-        private Color preparingColor = new Color(1f, 0.65f, 0f, 1f);
+        private Color preparingColor =
+            new Color(1f, 0.65f, 0f, 1f);
 
         [SerializeField]
-        private Color localCompleteColor = new Color(1f, 0.85f, 0.2f, 1f);
+        private Color localCompleteColor =
+            new Color(1f, 0.85f, 0.2f, 1f);
 
         [SerializeField]
-        private Color readyColor = new Color(0.2f, 0.8f, 0.25f, 1f);
+        private Color readyColor =
+            new Color(0.2f, 0.8f, 0.25f, 1f);
 
         [SerializeField]
-        private Color notReadyColor = new Color(0.8f, 0.2f, 0.2f, 1f);
+        private Color notReadyColor =
+            new Color(0.8f, 0.2f, 0.2f, 1f);
 
         private bool _frameworkReady;
 
         private void Awake()
         {
+            ValidateReferences();
             ResetPresentation();
-
-            if (progressSource == null)
-            {
-                Debug.LogError(
-                    $"{LogPrefix} progress-presentation='invalid' reason='Progress Source is missing.'.",
-                    this);
-            }
         }
 
         private void OnEnable()
@@ -90,6 +97,7 @@ namespace Project._Project.Scripts.Runtime
             }
 
             SetPreparedContentActive(false);
+            RefreshReadinessDiagnostics();
         }
 
         public void ShowReady()
@@ -108,6 +116,7 @@ namespace Project._Project.Scripts.Runtime
             }
 
             SetPreparedContentActive(true);
+            RefreshReadinessDiagnostics();
         }
 
         public void ShowNotReady()
@@ -125,6 +134,7 @@ namespace Project._Project.Scripts.Runtime
             }
 
             SetPreparedContentActive(false);
+            RefreshReadinessDiagnostics();
         }
 
         public void ResetPresentation()
@@ -143,6 +153,7 @@ namespace Project._Project.Scripts.Runtime
             }
 
             SetPreparedContentActive(false);
+            RefreshReadinessDiagnostics();
         }
 
         private void HandleProgressChanged(float normalizedProgress)
@@ -172,6 +183,34 @@ namespace Project._Project.Scripts.Runtime
             }
         }
 
+        private void RefreshReadinessDiagnostics()
+        {
+            if (diagnosticsLabel == null)
+            {
+                return;
+            }
+
+            if (readinessEvents == null ||
+                readinessEvents.LastRevision <= 0)
+            {
+                diagnosticsLabel.text = "No readiness snapshot";
+                return;
+            }
+
+            ActivityReadinessSnapshot snapshot =
+                readinessEvents.LastSnapshot;
+
+            diagnosticsLabel.text =
+                $"Reason: {snapshot.Reason}\n" +
+                $"Participants: {snapshot.ParticipantCount}\n" +
+                $"Required: {snapshot.RequiredCount}\n" +
+                $"Optional: {snapshot.OptionalCount}\n" +
+                $"Pending: {snapshot.PendingCount}\n" +
+                $"Completed: {snapshot.CompletedCount}\n" +
+                $"Failed: {snapshot.FailedCount}\n" +
+                $"Revision: {snapshot.Revision}";
+        }
+
         private void SetProgressVisual(float progress)
         {
             if (progressFill != null)
@@ -181,19 +220,49 @@ namespace Project._Project.Scripts.Runtime
 
             if (progressLabel != null)
             {
-                int percentage = Mathf.RoundToInt(progress * 100f);
+                int percentage =
+                    Mathf.RoundToInt(progress * 100f);
+
                 progressLabel.text = $"{percentage}%";
             }
         }
 
         private void SetPreparedContentActive(bool active)
         {
-            if (preparedContent == null || preparedContent.activeSelf == active)
+            if (preparedContent == null ||
+                preparedContent.activeSelf == active)
             {
                 return;
             }
 
             preparedContent.SetActive(active);
+        }
+
+        private void ValidateReferences()
+        {
+            if (progressSource == null)
+            {
+                Debug.LogError(
+                    $"{LogPrefix} progress-presentation='invalid' " +
+                    "reason='Progress Source is missing.'.",
+                    this);
+            }
+
+            if (readinessEvents == null)
+            {
+                Debug.LogError(
+                    $"{LogPrefix} readiness-diagnostics='invalid' " +
+                    "reason='Activity Readiness Events is missing.'.",
+                    this);
+            }
+
+            if (diagnosticsLabel == null)
+            {
+                Debug.LogError(
+                    $"{LogPrefix} readiness-diagnostics='invalid' " +
+                    "reason='Diagnostics Label is missing.'.",
+                    this);
+            }
         }
     }
 }

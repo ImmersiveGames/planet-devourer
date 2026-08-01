@@ -17,7 +17,7 @@ MonoBehaviour:
   - contentId: activity-content.activity-readiness-intermission
     scenePath: Assets/_Project/Scenes/Activity Readiness/Activity_Readiness_Intermission.unity
     sceneName: Activity_Readiness_Intermission
-    requiredness: 0
+    requiredness: 10
     loadMode: 0
     releasePolicy: 0
   description: 
