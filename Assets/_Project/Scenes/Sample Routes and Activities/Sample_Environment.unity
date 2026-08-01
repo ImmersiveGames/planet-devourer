@@ -167,7 +167,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 186d5c674b9947cbb89d1c02ae9e8317, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ActivityFlow.ActivityLocalVisibilityAdapter
-  activity: {fileID: 11400000, guid: fc97914517d3ff84b8f079ac99f22889, type: 2}
+  activities:
+  - {fileID: 11400000, guid: fc97914517d3ff84b8f079ac99f22889, type: 2}
+  matchMode: 0
+  noActiveActivityPolicy: 0
   localContentId: bee.cow
   requiredness: 0
 --- !u!114 &19067685
@@ -2047,7 +2050,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 186d5c674b9947cbb89d1c02ae9e8317, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ActivityFlow.ActivityLocalVisibilityAdapter
-  activity: {fileID: 11400000, guid: e30fdbe54626d4a47abe2ec3e74c9822, type: 2}
+  activities:
+  - {fileID: 11400000, guid: e30fdbe54626d4a47abe2ec3e74c9822, type: 2}
+  matchMode: 0
+  noActiveActivityPolicy: 0
   localContentId: apple.chickens
   requiredness: 0
 --- !u!114 &1509643811
