@@ -15,8 +15,8 @@ MonoBehaviour:
   profileId: activity.chickens.content.profile
   scenes:
   - contentId: content.chickens
-    scenePath: Assets/_Project/Scenes/AtivitiesContents/SampleChikens.unity
-    sceneName: SampleChikens
+    scenePath: Assets/_Project/Scenes/Sample Routes and Activities/AtivitiesContents/SampleChickens.unity
+    sceneName: SampleChickens
     requiredness: 10
     loadMode: 0
     releasePolicy: 0

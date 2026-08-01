@@ -15,7 +15,7 @@ MonoBehaviour:
   profileId: activity.cow.content.profile
   scenes:
   - contentId: content.cows
-    scenePath: Assets/_Project/Scenes/AtivitiesContents/SampleCows.unity
+    scenePath: Assets/_Project/Scenes/Sample Routes and Activities/AtivitiesContents/SampleCows.unity
     sceneName: SampleCows
     requiredness: 10
     loadMode: 0

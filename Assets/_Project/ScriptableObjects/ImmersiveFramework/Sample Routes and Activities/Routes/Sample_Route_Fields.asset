@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a35fe899a80d2d64dac72e8bfe3079df, type: 3}
-  m_Name: StartupMenuRoute
+  m_Name: Sample_Route_Fields
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.RouteAsset
-  routeId: 2066dc8664634257958fb635eb5438a2
-  routeName: Startup Menu Route
-  primaryScenePath: Assets/_Project/Scenes/Sample_MenuHub.unity
-  primarySceneName: Sample_MenuHub
-  routeContentProfile: {fileID: 0}
-  startupActivity: {fileID: 0}
-  transitionGateMode: 10
+  routeId: 6bb3c2d1b93747cba1dfede6809d75f0
+  routeName: 'Sample Fields '
+  primaryScenePath: Assets/_Project/Scenes/Sample Routes and Activities/RotesContents/Sample_Environment.unity
+  primarySceneName: Sample_Environment
+  routeContentProfile: {fileID: 11400000, guid: a7b921b93d9d743459fe5fb336891f03, type: 2}
+  startupActivity: {fileID: 11400000, guid: fc97914517d3ff84b8f079ac99f22889, type: 2}
+  transitionGateMode: 30
   description: 

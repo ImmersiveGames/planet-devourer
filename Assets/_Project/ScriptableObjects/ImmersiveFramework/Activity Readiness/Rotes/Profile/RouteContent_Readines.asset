@@ -10,16 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dd969b54c69d4c4293022f4fa1b2432a, type: 3}
-  m_Name: Additive_Forest
+  m_Name: RouteContent_Readines
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.RouteContentProfileAsset
-  profileId: forest.rote.additive.profile
-  additionalScenes:
-  - contentId: sample.route.menu
-    scenePath: Assets/_Project/Scenes/Shared/Shared_RouteMenu.unity
-    sceneName: Shared_RouteMenu
-    requiredness: 10
-  - contentId: additive.route.forest
-    scenePath: Assets/_Project/Scenes/RotesContents/Additives/Sample_Add_Forest.unity
-    sceneName: Sample_Add_Forest
-    requiredness: 0
-  description: 
+  profileId: 
+  additionalScenes: []
+  description: Optional shared content used by the M03 readiness Route.

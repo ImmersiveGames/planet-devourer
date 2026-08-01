@@ -19,7 +19,7 @@ MonoBehaviour:
     sceneName: Shared_RouteMenu
     requiredness: 10
   - contentId: additive.route.fields
-    scenePath: Assets/_Project/Scenes/RotesContents/Additives/Sample_Add_Fields.unity
+    scenePath: Assets/_Project/Scenes/Sample Routes and Activities/RotesContents/Additives/Sample_Add_Fields.unity
     sceneName: Sample_Add_Fields
     requiredness: 0
   description: 
