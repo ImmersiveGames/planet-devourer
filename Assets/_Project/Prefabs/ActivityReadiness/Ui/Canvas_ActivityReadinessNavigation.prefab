@@ -184,6 +184,7 @@ GameObject:
   - component: {fileID: 2694477084984758990}
   - component: {fileID: 1266689171911475728}
   - component: {fileID: 768960885103062035}
+  - component: {fileID: 1380211314385051893}
   m_Layer: 0
   m_Name: btn_Preparation
   m_TagString: Untagged
@@ -292,7 +293,20 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6568900194202462261}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 768960885103062035}
+        m_TargetAssemblyTypeName: Immersive.Framework.GameFlow.ActivityRequestTrigger,
+          Immersive.Framework.Runtime
+        m_MethodName: RequestActivity
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1266689171911475728
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -325,8 +339,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 88595ccde21347ea987cfbba6c100c2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.GameFlow.ActivityRequestTrigger
-  targetActivity: {fileID: 11400000, guid: 7cc5be297bda93941a7dca3b8b521802, type: 2}
+  targetActivity: {fileID: 11400000, guid: dcc5c9819fcbd1c48ac3fceb9e1cf3e0, type: 2}
   reason: activity-request.canvas-activityreadinessnavigation-btn-preparation
+--- !u!114 &1380211314385051893
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2005684517715294500}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 186d5c674b9947cbb89d1c02ae9e8317, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ActivityFlow.ActivityLocalVisibilityAdapter
+  activities:
+  - {fileID: 11400000, guid: b8fb628bcd16b9647a5724be7181c81e, type: 2}
+  matchMode: 0
+  noActiveActivityPolicy: 0
+  localContentId: visibility.activity-readiness.preparation
+  requiredness: 10
 --- !u!1 &2490351025789599063
 GameObject:
   m_ObjectHideFlags: 0
@@ -722,6 +754,7 @@ GameObject:
   - component: {fileID: 3504084812636795341}
   - component: {fileID: 2912717495598165158}
   - component: {fileID: 6366453563008985559}
+  - component: {fileID: 8757353486197065732}
   m_Layer: 0
   m_Name: btn_Intermission
   m_TagString: Untagged
@@ -830,7 +863,20 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3979182371541156115}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6366453563008985559}
+        m_TargetAssemblyTypeName: Immersive.Framework.GameFlow.ActivityRequestTrigger,
+          Immersive.Framework.Runtime
+        m_MethodName: RequestActivity
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2912717495598165158
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -865,6 +911,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.GameFlow.ActivityRequestTrigger
   targetActivity: {fileID: 11400000, guid: b8fb628bcd16b9647a5724be7181c81e, type: 2}
   reason: activity-request.canvas-activityreadinessnavigation-btn-intermission
+--- !u!114 &8757353486197065732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7270210484061558540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 186d5c674b9947cbb89d1c02ae9e8317, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ActivityFlow.ActivityLocalVisibilityAdapter
+  activities:
+  - {fileID: 11400000, guid: dcc5c9819fcbd1c48ac3fceb9e1cf3e0, type: 2}
+  matchMode: 0
+  noActiveActivityPolicy: 0
+  localContentId: visibility.activity-readiness.intermission
+  requiredness: 10
 --- !u!1 &8123511453137360291
 GameObject:
   m_ObjectHideFlags: 0
