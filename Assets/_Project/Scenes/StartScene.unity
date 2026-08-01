@@ -316,6 +316,14 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5738851385367724025, guid: 9026db1f15c3b4f4688ad884152b0111, type: 3}
+      propertyPath: reason
+      value: to-readness
+      objectReference: {fileID: 0}
+    - target: {fileID: 5738851385367724025, guid: 9026db1f15c3b4f4688ad884152b0111, type: 3}
+      propertyPath: targetRoute
+      value: 
+      objectReference: {fileID: 11400000, guid: 3bcaa3b94a4c39e4f83806c9999715f9, type: 2}
     - target: {fileID: 6439143972939865019, guid: 9026db1f15c3b4f4688ad884152b0111, type: 3}
       propertyPath: m_Text
       value: Activity Readiness
