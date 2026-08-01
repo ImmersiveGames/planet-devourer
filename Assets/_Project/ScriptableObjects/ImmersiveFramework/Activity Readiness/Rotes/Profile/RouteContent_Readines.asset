@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.RouteContentProfileAsset
   profileId: route-content-profile.routecontent-readines
   additionalScenes:
-  - contentId: route-content.shared-routemenu
-    scenePath: Assets/_Project/Scenes/Shared/Shared_RouteMenu.unity
-    sceneName: Shared_RouteMenu
-    requiredness: 0
+  - contentId: route-content.activity-readiness-menu
+    scenePath: Assets/_Project/Scenes/Activity Readiness/ActivityReadinessMenu.unity
+    sceneName: ActivityReadinessMenu
+    requiredness: 10
   description: Optional shared content used by the M03 readiness Route.

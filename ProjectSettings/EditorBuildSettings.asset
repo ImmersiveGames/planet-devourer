@@ -35,5 +35,11 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Project/Scenes/Activity Readiness/ActivitiesContent/Activity_Readiness_Add.unity
     guid: c87843095c0dc71418e3c22cd1895de3
+  - enabled: 1
+    path: Assets/_Project/Scenes/Activity Readiness/ActivityReadinessMenu.unity
+    guid: 9ae35639e6300164f909dc3a8a0ab214
+  - enabled: 1
+    path: Assets/_Project/Scenes/Activity Readiness/Activity_Readiness_Intermission.unity
+    guid: 7211720f9d21bc84aa305c837dcf8f0f
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
