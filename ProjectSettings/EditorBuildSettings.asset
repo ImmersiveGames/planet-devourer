@@ -29,5 +29,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Project/Scenes/Sample Routes and Activities/AtivitiesContents/SampleCows.unity
     guid: c548bf72d35529248910160ff8c62ae1
+  - enabled: 1
+    path: Assets/_Project/Scenes/Activity Readiness/Activity_Readiness.unity
+    guid: eba08335e2f480a4a99bb38180157947
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

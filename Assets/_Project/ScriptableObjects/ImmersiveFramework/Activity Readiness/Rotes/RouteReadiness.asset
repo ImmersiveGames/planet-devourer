@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.RouteAsset
   routeId: c12eda3605a2491b9872ff1a07fca9fc
   routeName: Activity Readiness
-  primaryScenePath: 
-  primarySceneName: 
+  primaryScenePath: Assets/_Project/Scenes/Activity Readiness/Activity_Readiness.unity
+  primarySceneName: Activity_Readiness
   routeContentProfile: {fileID: 11400000, guid: b012f3f3ef6937d42ba468c576ee9b22, type: 2}
   startupActivity: {fileID: 11400000, guid: dcc5c9819fcbd1c48ac3fceb9e1cf3e0, type: 2}
   transitionGateMode: 30

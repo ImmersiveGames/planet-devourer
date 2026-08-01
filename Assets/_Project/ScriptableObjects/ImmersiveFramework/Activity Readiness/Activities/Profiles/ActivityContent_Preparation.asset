@@ -13,5 +13,11 @@ MonoBehaviour:
   m_Name: ActivityContent_Preparation
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.ActivityContentProfileAsset
   profileId: 
-  scenes: []
+  scenes:
+  - contentId: activity-content.activity-readiness-add
+    scenePath: Assets/_Project/Scenes/Activity Readiness/ActivitiesContent/Activity_Readiness_Add.unity
+    sceneName: Activity_Readiness_Add
+    requiredness: 0
+    loadMode: 0
+    releasePolicy: 0
   description: Activity-owned scene containing the readiness preparation example.
