@@ -15,7 +15,7 @@ MonoBehaviour:
   routeId: 6bb3c2d1b93747cba1dfede6809d75f0
   routeName: 'Sample Fields '
   primaryScenePath: Assets/_Project/Demo 01 - Routes and Activities/Scenes/Routes
-    and Activities/RotesContents/Sample_Environment.unity
+    and Activities/RoutesContents/Sample_Environment.unity
   primarySceneName: Sample_Environment
   routeContentProfile: {fileID: 11400000, guid: a7b921b93d9d743459fe5fb336891f03, type: 2}
   startupActivity: {fileID: 11400000, guid: fc97914517d3ff84b8f079ac99f22889, type: 2}

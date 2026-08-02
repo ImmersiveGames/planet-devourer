@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dd969b54c69d4c4293022f4fa1b2432a, type: 3}
-  m_Name: Additive_Forest
+  m_Name: Additive_Fields
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.RouteContentProfileAsset
-  profileId: forest.rote.additive.profile
+  profileId: fields.rote.additive.profile
   additionalScenes:
   - contentId: sample.route.menu
     scenePath: Assets/_Project/Scenes/Shared/Shared_RouteMenu.unity
     sceneName: Shared_RouteMenu
     requiredness: 10
-  - contentId: additive.route.forest
+  - contentId: additive.route.fields
     scenePath: Assets/_Project/Demo 01 - Routes and Activities/Scenes/Routes and
-      Activities/RotesContents/Additives/Sample_Add_Forest.unity
-    sceneName: Sample_Add_Forest
+      Activities/RoutesContents/Additives/Sample_Add_Fields.unity
+    sceneName: Sample_Add_Fields
     requiredness: 0
   description: 

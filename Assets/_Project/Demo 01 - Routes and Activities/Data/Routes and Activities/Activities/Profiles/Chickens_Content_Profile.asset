@@ -16,7 +16,7 @@ MonoBehaviour:
   scenes:
   - contentId: content.chickens
     scenePath: Assets/_Project/Demo 01 - Routes and Activities/Scenes/Routes and
-      Activities/AtivitiesContents/SampleChickens.unity
+      Activities/ActivitiesContents/SampleChickens.unity
     sceneName: SampleChickens
     requiredness: 10
     loadMode: 0

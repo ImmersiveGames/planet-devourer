@@ -1,256 +1,584 @@
-# 🗺️ FIRSTGAME — Lugar, Momento e Reação: como o Immersive Framework monta o contexto do jogo
+# Demo 01 — Routes, Activities, Lifecycle Events and Readiness
 
-> Guia para quem vai desenhar cenas com o framework — não é preciso saber C# para entender isso, só entender o jogo.
-
-## A ideia em uma frase
-
-O jogador nunca está só "numa cena". Ele está num **lugar** (Route), vivendo um **momento** (Activity) dentro dele, e o mundo ao redor **reage** a esse momento (Visibility Adapter).
+Esta pasta demonstra os modelos M01, M02 e M03 do FIRSTGAME.
 
 ```text
-lugar        →  Floresta ou Campos
-momento      →  Vacas ou Galinhas
-reação       →  Abelhas ou Maçãs aparecem/somem
+M01  Route and Activity
+M02  Lifecycle Events
+M03  Activity Readiness
 ```
 
-Quatro perguntas, quatro sistemas:
+O objetivo é mostrar como um projeto consumidor declara lugares, momentos, conteúdo pertencente a cada escopo, callbacks de lifecycle e readiness operacional sem criar um fluxo paralelo ao framework.
 
-| Pergunta | Quem responde | Exemplo na demo |
-|---|---|---|
-| Onde o jogador está? | **Route** | Campos |
-| O que está acontecendo aqui? | **Activity** | Vacas |
-| O que o mundo faz por causa disso? | **Visibility Adapter** | Abelhas aparecem |
-| Isso já aconteceu de verdade? | **Lifecycle Events** | `Activity Entered` disparado |
+## Como executar
 
-Guarde essa tabela — o resto do documento é só destrinchar cada linha dela.
-
----
-
-## 1. Route: o lugar
-
-Quando o jogador escolhe **Campos**, o framework não faz um `LoadScene` solto. Ele monta o destino inteiro:
+Ative:
 
 ```text
-entra na Route Campos
-   → resolve as cenas que pertencem a ela
-   → carrega conteúdo compartilhado
-   → liga a Activity inicial configurada
-   → avisa todo mundo que a Route entrou
+Assets/_Project/Demo 01 - Routes and Activities/Demo01-GameApplication.asset
 ```
 
-Pense na Route como uma **caixa de mudança completa**, não como uma cena isolada:
+em:
 
 ```text
-Route Campos
-├── cena principal (Sample_Environment)
-├── cenas adicionais
-├── conteúdo compartilhado
-└── Activity inicial
+Assets/_Project/Settings/ImmersiveFramework/Resources/
+└── ImmersiveFrameworkSettings.asset
 ```
 
-É por isso que, como designer, você trata "Campos" como um destino de verdade do jogo — não uma sequência de scripts carregando cena por cena na mão.
-
----
-
-## 2. Activity: o momento
-
-Dentro de uma Route, o framework pode trocar de **Activity** sem sair do lugar. Na demo: **Vacas** e **Galinhas**.
-
-A sacada boa aqui: **trocar de Activity não recarrega a Route.**
+A aplicação inicia pela Route:
 
 ```text
-Campos + Vacas   →  jogador muda o modo  →   Campos + Galinhas
-        ↑                                            ↑
-   Route continua carregada, só o "momento" mudou
+Assets/_Project/Demo 01 - Routes and Activities/Data/Demo01StartupMenu.asset
 ```
 
-Isso importa na prática porque evita o soluço de recarregar o mundo inteiro toda vez que o jogo muda de estado — só o que precisa trocar, troca.
-
----
-
-## 3. Visibility Adapter: a reação do mundo
-
-Abelhas e Maçãs **não são Activities** — são conteúdo local que só *reage* ao que já foi decidido. Elas não escolhem nada, só obedecem:
+Cena inicial:
 
 ```text
-Bee To Cows Activities      → ligado à Activity "Vacas"
-Apple To Chikens Activities → ligado à Activity "Galinhas"
+Assets/_Project/Demo 01 - Routes and Activities/Scenes/Demo01StartScene.unity
 ```
 
-O `ActivityLocalVisibilityAdapter` é quem faz essa ponte: ele observa qual Activity está ativa e liga/desliga o objeto conforme o caso.
+Este README usa os nomes reais presentes no repositório. Não renomeie uma pasta isoladamente pelo sistema de arquivos; qualquer normalização futura deve ser feita dentro do Unity, preservando referências e GUIDs.
+
+# Estrutura principal
 
 ```text
-Activity Vacas entra     →  Abelhas aparecem, Maçãs somem
-Activity Galinhas entra  →  Maçãs aparecem, Abelhas somem
+Demo 01 - Routes and Activities/
+├── Demo01-GameApplication.asset
+├── Data/
+│   ├── Demo01StartupMenu.asset
+│   ├── Activity Readiness/
+│   │   ├── Activities/
+│   │   └── Routes/
+│   └── Routes and Activities/
+│       ├── Activities/
+│       └── Routes/
+├── Prefabs/
+│   ├── Activity Readiness/
+│   └── Routes and Activities/
+├── Scenes/
+│   ├── Demo01StartScene.unity
+│   ├── Activity Readiness/
+│   └── Routes and Activities/
+└── Scripts/
+    ├── Activity Readiness/
+    └── Routes and Activities/
 ```
 
-**Regra de ouro para montar uma cena:** cada "pacote" de conteúdo que deve entrar e sair junto vira um root, com um adapter nele — não um adapter por objetinho solto.
+# M01 — Route and Activity
+
+## O que o modelo demonstra
 
 ```text
-Activity_Cows_Content
-├── ActivityLocalVisibilityAdapter
-├── ActivityContentLifecycleEvents
-├── Bees
-├── Effects
-└── Interactions
+Route
+  representa o destino/lugar do jogo;
+  possui cena principal;
+  pode possuir cenas adicionais Route-owned;
+  pode iniciar uma Activity.
+
+Activity
+  representa o momento/modo dentro da Route;
+  pode trocar sem recarregar a Route inteira;
+  pode possuir cenas Activity-owned;
+  emite lifecycle próprio.
 ```
 
----
+A demo utiliza dois destinos visuais baseados na mesma cena principal e diferencia a composição por conteúdo adicional da Route e da Activity.
 
-## 4. Lifecycle Events: a prova de que aconteceu
+## Assets para localizar
 
-Os eventos de lifecycle não são só logs decorativos — são o gancho para você conectar comportamento (animação, som, HUD) sem inventar um sistema paralelo.
-
-| Nível | Entrada | Saída |
-|---|---|---|
-| Scene | `Available` | `Releasing` |
-| Route | `Entered` | `Exited` |
-| Activity | `Entered` | `Exited` |
-
-Exemplo de uso real:
+Routes:
 
 ```text
-Activity Vacas Entered  → toca animação das Abelhas, liga interação, atualiza HUD
-Activity Vacas Exited   → para o comportamento, limpa estado, prepara a saída
+Assets/_Project/Demo 01 - Routes and Activities/Data/Routes and Activities/Routes/
+├── Sample_Route_Fields.asset
+└── Sample_Route_Forest.asset
 ```
 
-E o **Canvas de diagnóstico** existe só para responder, ao vivo: *"os eventos que eu esperava realmente foram chamados?"* Ele não decide nada, só mostra evidência:
+Route Content Profiles atualmente utilizados pela composição dos ambientes:
 
 ```text
-ROUTE    | Sample Fields         | ENTERED: CALLED | EXITED: WAITING
-ACTIVITY | Sample Activity Cows  | ENTERED: CALLED | EXITED: WAITING
+Assets/_Project/Demo 01 - Routes and Activities/Data/Activity Readiness/Routes/Profiles/
+├── Additive_Fields.asset
+└── Additive_Forest.asset
 ```
 
-Para detalhe pesado, o Console tem o canal `FIRSTGAME_LIFECYCLE`.
-
----
-
-## 5. A demo do começo ao fim
-
-Escolhendo **Campos → Vacas**:
+Activities e seus profiles:
 
 ```text
-1. Route Campos é solicitada
-2. Cenas da Route carregam
-3. Route entra                      → ROUTE Entered
-4. Activity inicial (Vacas) entra   → ACTIVITY Entered
-5. Adapters atualizam objetos       → Abelhas ativas / Maçãs inativas
-6. Canvas confirma os callbacks
+Assets/_Project/Demo 01 - Routes and Activities/Data/Activity Readiness/Activities/
+├── Sample_Activities_Cows.asset
+├── Sample_Activites_Chickens.asset
+└── Profiles/
+    ├── Activity_Cow_Content_Profile.asset
+    └── Activity_Chickens_Content_Profile.asset
 ```
 
-Trocando para **Galinhas**, sem sair de Campos:
+Cenas:
 
 ```text
-Sample Activity Cows     → Exited
-Sample Activity Chikens  → Entered
-Bee To Cows Activities   → inativo
-Apple To Chikens         → ativo
+Assets/_Project/Demo 01 - Routes and Activities/Scenes/Routes and Activities/
+├── RoutesContents/
+│   ├── Sample_Environment.unity
+│   └── Additives/
+│       ├── Sample_Add_Fields.unity
+│       └── Sample_Add_Forest.unity
+└── ActivitiesContents/
+    ├── SampleCows.unity
+    └── SampleChickens.unity
 ```
 
-A Route nunca sai do ar — só o "momento" trocou. Essa é a parte mais importante para entender de verdade.
-
----
-
-## 6. Levando o modelo para outro jogo
-
-O padrão é sempre: **Route dá o lugar → Activity dá o modo → Adapter faz o mundo reagir.**
-
-### 🏘️ RPG / mundo aberto
+## Composição esperada
 
 ```text
-Route: Vila
-Activities: Exploração · Comércio · Diálogo
-
-Comércio    → bancas abrem, UI de loja liga
-Diálogo     → NPCs de conversa aparecem, câmera e UI de diálogo ligam
-Exploração  → tudo isso desliga, NPCs andando ligam
+Route Fields ou Route Forest
+├── Primary Scene
+│   └── Sample_Environment
+├── Route Content Profile
+│   ├── navegação compartilhada da Route
+│   └── cena aditiva específica do destino
+└── Startup Activity
+    └── Activity Content Profile
+        └── cena aditiva específica do momento
 ```
 
-### 🌲 Jogo de exploração
+A identidade funcional vem dos assets e IDs; nomes de GameObjects e nomes de arquivo servem apenas para apresentação e diagnóstico.
+
+## Fluxo em Play Mode
 
 ```text
-Route: Floresta
-Activities: Exploração · Combate · Coleta
-
-Adapters: HUD de combate · inimigos locais · recursos coletáveis · UI de exploração
+Menu solicita Route
+→ framework libera a Route anterior
+→ carrega Sample_Environment como Primary Scene
+→ carrega cenas do Route Content Profile
+→ cria o runtime scope da Route
+→ entra na Startup Activity
+→ carrega conteúdo Activity-owned
+→ emite Entered
 ```
 
-### 🏎️ Jogo de corrida
+Ao trocar somente a Activity:
 
 ```text
-Route: Circuito
-Activities: Preparação · Corrida · Resultado
-
-Adapters: grid de largada · cronômetro · placar final · elementos de pista
+Activity anterior sai
+→ seu conteúdo é liberado
+→ nova Activity entra
+→ seu conteúdo é carregado
+→ a Route e seu conteúdo continuam ativos
 ```
 
-### 🏗️ Jogo de construção
+## Hierarquia funcional recomendada ao replicar
+
+Na Primary Scene:
 
 ```text
-Route: Base Principal
-Activities: Exploração · Construção · Gerenciamento
-
-Adapters: ferramentas de construção · HUD de recursos · seleção de estruturas
+Environment_Root
+├── geometria persistente durante a Route
+├── pontos de referência visuais
+└── superfícies que pertencem ao lugar, não à Activity
 ```
 
----
-
-## 7. Montando uma Route ou Activity nova — checklist rápido
-
-**Nova Route**, pergunte-se:
-- Que lugar o jogador está entrando?
-- Quais cenas formam esse lugar?
-- Existe uma Activity inicial?
-- Que conteúdo deve durar a Route inteira?
-
-**Nova Activity**, pergunte-se:
-- Que modo está entrando?
-- O que aparece? O que some?
-- O que começa e o que termina?
-
-Depois: crie o asset → associe à Route certa → organize os objetos em roots → adicione o `ActivityLocalVisibilityAdapter` em cada root → ligue `Entered`/`Exited` onde precisar de reação extra.
-
----
-
-## 8. O que é do framework e o que é seu
-
-| Framework faz | Você (jogo) faz |
-|---|---|
-| Resolve a Route | Cria os assets |
-| Carrega a composição | Organiza os objetos em roots |
-| Define a Activity ativa | Configura os bindings |
-| Emite os lifecycle events | Liga os callbacks |
-| Avisa os adapters | Decide o que aparece em cada momento |
-
----
-
-## 9. Armadilhas comuns — não faça isso
-
-- ❌ Ativar/desativar manualmente objetos que já têm adapter
-- ❌ Trocar de Activity via `FindObjectOfType`
-- ❌ Criar um singleton de navegação paralelo
-- ❌ Duplicar callbacks com um event bus estático
-- ❌ Recarregar a Route inteira só pra trocar de Activity
-- ❌ Usar o nome do GameObject como identidade
-
-Todos esses padrões tornam a montagem opaca — a composição precisa continuar legível no Inspector.
-
----
-
-## 10. Como saber se está tudo certo
-
-Rode a sequência completa e confira no Canvas/Console:
+Na cena Route-owned:
 
 ```text
-Entrada da Route     → Scene Available → Route Entered → Startup Activity Entered
-Troca de Activity    → Previous Activity Exited → Target Activity Entered
-Saída da Route       → Activity Exited → Route Exited → Scene Releasing
-Visibilidade         → conteúdo da Activity ativa visível / demais ocultos
+RouteContent_Root
+├── navegação da Route
+├── decoração específica do destino
+└── componentes de lifecycle de Route, quando necessários
 ```
 
-Se você consegue responder "qual Route está ativa, qual Activity está ativa, o que devia aparecer e o Canvas confirmou o callback" — a montagem está correta.
+Na cena Activity-owned:
 
----
+```text
+ActivityContent_Root
+├── conteúdo visual do momento
+├── interações daquele momento
+├── ActivityLocalVisibilityAdapter, quando aplicável
+└── callbacks/presenters de lifecycle
+```
 
-## Resumo de uma linha
+Não coloque conteúdo que precisa sobreviver à troca de Activity dentro de uma cena Activity-owned.
 
-> **Route cria o lugar. Activity cria o momento. Visibility Adapter muda o mundo local. Lifecycle Events provam que tudo aconteceu de verdade.**
+## Como replicar em outro projeto
+
+Crie ou identifique:
+
+```text
+GameApplicationAsset
+Startup Menu Route
+uma Route por destino
+um Route Content Profile por composição adicional
+uma ou mais Activities
+um Activity Content Profile por conjunto de cenas Activity-owned
+```
+
+Configure na ordem:
+
+```text
+1. GameApplication → Startup Route
+2. Route → Primary Scene
+3. Route → Route Content Profile
+4. Route → Startup Activity
+5. Activity → Activity Content Profile
+6. botões → requests tipadas para Route/Activity
+```
+
+Teste obrigatoriamente:
+
+```text
+entrada na Route;
+troca de Activity sem recarregar a Primary Scene;
+saída da Route;
+reentrada sem conteúdo duplicado.
+```
+
+# M02 — Lifecycle Events
+
+## O que o modelo demonstra
+
+O framework emite eventos claros para a disponibilidade e liberação das cenas, entrada e saída da Route e entrada e saída da Activity.
+
+```text
+Scene
+  Available
+  Releasing
+
+Route
+  Entered
+  Exited
+
+Activity
+  Entered
+  Exited
+```
+
+Os callbacks podem atualizar UI, iniciar animação, ligar interação ou registrar evidência. Eles não devem escolher a Route/Activity por conta própria nem criar uma autoridade paralela.
+
+## Prefabs e scripts para localizar
+
+Prefabs:
+
+```text
+Assets/_Project/Demo 01 - Routes and Activities/Prefabs/Routes and Activities/UI/
+├── Canvas-Lifecyle.prefab
+├── RoutesAndActivities_RoutesNavigation.prefab
+└── RoutesAndActivities_ActivityNavigation.prefab
+```
+
+Scripts do consumidor:
+
+```text
+Assets/_Project/Demo 01 - Routes and Activities/Scripts/Routes and Activities/
+├── LifecycleCanvasEventReporter.cs
+├── LifecycleCanvasEventTypes.cs
+├── LifecycleCanvasPresenter.cs
+└── Editor/
+    ├── LifecycleCanvasPrefabInstaller.cs
+    └── LifecycleCanvasPresenterEditor.cs
+```
+
+Esses scripts são apresentação e diagnóstico do FIRSTGAME. Eles não são autoridade runtime do framework.
+
+## Hierarquia funcional
+
+```text
+Canvas-Lifecyle
+├── área de status de Scene
+├── área de status de Route
+├── área de status de Activity
+└── Last Event
+```
+
+Os objetos que recebem callbacks devem manter referências explícitas para o presenter ou usar UnityEvents configurados no Inspector. Não resolva o canvas por nome ou busca global.
+
+## Como replicar em outro projeto
+
+```text
+1. Escolha o objeto que precisa reagir ao lifecycle.
+2. Adicione a superfície oficial de eventos correspondente ao escopo.
+3. Conecte Entered/Exited ou Available/Releasing por referência explícita.
+4. Mantenha o callback pequeno e pertencente ao jogo consumidor.
+5. Use o console e uma UI simples apenas para diagnóstico.
+```
+
+Exemplo:
+
+```text
+Activity Entered
+→ iniciar animação local
+→ habilitar interação
+→ atualizar HUD
+
+Activity Exited
+→ parar comportamento
+→ limpar estado local
+→ ocultar apresentação
+```
+
+## Aceite do M02
+
+```text
+Scene Available ocorre antes do uso do conteúdo;
+Route Entered/Exited acompanha a ocorrência correta;
+Activity Entered/Exited acompanha cada troca;
+callbacks não disparam duplicados após reentrada;
+UI de diagnóstico não decide lifecycle.
+```
+
+# M03 — Activity Readiness
+
+## O que o modelo demonstra
+
+Activity Readiness agrega participantes registrados na ocorrência atual da Activity.
+
+```text
+Required participant
+  bloqueia Ready enquanto não concluir.
+
+Optional participant
+  aparece no diagnóstico, mas não bloqueia Ready.
+```
+
+A demonstração possui duas Activities:
+
+```text
+Preparation
+Intermission
+```
+
+O conteúdo de navegação pertence à Route e permanece disponível durante a troca entre Activities.
+
+## Assets para localizar
+
+Route:
+
+```text
+Assets/_Project/Demo 01 - Routes and Activities/Data/Activity Readiness/Routes/
+└── RouteReadiness.asset
+```
+
+Route Content Profile:
+
+```text
+Assets/_Project/Demo 01 - Routes and Activities/Data/Routes and Activities/Routes/Profile/
+└── RouteContent_Readines.asset
+```
+
+Activities:
+
+```text
+Assets/_Project/Demo 01 - Routes and Activities/Data/Routes and Activities/Activities/
+├── ActivityReadiness_Preparation.asset
+├── ActivityReadiness_Intermission.asset
+└── Profiles/
+    ├── ActivityContent_Preparation.asset
+    └── ActivityContent_Intermission.asset
+```
+
+Cenas:
+
+```text
+Assets/_Project/Demo 01 - Routes and Activities/Scenes/Activity Readiness/
+├── Activity_Readiness.unity
+├── ActivityReadinessMenu.unity
+├── Activity_Readiness_Intermission.unity
+└── ActivitiesContent/
+    └── Activity_Readiness_Add.unity
+```
+
+Prefabs:
+
+```text
+Assets/_Project/Demo 01 - Routes and Activities/Prefabs/Activity Readiness/
+├── Readiness Participant.prefab
+└── Ui/
+    └── Canvas_ActivityReadinessNavigation.prefab
+```
+
+Scripts do consumidor:
+
+```text
+Assets/_Project/Demo 01 - Routes and Activities/Scripts/Activity Readiness/
+├── ReadinessPreparationArea.cs
+├── ReadinessPreparationSequence.cs
+└── ReadinessProgressPresenter.cs
+```
+
+## Ownership da composição
+
+```text
+RouteReadiness
+├── Primary Scene
+│   └── Activity_Readiness
+├── Route Content Profile
+│   └── ActivityReadinessMenu
+└── Startup Activity
+    └── ActivityReadiness_Preparation
+```
+
+Preparation possui conteúdo próprio:
+
+```text
+ActivityContent_Preparation
+└── Activity_Readiness_Add
+```
+
+Intermission possui conteúdo próprio:
+
+```text
+ActivityContent_Intermission
+└── Activity_Readiness_Intermission
+```
+
+A navegação não deve ser declarada simultaneamente como conteúdo de Route e de Activity.
+
+## Hierarquia funcional recomendada
+
+Primary Scene:
+
+```text
+Activity_Readiness
+└── ambiente compartilhado pela Route
+```
+
+Route-owned navigation scene:
+
+```text
+ActivityReadinessMenu
+└── Canvas_ActivityReadinessNavigation
+    ├── Preparation
+    ├── Intermission
+    └── Back To Menu
+```
+
+Activity-owned content:
+
+```text
+ActivityContent_Root
+├── Readiness Participant (Required)
+├── participante Optional permanentemente pendente
+├── ReadinessPreparationArea / sequência de preparação
+└── ReadinessProgressPresenter
+```
+
+A hierarquia exata pode variar, mas ownership e referências devem permanecer explícitos.
+
+## Fluxo em Play Mode
+
+```text
+Route entra
+→ conteúdo Route-owned fica disponível
+→ Preparation inicia
+→ participantes são registrados na ocorrência
+→ Required fica Pending
+→ progresso é apresentado
+→ Required conclui
+→ Activity fica Ready
+```
+
+Ao trocar para Intermission:
+
+```text
+Preparation sai
+→ participantes da ocorrência são liberados
+→ cena de Preparation é descarregada
+→ Intermission entra
+→ novos participantes pertencem à nova ocorrência
+```
+
+Ao voltar para Preparation, não pode haver handles ou participantes stale da ocorrência anterior.
+
+## Semântica importante do corte atual
+
+No runtime atual, readiness representa estado operacional pós-transição. Ela não é, por si só, um gate de revelação visual ou de entrada.
+
+```text
+transição pode concluir
+→ Activity fica ativa
+→ readiness continua Preparing/NotReady
+→ depois alcança Ready
+```
+
+Portanto, não use esta demo para afirmar que o fade/loading permanecerá cobrindo o conteúdo até `Ready`. Essa política de reveal/gameplay release exige uma superfície de produto própria e não faz parte do M03 implementado.
+
+## Como replicar em outro projeto
+
+```text
+1. Crie a Route e mantenha a navegação como Route-owned.
+2. Crie uma Activity por momento operacional.
+3. Declare as cenas Activity-owned em seus profiles.
+4. Coloque participantes de readiness no conteúdo da Activity.
+5. Marque como Required somente o que realmente bloqueia Ready.
+6. Use Optional para diagnóstico não bloqueante.
+7. Conecte um presenter passivo para mostrar estado/progresso.
+8. Teste troca, saída e reentrada.
+```
+
+Não crie um manager global para controlar readiness. Não faça fallback silencioso quando um participante obrigatório falhar.
+
+## Aceite do M03
+
+```text
+Required Pending impede Ready;
+Required Complete permite Ready;
+Optional Pending não bloqueia Ready;
+participants pertencem à ocorrência correta;
+troca de Activity libera o estado anterior;
+Back To Menu libera Route e Activity;
+reentrada cria uma ocorrência limpa;
+nenhum warning/error bloqueante.
+```
+
+# O que é reutilizável
+
+```text
+padrão GameApplication → Route → Activity;
+separação Route-owned / Activity-owned;
+prefabs de navegação como apresentação;
+presenter de lifecycle/readiness como consumidor passivo;
+organização de conteúdo por root;
+sequência de testes de entrada, troca, saída e reentrada.
+```
+
+Não copie automaticamente IDs, GUIDs, `ProjectSettings` ou a cena persistente. Recrie a intenção no projeto consumidor e use IDs próprios e estáveis.
+
+# Diagnóstico de problemas
+
+## A Route entra, mas a Activity não
+
+Verifique:
+
+```text
+Startup Activity atribuída;
+Activity ID válido;
+Activity Content Profile válido;
+cenas no Build Settings;
+nenhuma falha bloqueante no diagnóstico da Route.
+```
+
+## A cena aditiva aparece duplicada
+
+Verifique se ela foi declarada em mais de um owner:
+
+```text
+Primary Scene;
+Route Content Profile;
+Activity Content Profile.
+```
+
+Uma cena deve possuir uma autoridade de composição clara para cada ocorrência.
+
+## O conteúdo visual não acompanha a Activity
+
+Verifique:
+
+```text
+binding do ActivityLocalVisibilityAdapter;
+ActivityAsset correto, não nome de GameObject;
+root de conteúdo correto;
+callbacks Entered/Exited;
+cleanup na saída.
+```
+
+## Readiness nunca fica Ready
+
+Verifique os participantes Required e seus diagnósticos. Um Optional pendente é esperado e não deve bloquear. Não transforme falha obrigatória em sucesso por timeout ou fallback.

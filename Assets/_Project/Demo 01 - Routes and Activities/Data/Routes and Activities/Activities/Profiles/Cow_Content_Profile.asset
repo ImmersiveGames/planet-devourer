@@ -16,7 +16,7 @@ MonoBehaviour:
   scenes:
   - contentId: content.cows
     scenePath: Assets/_Project/Demo 01 - Routes and Activities/Scenes/Routes and
-      Activities/AtivitiesContents/SampleCows.unity
+      Activities/ActivitiesContents/SampleCows.unity
     sceneName: SampleCows
     requiredness: 10
     loadMode: 0
