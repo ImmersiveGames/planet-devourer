@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2594013858519284345}
   - component: {fileID: 3854582614555263036}
   - component: {fileID: 6973176623148063861}
+  - component: {fileID: 2557461565790810994}
   m_Layer: 0
   m_Name: LocalPlayerProvisioning
   m_TagString: Untagged
@@ -119,3 +120,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.LocalPlayerActorSelectionRequestAuthoring
   provisioningAuthoring: {fileID: 2594013858519284345}
+--- !u!114 &2557461565790810994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8429960221941208285}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ff20deef9d4b634b9031d2edaa3255d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FirstGame.FrameworkModels.Demo02.ManagerProvisionedPlayer.ManagerProvisionedPlayerCommandReceiver
+  commandChannel: {fileID: 11400000, guid: c49f5a661c557e5408b406d02421c95b, type: 2}
+  provisioningAuthoring: {fileID: 2594013858519284345}
+  actorSelectionRequests: {fileID: 6973176623148063861}
+  lastCommand: 0
+  executedCommandCount: 0
+  lastDiagnostic: No Manager-Provisioned Player command has executed.

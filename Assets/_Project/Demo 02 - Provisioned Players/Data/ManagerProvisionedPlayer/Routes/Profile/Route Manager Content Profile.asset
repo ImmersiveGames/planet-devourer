@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.RouteContentProfileAsset
   profileId: 
   additionalScenes:
-  - contentId: route-content.demo02-persistentcontent
-    scenePath: Assets/_Project/Demo 02 - Provisioned Players/Scenes/Persistent/Demo02_PersistentContent.unity
-    sceneName: Demo02_PersistentContent
+  - contentId: route-content.scenemenumanageradd
+    scenePath: Assets/_Project/Demo 02 - Provisioned Players/Scenes/ManagerProvisionedPlayer/Additive/SceneManagerPlayerMenu.unity
+    sceneName: SceneManagerPlayerMenu
     requiredness: 10
   description: 

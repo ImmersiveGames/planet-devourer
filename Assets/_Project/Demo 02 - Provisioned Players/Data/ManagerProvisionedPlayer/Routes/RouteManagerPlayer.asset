@@ -16,7 +16,7 @@ MonoBehaviour:
   routeName: Manager Player Route
   primaryScenePath: Assets/_Project/Demo 02 - Provisioned Players/Scenes/ManagerProvisionedPlayer/SceneManagerPlayer.unity
   primarySceneName: SceneManagerPlayer
-  routeContentProfile: {fileID: 0}
+  routeContentProfile: {fileID: 11400000, guid: b9292a16348929a449d8d560517f5037, type: 2}
   startupActivity: {fileID: 11400000, guid: 252f22c22b0aea74f904b0c055c9dfe9, type: 2}
   transitionGateMode: 30
   description: 
