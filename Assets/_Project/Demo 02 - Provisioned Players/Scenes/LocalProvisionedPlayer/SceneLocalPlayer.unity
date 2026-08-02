@@ -1002,7 +1002,7 @@ Transform:
   m_GameObject: {fileID: 1344508689}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: -1.56}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1025,13 +1025,13 @@ MonoBehaviour:
   actorProfile: {fileID: 11400000, guid: d8311ad69ca750944ba24512f934376d, type: 2}
   sceneLogicalPlayerActor: {fileID: 4529364060809698841}
   admissionTiming: 0
-  evidenceActorProfile: {fileID: 0}
-  evidenceLogicalActorHostPrefab: {fileID: 0}
-  evidenceDiagnostic: 
-  lastAuthoringStatus: 170
-  lastAuthoringDiagnostic: Scene Logical Player Actor prefab source 'PlayerActor_SceneProvided'
-    does not match Actor Profile 'Actor_SceneProvidedPlayer' Logical Actor Host prefab
-    'PlayerActor_SceneProvided'.
+  evidenceActorProfile: {fileID: 11400000, guid: d8311ad69ca750944ba24512f934376d, type: 2}
+  evidenceLogicalActorHostPrefab: {fileID: 1485996504507352715, guid: 9f36e6258d89fe941a5d4b2aaa67b376, type: 3}
+  evidenceDiagnostic: Profile='Actor_SceneProvidedPlayer' sourcePrefab='PlayerActor_SceneProvided'
+    actor='PlayerActor_SceneProvided'.
+  lastAuthoringStatus: 10
+  lastAuthoringDiagnostic: Scene-Provided Player authoring and internal profile evidence
+    are valid.
 --- !u!114 &1344508692
 MonoBehaviour:
   m_ObjectHideFlags: 0
