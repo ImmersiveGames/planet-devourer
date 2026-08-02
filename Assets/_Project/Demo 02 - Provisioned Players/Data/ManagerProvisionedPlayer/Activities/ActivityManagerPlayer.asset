@@ -15,10 +15,11 @@ MonoBehaviour:
   activityId: 7fc246fcdac940dea0596582d396e1d5
   activityName: Manager Player Activity
   description: 
-  playerParticipationProjectionMode: 0
-  playerParticipationZeroParticipantPolicy: 0
-  playerParticipationExplicitSlotProfiles: []
-  playerParticipationRequirementLevel: 0
+  playerParticipationProjectionMode: 20
+  playerParticipationZeroParticipantPolicy: 10
+  playerParticipationExplicitSlotProfiles:
+  - {fileID: 11400000, guid: 806c8a7c323335343a78011c9c4c8e01, type: 2}
+  playerParticipationRequirementLevel: 30
   activityContentProfile: {fileID: 0}
-  visualTransitionMode: 0
-  transitionGateMode: 10
+  visualTransitionMode: 10
+  transitionGateMode: 30

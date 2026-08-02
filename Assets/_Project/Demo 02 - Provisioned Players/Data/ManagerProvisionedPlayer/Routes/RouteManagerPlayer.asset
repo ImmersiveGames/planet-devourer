@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.RouteAsset
   routeId: 39c97860f08749289c38db72e1bdf479
   routeName: Manager Player Route
-  primaryScenePath: 
-  primarySceneName: 
+  primaryScenePath: Assets/_Project/Demo 02 - Provisioned Players/Scenes/ManagerProvisionedPlayer/SceneManagerPlayer.unity
+  primarySceneName: SceneManagerPlayer
   routeContentProfile: {fileID: 0}
-  startupActivity: {fileID: 0}
+  startupActivity: {fileID: 11400000, guid: 252f22c22b0aea74f904b0c055c9dfe9, type: 2}
   transitionGateMode: 30
   description: 
