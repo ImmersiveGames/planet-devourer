@@ -131,6 +131,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Activity Readiness Scenario
       objectReference: {fileID: 0}
+    - target: {fileID: 3430487967796004240, guid: 4d3a0318542ea6d4082df951c2b0810f, type: 3}
+      propertyPath: m_text
+      value: 'POLICY: WAIT VISIBLE'
+      objectReference: {fileID: 0}
     - target: {fileID: 5938903293073782648, guid: 4d3a0318542ea6d4082df951c2b0810f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -170,6 +174,17 @@ PrefabInstance:
     - target: {fileID: 5938903293073782648, guid: 4d3a0318542ea6d4082df951c2b0810f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6095007456819511964, guid: 4d3a0318542ea6d4082df951c2b0810f, type: 3}
+      propertyPath: m_text
+      value: 'The scene is visible while input, interaction and gameplay
+
+        remain
+        blocked until readiness reaches READY.'
+      objectReference: {fileID: 0}
+    - target: {fileID: 6095007456819511964, guid: 4d3a0318542ea6d4082df951c2b0810f, type: 3}
+      propertyPath: m_fontSize
+      value: 26.3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c6d702c1ba364e70ad76a85eb5f1b842, type: 3}
-  m_Name: Activity_Preparation
+  m_Name: ActivityReadiness_WaitVisible
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.ActivityAsset
-  activityId: 03d617ac3b6e4366b2dd9389bd9f7d9b
-  activityName: "Readiness \u2014 Observe Only"
-  description: 'Shows readiness after normal Activity entry. Required participants
+  activityId: e380a38a3b6c490d9e087fe9c73f3fd8
+  activityName: "Readiness \u2014 Wait Visible"
+  description: 'Reveals the Activity-owned preparation scenario while retaining
 
-    control
-    Ready, but do not retain presentation or the capability gate.'
+    input,
+    interaction and gameplay until readiness reaches Ready.'
   playerParticipationProjectionMode: 0
   playerParticipationZeroParticipantPolicy: 0
   playerParticipationExplicitSlotProfiles: []
   playerParticipationRequirementLevel: 0
-  activityContentProfile: {fileID: 11400000, guid: 97b6a0fe96003834aa9d3875a6a66551, type: 2}
-  activityEntryReadinessPolicy: 0
+  activityContentProfile: {fileID: 11400000, guid: 45a2a4732ab22af4eb3322788760692d, type: 2}
+  activityEntryReadinessPolicy: 20
   visualTransitionMode: 0
-  transitionGateMode: 10
+  transitionGateMode: 30
