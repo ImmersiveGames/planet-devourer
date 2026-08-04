@@ -16,6 +16,10 @@ MonoBehaviour:
   startupRoute: {fileID: 11400000, guid: 8a488e2ec9dc5a349bd4b59c1a66bf3c, type: 2}
   localPlayerSlots: []
   playerActorSelectionDuplicatePolicy: 10
+  frameRatePolicy:
+    mode: 0
+    targetFrameRate: 60
+    vSyncCount: 1
   persistentContent:
     containerScene: {fileID: 102900000, guid: aae12116c7a7e494d898c421ecb024b9, type: 3}
   validationMode: 1
