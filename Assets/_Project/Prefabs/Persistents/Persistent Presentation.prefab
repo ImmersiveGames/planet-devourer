@@ -223,7 +223,7 @@ GameObject:
   - component: {fileID: 1777403010019741969}
   - component: {fileID: 2238368114748426791}
   m_Layer: 0
-  m_Name: Progreess Fill Image
+  m_Name: Progress Fill Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -934,7 +934,7 @@ MonoBehaviour:
   surfaceImage: {fileID: 5372658404116540805}
   progressRoot: {fileID: 5733471638869183724}
   progressFillImage: {fileID: 2238368114748426791}
-  progressSlider: {fileID: 5605470664970630203}
+  progressSlider: {fileID: 0}
   initialProgressValue: 0
   showProgressRootWhenVisible: 1
   hideProgressRootWhenHidden: 1
@@ -962,7 +962,7 @@ GameObject:
   m_Component:
   - component: {fileID: 562679408492327963}
   m_Layer: 0
-  m_Name: PreogressRoot
+  m_Name: Progress Root
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1458,9 +1458,9 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 2176286578850270719}
-  - {fileID: 6504931282215587938}
   - {fileID: 939943755019974028}
+  - {fileID: 6504931282215587938}
+  - {fileID: 2176286578850270719}
   m_Father: {fileID: 1111033364960878232}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
