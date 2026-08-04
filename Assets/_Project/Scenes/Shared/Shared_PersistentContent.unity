@@ -246,9 +246,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1154013709887932601, guid: f740c61eff2f2224eb1e51073adb53a4, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3541332051913912062, guid: f740c61eff2f2224eb1e51073adb53a4, type: 3}
       propertyPath: m_Name
       value: Persistent Presentation
+      objectReference: {fileID: 0}
+    - target: {fileID: 4569716154635290560, guid: f740c61eff2f2224eb1e51073adb53a4, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
