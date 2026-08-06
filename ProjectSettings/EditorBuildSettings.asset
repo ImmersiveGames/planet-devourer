@@ -68,5 +68,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Project/Demo01/Scenes/Activity Readiness/ActivitiesContent/Activity_Readiness_WaitCovered.unity
     guid: b62dcc47ea3df5c42bfb103b6115bee2
+  - enabled: 1
+    path: Assets/_Project/Demo02/Scenes/ManagerProvisionedPlayer/Activity/SceneManagerPlayerActivity.unity
+    guid: 05b23d1911abf91408a7e498391fc3f0
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
