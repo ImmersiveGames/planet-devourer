@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a35fe899a80d2d64dac72e8bfe3079df, type: 3}
+  m_Name: Route_LocalMultiplayer
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.RouteAsset
+  routeId: 1e1156f15ff2434f8cd6528a16787051
+  routeName: Local Multiplayer
+  primaryScenePath: Assets/_Project/Demo03/Scenes/LocalMultiplayer/Route/SceneLocalMultiplayerEnvironment.unity
+  primarySceneName: SceneLocalMultiplayerEnvironment
+  routeContentProfile: {fileID: 11400000, guid: 68051bc3a7000574f866103286ab592f, type: 2}
+  startupActivity: {fileID: 11400000, guid: 48c317df9ba12bb4b9c0d72c551107e4, type: 2}
+  transitionGateMode: 30
+  description: Local multiplayer route proving two explicit required Player Slots
+    and participant-aware Activity readiness.
