@@ -10,17 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c6d702c1ba364e70ad76a85eb5f1b842, type: 3}
-  m_Name: ActivityManagerPlayer
+  m_Name: Activity_ActivityOwnedPlayer
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.ActivityAsset
-  activityId: 7fc246fcdac940dea0596582d396e1d5
-  activityName: Manager Player Activity
-  description: 
+  activityId: ca4875b605664e01b1078331212d8f52
+  activityName: "Scene-Provided Player \u2014 Activity-Owned"
+  description: Demonstrates a Scene-Provided Player whose physical Host and Actor
+    belong to an Activity content scene.
   playerParticipationProjectionMode: 20
   playerParticipationZeroParticipantPolicy: 10
   playerParticipationExplicitSlotProfiles:
   - {fileID: 11400000, guid: 806c8a7c323335343a78011c9c4c8e01, type: 2}
   playerParticipationRequirementLevel: 30
-  activityContentProfile: {fileID: 11400000, guid: ecd84285b51152941a2daa9a244cd955, type: 2}
-  activityEntryReadinessPolicy: 20
-  visualTransitionMode: 20
+  activityContentProfile: {fileID: 11400000, guid: 8819a7e9556c92c4297bd3ea10df8e09, type: 2}
+  activityEntryReadinessPolicy: 0
+  visualTransitionMode: 0
   transitionGateMode: 30
