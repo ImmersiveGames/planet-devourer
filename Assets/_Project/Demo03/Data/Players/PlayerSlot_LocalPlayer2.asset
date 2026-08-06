@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35f657670d594601a6d7dcb3ba9c61c4, type: 3}
   m_Name: PlayerSlot_LocalPlayer2
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.PlayerSlotProfile
-  playerSlotId: player.2
+  playerSlotId: player.demo03.2
   displayName: Player 2
   description: Scene-provided local player slot used by the M06 sample.
   accentColor: {r: 0.6980392, g: 0.1333333, b: 0.1333333, a: 1}

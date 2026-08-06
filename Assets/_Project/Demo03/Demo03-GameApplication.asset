@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.GameApplicationAsset
   applicationName: "Demo 03 \u2014 Local Multiplayer Foundations"
   startupRoute: {fileID: 0}
-  localPlayerSlots: []
-  playerActorSelectionDuplicatePolicy: 10
+  localPlayerSlots:
+  - {fileID: 11400000, guid: c1e865ed27b0e1949abacfb13d9627e9, type: 2}
+  - {fileID: 11400000, guid: 1762e7ee6187cdc4dae3da8490e95d8a, type: 2}
+  playerActorSelectionDuplicatePolicy: 20
   frameRatePolicy:
     mode: 0
     targetFrameRate: 60
