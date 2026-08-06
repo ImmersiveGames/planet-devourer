@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e26429fffbfe4f4982799913c06a72f, type: 3}
   m_Name: ImmersiveFrameworkSettings
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.ImmersiveFrameworkSettingsAsset
-  activeGameApplication: {fileID: 11400000, guid: 0dd8fa70bd6c609439429ddb186f3c5e, type: 2}
+  activeGameApplication: {fileID: 11400000, guid: 5d9bf46abeec3704b9bfccbe6645d8ef, type: 2}
   editorPlayModeStartup: 0
   loggingConfig: {fileID: 11400000, guid: ae7c782a09e98fb4084052ca9c8166d1, type: 2}
