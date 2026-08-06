@@ -165,7 +165,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3040073741443721681, guid: 22e771eb5bcd27d4fbda52b63d535b79, type: 3}
       propertyPath: m_Text
-      value: "Manager-Provisioned Player \u2014 Single Local Player"
+      value: "Manager-Provisioned Player \u2014 Session-Scoped Host"
       objectReference: {fileID: 0}
     - target: {fileID: 3276775387088460495, guid: 22e771eb5bcd27d4fbda52b63d535b79, type: 3}
       propertyPath: m_AnchorMax.y
