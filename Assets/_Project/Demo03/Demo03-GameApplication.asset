@@ -23,5 +23,5 @@ MonoBehaviour:
     targetFrameRate: 60
     vSyncCount: 1
   persistentContent:
-    containerScene: {fileID: 0}
+    containerScene: {fileID: 102900000, guid: 0e7d472f71fd7a043aece92fa3d5b535, type: 3}
   validationMode: 1
