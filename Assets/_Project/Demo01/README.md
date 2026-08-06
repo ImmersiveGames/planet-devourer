@@ -1,6 +1,10 @@
 # Demo 01 — Routes, Activities, Lifecycle Events and Readiness
 
-Esta pasta demonstra os modelos M01, M02 e M03 do FIRSTGAME.
+**Status:** M01, M02 e M03 demonstrados como prova de consumidor  
+**Última validação principal:** 2026-08-04  
+**Unity:** 6.5
+
+A Demo 01 reúne:
 
 ```text
 M01  Route and Activity
@@ -8,14 +12,14 @@ M02  Lifecycle Events
 M03  Activity Readiness
 ```
 
-O objetivo é mostrar como um projeto consumidor declara lugares, momentos, conteúdo pertencente a cada escopo, callbacks de lifecycle e readiness operacional sem criar um fluxo paralelo ao framework.
+O objetivo é mostrar como um projeto consumidor declara lugares, momentos, conteúdo por escopo, callbacks de lifecycle e readiness operacional sem criar uma autoridade paralela ao framework.
 
-## Como executar
+# 1. Como executar
 
 Ative:
 
 ```text
-Assets/_Project/Demo 01 - Routes and Activities/Demo01-GameApplication.asset
+Assets/_Project/Demo01/Demo01-GameApplication.asset
 ```
 
 em:
@@ -25,38 +29,20 @@ Assets/_Project/Settings/ImmersiveFramework/Resources/
 └── ImmersiveFrameworkSettings.asset
 ```
 
-A aplicação inicia pela Route:
+Abra a cena inicial da Demo 01 e entre em Play Mode com o Console limpo. A aplicação inicia pelo menu da própria demonstração e oferece entradas separadas para Routes/Activities e Activity Readiness.
+
+# 2. Estrutura principal
 
 ```text
-Assets/_Project/Demo 01 - Routes and Activities/Data/Demo01StartupMenu.asset
-```
-
-Cena inicial:
-
-```text
-Assets/_Project/Demo 01 - Routes and Activities/Scenes/Demo01StartScene.unity
-```
-
-Este README usa os nomes reais presentes no repositório. Não renomeie uma pasta isoladamente pelo sistema de arquivos; qualquer normalização futura deve ser feita dentro do Unity, preservando referências e GUIDs.
-
-# Estrutura principal
-
-```text
-Demo 01 - Routes and Activities/
+Assets/_Project/Demo01/
 ├── Demo01-GameApplication.asset
 ├── Data/
-│   ├── Demo01StartupMenu.asset
 │   ├── Activity Readiness/
-│   │   ├── Activities/
-│   │   └── Routes/
 │   └── Routes and Activities/
-│       ├── Activities/
-│       └── Routes/
 ├── Prefabs/
 │   ├── Activity Readiness/
 │   └── Routes and Activities/
 ├── Scenes/
-│   ├── Demo01StartScene.unity
 │   ├── Activity Readiness/
 │   └── Routes and Activities/
 └── Scripts/
@@ -64,178 +50,89 @@ Demo 01 - Routes and Activities/
     └── Routes and Activities/
 ```
 
-# M01 — Route and Activity
+A identidade funcional vem dos assets e IDs. Nomes de GameObjects e arquivos servem para apresentação e diagnóstico, não como autoridade runtime.
 
-## O que o modelo demonstra
+# 3. M01 — Route and Activity
+
+## 3.1 Intenção de produto
 
 ```text
 Route
-  representa o destino/lugar do jogo;
-  possui cena principal;
-  pode possuir cenas adicionais Route-owned;
+  representa um destino/lugar;
+  possui Primary Scene;
+  pode possuir conteúdo Route-owned;
   pode iniciar uma Activity.
 
 Activity
-  representa o momento/modo dentro da Route;
+  representa um momento/modo dentro da Route;
   pode trocar sem recarregar a Route inteira;
-  pode possuir cenas Activity-owned;
-  emite lifecycle próprio.
+  pode possuir conteúdo Activity-owned;
+  possui lifecycle próprio.
 ```
 
-A demo utiliza dois destinos visuais baseados na mesma cena principal e diferencia a composição por conteúdo adicional da Route e da Activity.
+A demo utiliza destinos visuais baseados em uma composição compartilhada e diferencia cada ocorrência por conteúdo adicional da Route e da Activity.
 
-## Assets para localizar
-
-Routes:
+## 3.2 Ownership esperado
 
 ```text
-Assets/_Project/Demo 01 - Routes and Activities/Data/Routes and Activities/Routes/
-├── Sample_Route_Fields.asset
-└── Sample_Route_Forest.asset
-```
-
-Route Content Profiles atualmente utilizados pela composição dos ambientes:
-
-```text
-Assets/_Project/Demo 01 - Routes and Activities/Data/Activity Readiness/Routes/Profiles/
-├── Additive_Fields.asset
-└── Additive_Forest.asset
-```
-
-Activities e seus profiles:
-
-```text
-Assets/_Project/Demo 01 - Routes and Activities/Data/Activity Readiness/Activities/
-├── Sample_Activities_Cows.asset
-├── Sample_Activites_Chickens.asset
-└── Profiles/
-    ├── Activity_Cow_Content_Profile.asset
-    └── Activity_Chickens_Content_Profile.asset
-```
-
-Cenas:
-
-```text
-Assets/_Project/Demo 01 - Routes and Activities/Scenes/Routes and Activities/
-├── RoutesContents/
-│   ├── Sample_Environment.unity
-│   └── Additives/
-│       ├── Sample_Add_Fields.unity
-│       └── Sample_Add_Forest.unity
-└── ActivitiesContents/
-    ├── SampleCows.unity
-    └── SampleChickens.unity
-```
-
-## Composição esperada
-
-```text
-Route Fields ou Route Forest
+Route
 ├── Primary Scene
-│   └── Sample_Environment
+│   └── ambiente base
 ├── Route Content Profile
-│   ├── navegação compartilhada da Route
-│   └── cena aditiva específica do destino
+│   ├── navegação compartilhada
+│   └── conteúdo específico do destino
 └── Startup Activity
     └── Activity Content Profile
-        └── cena aditiva específica do momento
+        └── conteúdo específico do momento
 ```
 
-A identidade funcional vem dos assets e IDs; nomes de GameObjects e nomes de arquivo servem apenas para apresentação e diagnóstico.
-
-## Fluxo em Play Mode
+Regras:
 
 ```text
-Menu solicita Route
-→ framework libera a Route anterior
-→ carrega Sample_Environment como Primary Scene
-→ carrega cenas do Route Content Profile
-→ cria o runtime scope da Route
-→ entra na Startup Activity
-→ carrega conteúdo Activity-owned
-→ emite Entered
+conteúdo que sobrevive à troca de Activity não fica em cena Activity-owned;
+navegação compartilhada pertence à Route;
+uma mesma cena não deve ser declarada simultaneamente por owners concorrentes;
+cleanup deve acompanhar o owner que carregou o conteúdo.
 ```
 
-Ao trocar somente a Activity:
+## 3.3 Fluxo runtime
+
+```text
+menu solicita Route
+→ framework libera a Route anterior
+→ carrega Primary Scene
+→ carrega Route Content
+→ cria a ocorrência da Route
+→ entra na Startup Activity
+→ carrega Activity Content
+→ publica lifecycle Entered
+```
+
+Troca somente de Activity:
 
 ```text
 Activity anterior sai
-→ seu conteúdo é liberado
+→ conteúdo Activity-owned é liberado
 → nova Activity entra
-→ seu conteúdo é carregado
-→ a Route e seu conteúdo continuam ativos
+→ novo conteúdo Activity-owned é carregado
+→ Route e Route Content permanecem ativos
 ```
 
-## Hierarquia funcional recomendada ao replicar
-
-Na Primary Scene:
+## 3.4 Aceite do M01
 
 ```text
-Environment_Root
-├── geometria persistente durante a Route
-├── pontos de referência visuais
-└── superfícies que pertencem ao lugar, não à Activity
+[ ] entrada na Route correta
+[ ] Primary Scene carregada uma vez
+[ ] conteúdo Route-owned presente
+[ ] Startup Activity iniciada
+[ ] troca de Activity sem recarregar a Route inteira
+[ ] saída libera o owner correto
+[ ] reentrada não duplica conteúdo
 ```
 
-Na cena Route-owned:
+# 4. M02 — Lifecycle Events
 
-```text
-RouteContent_Root
-├── navegação da Route
-├── decoração específica do destino
-└── componentes de lifecycle de Route, quando necessários
-```
-
-Na cena Activity-owned:
-
-```text
-ActivityContent_Root
-├── conteúdo visual do momento
-├── interações daquele momento
-├── ActivityLocalVisibilityAdapter, quando aplicável
-└── callbacks/presenters de lifecycle
-```
-
-Não coloque conteúdo que precisa sobreviver à troca de Activity dentro de uma cena Activity-owned.
-
-## Como replicar em outro projeto
-
-Crie ou identifique:
-
-```text
-GameApplicationAsset
-Startup Menu Route
-uma Route por destino
-um Route Content Profile por composição adicional
-uma ou mais Activities
-um Activity Content Profile por conjunto de cenas Activity-owned
-```
-
-Configure na ordem:
-
-```text
-1. GameApplication → Startup Route
-2. Route → Primary Scene
-3. Route → Route Content Profile
-4. Route → Startup Activity
-5. Activity → Activity Content Profile
-6. botões → requests tipadas para Route/Activity
-```
-
-Teste obrigatoriamente:
-
-```text
-entrada na Route;
-troca de Activity sem recarregar a Primary Scene;
-saída da Route;
-reentrada sem conteúdo duplicado.
-```
-
-# M02 — Lifecycle Events
-
-## O que o modelo demonstra
-
-O framework emite eventos claros para a disponibilidade e liberação das cenas, entrada e saída da Route e entrada e saída da Activity.
+## 4.1 Eventos demonstrados
 
 ```text
 Scene
@@ -251,334 +148,305 @@ Activity
   Exited
 ```
 
-Os callbacks podem atualizar UI, iniciar animação, ligar interação ou registrar evidência. Eles não devem escolher a Route/Activity por conta própria nem criar uma autoridade paralela.
+Os callbacks podem atualizar UI, iniciar animação, habilitar interação ou registrar evidência. Eles não escolhem Route/Activity por conta própria e não substituem a autoridade do framework.
 
-## Prefabs e scripts para localizar
+## 4.2 Papel dos scripts consumidores
 
-Prefabs:
+Os presenters e reporters da Demo 01 são superfícies de apresentação e diagnóstico do FIRSTGAME.
 
-```text
-Assets/_Project/Demo 01 - Routes and Activities/Prefabs/Routes and Activities/UI/
-├── Canvas-Lifecyle.prefab
-├── RoutesAndActivities_RoutesNavigation.prefab
-└── RoutesAndActivities_ActivityNavigation.prefab
-```
-
-Scripts do consumidor:
+Eles devem:
 
 ```text
-Assets/_Project/Demo 01 - Routes and Activities/Scripts/Routes and Activities/
-├── LifecycleCanvasEventReporter.cs
-├── LifecycleCanvasEventTypes.cs
-├── LifecycleCanvasPresenter.cs
-└── Editor/
-    ├── LifecycleCanvasPrefabInstaller.cs
-    └── LifecycleCanvasPresenterEditor.cs
+receber referências explícitas;
+mostrar o último evento e o escopo associado;
+manter callbacks pequenos;
+limpar estado local no release/exit.
 ```
 
-Esses scripts são apresentação e diagnóstico do FIRSTGAME. Eles não são autoridade runtime do framework.
-
-## Hierarquia funcional
+Eles não devem:
 
 ```text
-Canvas-Lifecyle
-├── área de status de Scene
-├── área de status de Route
-├── área de status de Activity
-└── Last Event
+resolver objetos por nome global;
+criar uma segunda máquina de estados;
+requisitar outra Route/Activity como efeito oculto do callback;
+interpretar UI como fonte de verdade.
 ```
 
-Os objetos que recebem callbacks devem manter referências explícitas para o presenter ou usar UnityEvents configurados no Inspector. Não resolva o canvas por nome ou busca global.
-
-## Como replicar em outro projeto
+## 4.3 Aceite do M02
 
 ```text
-1. Escolha o objeto que precisa reagir ao lifecycle.
-2. Adicione a superfície oficial de eventos correspondente ao escopo.
-3. Conecte Entered/Exited ou Available/Releasing por referência explícita.
-4. Mantenha o callback pequeno e pertencente ao jogo consumidor.
-5. Use o console e uma UI simples apenas para diagnóstico.
+[ ] Scene Available ocorre antes do uso do conteúdo
+[ ] Scene Releasing acompanha o release correto
+[ ] Route Entered/Exited acompanha a ocorrência correta
+[ ] Activity Entered/Exited acompanha cada troca
+[ ] callbacks não duplicam após reentrada
+[ ] UI permanece passiva
 ```
 
-Exemplo:
+# 5. M03 — Activity Readiness
 
-```text
-Activity Entered
-→ iniciar animação local
-→ habilitar interação
-→ atualizar HUD
-
-Activity Exited
-→ parar comportamento
-→ limpar estado local
-→ ocultar apresentação
-```
-
-## Aceite do M02
-
-```text
-Scene Available ocorre antes do uso do conteúdo;
-Route Entered/Exited acompanha a ocorrência correta;
-Activity Entered/Exited acompanha cada troca;
-callbacks não disparam duplicados após reentrada;
-UI de diagnóstico não decide lifecycle.
-```
-
-# M03 — Activity Readiness
-
-## O que o modelo demonstra
+## 5.1 Intenção de produto
 
 Activity Readiness agrega participantes registrados na ocorrência atual da Activity.
 
 ```text
-Required participant
-  bloqueia Ready enquanto não concluir.
+Required
+  bloqueia o estado Ready enquanto não concluir.
 
-Optional participant
+Optional
   aparece no diagnóstico, mas não bloqueia Ready.
 ```
 
-A demonstração possui duas Activities:
+A demonstração compara três políticas de entrada:
+
+| Policy | Apresentação | Comportamento esperado |
+|---|---|---|
+| `ObserveOnly` | apresentação existente | readiness é observada sem reter cover ou gates |
+| `WaitVisible` | conteúdo visível | preparação fica visível enquanto capabilities configuradas permanecem gated |
+| `WaitCovered` | `FadeWithLoading` | a Activity permanece coberta até todos os Required concluírem |
+
+`WaitCovered` é a prova semelhante a produção: o Loading determinístico é dirigido pelos participantes do framework, não por scripts de gameplay.
+
+## 5.2 Fluxo da demonstração
 
 ```text
-Preparation
-Intermission
+menu da Demo 01
+→ Activity Readiness Route
+→ Observe Only
+→ Intermission
+→ Wait Visible ou Wait Covered
+→ Intermission
+→ nova entrada ou repetição de Wait Covered
 ```
 
-O conteúdo de navegação pertence à Route e permanece disponível durante a troca entre Activities.
-
-## Assets para localizar
-
-Route:
+Para `WaitCovered`:
 
 ```text
-Assets/_Project/Demo 01 - Routes and Activities/Data/Activity Readiness/Routes/
-└── RouteReadiness.asset
+Activity request
+→ FadeWithLoading inicia
+→ faixa técnica de Loading avança
+→ quatro Required participants concluem de forma independente
+→ Optional permanece pendente
+→ aggregate readiness fica Ready
+→ Loading chega a 100%
+→ Loading fecha
+→ cover revela a Activity concluída
 ```
 
-Route Content Profile:
+## 5.3 Configuração canônica de Wait Covered
 
 ```text
-Assets/_Project/Demo 01 - Routes and Activities/Data/Routes and Activities/Routes/Profile/
-└── RouteContent_Readines.asset
+Activity Entry Readiness Policy = WaitCovered
+Visual Transition Mode          = FadeWithLoading
+Transition Gate Mode            = InputInteractionAndGameplay
+Content Profile                 = ActivityContent_ReadinessWaitCovered
 ```
 
-Activities:
+A cena Activity-owned contém uma instância do cenário Wait Covered. Ela não deve conter:
 
 ```text
-Assets/_Project/Demo 01 - Routes and Activities/Data/Routes and Activities/Activities/
-├── ActivityReadiness_Preparation.asset
-├── ActivityReadiness_Intermission.asset
-└── Profiles/
-    ├── ActivityContent_Preparation.asset
-    └── ActivityContent_Intermission.asset
+segundo Loading Canvas;
+FrameworkRuntimeHost local;
+bootstrap paralelo;
+autoridade de Loading do consumidor.
 ```
 
-Cenas:
+## 5.4 Participantes
+
+A composição validada usa:
+
+| Ordem | Participant Id | Requiredness | Fonte de conclusão |
+|---:|---|---|---|
+| 10 | `m03.wait-covered.chicken-01` | Required | Chicken 01 alcança o target |
+| 20 | `m03.wait-covered.chicken-02` | Required | Chicken 02 alcança o target |
+| 30 | `m03.wait-covered.chicken-03` | Required | Chicken 03 alcança o target |
+| 40 | `m03.wait-covered.chicken-04` | Required | Chicken 04 alcança o target |
+| 50 | `m03.wait-covered.optional` | Optional | intencionalmente pendente |
+
+O framework conta participantes, não Chickens. Movimento e target são apenas apresentação de consumidor e evidência de conclusão.
+
+Cada Required usa uma ponte local explícita entre o `ActivityReadinessParticipant` e sua área de preparação. O Optional não possui callback de conclusão.
+
+## 5.5 Loading persistente
+
+A apresentação persistente usa uma única superfície oficial com suporte a progresso determinístico.
+
+Esperado:
 
 ```text
-Assets/_Project/Demo 01 - Routes and Activities/Scenes/Activity Readiness/
-├── Activity_Readiness.unity
-├── ActivityReadinessMenu.unity
-├── Activity_Readiness_Intermission.unity
-└── ActivitiesContent/
-    └── Activity_Readiness_Add.unity
+progress-capable surface;
+determinate progress habilitado;
+progresso visível durante Loading;
+100% somente quando o aggregate readiness fica Ready;
+progresso oculto e resetado quando Loading fecha;
+hidden state aplicado no Awake.
 ```
 
-Prefabs:
+FIRSTGAME não resolve nem atualiza diretamente essa superfície.
+
+## 5.6 Evidência esperada
+
+Uma ocorrência limpa de `WaitCovered` produz:
 
 ```text
-Assets/_Project/Demo 01 - Routes and Activities/Prefabs/Activity Readiness/
-├── Readiness Participant.prefab
-└── Ui/
-    └── Canvas_ActivityReadinessNavigation.prefab
+4 Required capturados
+4 Required concluídos
+0 Required pendentes
+1 Optional capturado
+1 Optional pendente
+Loading progress = 100%
+Activity Request = Succeeded
+blockingIssues = 0
 ```
 
-Scripts do consumidor:
+A sequência visual esperada é monotônica: cada Required concluído produz um avanço independente após a faixa técnica.
+
+## 5.7 Saída e reentrada
 
 ```text
-Assets/_Project/Demo 01 - Routes and Activities/Scripts/Activity Readiness/
-├── ReadinessPreparationArea.cs
-├── ReadinessPreparationSequence.cs
-└── ReadinessProgressPresenter.cs
-```
-
-## Ownership da composição
-
-```text
-RouteReadiness
-├── Primary Scene
-│   └── Activity_Readiness
-├── Route Content Profile
-│   └── ActivityReadinessMenu
-└── Startup Activity
-    └── ActivityReadiness_Preparation
-```
-
-Preparation possui conteúdo próprio:
-
-```text
-ActivityContent_Preparation
-└── Activity_Readiness_Add
-```
-
-Intermission possui conteúdo próprio:
-
-```text
-ActivityContent_Intermission
-└── Activity_Readiness_Intermission
-```
-
-A navegação não deve ser declarada simultaneamente como conteúdo de Route e de Activity.
-
-## Hierarquia funcional recomendada
-
-Primary Scene:
-
-```text
-Activity_Readiness
-└── ambiente compartilhado pela Route
-```
-
-Route-owned navigation scene:
-
-```text
-ActivityReadinessMenu
-└── Canvas_ActivityReadinessNavigation
-    ├── Preparation
-    ├── Intermission
-    └── Back To Menu
-```
-
-Activity-owned content:
-
-```text
-ActivityContent_Root
-├── Readiness Participant (Required)
-├── participante Optional permanentemente pendente
-├── ReadinessPreparationArea / sequência de preparação
-└── ReadinessProgressPresenter
-```
-
-A hierarquia exata pode variar, mas ownership e referências devem permanecer explícitos.
-
-## Fluxo em Play Mode
-
-```text
-Route entra
-→ conteúdo Route-owned fica disponível
-→ Preparation inicia
-→ participantes são registrados na ocorrência
-→ Required fica Pending
-→ progresso é apresentado
-→ Required conclui
-→ Activity fica Ready
-```
-
-Ao trocar para Intermission:
-
-```text
-Preparation sai
-→ participantes da ocorrência são liberados
-→ cena de Preparation é descarregada
+primeira ocorrência WaitCovered conclui
 → Intermission entra
-→ novos participantes pertencem à nova ocorrência
+→ participantes da ocorrência são liberados
+→ cena Activity-owned descarrega
+→ segunda requisição cria outra ocorrência
+→ quatro Required concluem novamente
+→ Loading chega a 100%
+→ nenhum estado stale permanece
 ```
 
-Ao voltar para Preparation, não pode haver handles ou participantes stale da ocorrência anterior.
+A evidência manual registrada mostrou ocorrências bem-sucedidas distintas, com cleanup e novo denominator.
 
-## Semântica importante do corte atual
+# 6. Validação consolidada
 
-No runtime atual, readiness representa estado operacional pós-transição. Ela não é, por si só, um gate de revelação visual ou de entrada.
+## 6.1 Aceite técnico do M03
 
 ```text
-transição pode concluir
-→ Activity fica ativa
-→ readiness continua Preparing/NotReady
-→ depois alcança Ready
+PASS — WaitCovered direto
+PASS — 4 Required capturados e concluídos
+PASS — 1 Optional capturado e pendente
+PASS — Loading determinístico
+PASS — 100% no aggregate Ready
+PASS — Loading release e reveal
+PASS — saída para Intermission
+PASS — segunda ocorrência limpa
+PASS — nenhum blocking issue na evidência fornecida
 ```
 
-Portanto, não use esta demo para afirmar que o fade/loading permanecerá cobrindo o conteúdo até `Ready`. Essa política de reveal/gameplay release exige uma superfície de produto própria e não faz parte do M03 implementado.
-
-## Como replicar em outro projeto
+## 6.2 Aceite de produto do M03
 
 ```text
-1. Crie a Route e mantenha a navegação como Route-owned.
-2. Crie uma Activity por momento operacional.
-3. Declare as cenas Activity-owned em seus profiles.
-4. Coloque participantes de readiness no conteúdo da Activity.
-5. Marque como Required somente o que realmente bloqueia Ready.
-6. Use Optional para diagnóstico não bloqueante.
-7. Conecte um presenter passivo para mostrar estado/progresso.
-8. Teste troca, saída e reentrada.
+PASS — usuário consegue criar e configurar manualmente
+PASS — três policies podem ser comparadas na mesma Route
+PASS — Required completion é visível no Loading
+PASS — Optional não bloqueia e é demonstrável
+PASS — cenário é inspecionável e reutilizável
+PARTIAL — wiring manual repetido ainda é suscetível a erro
+PARTIAL — tooling oficial de authoring ainda não está completo
 ```
 
-Não crie um manager global para controlar readiness. Não faça fallback silencioso quando um participante obrigatório falhar.
+# 7. Findings de UX e produto
 
-## Aceite do M03
+| ID | Finding | Severidade | Destino |
+|---|---|---:|---|
+| M03-UX-01 | Participante inativo ainda pode ser descoberto porque o escopo inclui children inativos | Alta | package docs/authoring/diagnostics |
+| M03-UX-02 | UnityEvents repetidos facilitaram apontar para a ponte errada | Alta | package template/validator |
+| M03-UX-03 | Participant Id duplicado sobreviveu ao authoring manual | Alta | package validation |
+| M03-UX-04 | A composição foi inicialmente gravada como scene overrides em vez do Prefab Variant | Média | FIRSTGAME workflow/template |
+| M03-UX-05 | Nova Activity exigiu atualização manual da visibilidade de navegação | Alta | package authoring/navigation |
+| M03-UX-06 | Loading determinístico exige wiring manual e inspeção cuidadosa | Média | package sample/template/docs |
+| M03-UX-07 | Apply de overrides pode carregar alterações não relacionadas para prefabs compartilhados | Média | higiene de mudanças FIRSTGAME |
+| M03-UX-08 | Diagnóstico completo é denso para o usuário comum | Média | package Advanced/Debug summary |
+| M03-UX-09 | Presenter local e Loading persistente podem parecer duas autoridades | Baixa | apresentação/docs FIRSTGAME |
+| M03-UX-10 | Aggregate participant e participantes independentes têm usos diferentes pouco óbvios | Média | package guide/template |
+
+Disposição:
 
 ```text
-Required Pending impede Ready;
-Required Complete permite Ready;
-Optional Pending não bloqueia Ready;
-participants pertencem à ocorrência correta;
-troca de Activity libera o estado anterior;
-Back To Menu libera Route e Activity;
-reentrada cria uma ocorrência limpa;
-nenhum warning/error bloqueante.
+FIRSTGAME mantém apresentação, cenário e menu;
+package deve amadurecer authoring, validation e Advanced/Debug;
+QAFramework mantém failure, cancellation, invalidation e late completion.
 ```
 
-# O que é reutilizável
+# 8. Limites de autoridade
+
+FIRSTGAME possui:
 
 ```text
-padrão GameApplication → Route → Activity;
-separação Route-owned / Activity-owned;
-prefabs de navegação como apresentação;
-presenter de lifecycle/readiness como consumidor passivo;
-organização de conteúdo por root;
-sequência de testes de entrada, troca, saída e reentrada.
+assets de Route e Activity;
+cenários visuais;
+movimento dos Chickens;
+pontes finas de conclusão;
+navegação;
+configuração da apresentação persistente;
+evidência e findings de consumidor.
 ```
 
-Não copie automaticamente IDs, GUIDs, `ProjectSettings` ou a cena persistente. Recrie a intenção no projeto consumidor e use IDs próprios e estáveis.
+O framework possui:
 
-# Diagnóstico de problemas
+```text
+discovery e captura por ocorrência;
+agregação Required/Optional;
+denominator autoritativo;
+envelope técnico/readiness de Loading;
+publicação de 100%;
+ordem de hide/reveal;
+retenção e release de gates;
+diagnóstico terminal.
+```
 
-## A Route entra, mas a Activity não
+FIRSTGAME não deve calcular o progresso autoritativo, escrever no Loading, resolver runtime host por busca global ou tratar Optional como parte do denominator de sucesso.
+
+# 9. Troubleshooting
+
+## Route entra, Activity não
 
 Verifique:
 
 ```text
-Startup Activity atribuída;
-Activity ID válido;
-Activity Content Profile válido;
+Startup Activity;
+Activity ID;
+Content Profile;
 cenas no Build Settings;
-nenhuma falha bloqueante no diagnóstico da Route.
+falha bloqueante no diagnóstico da Route.
 ```
 
-## A cena aditiva aparece duplicada
+## Cena aditiva duplicada
 
-Verifique se ela foi declarada em mais de um owner:
+Confirme que ela não está declarada ao mesmo tempo como:
 
 ```text
 Primary Scene;
-Route Content Profile;
-Activity Content Profile.
-```
-
-Uma cena deve possuir uma autoridade de composição clara para cada ocorrência.
-
-## O conteúdo visual não acompanha a Activity
-
-Verifique:
-
-```text
-binding do ActivityLocalVisibilityAdapter;
-ActivityAsset correto, não nome de GameObject;
-root de conteúdo correto;
-callbacks Entered/Exited;
-cleanup na saída.
+Route Content;
+Activity Content.
 ```
 
 ## Readiness nunca fica Ready
 
-Verifique os participantes Required e seus diagnósticos. Um Optional pendente é esperado e não deve bloquear. Não transforme falha obrigatória em sucesso por timeout ou fallback.
+Verifique:
+
+```text
+Required pendente;
+Participant Id duplicado;
+callback apontando para a ponte errada;
+participante inativo ainda capturado;
+conclusão enviada para ocorrência antiga;
+falha obrigatória explícita.
+```
+
+Não transformar falha obrigatória em sucesso por timeout ou fallback.
+
+# 10. Checklist de reutilização
+
+```text
+[ ] definir GameApplication e Startup Route
+[ ] separar Primary Scene, Route Content e Activity Content
+[ ] conectar lifecycle por referências explícitas
+[ ] escolher ObserveOnly, WaitVisible ou WaitCovered
+[ ] marcar Required somente quando realmente bloqueia Ready
+[ ] manter Participant Id único
+[ ] usar participantes independentes para increments independentes
+[ ] configurar uma única superfície persistente de Loading
+[ ] testar entrada, troca, saída e reentrada
+[ ] confirmar cleanup por ocorrência
+[ ] manter casos negativos no QAFramework
+```

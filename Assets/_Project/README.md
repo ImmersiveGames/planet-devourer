@@ -1,133 +1,206 @@
-# FIRSTGAME — Immersive Framework consumer demo
+# FIRSTGAME — Immersive Framework Consumer Demo
 
-Status: Active integration demo  
-Last updated: 2026-07-28
+**Status:** integração ativa como consumidor real  
+**Última atualização:** 2026-08-06  
+**Unity:** 6.5
 
-`planet-devourer` is the real-game consumer of `com.immersive.framework`.
+`planet-devourer` é o consumidor real de `com.immersive.framework`.
 
-The current project is intentionally being assembled in a developer-realistic order. The menu exposes focused Routes and scenes so one framework composition can be understood and validated at a time. These test entries are development UX; they are not the final public game menu.
+O projeto demonstra como um usuário encontra, configura, executa e diagnostica as superfícies do framework em um jogo Unity real. Ele não é a fonte oficial dos contratos do framework e não deve criar autoridades paralelas para contornar superfícies ainda ausentes.
 
-## Source-of-truth rule
-
-Use the current Git state of these repositories:
+## Fontes oficiais
 
 ```text
-Framework / product
+Framework / produto
   ImmersiveGames/com.immersive.framework
 
-Technical QA
+QA técnico
   rinnocenti/QAFramework
 
-Real consumer
+Consumidor real
   ImmersiveGames/planet-devourer
 ```
 
-Do not restore legacy setup scripts, copy QA fixtures, copy serialized QA assets, or create local framework facades.
-
-## Current application composition
-
-The current Build Settings contain:
+Responsabilidades:
 
 ```text
-Assets/_Project/Scenes/Menu/FG_UIGlobal.unity
-Assets/_Project/Scenes/Menu/FG_Menu.unity
-Assets/_Project/Scenes/Gameplay/FG_Gameplay.unity
-Assets/_Project/Scenes/System/Conteiner Scene.unity
-Assets/_Project/Scenes/Gameplay/SceneProvidedGameplay.unity
+com.immersive.framework
+  runtime, contracts, authoring, tooling, validators, docs e APIs oficiais
+
+QAFramework
+  smokes técnicos, casos negativos, regressões e matrizes contratuais
+
+FIRSTGAME
+  criação manual, integração real, legibilidade, usabilidade e fluxo de jogo
 ```
 
-`FG_GameApplication.asset` currently declares:
+Não restaurar scripts legados, copiar fixtures do QA, copiar `ProjectSettings` de projetos anteriores ou criar facades locais que substituam contratos do package.
+
+# Organização da documentação
+
+A documentação ativa fica próxima da composição que descreve:
 
 ```text
-startup Route
-four ordered local Player Slot Profiles
-Actor duplicate-selection policy
-Conteiner Scene as Persistent Content
+Assets/_Project/README.md
+  visão global, estado dos modelos, limites e índice
+
+Assets/_Project/Demo01/README.md
+  M01, M02 e M03: uso, configuração, validação e findings
+
+Assets/_Project/Demo02/README.md
+  M06 e M07: uso, configuração, validação e findings
 ```
 
-## Current development entry points
-
-The menu currently exposes two Git-visible Route requests:
+Regras:
 
 ```text
-Start Game
-  reason: firstgame.start.game
-  opens the general gameplay path
-
-Player Local Test
-  reason: firstgame.playerlocal.test
-  opens FG_PlayerSceneProvider
-  primary scene: SceneProvidedGameplay
+um README por demonstração;
+status global somente neste README;
+fluxo de uso e findings no README da demonstração;
+sem cópias paralelas do mesmo estado em Documentation/;
+planos extensos e ADRs pertencem ao package oficial;
+matrizes negativas pertencem ao QAFramework;
+evidência de consumidor permanece resumida no README da demo.
 ```
 
-The focused Player path currently uses:
+Um documento separado só deve existir quando tiver lifetime próprio e não puder ser mantido sem duplicar o README, por exemplo uma especificação formal, ADR oficial ou relatório externo congelado.
+
+# Estado atual dos modelos
+
+| Modelo | Demonstração | Estado |
+|---|---|---|
+| M01 | Route and Activity | Demonstrado na Demo 01 |
+| M02 | Lifecycle Events | Demonstrado na Demo 01 |
+| M03 | Activity Readiness | Demonstrado na Demo 01 |
+| M04 | Content Anchors | Revogado da sequência atual |
+| M05 | Anchor Materialization | Revogado da sequência atual |
+| M06 | Scene-Provided Logical Player | Baseline consumidor demonstrado na Demo 02 |
+| M07 | Manager-Provisioned Logical Player | Baseline consumidor demonstrado na Demo 02 |
+| M08 | Participation Policies | Ainda não montado como demonstração dedicada |
+
+Use `Demonstrado` somente quando houver uma jornada de Play Mode registrada no README correspondente.
+
+# Índice das demonstrações
+
+## Demo 01 — Routes, Activities, Lifecycle e Readiness
+
+Documenta:
 
 ```text
-Actor_PlayerSceneProvided.prefab
-Player_SceneProvided.prefab
-Player_SceneProvided_With_Pause.prefab
-Player_SceneProvided_With_Camera.prefab
+M01 Route and Activity
+M02 Lifecycle Events
+M03 Activity Readiness
 ```
 
-## Current assembly sequence
+Inclui:
 
 ```text
-Game Application and Routes
--> Persistent Content
--> persistent Camera Output
--> Pause outside the Player
--> Pause bound to the Player
--> Scene-Provided Logical Player
--> Player gameplay Camera
--> Manager-Provisioned Logical Player
--> Session-Persistent Logical Player
--> real gameplay vertical slice
+ownership Route-owned e Activity-owned;
+callbacks de Scene, Route e Activity;
+ObserveOnly, WaitVisible e WaitCovered;
+Required e Optional participants;
+Loading determinístico por readiness;
+saída, cleanup e reentrada;
+findings de authoring e diagnóstico.
 ```
 
-The first six items have Git-visible assets or implementation. The Scene-Provided Player with Camera remains the current integration-validation focus. Manager-Provisioned is the next consumer assembly. Session-Persistent is architecturally accepted but is not yet an available package product surface.
+Consulte [Demo01/README.md](Demo01/README.md).
 
-## Status vocabulary
+## Demo 02 — Provisioned Players
+
+Documenta:
+
+```text
+M06 Scene-Provided Logical Player
+M07 Manager-Provisioned Logical Player
+```
+
+Inclui:
+
+```text
+Player Slot, Local Player Host e Actor Mount;
+Actor scene-owned versus manager-provisioned;
+admission e default Actor;
+Joining fechado/aberto;
+Activity Restart;
+Route exit/reentry com estado de Session preservado;
+validação manual e findings de produto.
+```
+
+Consulte [Demo02/README.md](Demo02/README.md).
+
+# Vocabulário de status
 
 ```text
 Present in Git
-  Serialized assets or code exist in the current repository.
+  assets, cenas ou código existem no repositório
 
 Authoring Ready
-  Required authoring references and stored validation evidence exist.
+  referências authoring e validação estática estão configuradas
 
 Runtime Implemented
-  The package contains the runtime path.
+  o package contém o caminho runtime oficial
 
-Manual Proof Required
-  A Unity Play Mode result must still be executed and recorded.
+Consumer Demonstrated
+  uma jornada FIRSTGAME foi executada e registrada
+
+QA Proven
+  o QAFramework prova contratos e casos negativos
 
 Blocked by Framework
-  The accepted product shape has no official runtime/authoring surface yet.
+  o fluxo desejado ainda não possui superfície oficial no package
 ```
 
-Do not use `Passed` unless the corresponding manual or automated evidence is recorded.
+`Consumer Demonstrated` não substitui `QA Proven`.
 
-## Documentation
+# Limites atuais de Player
 
-- [Current State](Documentation/FIRSTGAME-CURRENT-STATE.md)
-- [Test Scenarios](Documentation/TEST-SCENARIOS.md)
-- [Player Variants](Documentation/PLAYER-VARIANTS.md)
-- [Historical P3 Baseline](Documentation/FIRSTGAME-P3-MANUAL-INTEGRATION-BASELINE.md)
-
-## Immediate next action
-
-Close the Scene-Provided Player with Camera scenario by recording Play Mode evidence for:
+Implementado e usado no FIRSTGAME:
 
 ```text
-Route entry
-Slot admission
-existing Actor adoption
-movement eligibility
-Camera request/output
-Player Pause
-application-only Pause
-Route exit and release
-second entry without duplication
+Scene-Provided Player
+Manager-Provisioned Player
+Session-scoped Slot participation
+configured default Actor
+contextual Actor preparation/materialization
+Activity restart and reentry
+Route exit and reentry
 ```
 
-Then create a separate Manager-Provisioned Route and scene using only the current package surfaces.
+Ainda sem fluxo completo de produto:
+
+```text
+Session-Persistent Logical Player
+public Session Leave
+explicit arbitrary Actor selection
+join Actor-less aguardando escolha
+Actor replacement after preparation
+disconnect/reconnect
+multiplayer Camera and Pause policy
+```
+
+Não simular essas features com singleton, busca global, manager consumidor ou uso direto de internals do package.
+
+# Critério de manutenção
+
+Ao atualizar uma demonstração:
+
+```text
+1. atualizar o README da própria demo;
+2. atualizar a tabela global somente se o status do modelo mudou;
+3. registrar jornada e limitações sem transformar observação em contrato;
+4. encaminhar problema técnico ao QAFramework;
+5. encaminhar solução reutilizável ao package;
+6. remover texto duplicado ou obsoleto no mesmo corte.
+```
+
+# Próximo trabalho de Player
+
+```text
+1. manter M06 e M07 como baselines congelados;
+2. montar Activity-owned Scene-Provided Player;
+3. demonstrar Dynamic Capacity e late join;
+4. provar dois Manager-Provisioned Players com devices explícitos;
+5. transformar Participation Policies em Activities compreensíveis;
+6. definir o corte oficial de seleção explícita de Actor antes da Demo 03 correspondente.
+```

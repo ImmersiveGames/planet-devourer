@@ -1,23 +1,28 @@
 # Demo 02 — Provisioned Players
 
-Esta pasta agrupa os modelos de Player do FIRSTGAME.
+**Status:** M06 e M07 demonstrados como baselines de consumidor  
+**Última validação principal:** 2026-08-06  
+**M08:** ainda não montado como demonstração dedicada  
+**Unity:** 6.5
 
-O escopo documentado neste arquivo está congelado no M06:
+A Demo 02 compara duas origens de Logical Player:
 
 ```text
-M06  Scene-Provided Player — concluído
-M07  Manager-Provisioned Player — fora deste corte documental
-M08  Participation Policies — fora deste corte documental
+M06 — Scene-Provided Logical Player
+  a cena já contém o Local Player Host e o Actor físico.
+
+M07 — Manager-Provisioned Logical Player
+  uma requisição explícita pede ao PlayerInputManager para criar o Host físico.
 ```
 
-Pastas posteriores podem existir no repositório, mas não devem ser usadas como prova de que M07 ou M08 estão concluídos.
+As duas variações convergem para o mesmo `PlayerSlotId` tipado e para a autoridade de participação da Session. Elas diferem em origem física, ownership e lifecycle.
 
-# Como executar o M06
+# 1. Como executar
 
 Ative:
 
 ```text
-Assets/_Project/Demo 02 - Provisioned Players/Demo02-GameApplication.asset
+Assets/_Project/Demo02/Demo02-GameApplication.asset
 ```
 
 em:
@@ -27,86 +32,11 @@ Assets/_Project/Settings/ImmersiveFramework/Resources/
 └── ImmersiveFrameworkSettings.asset
 ```
 
-A aplicação inicia por:
+A aplicação inicia pelo menu da Demo 02 e oferece entradas separadas para Scene-Provided e Manager-Provisioned.
 
-```text
-Assets/_Project/Demo 02 - Provisioned Players/Data/Demo02StartupMenu.asset
-```
+# 2. Configuração compartilhada
 
-Cena do menu:
-
-```text
-Assets/_Project/Demo 02 - Provisioned Players/Demo02StartMenu.unity
-```
-
-# Estrutura relevante ao M06
-
-```text
-Demo 02 - Provisioned Players/
-├── Demo02-GameApplication.asset
-├── Demo02StartMenu.unity
-├── Data/
-│   ├── Demo02StartupMenu.asset
-│   ├── SinglePlayerSlotProfile.asset
-│   ├── Actor_SceneProvidedPlayer.asset
-│   └── LocalProvisionedPlayer/
-│       ├── Activities/
-│       │   └── ActivityLocalPlayer.asset
-│       └── Routes/
-│           ├── RouteLocalPlayer.asset
-│           └── Profile/
-│               └── RouteLocalPlayerContentProfile.asset
-├── Prefabs/
-│   └── LocalProvisionedPlayer/
-│       ├── LocalPlayer_RoutesNavigation.prefab
-│       └── Actors/
-│           └── PlayerActor_SceneProvided.prefab
-├── Scenes/
-│   └── LocalProvisionedPlayer/
-│       ├── SceneLocalPlayer.unity
-│       └── Additive/
-│           └── SceneLocalPlayerAdd.unity
-└── Scripts/
-    └── LocalProvisionedPlayer/
-        └── SceneProvidedPlayerMovement.cs
-```
-
-A pasta histórica `LocalProvisionedPlayer` representa o M06 Scene-Provided Player. Não confunda esse nome com o fluxo Manager-Provisioned do M07.
-
-# M06 — Scene-Provided Player
-
-## O que o modelo demonstra
-
-```text
-A cena já contém o Player físico.
-A Activity não instancia esse Player.
-O framework admite a instância existente em um Slot configurado.
-O Logical Actor permanece scene-owned.
-O PlayerInput pertence ao Host técnico.
-O gameplay simples pertence ao jogo consumidor.
-```
-
-O modelo diferencia cinco conceitos:
-
-| Conceito | Responsabilidade |
-|---|---|
-| Player Slot | Assento configurado na Session |
-| Local Player Host | Objeto técnico que possui `PlayerInput` e admission evidence |
-| Actor Mount | Ponto explícito sob o Host onde o Logical Actor existe |
-| Logical Player Actor | Identidade/representação de gameplay admitida pela Activity |
-| Scene-Provided Player Composer | Intenção authorável que conecta Slot, Host, ActorProfile e Actor da cena |
-
-# Configuração de assets
-
-## GameApplication
-
-Asset:
-
-```text
-Assets/_Project/Demo 02 - Provisioned Players/Demo02-GameApplication.asset
-```
-
-Configuração relevante:
+`Demo02-GameApplication.asset` declara:
 
 ```text
 Application Name
@@ -115,176 +45,42 @@ Application Name
 Startup Route
   Demo02StartupMenu
 
-Local Player Slots
+Configured Local Player Slots
   SinglePlayerSlotProfile
+
+Initial Dynamic Capacity
+  1
+
+Initial Joining State
+  Closed
 
 Persistent Content
-  Shared_PersistentContent
-
-Validation Mode
-  Standard
+  Demo02 Persistent
 ```
 
-## Player Slot Profile
+O Slot configurado define o assento estável da Session e o `defaultActorProfile` usado nas variações atuais.
 
-Asset:
+Não usar `PlayerInput.playerIndex`, ordem de hierarquia ou nome de GameObject como `PlayerSlotId`.
 
-```text
-Assets/_Project/Demo 02 - Provisioned Players/Data/SinglePlayerSlotProfile.asset
-```
+# 3. Vocabulário canônico
 
-Configuração relevante:
+| Conceito | Responsabilidade |
+|---|---|
+| Player Slot | assento estável de participação configurado pela Game Application |
+| Logical Player | participante da Session associado a um Slot tipado |
+| Local Player Host | objeto físico Unity que normalmente possui `PlayerInput` |
+| Actor Profile | intenção authoring para identidade/composição de Actor |
+| Logical Actor | identidade runtime correlacionada ao Logical Player |
+| Actor Mount | ponto físico explícito onde o Actor é materializado ou adotado |
+| Activity participation | projeção e requisitos aplicados por uma Activity |
 
-```text
-Player Slot ID
-  player.1
+Um Logical Player não implica automaticamente que o Actor já foi escolhido, preparado, materializado ou liberado para gameplay. Na variação M07 atual, porém, o `defaultActorProfile` é preparado pelo lifecycle após o Join válido.
 
-Display Name
-  Player 1
+# 4. M06 — Scene-Provided Logical Player
 
-Default Actor Profile
-  Actor_SceneProvidedPlayer
-```
+## 4.1 Intenção de produto
 
-Use IDs próprios ao replicar. Não copie `player.1` se ele colidir com a identidade do projeto consumidor.
-
-## Actor Profile
-
-Asset:
-
-```text
-Assets/_Project/Demo 02 - Provisioned Players/Data/Actor_SceneProvidedPlayer.asset
-```
-
-Configuração relevante:
-
-```text
-Actor Kind
-  Player
-
-Actor Role
-  Protagonist
-
-Logical Actor Host Prefab
-  PlayerActor_SceneProvided.prefab
-```
-
-O `ActorProfile` declara a composição lógica canônica; ele não instancia o prefab por conta própria neste fluxo.
-
-## Route
-
-Asset:
-
-```text
-Assets/_Project/Demo 02 - Provisioned Players/Data/LocalProvisionedPlayer/Routes/
-└── RouteLocalPlayer.asset
-```
-
-Configuração relevante:
-
-```text
-Route Name
-  Scene-Provided Player
-
-Primary Scene
-  SceneLocalPlayer
-
-Route Content Profile
-  RouteLocalPlayerContentProfile
-
-Startup Activity
-  ActivityLocalPlayer
-```
-
-## Route Content Profile
-
-Asset:
-
-```text
-Assets/_Project/Demo 02 - Provisioned Players/Data/LocalProvisionedPlayer/Routes/Profile/
-└── RouteLocalPlayerContentProfile.asset
-```
-
-Declara:
-
-```text
-SceneLocalPlayerAdd
-  Required
-  Route-owned
-```
-
-Essa cena contém a navegação compartilhada, incluindo `Back To Menu`. Como pertence à Route, permanece disponível durante qualquer Activity futura dentro da mesma Route.
-
-## Activity
-
-Asset:
-
-```text
-Assets/_Project/Demo 02 - Provisioned Players/Data/LocalProvisionedPlayer/Activities/
-└── ActivityLocalPlayer.asset
-```
-
-Configuração relevante:
-
-```text
-Projection Mode
-  Explicit Slots
-
-Explicit Slots
-  SinglePlayerSlotProfile
-
-Zero Participant Policy
-  Rejected
-
-Requirement Level
-  Logical Actors Prepared
-
-Activity Content Profile
-  None
-```
-
-O Player está na Primary Scene da Route; por isso a Activity não precisa carregar outra cena para possuí-lo. A Activity opera a participação lógica da instância existente.
-
-# Prefab canônico do Logical Actor
-
-Prefab:
-
-```text
-Assets/_Project/Demo 02 - Provisioned Players/Prefabs/LocalProvisionedPlayer/Actors/
-└── PlayerActor_SceneProvided.prefab
-```
-
-Hierarquia funcional:
-
-```text
-PlayerActor_SceneProvided
-├── PlayerActorDeclaration
-├── CharacterController
-├── SceneProvidedPlayerMovement
-└── Visual
-    └── modelo do personagem
-```
-
-Regras:
-
-```text
-não adicionar PlayerInput ao Actor;
-não desempacotar a instância usada na cena;
-manter exatamente um PlayerActorDeclaration canônico;
-manter o prefab atribuído no ActorProfile;
-movimento e visual são responsabilidade do jogo consumidor.
-```
-
-# Hierarquia da cena
-
-Cena:
-
-```text
-Assets/_Project/Demo 02 - Provisioned Players/Scenes/LocalProvisionedPlayer/
-└── SceneLocalPlayer.unity
-```
-
-Hierarquia relevante:
+Use quando a Route ou Activity já contém a composição física do Player.
 
 ```text
 SceneProvidedPlayer
@@ -292,367 +88,465 @@ SceneProvidedPlayer
 ├── LocalPlayerHostAuthoring
 ├── SceneLocalPlayerAdmissionAuthoring
 └── ActorMount
-    └── PlayerActor_SceneProvided (prefab instance)
-        ├── PlayerActorDeclaration
-        ├── CharacterController
-        ├── SceneProvidedPlayerMovement
-        └── Visual
+    └── PlayerActor_SceneProvided
 ```
 
-## Root `SceneProvidedPlayer`
+O Actor é scene-owned. O framework valida e admite a composição existente; ele não deve instanciar silenciosamente um Actor duplicado.
 
-### PlayerInput
+## 4.2 Assets relevantes
 
 ```text
-Actions
-  InputActionAsset do projeto
-
-Default Action Map
-  mapa que contém Move
+Assets/_Project/Demo02/Data/LocalProvisionedPlayer/
+Assets/_Project/Demo02/Prefabs/LocalProvisionedPlayer/
+Assets/_Project/Demo02/Scenes/LocalProvisionedPlayer/
+Assets/_Project/Demo02/Scripts/LocalProvisionedPlayer/
 ```
 
-Deve existir exatamente um `PlayerInput` em toda a hierarquia do Host e ele deve estar no mesmo GameObject de `LocalPlayerHostAuthoring`.
+A pasta histórica `LocalProvisionedPlayer` representa o caminho Scene-Provided do M06. Não interpretar esse nome como o M07 Manager-Provisioned.
 
-### LocalPlayerHostAuthoring
+## 4.3 Authoring principal
+
+O Host técnico deve possuir:
 
 ```text
-Player Input
-  PlayerInput do mesmo root
-
-Actor Mount
-  filho ActorMount
+um único PlayerInput no mesmo root de LocalPlayerHostAuthoring;
+ActorMount como child explícito;
+um único PlayerActorDeclaration sob o ActorMount;
+SceneLocalPlayerAdmissionAuthoring configurado com Slot, ActorProfile e Actor da cena.
 ```
 
-O Host é técnico:
+Sequência authoring:
 
 ```text
-possui PlayerInput;
-recebe admission evidence;
-conhece o Slot joined;
-não seleciona ActorProfile;
-não executa gameplay.
+1. configurar PlayerSlotProfile e ActorProfile;
+2. colocar o Host e o Actor canônico na cena;
+3. configurar o Scene-Provided Player Composer;
+4. executar Apply / Rebuild;
+5. executar Validate;
+6. configurar a Activity com Explicit Slots e Logical Actors Prepared.
 ```
 
-### SceneLocalPlayerAdmissionAuthoring
+`Apply / Rebuild` deve ser idempotente. Ele grava evidence tipada, não executa gameplay e não atribui identidade runtime em Edit Mode.
 
-No Inspector aparece como `Scene-Provided Player` / `Scene-Provided Player Composer`, conforme a versão do package.
-
-Configuração:
+## 4.4 Fluxo runtime
 
 ```text
-Player Slot Profile
-  SinglePlayerSlotProfile
-
-Actor Profile
-  Actor_SceneProvidedPlayer
-
-Scene Logical Player Actor
-  PlayerActorDeclaration da instância sob ActorMount
-
-Admission Timing
-  On Activity Enter
+Route/Activity entra
+→ composer resolve Host, Slot e Actor authored
+→ framework admite o Scene-Provided Logical Player
+→ Actor existente é adotado
+→ PlayerInput evidence é vinculada
+→ Logical Actors Prepared é satisfeito
+→ gameplay fica disponível
 ```
 
-### ActorMount
+Saída:
 
 ```text
-filho do Host;
-não é o próprio root;
-não contém outro PlayerInput;
-contém exatamente um PlayerActorDeclaration;
-contém uma instância do prefab definido pelo ActorProfile.
+Activity/Route sai
+→ admission e evidence contextual são liberadas
+→ unload da cena destrói os objetos scene-owned
 ```
 
-# Apply / Rebuild e Validate
+Reentrada cria nova ocorrência e nova admissão, sem Actor duplicado ou Slot stale.
 
-Depois de configurar o composer:
+## 4.5 Evidência aceita do M06
 
 ```text
-1. Apply / Rebuild
-2. Validate
+PASS — Host scene-provided admitido
+PASS — Slot estável atribuído
+PASS — Actor existente adotado
+PASS — movement disponível
+PASS — release na saída
+PASS — reentrada válida
+PASS — Activity Restart readmite sem duplicação
+PASS — Apply / Rebuild e Validate coerentes
 ```
 
-`Apply / Rebuild` não cria gameplay nem atribui identidade runtime. Ele confirma que o Actor da cena vem do prefab canônico do `ActorProfile` e grava evidence tipada no composer.
+# 5. M07 — Manager-Provisioned Logical Player
 
-Resultado esperado na primeira aplicação:
+## 5.1 Intenção de produto
+
+Use quando uma requisição explícita deve criar o Local Player Host por meio do `PlayerInputManager`.
+
+Assets principais:
 
 ```text
-status
-  Valid
+Assets/_Project/Demo02/Data/ManagerProvisionedPlayer/
+├── Activities/ActivityManagerPlayer.asset
+├── Commands/Manager Provisioned Player Command Channel.asset
+└── Routes/RouteManagerPlayer.asset
 
-succeeded
-  True
+Assets/_Project/Demo02/Prefabs/ManagerProvisionedPlayer/Player/
+└── Player_ManagerProvisioned.prefab
 
-createdEvidence
-  True
+Assets/_Project/Demo02/Scenes/ManagerProvisionedPlayer/
+├── SceneManagerPlayer.unity
+├── Additive/SceneManagerPlayerMenu.unity
+└── Activity/SceneManagerPlayerActivity.unity
 
-updatedEvidence
-  True
+Assets/_Project/Demo02/Scripts/ManagerProvisionedPlayer/Commands/
+├── ManagerProvisionedPlayerCommandChannel.cs
+├── ManagerProvisionedPlayerCommandEmitter.cs
+└── ManagerProvisionedPlayerCommandReceiver.cs
 ```
 
-Uma segunda aplicação sem mudança deve ser idempotente:
+## 5.2 Composição persistente
+
+A composição persistente expõe os endpoints oficiais necessários:
 
 ```text
-createdEvidence
-  False
-
-updatedEvidence
-  False
+PlayerInputManager
+LocalPlayerProvisioningAuthoring
+LocalPlayerProvisioningHostRegistration
+LocalPlayerActorSelectionRequestAuthoring
+ManagerProvisionedPlayerCommandReceiver
 ```
 
-Em `Advanced / Debug`:
+O prefab do Host contém:
 
 ```text
-Typed Actor Evidence
-  true
-
-Evidence Actor Profile
-  Actor_SceneProvidedPlayer
-
-Evidence Actor Prefab
-  PlayerActor_SceneProvided
+PlayerInput
+LocalPlayerHostAuthoring
+ActorMount
 ```
 
-# Movimento do consumidor
+O Host não executa gameplay. O Actor materializado sob o mount contém o comportamento consumidor.
 
-Script:
+## 5.3 Fluxo canônico do M07
 
 ```text
-Assets/_Project/Demo 02 - Provisioned Players/Scripts/LocalProvisionedPlayer/
-└── SceneProvidedPlayerMovement.cs
+Open Joining
+→ Request Join
+→ PlayerInputManager cria o Host
+→ framework reserva/admite o Slot configurado
+→ lifecycle prepara o default Actor do Slot
+→ Actor é materializado sob ActorMount
+→ readiness da Activity conclui
+→ Loading fecha
+→ movement fica disponível
 ```
 
-O script lê a action `Move` do `PlayerInput` injetado no `PlayerActorDeclaration` após a admissão.
-
-Ele não deve:
+Controles primários corretos:
 
 ```text
-usar Keyboard.current como autoridade;
-procurar o Host por nome;
-ativar actions desabilitadas pelo framework;
-criar fallback quando não existe PlayerInput;
-executar gameplay no authoring component.
+Open Joining
+Request Join
+Close Joining
+Restart Activity
+Back To Menu
 ```
 
-O `CharacterController` e a gravidade simples são suficientes para a demonstração. Câmera seguindo o Player pertence ao M10, não ao M06.
-
-# Navegação Route-owned
-
-Cena:
+Controles que permanecem desativados nesta variação:
 
 ```text
-Assets/_Project/Demo 02 - Provisioned Players/Scenes/LocalProvisionedPlayer/Additive/
-└── SceneLocalPlayerAdd.unity
+Select Default Actor
+Request Join + Select Default Actor
 ```
 
-Conteúdo principal:
+Motivo:
 
 ```text
-Canvas
-└── LocalPlayer_RoutesNavigation
-    └── Back To Menu
+SinglePlayerSlotProfile já declara defaultActorProfile;
+Join válido admite o Host;
+lifecycle da Activity prepara/materializa o Actor configurado;
+um pedido posterior de seleção é redundante e recebe RejectedLogicalActorAlreadyPrepared.
 ```
 
-Essa cena pertence ao `RouteLocalPlayerContentProfile`. Não a declare também em um `ActivityContentProfile`.
+A correção de produto é não ensinar o comando redundante. O runtime deve continuar rejeitando explicitamente a operação inválida.
 
-# Fluxo runtime esperado
+## 5.4 Hierarquia esperada após Join
 
 ```text
-Demo02StartMenu
-→ solicita RouteLocalPlayer
-→ SceneLocalPlayer é carregada
-→ SceneLocalPlayerAdd é carregada como Route content
-→ ActivityLocalPlayer entra
-→ composer solicita admissão
-→ SinglePlayerSlotProfile é reservado/joined
-→ Actor da cena é adotado
-→ PlayerInput evidence é vinculada ao Actor
-→ requirement Logical Actors Prepared é satisfeito
-→ Activity fica Ready
-→ movimento funciona
+DontDestroyOnLoad
+└── Immersive Framework Runtime
+    └── Player Activity Readiness
+        └── Player_ManagerProvisioned(Clone)
+            └── ActorMount
+                └── PlayerActor_SceneProvided
 ```
 
-No Inspector durante Play Mode:
+Contagens esperadas:
 
 ```text
-Runtime
-  Ready
-
-Admission
-  Admitted
-
-Host Joined
-  true
-
-Active Admission
-  true
-
-Actor Ownership
-  ExternalSceneOwned
+Local Player Hosts = 1
+ActorMounts = 1
+physical Actors = 1
 ```
 
-# Saída e reentrada
+O nome `PlayerActor_SceneProvided` é um finding de nomenclatura; não altera a funcionalidade.
 
-Ao selecionar `Back To Menu`:
+# 6. Lifetime de Session e Activity
+
+## 6.1 Session-scoped
 
 ```text
-Activity sai
-→ participant recebe Exit
-→ admissão é liberada
-→ Slot deixa de estar Joined
-→ conteúdo Route-owned é descarregado
-→ Primary Scene é substituída pelo menu
+Player Slot joined;
+Manager-Provisioned Local Player Host;
+PlayerInput/device correlation;
+Joining state;
+seleção/default Actor associada ao participante.
 ```
 
-Na reentrada:
+## 6.2 Activity-contextual
 
 ```text
-nova instância de cena
-→ nova ocorrência da Activity
-→ nova admissão válida
-→ sem Actor duplicado
-→ sem Slot stale
-→ movimento volta a funcionar
+readiness contribution;
+Actor materialization contextual;
+gameplay state da ocorrência;
+Activity content;
+Loading/gates da transição.
 ```
 
-# Como replicar em outro projeto
-
-## Assets
-
-Crie ou identifique:
+Consequências demonstradas:
 
 ```text
-GameApplicationAsset
-PlayerSlotProfile
-ActorProfile
-RouteAsset
-RouteContentProfileAsset
-ActivityAsset
-Logical Actor Host prefab
+Close Joining não remove Player admitido;
+Activity Restart não exige novo Join;
+Route exit/reentry pode preservar o Player da Session;
+saída durante espera cancela a ocorrência, mas não fecha Joining automaticamente;
+Back To Menu não é Session Leave.
 ```
 
-## Cenas
+O framework ainda não possui um fluxo público completo de `Session Leave` demonstrado no FIRSTGAME.
 
-Crie ou identifique:
+# 7. Jornadas manuais validadas do M07
+
+## 7.1 Matriz
+
+| Caso | Resultado |
+|---|---|
+| Runtime com um Slot, capacity 1 e Joining fechado | Passed |
+| Request Join enquanto fechado | `RejectedJoiningClosed`, sem estado parcial |
+| Open Joining após rejeição | Passed |
+| Request Join autorizado | Host, Slot, `PlayerInput` e ActorMount correlacionados |
+| Default Actor lifecycle | Actor aparece sem segundo comando |
+| Movement | Passed |
+| Segundo Request Join | rejeição explícita por capacidade, sem duplicação |
+| Close Joining após admissão | Player permanece operacional |
+| Activity final readiness | pronta sem blocking issues |
+| Activity Restart | clear/reentry sem novo Join |
+| Restart position | Actor retorna ao ponto inicial |
+| Restart hierarchy | um Host, um mount, um Actor |
+| Restart input | movement restaurado |
+| Route exit | conteúdo e roots contextuais liberados |
+| Route return após Join | Player da Session preservado; Actor retorna sem novo Join |
+| Exit while waiting | espera cancelada, Loading/gates liberados |
+| Joining após saída da espera | permanece aberto |
+| Reentrada após saída da espera | Request Join direto funciona |
+
+## 7.2 Rejeição e recuperação
 
 ```text
-menu;
-Primary Scene com o Scene-Provided Player;
-cena Route-owned para navegação compartilhada, se necessária.
+Request Join com Joining fechado
+→ rejeição explícita
+→ Open Joining
+→ Request Join
+→ Actor aparece
+→ movement funciona
 ```
 
-## Montagem
+Não houve fallback silencioso, Host parcial ou transação envenenada.
+
+## 7.3 Happy path e proteção de capacidade
 
 ```text
-1. Adicione o Slot ao GameApplication.
-2. Aponte o default ActorProfile do Slot.
-3. Aponte o Logical Actor Host prefab no ActorProfile.
-4. Coloque o Host técnico na Primary Scene.
-5. Adicione PlayerInput e LocalPlayerHostAuthoring no mesmo root.
-6. Crie ActorMount como filho explícito.
-7. Instancie o prefab canônico do Actor sob ActorMount.
-8. Adicione SceneLocalPlayerAdmissionAuthoring ao root.
-9. Configure Slot, ActorProfile, Actor e Admission Timing.
-10. Execute Apply / Rebuild e Validate.
-11. Configure a Activity com Explicit Slots + Logical Actors Prepared.
-12. Teste entrada, movimento, saída e reentrada.
+Open Joining
+→ Request Join
+→ Host + Actor
+→ movement
+→ Request Join novamente
+→ rejeição por capacidade
+→ hierarquia continua com um Host e um Actor
 ```
 
-# Erros comuns
-
-## `MissingProfileEvidence`
-
-Causa normal:
+## 7.4 Activity Restart
 
 ```text
-Validate foi executado antes de Apply / Rebuild;
-ou o Actor não está ligado a um prefab source.
+Join válido
+→ mover Actor
+→ Restart Activity
+→ Actor retorna ao spawn
+→ movement funciona
+→ sem duplicação
 ```
 
-Ação:
+A prova manual confirma o contrato consumidor. Ela não afirma identidade exata da instância Unity antes/depois porque não foi registrado um occurrence identifier do Actor.
+
+## 7.5 Route exit e reentrada
 
 ```text
-confirme a instância do prefab;
-execute Apply / Rebuild;
-depois execute Validate.
+Join válido
+→ Back To Menu
+→ entrar no M07 novamente
+→ nenhum novo Join
+→ Actor retorna
+→ movement funciona
 ```
 
-## `IncompatibleProfileEvidence`
+Isso prova preservação do participante da Session e recomposição contextual da Activity.
 
-Verifique:
+## 7.6 Saída durante espera
 
 ```text
-ActorProfile.LogicalActorHostPrefab;
-prefab source da instância da cena;
-Scene Logical Player Actor selecionado;
-instância não desempacotada.
+entrar no M07
+→ Open Joining
+→ não executar Join
+→ Back To Menu durante a espera
+→ entrar novamente
+→ Request Join diretamente
 ```
 
-Não compare apenas nomes: dois prefabs diferentes podem possuir o mesmo nome.
+A nova Route substitui a autoridade anterior, a espera é cancelada, Loading/gates são liberados e a próxima transação válida funciona.
 
-## Activity fica NotReady
+# 8. Loading e readiness
 
-Verifique:
+Sequência observada:
 
 ```text
-Slot está no GameApplication;
-Activity projeta o Slot correto;
-composer está no mesmo root do Host;
-ActorProfile é Player / Protagonist;
-Actor está sob ActorMount;
-Apply / Rebuild e Validate passaram;
-nenhum erro de admissão aparece no diagnóstico.
+Activity entry começa
+→ cenas técnicas carregam
+→ Activity aguarda Player obrigatório
+→ Slot entra
+→ Logical Actor é preparado
+→ Actor físico é materializado
+→ contribuição de readiness fica Ready
+→ aggregate Activity fica Ready
+→ Loading fecha
+→ gameplay gate libera
 ```
 
-## Mensagem `Local Player provisioning is not configured`
-
-No M06 isso é esperado. Ela se refere ao fluxo Manager-Provisioned, que não é usado pelo Scene-Provided Player.
-
-# Critério de aceite do M06
+Classificação da evidência:
 
 ```text
-[ ] GameApplication possui o Slot
-[ ] Slot possui default ActorProfile
-[ ] ActorProfile aponta para o prefab canônico
-[ ] cena contém um único Host
-[ ] Host contém um único PlayerInput
-[ ] ActorMount é explícito
+comportamento visual: confirmado
+resultado final: confirmado
+correlação temporal completa nos logs: parcial
+```
+
+Scripts FIRSTGAME não devem localizar o Loading adapter, escrever progresso, recalcular readiness ou usar parsing de logs como autoridade.
+
+# 9. Findings de UX e produto
+
+| ID | Finding | Severidade | Destino / ação |
+|---|---|---:|---|
+| M07-UX-01 | `Select Default Actor` é redundante após o Join atual | Média | manter desativado no M07 |
+| M07-UX-02 | `Request Join + Select Default Actor` ensina sequência incorreta | Média | manter desativado |
+| M07-DIAG-01 | Rejeições esperadas são apresentadas como `Debug.LogError` | Baixa | reclassificar depois sem esconder status tipado |
+| M07-DIAG-02 | Route replacement intencional durante espera parece falha | Média | revisar vocabulário package/presentation |
+| M07-DIAG-03 | Sequência Loading/readiness é mais clara visualmente que nos logs | Média | melhorar observabilidade no package |
+| M07-DIAG-04 | Restart sem Reset Subjects produz warning não bloqueante | Baixa | registrar; não criar subject artificial |
+| M07-NAME-01 | Actor compartilhado tem nome Scene-Provided no M07 | Baixa | normalizar nome em cleanup futuro |
+| M07-AUTH-01 | Setup exige vários componentes técnicos | Média | acumular evidência antes de criar Recipe/Composer |
+| M07-DOC-01 | README antigo congelava o escopo no M06 | Alta | corrigido por esta consolidação |
+
+Classificação recomendada para comandos:
+
+| Resultado | Apresentação |
+|---|---|
+| operação bem-sucedida | Info / success |
+| rejeição de regra esperada | Info ou Warning com status tipado |
+| binding ausente/configuração inválida | Error |
+| exception/estado impossível | Error |
+
+# 10. Limites do baseline M07
+
+Incluído:
+
+```text
+um Slot configurado;
+capacity 1;
+Joining inicialmente fechado;
+Host Manager-Provisioned;
+default Actor;
+movement;
+Activity Restart;
+Route exit/reentry;
+exit while waiting.
+```
+
+Não avaliado:
+
+```text
+Camera;
+Pause;
+múltiplos Players;
+escolha explícita entre Actors;
+Session Leave;
+disconnect/reconnect;
+split-screen.
+```
+
+# 11. Features bloqueadas por package
+
+Exigem contrato/superfície oficial antes de demonstração canônica:
+
+```text
+seleção explícita entre ActorProfiles arbitrários;
+Join que permanece Actor-less aguardando escolha;
+public Session Leave;
+Actor replacement após preparação;
+Session-Persistent Logical Player;
+disconnect/reconnect;
+multiplayer Camera e Pause policy.
+```
+
+FIRSTGAME pode definir a UX desejada, mas não deve criar uma autoridade runtime paralela.
+
+# 12. Próximas demonstrações
+
+Ordem recomendada:
+
+```text
+1. Activity-owned Scene-Provided Player;
+2. Dynamic Capacity e late join;
+3. dois Manager-Provisioned Players com devices explícitos;
+4. Participation Policies como Activities compreensíveis;
+5. Demo de seleção explícita de Actor após corte oficial do package.
+```
+
+A próxima variação de seleção deve separar claramente:
+
+```text
+Open Joining
+→ Request Join
+→ Slot joined sem Actor preparado
+→ apresentar opções
+→ selecionar ActorProfile
+→ confirmar
+→ preparar/materializar Actor
+```
+
+Esse fluxo não faz parte do M07 atual.
+
+# 13. Checklist de aceite
+
+## M06
+
+```text
+[ ] Slot e default ActorProfile configurados
+[ ] Host scene-provided possui um PlayerInput
+[ ] ActorMount explícito
 [ ] Actor é instância do prefab canônico
-[ ] Apply / Rebuild é válido e idempotente
-[ ] Validate é válido
-[ ] Activity usa Explicit Slots
-[ ] requirement é Logical Actors Prepared
-[ ] admissão ocorre no Activity Enter
-[ ] Activity fica Ready
-[ ] Actor recebe PlayerInput
-[ ] movimento funciona
-[ ] saída libera a admissão
-[ ] reentrada não duplica Slot, Host ou Actor
-[ ] nenhum warning/error bloqueante
+[ ] Apply / Rebuild idempotente
+[ ] Validate válido
+[ ] Activity usa Explicit Slots + Logical Actors Prepared
+[ ] entrada, movement, saída e reentrada funcionam
+[ ] sem duplicação
 ```
 
-# O que copiar e o que recriar
-
-Pode ser reutilizado como referência:
+## M07
 
 ```text
-hierarquia Host → ActorMount → Actor;
-separação entre Host técnico e gameplay;
-sequência de Apply / Rebuild e Validate;
-script simples de movimento;
-padrão de navegação Route-owned.
+[ ] Joining começa fechado
+[ ] Request Join fechado é rejeitado explicitamente
+[ ] Open Joining habilita a transação
+[ ] Join cria um Host e um Actor
+[ ] default Actor não exige seleção separada
+[ ] segundo Join não duplica objetos
+[ ] Close Joining não remove Player existente
+[ ] Restart recompõe Actor sem novo Join
+[ ] Route reentry preserva participação da Session
+[ ] exit while waiting libera Loading e gates
+[ ] nenhum blocking issue no happy path
 ```
-
-Deve ser recriado no projeto consumidor:
-
-```text
-IDs de Slot e ActorProfile;
-InputActionAsset;
-GameApplication;
-Routes e Activities;
-modelo visual;
-paths de cenas;
-Persistent Content adequado ao projeto.
-```
-
-Não copie `ProjectSettings`, GUIDs ou IDs funcionais apenas para fazer a demonstração “passar”.
