@@ -89,5 +89,11 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Project/Demo03/Scenes/Persistent/SceneDemo03Persistent.unity
     guid: 0e7d472f71fd7a043aece92fa3d5b535
+  - enabled: 1
+    path: Assets/_Project/Demo03/Scenes/LocalMultiplayer/SceneLocalMultiplayer.unity
+    guid: bba24dc841d163e4385ad86cccee4a4a
+  - enabled: 1
+    path: Assets/_Project/Demo03/Scenes/LocalMultiplayer/SceneLocalMultiplayer_Navegation.unity
+    guid: bf1445242cb67204581079c9f368fd63
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
