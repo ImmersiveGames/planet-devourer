@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6d702c1ba364e70ad76a85eb5f1b842, type: 3}
+  m_Name: Activity_MinimalGame
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.ActivityAsset
+  activityId: 660b0f8869e44323b702044a65e98191
+  activityName: Minimal Game
+  description: 
+  playerParticipationProjectionMode: 20
+  playerParticipationZeroParticipantPolicy: 10
+  playerParticipationExplicitSlotProfiles:
+  - {fileID: 11400000, guid: 74a665a54f2420e448955b454bb29b06, type: 2}
+  playerParticipationRequirementLevel: 30
+  activityContentProfile: {fileID: 0}
+  activityEntryReadinessPolicy: 0
+  visualTransitionMode: 0
+  transitionGateMode: 10

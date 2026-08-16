@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: GameApplication_MinimalGame
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.GameApplicationAsset
   applicationName: Minimal Game
-  startupRoute: {fileID: 0}
-  playerSessionEnabled: 0
-  defaultPlayerSessionProfile: {fileID: 0}
+  startupRoute: {fileID: 11400000, guid: 5ffc60b9e0658e0409ba446fd5d3d6bc, type: 2}
+  playerSessionEnabled: 1
+  defaultPlayerSessionProfile: {fileID: 11400000, guid: d519d08de0ffc0445acea81b5d88cd14, type: 2}
   playerActorSelectionDuplicatePolicy: 10
   progressionSaveEnabled: 0
   defaultProgressionSaveProfile: {fileID: 0}
   persistentContent:
-    containerScene: {fileID: 0}
+    containerScene: {fileID: 102900000, guid: fdb0c67fbbd9f0845b46422294079fb4, type: 3}
   validationMode: 1
