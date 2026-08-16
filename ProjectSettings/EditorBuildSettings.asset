@@ -1,0 +1,102 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/_Project/Scenes/Shared/Shared_PersistentContent.unity
+    guid: aae12116c7a7e494d898c421ecb024b9
+  - enabled: 1
+    path: Assets/_Project/Demo01/Scenes/Routes and Activities/RoutesContents/Sample_Environment.unity
+    guid: 7ce94dc53fc9b924898f33010881cedf
+  - enabled: 1
+    path: Assets/_Project/Demo01/Scenes/Demo01StartScene.unity
+    guid: 66436f17c06d21943b1f1cd0346b25a5
+  - enabled: 1
+    path: Assets/_Project/Scenes/Shared/Shared_RouteMenu.unity
+    guid: 641ee41999360b44ebcfa3dd110a669e
+  - enabled: 1
+    path: Assets/_Project/Demo01/Scenes/Routes and Activities/RoutesContents/Additives/Sample_Add_Fields.unity
+    guid: 2daf86354c5b98040958aac2c299fa42
+  - enabled: 1
+    path: Assets/_Project/Demo01/Scenes/Routes and Activities/RoutesContents/Additives/Sample_Add_Forest.unity
+    guid: a0b71624384a5ca43ab172a4340d3418
+  - enabled: 1
+    path: Assets/_Project/Demo01/Scenes/Routes and Activities/ActivitiesContents/SampleChickens.unity
+    guid: ab23e2951ca3b9f438c158baba0654f7
+  - enabled: 1
+    path: Assets/_Project/Demo01/Scenes/Routes and Activities/ActivitiesContents/SampleCows.unity
+    guid: c548bf72d35529248910160ff8c62ae1
+  - enabled: 1
+    path: Assets/_Project/Demo01/Scenes/Activity Readiness/Activity_Readiness.unity
+    guid: eba08335e2f480a4a99bb38180157947
+  - enabled: 1
+    path: Assets/_Project/Demo01/Scenes/Activity Readiness/ActivitiesContent/Activity_Readiness_Add.unity
+    guid: c87843095c0dc71418e3c22cd1895de3
+  - enabled: 1
+    path: Assets/_Project/Demo01/Scenes/Activity Readiness/ActivityReadinessMenu.unity
+    guid: 9ae35639e6300164f909dc3a8a0ab214
+  - enabled: 1
+    path: Assets/_Project/Demo01/Scenes/Activity Readiness/Activity_Readiness_Intermission.unity
+    guid: 7211720f9d21bc84aa305c837dcf8f0f
+  - enabled: 1
+    path: Assets/_Project/Demo02/Demo02StartMenu.unity
+    guid: 133bb9a0c8c72644da1822f46589bb09
+  - enabled: 1
+    path: Assets/_Project/Demo02/Scenes/LocalProvisionedPlayer/SceneLocalPlayer.unity
+    guid: 482ea406537f0d1418c5a77a4cc4380f
+  - enabled: 1
+    path: Assets/_Project/Demo02/Scenes/ManagerProvisionedPlayer/SceneManagerPlayer.unity
+    guid: 3d223c75488b1b14297f12e395943322
+  - enabled: 1
+    path: Assets/_Project/Demo02/Scenes/LocalProvisionedPlayer/Additive/SceneLocalPlayerAdd.unity
+    guid: 7912cff07e28cfe4e8591e5fa4323d68
+  - enabled: 1
+    path: Assets/_Project/Demo02/Scenes/Participation Policies/SceneParticipationPolices.unity
+    guid: 81a05e11a83fc314987eb6a4a0bee870
+  - enabled: 1
+    path: Assets/_Project/Demo02/Scenes/Persistent/Demo02_PersistentContent.unity
+    guid: 13f0b6ad18df9c644843545934ba16f9
+  - enabled: 1
+    path: Assets/_Project/Demo02/Scenes/ManagerProvisionedPlayer/Additive/SceneManagerPlayerMenu.unity
+    guid: 1a8eb19d11ae2a243b57572617316ca3
+  - enabled: 1
+    path: Assets/_Project/Demo01/Scenes/Activity Readiness/ActivitiesContent/Activity_Readiness_WaitVisible.unity
+    guid: 8dfcd76294eb0be4794dad93d07f9873
+  - enabled: 1
+    path: Assets/_Project/Demo01/Scenes/Activity Readiness/ActivitiesContent/Activity_Readiness_WaitCovered.unity
+    guid: b62dcc47ea3df5c42bfb103b6115bee2
+  - enabled: 1
+    path: Assets/_Project/Demo02/Scenes/ManagerProvisionedPlayer/Activity/SceneManagerPlayerActivity.unity
+    guid: 05b23d1911abf91408a7e498391fc3f0
+  - enabled: 1
+    path: Assets/_Project/Demo02/Scenes/ActivityOwnedPlayer/Route/SceneActivityOwnedPlayerEnvironment.unity
+    guid: 7b890cf1f9604f34db6ae936889b161b
+  - enabled: 1
+    path: Assets/_Project/Demo02/Scenes/ActivityOwnedPlayer/Route/SceneActivityOwnedPlayerNavigation.unity
+    guid: 2c437fce8e291904897c844255492343
+  - enabled: 1
+    path: Assets/_Project/Demo02/Scenes/ActivityOwnedPlayer/Activities/SceneActivityOwnedPlayer.unity
+    guid: e55b3511e20984944b7a7cc4deccca05
+  - enabled: 1
+    path: Assets/_Project/Demo02/Scenes/ActivityOwnedPlayer/Activities/SceneActivityOwnedPlayerIntermission.unity
+    guid: 44992316fb888394ab449beb7659945e
+  - enabled: 1
+    path: Assets/_Project/Demo03/Demo03StartMenu.unity
+    guid: 5c270a0f3a5c0ee408bd590ac6155e08
+  - enabled: 1
+    path: Assets/_Project/Demo03/Scenes/Persistent/SceneDemo03Persistent.unity
+    guid: 0e7d472f71fd7a043aece92fa3d5b535
+  - enabled: 1
+    path: Assets/_Project/Demo03/Scenes/LocalMultiplayer/Route/SceneLocalMultiplayerEnvironment.unity
+    guid: bba24dc841d163e4385ad86cccee4a4a
+  - enabled: 1
+    path: Assets/_Project/Demo03/Scenes/LocalMultiplayer/Route/SceneLocalMultiplayerNavigation.unity
+    guid: bf1445242cb67204581079c9f368fd63
+  - enabled: 1
+    path: Assets/_Project/Demo03/Scenes/LocalMultiplayer/Activities/SceneLocalMultiplayerActivity.unity
+    guid: d1828e548d7e5b84ca4b9d1db5e54be2
+  m_configObjects:
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

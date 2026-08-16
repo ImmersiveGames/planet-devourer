@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6d702c1ba364e70ad76a85eb5f1b842, type: 3}
+  m_Name: Activity_LocalMultiplayer
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.ActivityAsset
+  activityId: c7f600838ced4940bfe81ffd8b03a764
+  activityName: Local Multiplayer Activity
+  description: Waits for both configured local Player Slots and prepares their Logical
+    Actors.
+  playerParticipationProjectionMode: 20
+  playerParticipationZeroParticipantPolicy: 10
+  playerParticipationExplicitSlotProfiles:
+  - {fileID: 11400000, guid: c1e865ed27b0e1949abacfb13d9627e9, type: 2}
+  - {fileID: 11400000, guid: 1762e7ee6187cdc4dae3da8490e95d8a, type: 2}
+  playerParticipationRequirementLevel: 30
+  activityContentProfile: {fileID: 11400000, guid: aba57fd7f986c5c469991da98943fd67, type: 2}
+  activityEntryReadinessPolicy: 20
+  visualTransitionMode: 20
+  transitionGateMode: 30
