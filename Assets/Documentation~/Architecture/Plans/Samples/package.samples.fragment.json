@@ -1,0 +1,29 @@
+{
+  "samples": [
+    {
+      "displayName": "Getting Started",
+      "description": "Minimal coherent Immersive Framework application.",
+      "path": "Samples~/GettingStarted"
+    },
+    {
+      "displayName": "Game Flow",
+      "description": "Route, Activity, transitions, loading/readiness and contextual Camera/Audio flow.",
+      "path": "Samples~/GameFlow"
+    },
+    {
+      "displayName": "Player",
+      "description": "Canonical Player application archetypes and compatible Player scenarios.",
+      "path": "Samples~/Player"
+    },
+    {
+      "displayName": "Advanced Context",
+      "description": "Focused transversal cases that are not naturally covered by the core sample contexts.",
+      "path": "Samples~/AdvancedContext"
+    },
+    {
+      "displayName": "Persistence",
+      "description": "Preferences and Progression Save consumer usage.",
+      "path": "Samples~/Persistence"
+    }
+  ]
+}
