@@ -269,7 +269,7 @@ GameObject:
   - component: {fileID: 6907791912919549119}
   - component: {fileID: 6173202718299576060}
   m_Layer: 0
-  m_Name: 'First Person Camera Rig '
+  m_Name: First Person Camera Rig
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -302,10 +302,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d1bda0d2aa64f85a2a0d71755cd1003, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.CameraAuthoring.CameraRigComposer
-  presentationIntent: 10
+  presentationIntent: 30
   targetSourceKind: 10
   targetSource: {fileID: 0}
-  explicitFollowTarget: {fileID: 0}
+  explicitFollowTarget: {fileID: 5478290073762105150}
   explicitLookAtTarget: {fileID: 0}
   followRequirement: 20
   lookAtRequirement: 10
@@ -375,6 +375,7 @@ GameObject:
   - component: {fileID: 3921673782170465721}
   - component: {fileID: 5167754915206357280}
   - component: {fileID: 8008570540604461571}
+  - component: {fileID: 6576297046216607493}
   m_Layer: 0
   m_Name: Scene-Provided Logical Player
   m_TagString: Untagged
@@ -474,3 +475,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 390f1d653bee4a0dbc17dce425c59eaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.PlayerGameplayInputConsumerBinding
+--- !u!114 &6576297046216607493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8115659310846711129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a99abef159b49deb652fe9c4f74fefc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.PlayerGameplayCameraAuthoring
+  requiredness: 20
+  cameraRig: {fileID: 6173202718299576060}
+  precedence: 50
