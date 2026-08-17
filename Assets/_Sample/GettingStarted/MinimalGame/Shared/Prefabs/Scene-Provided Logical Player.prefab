@@ -258,6 +258,78 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &7158920244871883872
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6907791912919549119}
+  - component: {fileID: 6173202718299576060}
+  m_Layer: 0
+  m_Name: 'First Person Camera Rig '
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6907791912919549119
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7158920244871883872}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8025667312746550385}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6173202718299576060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7158920244871883872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d1bda0d2aa64f85a2a0d71755cd1003, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.CameraAuthoring.CameraRigComposer
+  presentationIntent: 10
+  targetSourceKind: 10
+  targetSource: {fileID: 0}
+  explicitFollowTarget: {fileID: 0}
+  explicitLookAtTarget: {fileID: 0}
+  followRequirement: 20
+  lookAtRequirement: 10
+  followOffset: {x: 0, y: 5, z: -8}
+  mountedPositionDamping: 0
+  mountedRotationDamping: 0
+  thirdPersonShoulderOffset: {x: 0.5, y: -0.4, z: 0}
+  thirdPersonVerticalArmLength: 0.4
+  thirdPersonCameraSide: 1
+  thirdPersonCameraDistance: 2
+  thirdPersonDamping: {x: 0.1, y: 0.5, z: 0.3}
+  cinemachineCamera: {fileID: 0}
+  materializedPresentationIntent: 0
+  frameworkOwnedCinemachineCamera: {fileID: 0}
+  frameworkOwnedPositionControl: {fileID: 0}
+  frameworkOwnedRotationControl: {fileID: 0}
+  materializationRevision: 0
+  logApplyRebuildDiagnostics: 1
+  lastApplyRebuildStatus: 
+  lastBlockingIssue: 
+  lastTargetResolutionSummary: 
+  lastMaterializationSummary: 
+  lastResolvedFollowTarget: {fileID: 0}
+  lastResolvedLookAtTarget: {fileID: 0}
 --- !u!1 &7215249361750842658
 GameObject:
   m_ObjectHideFlags: 0
@@ -268,7 +340,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7585685555332619861}
   m_Layer: 0
-  m_Name: Representation
+  m_Name: ModelMount
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -323,8 +395,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 7585685555332619861}
   - {fileID: 5478290073762105150}
+  - {fileID: 7585685555332619861}
+  - {fileID: 6907791912919549119}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6450611891836702178
