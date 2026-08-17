@@ -391,6 +391,7 @@ MonoBehaviour:
   outputId: camera.output.main
   unityCamera: {fileID: 1082388253}
   cinemachineBrain: {fileID: 1082388252}
+  defaultCameraRig: {fileID: 840739185}
   initializeOnAwake: 1
   logDiagnostics: 1
   lastStatus: NotInitialized
