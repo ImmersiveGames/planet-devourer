@@ -304,7 +304,7 @@ GameObject:
   - component: {fileID: 5167754915206357280}
   - component: {fileID: 8008570540604461571}
   m_Layer: 0
-  m_Name: LogicalActor_MinimalPlayer
+  m_Name: Scene-Provided Logical Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
