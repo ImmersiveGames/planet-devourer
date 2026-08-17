@@ -18,4 +18,4 @@ MonoBehaviour:
     mode: 0
     targetFrameRate: 60
     vSyncCount: 1
-  loggingConfig: {fileID: 0}
+  loggingConfig: {fileID: 11400000, guid: 146d9074a4b13404ba7e3a41be6e69f9, type: 2}

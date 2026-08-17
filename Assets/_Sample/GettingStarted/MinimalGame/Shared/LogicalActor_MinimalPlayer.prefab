@@ -302,6 +302,7 @@ GameObject:
   - component: {fileID: 6450611891836702178}
   - component: {fileID: 3921673782170465721}
   - component: {fileID: 5167754915206357280}
+  - component: {fileID: 8008570540604461571}
   m_Layer: 0
   m_Name: LogicalActor_MinimalPlayer
   m_TagString: Untagged
@@ -381,7 +382,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d8560546c5ebb44e837368f4289d17c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Immersive.Framework.Samples.GettingStarted.MinimalFirstPersonLocomotion
-  cameraMount: {fileID: 5478290073762105150}
+  moveAction: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  lookAction: {fileID: -5630151704836100654, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   moveSpeed: 4
+  cameraMount: {fileID: 5478290073762105150}
   lookSensitivity: 0.1
-  maxPitch: 85
+  minimumPitch: -80
+  maximumPitch: 80
+--- !u!114 &8008570540604461571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8115659310846711129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 390f1d653bee4a0dbc17dce425c59eaa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.PlayerGameplayInputConsumerBinding
