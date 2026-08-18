@@ -178,7 +178,6 @@ GameObject:
   - component: {fileID: 1486248935081468161}
   - component: {fileID: 6678929082926894029}
   - component: {fileID: 6839676246481327867}
-  - component: {fileID: 308729236606098621}
   - component: {fileID: 6488489830484717355}
   m_Layer: 0
   m_Name: Camera Output
@@ -305,30 +304,6 @@ MonoBehaviour:
   logDiagnostics: 1
   lastStatus: NotInitialized
   lastDiagnostic: 
---- !u!114 &308729236606098621
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2525267510779617927}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a4f28c7e16d45a6b9c1d2e3f4a5b607, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Camera.SessionCameraOverrideBinding
-  scopeId: camera.scope.session.default
-  requestId: camera.request.session.default
-  rigComposer: {fileID: 2706233871067227582}
-  targetSource: {fileID: 8091125778278855379}
-  precedence: 300
-  tieBreakerId: camera.tie.session.default
-  logDiagnostics: 1
-  overrideActive: 0
-  ownerActive: 0
-  lastStatus: Unavailable
-  lastDiagnostic: 
-  persistentOutputSession: {fileID: 6839676246481327867}
 --- !u!114 &6488489830484717355
 MonoBehaviour:
   m_ObjectHideFlags: 0
