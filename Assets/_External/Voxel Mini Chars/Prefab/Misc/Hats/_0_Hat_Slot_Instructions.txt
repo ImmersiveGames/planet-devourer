@@ -1,0 +1,9 @@
+_ Use this hat slot as children of the head Bone in the model armature.
+
+- Then use the hat as child of this slot. 
+
+- This will adjust the size of the hat.
+
+- just position the hat and rotate as you like.
+
+Obs: The others prefabs are using this Hat slot, you can use then instead.

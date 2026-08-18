@@ -1,29 +1,32 @@
 {
   "dependencies": {
     "com.immersive.audio": {
-      "version": "file:C:/Projetos/ImmersivePackages/com.immersive.audio",
+      "version": "https://github.com/ImmersiveGames/com.immersive.audio.git",
       "depth": 0,
-      "source": "local",
+      "source": "git",
       "dependencies": {
         "com.immersive.pooling": "0.2.0"
-      }
+      },
+      "hash": "2bcf72cec5e79897690d3dfe400a62889574ede5"
     },
     "com.immersive.foundation": {
-      "version": "file:C:/Projetos/ImmersivePackages/com.immersive.foundation",
+      "version": "https://github.com/ImmersiveGames/com.immersive.foundation.git",
       "depth": 0,
-      "source": "local",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "f0618a0aef38c7c0eab1559ed6996902e09c4258"
     },
     "com.immersive.framework": {
-      "version": "file:C:/Projetos/ImmersivePackages/com.immersive.framework",
+      "version": "https://github.com/ImmersiveGames/com.immersive.framework.git",
       "depth": 0,
-      "source": "local",
+      "source": "git",
       "dependencies": {
         "com.immersive.foundation": "0.2.0",
         "com.immersive.logging": "0.2.1",
         "com.unity.cinemachine": "3.1.0",
         "com.unity.inputsystem": "1.19.0"
-      }
+      },
+      "hash": "5627b5746410ff9d69533b7eada8a9f26220ce47"
     },
     "com.immersive.logging": {
       "version": "https://github.com/ImmersiveGames/com.immersive.logging.git",
@@ -33,10 +36,11 @@
       "hash": "00af12ab19fe00a19143351a729b7351b3e8048e"
     },
     "com.immersive.pooling": {
-      "version": "file:C:/Projetos/ImmersivePackages/com.immersive.pooling",
+      "version": "https://github.com/ImmersiveGames/com.immersive.pooling.git",
       "depth": 0,
-      "source": "local",
-      "dependencies": {}
+      "source": "git",
+      "dependencies": {},
+      "hash": "3ce1402c758cf2cb6000104a37eacf1fd924106a"
     },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
