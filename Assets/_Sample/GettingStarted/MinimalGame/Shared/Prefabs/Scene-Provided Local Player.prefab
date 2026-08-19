@@ -94,7 +94,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.SceneLocalPlayerAdmissionAuthoring
   playerSlotProfile: {fileID: 11400000, guid: 74a665a54f2420e448955b454bb29b06, type: 2}
   actorProfile: {fileID: 11400000, guid: 30911786217ab5e4f935786bbd92111c, type: 2}
-  sceneLogicalPlayerActor: {fileID: 0}
+  sceneLogicalPlayerActor: {fileID: 7346198651684525912}
   admissionTiming: 0
   initialPlacementPolicy: 0
   evidenceActorProfile: {fileID: 11400000, guid: 30911786217ab5e4f935786bbd92111c, type: 2}
@@ -157,6 +157,80 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 5987316287233232587}
   m_Father: {fileID: 4087370368490847266}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &4357194804171004602
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 7112588300604806007}
+    m_Modifications:
+    - target: {fileID: 8025667312746550385, guid: 2381b9efb17fe2e488b3d3e59ca2e640, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8025667312746550385, guid: 2381b9efb17fe2e488b3d3e59ca2e640, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8025667312746550385, guid: 2381b9efb17fe2e488b3d3e59ca2e640, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8025667312746550385, guid: 2381b9efb17fe2e488b3d3e59ca2e640, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8025667312746550385, guid: 2381b9efb17fe2e488b3d3e59ca2e640, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8025667312746550385, guid: 2381b9efb17fe2e488b3d3e59ca2e640, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8025667312746550385, guid: 2381b9efb17fe2e488b3d3e59ca2e640, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8025667312746550385, guid: 2381b9efb17fe2e488b3d3e59ca2e640, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8025667312746550385, guid: 2381b9efb17fe2e488b3d3e59ca2e640, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8025667312746550385, guid: 2381b9efb17fe2e488b3d3e59ca2e640, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8115659310846711129, guid: 2381b9efb17fe2e488b3d3e59ca2e640, type: 3}
+      propertyPath: m_Name
+      value: Scene-Provided Logical Player
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2381b9efb17fe2e488b3d3e59ca2e640, type: 3}
+--- !u!4 &5987316287233232587 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8025667312746550385, guid: 2381b9efb17fe2e488b3d3e59ca2e640, type: 3}
+  m_PrefabInstance: {fileID: 4357194804171004602}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7346198651684525912 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6450611891836702178, guid: 2381b9efb17fe2e488b3d3e59ca2e640, type: 3}
+  m_PrefabInstance: {fileID: 4357194804171004602}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26cc512b3155464caed4dc48a6c9de6d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Actors.PlayerActorDeclaration
