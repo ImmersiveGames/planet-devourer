@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BGM_MinimalGame
   m_EditorClassIdentifier: Immersive.Audio.Unity::Immersive.Audio.Authoring.AudioBgmCueAsset
   cueId: sample00.minimalgame.bgm
-  clip: {fileID: 0}
+  clip: {fileID: 8300000, guid: f01079741d435bc4fb3dd974f74c80e7, type: 3}
   volume: 0.5
   pitch: 1
   loopMode: 1

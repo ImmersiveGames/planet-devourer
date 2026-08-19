@@ -7,7 +7,7 @@
       "dependencies": {
         "com.immersive.pooling": "0.2.0"
       },
-      "hash": "2bcf72cec5e79897690d3dfe400a62889574ede5"
+      "hash": "e2d0779d95ee3342478708c7d33f4ce54fb71982"
     },
     "com.immersive.foundation": {
       "version": "https://github.com/ImmersiveGames/com.immersive.foundation.git",
@@ -17,16 +17,15 @@
       "hash": "f0618a0aef38c7c0eab1559ed6996902e09c4258"
     },
     "com.immersive.framework": {
-      "version": "https://github.com/ImmersiveGames/com.immersive.framework.git",
+      "version": "file:C:/Projetos/ImmersivePackages/com.immersive.framework",
       "depth": 0,
-      "source": "git",
+      "source": "local",
       "dependencies": {
         "com.immersive.foundation": "0.2.0",
         "com.immersive.logging": "0.2.1",
         "com.unity.cinemachine": "3.1.0",
         "com.unity.inputsystem": "1.19.0"
-      },
-      "hash": "5627b5746410ff9d69533b7eada8a9f26220ce47"
+      }
     },
     "com.immersive.logging": {
       "version": "https://github.com/ImmersiveGames/com.immersive.logging.git",
