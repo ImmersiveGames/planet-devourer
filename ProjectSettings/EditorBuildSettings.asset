@@ -11,5 +11,20 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Sample/GettingStarted/MinimalGame/Scenes/MinimalGame_Gameplay.unity
     guid: dab13da3c1b986b4f98482d4ab6aaea7
+  - enabled: 1
+    path: Assets/_Sample/GameFlow/GameFlowShowcase/Scenes/SCN_GameFlow_Hub.unity
+    guid: b94da776cb126e042acbfcd848ad67a8
+  - enabled: 1
+    path: Assets/_Sample/GameFlow/GameFlowShowcase/Scenes/SCN_GameFlow_Persistence.unity
+    guid: d09f96496619c6b48986c8afc08b0b75
+  - enabled: 1
+    path: Assets/_Sample/GameFlow/GameFlowShowcase/Scenes/SCN_GameFlow_Basic.unity
+    guid: e684ad4337b3bb74aa6365f5b2bb4ea9
+  - enabled: 1
+    path: Assets/_Sample/GameFlow/GameFlowShowcase/Scenes/SCN_GameFlow_Basic_A.unity
+    guid: 3851bcd5acf564148920354898e3c28a
+  - enabled: 1
+    path: Assets/_Sample/GameFlow/GameFlowShowcase/Scenes/SCN_GameFlow_Basic_B.unity
+    guid: ff4307ca05ee7b245bfe9215d6d75108
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
