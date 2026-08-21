@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8c0e883f4a3cbb34cb0accc699d13a6d, type: 3}
-  m_Name: BGM_MinimalGame
+  m_Name: BGM_Floresta
   m_EditorClassIdentifier: Immersive.Audio.Unity::Immersive.Audio.Authoring.AudioBgmCueAsset
-  cueId: sample00.minimalgame.bgm
+  cueId: shared.bgm.forest
   clip: {fileID: 8300000, guid: f01079741d435bc4fb3dd974f74c80e7, type: 3}
   volume: 0.5
   pitch: 1
   loopMode: 1
   routingBus: Master
-  fadeInSeconds: 1
-  fadeOutSeconds: 1
+  fadeInSeconds: 0.2
+  fadeOutSeconds: 0.2
