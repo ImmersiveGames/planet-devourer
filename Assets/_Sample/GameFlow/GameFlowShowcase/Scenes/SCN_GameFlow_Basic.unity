@@ -467,7 +467,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3075015778471964599, guid: d4e6b1ea546af3b4f863693a6f859e22, type: 3}
       propertyPath: m_Name
-      value: Visitors B
+      value: Visitors A
       objectReference: {fileID: 0}
     - target: {fileID: 7707499393979917540, guid: d4e6b1ea546af3b4f863693a6f859e22, type: 3}
       propertyPath: m_LocalPosition.x
@@ -555,7 +555,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 879044399388274724, guid: 142633ad0828df946815104b1e075af6, type: 3}
       propertyPath: m_Name
-      value: Visitors A
+      value: Visitors B
       objectReference: {fileID: 0}
     - target: {fileID: 879044399388274724, guid: 142633ad0828df946815104b1e075af6, type: 3}
       propertyPath: m_IsActive
