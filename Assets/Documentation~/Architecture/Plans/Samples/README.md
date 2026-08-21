@@ -1,6 +1,6 @@
 # Samples Authoring Guide and Status
 
-Last updated: **2026-08-17**
+Last updated: **2026-08-21**
 
 Canonical strategy:
 
@@ -9,7 +9,7 @@ Assets/Documentation~/Architecture/ADRs/
   FG-ADR-001-Immersive-Framework-Sample-and-Demonstration-Strategy.md
 ```
 
-This file is the **operational guide/status surface** for the active sample-construction program. The ADR defines the frozen strategy; this guide records where current work happens, which sample is closed for authoring, and what remains before final UPM release.
+This file is the **operational guide/status surface** for the active sample-construction program. The ADR defines the frozen strategy; this guide records where current work happens, what is already proven in authoring/Play Mode, and what remains before final UPM release.
 
 ## Current operational baseline
 
@@ -20,22 +20,22 @@ Repository
 Branch
   main
 
-Verified implementation baseline before this documentation cut
-  73ed9eff75d387f5eb250900e24df7e323961754
-  "Camera rig Apply"
+Observed repository baseline for this documentation cut
+  4bc7e45bd7a2ec984eb8a8427efd5b4aba7e7b92
+  "Acivity BGM"
 
 Authoring workspace
   Assets/_Sample/
 ```
 
-The older `FirstGame` branch references in Revision 10 planning material describe the historical authoring baseline. Current implementation work is on `main`.
+The older `FirstGame` branch references are historical Revision 10 context. Current implementation work and operational truth are on `main`.
 
 ## Current sample progress
 
 | Order | Group / Demonstration | Authoring / Play Mode | UPM release |
 |---|---|---|---|
 | 00 | Getting Started / Minimal Game | **COMPLETE / PROVEN** | Pending promotion + Package Manager import proof |
-| 01 | Game Flow | Next implementation area | Pending |
+| 01 | Game Flow / GameFlowShowcase | **IN PROGRESS — HUB + Basic Flow PROVEN** | Pending |
 | 02 | Player | Planned | Pending |
 | 03 | Advanced Context | Planned | Pending |
 | 04 | Persistence | Planned | Pending |
@@ -76,9 +76,57 @@ Therefore:
 Sample 00 implementation work
   CLOSED
 
-next sample implementation cut
-  MAY BEGIN
+UPM promotion/import proof
+  PENDING
 ```
+
+### Sample 01 current state
+
+Game Flow is now actively materialized under:
+
+```text
+Assets/_Sample/GameFlow/GameFlowShowcase/
+```
+
+Current application shape:
+
+```text
+GameApplication_GameFlow.asset
+  Player Session disabled
+  Persistent Content -> SCN_GameFlow_Persistence
+  Startup Route -> Route_Hub
+
+Route_Hub
+  primary scene -> SCN_GameFlow_Hub
+  no Startup Activity
+
+Route_BasicFlow
+  primary scene -> SCN_GameFlow_Basic
+  Startup Activity -> Activity_Basic_A
+
+Activities
+  Activity_Basic_A
+  Activity_Basic_B
+```
+
+Authoring/Play Mode evidence already closed for the Basic Flow vertical:
+
+```text
+Framework boots into Game Flow HUB
+SCN_GameFlow_Persistence is loaded as Persistent Content
+Route_Hub is valid with no Startup Activity
+HUB settles with Activity = None
+Route_BasicFlow enters Activity_Basic_A
+Activity A <-> Activity B switching works
+return to HUB restores Activity = None
+teardown completes
+cycles are repeatable
+no blocking issue was observed in the proven flow
+```
+
+Current contextual Audio work is **not yet a closure claim**. Activity-scoped BGM bindings have been materialized for the Basic Flow Activities in the observed Git baseline, but the last authoring review still required runtime playback/lifecycle proof before that part can be marked proven.
+
+The broader Game Flow scenario catalog remains evolutionary. Transition, Loading/Readiness, advanced content/visibility, Restart/Recovery and other contextual Camera/Audio coverage are still implementation work unless separately closed by later evidence.
 
 ## Completion vocabulary
 
@@ -135,15 +183,24 @@ RELEASE VALIDATION
 - authoring-only `Assets/_Sample/Shared` cross-group dependencies must be resolved before package finalization;
 - final consumer behavior is proven from the Package Manager imported copy;
 - finishing a sample's authoring phase does not silently claim UPM release validation;
+- a committed/materialized configuration is not marked **PROVEN** until the corresponding observable runtime behavior has been verified;
 - the canonical ADR filename is stable; structural strategy changes belong in that ADR, while ordinary construction progress belongs here and in sample-local README files.
 
-## Next implementation cut
-
-With Sample 00 closed for authoring/proving, the sample-program sequence may advance to:
+## Current implementation cut
 
 ```text
 Sample 01
   Game Flow
+
+Closed so far
+  HUB / Route_Hub
+  Basic Flow Route
+  Activity A <-> B cycle
+  return to HUB / Activity None
+
+Still active
+  contextual BGM runtime proof
+  remaining evolutionary Game Flow scenarios
 ```
 
-Game Flow should continue to follow the frozen strategy: one initial Demonstration Application, a sample HUB/Menu when useful, and evolutionary scenarios for Route/Activity, content/visibility, Transition, Loading/Readiness and Restart/Recovery.
+Game Flow continues to follow the frozen strategy: one initial Demonstration Application, a sample HUB/Menu, and evolutionary scenarios for Route/Activity, content/visibility, Transition, Loading/Readiness and Restart/Recovery. Camera and Audio remain contextual/transversal coverage rather than separate basic sample silos.

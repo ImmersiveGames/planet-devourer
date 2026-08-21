@@ -339,6 +339,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Audio::Immersive.Framework.Audio.FrameworkRouteBgmBinding
   routeBgm: {fileID: 0}
+  policy: 2
+  routePolicySerializationVersion: 1
   director: {fileID: 0}
   startupActivityBgmBinding: {fileID: 0}
 --- !u!1001 &1657409735848767527
@@ -497,4 +499,3 @@ SceneRoots:
   - {fileID: 1427141901}
   - {fileID: 1385523583}
   - {fileID: 1657409735848767527}
-  - {fileID: 1778797211}
