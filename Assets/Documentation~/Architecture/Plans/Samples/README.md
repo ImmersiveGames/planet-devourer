@@ -21,8 +21,8 @@ Branch
   main
 
 Observed repository baseline for this documentation cut
-  4bc7e45bd7a2ec984eb8a8427efd5b4aba7e7b92
-  "Acivity BGM"
+  9c088e81698edd8644197ff71165844464b670eb
+  "Visitors Rename"
 
 Authoring workspace
   Assets/_Sample/
@@ -82,7 +82,7 @@ UPM promotion/import proof
 
 ### Sample 01 current state
 
-Game Flow is now actively materialized under:
+Game Flow is actively materialized under:
 
 ```text
 Assets/_Sample/GameFlow/GameFlowShowcase/
@@ -99,6 +99,7 @@ GameApplication_GameFlow.asset
 Route_Hub
   primary scene -> SCN_GameFlow_Hub
   no Startup Activity
+  BGM intent -> Silence
 
 Route_BasicFlow
   primary scene -> SCN_GameFlow_Basic
@@ -106,27 +107,55 @@ Route_BasicFlow
 
 Activities
   Activity_Basic_A
+    Activity-owned scene -> SCN_GameFlow_Basic_A
+
   Activity_Basic_B
+    Activity-owned scene -> SCN_GameFlow_Basic_B
 ```
 
-Authoring/Play Mode evidence already closed for the Basic Flow vertical:
+Authoring/Play Mode evidence closed for the Basic Flow vertical:
 
 ```text
 Framework boots into Game Flow HUB
 SCN_GameFlow_Persistence is loaded as Persistent Content
 Route_Hub is valid with no Startup Activity
 HUB settles with Activity = None
+Route_Hub explicit BGM Silence is applied
+
 Route_BasicFlow enters Activity_Basic_A
-Activity A <-> Activity B switching works
+SCN_GameFlow_Basic remains the Route Primary Scene while Activities switch
+
+Activity-local visibility is proven inside SCN_GameFlow_Basic
+  Visitors A -> Activity_Basic_A
+  Visitors B -> Activity_Basic_B
+  ActivityContentBinding activates/deactivates the correct local content
+
+Activity-owned scene composition is proven
+  Activity_Basic_A -> SCN_GameFlow_Basic_A
+  Activity_Basic_B -> SCN_GameFlow_Basic_B
+  A <-> B loads the target Activity scene and releases the previous Activity scene
+
+contextual BGM is proven
+  Route_Hub Silence
+    -> Activity_Basic_A BGM
+    -> Activity_Basic_B BGM
+    -> Route_Hub Silence
+
 return to HUB restores Activity = None
 teardown completes
 cycles are repeatable
-no blocking issue was observed in the proven flow
+blockingIssues = 0 in the proven flow
 ```
 
-Current contextual Audio work is **not yet a closure claim**. Activity-scoped BGM bindings have been materialized for the Basic Flow Activities in the observed Git baseline, but the last authoring review still required runtime playback/lifecycle proof before that part can be marked proven.
+Composition / Visibility is therefore no longer tracked as a separate immediate scenario. Its basic contract is intentionally demonstrated inside Basic Flow through the combination of:
 
-The broader Game Flow scenario catalog remains evolutionary. Transition, Loading/Readiness, advanced content/visibility, Restart/Recovery and other contextual Camera/Audio coverage are still implementation work unless separately closed by later evidence.
+```text
+Route-owned scene content
+Activity-local visibility via ActivityContentBinding
+Activity-owned scene composition via ActivityContent profiles/scenes
+```
+
+The broader Game Flow scenario catalog remains evolutionary. Transition, Loading/Readiness and Restart/Recovery remain implementation work. Contextual Camera/Audio coverage should be added only where it naturally teaches an additional contract; the current Basic Flow already closes the baseline contextual BGM path.
 
 ## Completion vocabulary
 
@@ -196,11 +225,17 @@ Closed so far
   HUB / Route_Hub
   Basic Flow Route
   Activity A <-> B cycle
+  Activity-local visibility in the Route scene
+  Activity-owned scene composition and release
+  contextual Route / Activity BGM baseline
   return to HUB / Activity None
 
 Still active
-  contextual BGM runtime proof
-  remaining evolutionary Game Flow scenarios
+  Transition
+  Loading & Readiness
+  Restart / Recovery
+  contextual Camera coverage where natural
+  additional Audio coverage only where it teaches a new contract
 ```
 
-Game Flow continues to follow the frozen strategy: one initial Demonstration Application, a sample HUB/Menu, and evolutionary scenarios for Route/Activity, content/visibility, Transition, Loading/Readiness and Restart/Recovery. Camera and Audio remain contextual/transversal coverage rather than separate basic sample silos.
+Game Flow continues to follow the frozen strategy: one initial Demonstration Application, a sample HUB/Menu, and evolutionary scenarios as needed. The Basic Flow now absorbs the baseline Route/Activity, content/visibility, Activity scene composition and contextual BGM demonstrations; later scenarios should add distinct contracts rather than duplicate those proofs.
