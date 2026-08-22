@@ -1,6 +1,6 @@
 # Minimal Game
 
-Status: **AUTHORING COMPLETE / PLAY MODE PROVEN — 2026-08-17**  
+Status: **AUTHORING COMPLETE / PLAY MODE PROVEN — 2026-08-22**  
 UPM promotion: **PENDING package finalization/import proof**
 
 ## Purpose
@@ -8,6 +8,24 @@ UPM promotion: **PENDING package finalization/import proof**
 Minimal Game is the Getting Started demonstration application for the minimum coherent Immersive Framework game.
 
 It proves **navigation, not gameplay**.
+
+## Canonical Scene-Provided reference
+
+Minimal Game is the **canonical executable Scene-Provided Player reference** for the sample program.
+
+```text
+Assets/_Sample/GettingStarted/MinimalGame/
+  -> canonical Scene-Provided coverage
+```
+
+The Player sample family must not duplicate this baseline as a dedicated Scene-Provided Demonstration Application under Player unless future implementation evidence reveals a distinct Scene-Provided consumer contract that cannot be demonstrated here.
+
+Player-specific sample sequencing and blockers are governed by:
+
+```text
+Assets/Documentation~/Architecture/ADRs/
+  FG-ADR-002-Player-Sample-Scope-and-Demonstration-Architecture.md
+```
 
 ## Implemented composition
 

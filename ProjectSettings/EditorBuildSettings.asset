@@ -32,11 +32,5 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Sample/GameFlow/GameFlowShowcase/Scenes/SCN_GameFlow_Content_Readiness.unity
     guid: a9779090051c15849ac4c4493927c85b
-  - enabled: 1
-    path: Assets/_Sample/Player/Shared/Scenes/SceneProvided_Persistent.unity
-    guid: 71da9dc5e671ab649bcb975dc4bcbb16
-  - enabled: 1
-    path: Assets/_Sample/Player/SceneProvided/Scenes/Scene_SceneProvided.unity
-    guid: 59fd38637cebd714683667c2ce8e9ea3
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
