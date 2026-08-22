@@ -13,12 +13,13 @@ MonoBehaviour:
   m_Name: Activity_SceneProvided
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.ActivityAsset
   activityId: 61a21b6e2a594e05bb10fc17eaec7f15
-  activityName: Activity
-  description: 
-  playerParticipationProjectionMode: 0
-  playerParticipationZeroParticipantPolicy: 0
-  playerParticipationExplicitSlotProfiles: []
-  playerParticipationRequirementLevel: 0
+  activityName: Scene-Provided Player
+  description: Scene-Provided Player demonstration activity.
+  playerParticipationProjectionMode: 20
+  playerParticipationZeroParticipantPolicy: 10
+  playerParticipationExplicitSlotProfiles:
+  - {fileID: 11400000, guid: f336104c2772c564fac51d0b3cdca9cf, type: 2}
+  playerParticipationRequirementLevel: 30
   activityContentProfile: {fileID: 0}
   activityEntryReadinessPolicy: 0
   visualTransitionMode: 0

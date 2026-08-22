@@ -12,10 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a5153a396724567a7dd4e0628405071, type: 3}
   m_Name: ActorProfile_Player
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Actors.ActorProfile
-  actorProfileId: actor-profile.player.default
-  displayName: Player Actor
+  actorProfileId: actor-profile.player-actor-01
+  displayName: Player Actor 01
   description: 
   icon: {fileID: 21300000, guid: 34f2c6a3e1699814dad515cd8d7e100f, type: 3}
   actorKind: 10
   actorRole: 10
-  logicalActorHostPrefab: {fileID: 0}
+  logicalActorHostPrefab: {fileID: 8115659310846711129, guid: 2381b9efb17fe2e488b3d3e59ca2e640, type: 3}

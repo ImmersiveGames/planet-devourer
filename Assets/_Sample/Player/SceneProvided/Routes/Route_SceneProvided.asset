@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Route_SceneProvided
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.RouteAsset
   routeId: 704c14ce673d42809019a421ece893bd
-  routeName: Startup Route
+  routeName: Scene-Provided Player
   primaryScenePath: Assets/_Sample/Player/SceneProvided/Scenes/Scene_SceneProvided.unity
   primarySceneName: Scene_SceneProvided
   routeContentProfile: {fileID: 0}

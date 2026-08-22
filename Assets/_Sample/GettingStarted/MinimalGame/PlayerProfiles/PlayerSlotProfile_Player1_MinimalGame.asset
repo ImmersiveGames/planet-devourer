@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35f657670d594601a6d7dcb3ba9c61c4, type: 3}
   m_Name: PlayerSlotProfile_Player1_MinimalGame
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.PlayerSlotProfile
-  playerSlotId: player.1
+  playerSlotId: player.minimal.1
   displayName: Player 1
   description: 
   accentColor: {r: 1, g: 1, b: 1, a: 1}
