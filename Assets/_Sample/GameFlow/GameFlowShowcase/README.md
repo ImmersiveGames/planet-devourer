@@ -323,7 +323,7 @@ ActivityContentBinding-controlled sample navigation
 blockingIssues = 0 on the successful paths
 ```
 
-It does **not** claim terminal readiness failure/recovery. Failure, cancellation and recovery remain a separate later scenario.
+Negative and exceptional readiness behavior such as Required failure, cancellation, invalidation or recovery remains part of the Framework robustness contract and technical QA coverage. The Game Flow Showcase does not fabricate failure paths merely to reproduce QA responsibilities.
 
 ---
 
@@ -392,18 +392,12 @@ BGM no-request preservation
 teardown and return to Activity None
 ```
 
-# Evolutionary scenarios
+# Consumer proof disposition
 
-Composition / Visibility, baseline Transition presentation and successful Readiness waiting/progress are no longer separate pending scenarios; they are demonstrated in the current coherent Game Flow Showcase.
+The current Game Flow Showcase closes the intended positive consumer proof for Game Flow. Composition / Visibility, baseline Transition/Loading presentation, successful Activity Readiness waiting/progress and contextual BGM behavior are all demonstrated through valid game paths.
 
-Remaining candidates include:
+There is no remaining mandatory Game Flow scenario solely to exercise negative, invalid or terminal failure behavior. Those paths belong to technical QA unless a future real product feature introduces an explicit player-facing recovery behavior that is itself worth demonstrating.
 
-```text
-terminal Readiness failure / recovery
-Restart / Recovery
-contextual Camera coverage where natural
-additional Audio coverage only where it teaches a new contract
-supporting Player configuration only when a scenario actually requires Player
-```
+Possible later demonstrations such as Activity Restart, Camera, Player, Pause, Progression Save or additional Audio remain feature-owned/evolutionary work. They do not block the current Game Flow consumer closure.
 
-Do not add new scenarios merely to mirror the ADR inventory. Each new scenario must teach a distinct consumer contract.
+Do not add new scenarios merely to mirror the ADR inventory. Each new scenario must teach a distinct positive consumer contract.
