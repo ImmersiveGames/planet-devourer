@@ -6,21 +6,38 @@ This file tracks the Game Flow Showcase materialization target. Unity assets mus
 
 ```text
 GameApplication_GameFlow.asset
+
 Routes/Route_Hub.asset
 Routes/Route_BasicFlow.asset
+Routes/Route_ReadinessShowcase.asset
+
 Activities/Activity_Basic_A.asset
 Activities/Activity_Basic_B.asset
 Activities/Activity_Basic_C.asset
+Activities/Activity_Basic_D.asset
+Activities/Activity_Basic_E.asset
+
 Activities/ActivityContent_Basic_A.asset
 Activities/ActivityContent_Basic_B.asset
+Activities/ActivityContentReadiness.asset
+
 Scenes/SCN_GameFlow_Persistence.unity
 Scenes/SCN_GameFlow_Hub.unity
 Scenes/SCN_GameFlow_Basic.unity
 Scenes/SCN_GameFlow_Basic_A.unity
 Scenes/SCN_GameFlow_Basic_B.unity
+Scenes/SCN_GameFlow_Basic_Readiness.unity
+Scenes/SCN_GameFlow_Content_Readiness.unity
+
+Scripts/GameFlowVisitorPreparation.cs
 ```
 
-The current tree also contains supporting sample UI/content, persistent Transition/Loading presentation and contextual BGM authoring used by the proven Basic Flow vertical.
+The current tree contains two proven topic Routes selected from the HUB:
+
+```text
+Basic Flow
+Readiness Showcase
+```
 
 There is intentionally no:
 
@@ -29,9 +46,9 @@ Activities/ActivityContent_Basic_C.asset
 Scenes/SCN_GameFlow_Basic_C.unity
 ```
 
-`Activity_Basic_C` is deliberately content-less so the sample proves that an Activity does not require an Activity Content Profile and that A/B Activity-owned and Activity-local content does not leak into C.
+`Activity_Basic_C` is deliberately content-less. In Basic Flow it proves a valid Activity without Activity-owned content. In Readiness Showcase it is reused as a neutral baseline between repeatable readiness tests.
 
-## Current content roles
+## Basic Flow content roles
 
 ```text
 Scenes/SCN_GameFlow_Basic.unity
@@ -40,11 +57,6 @@ Scenes/SCN_GameFlow_Basic.unity
   Activity-local content
     Visitors A -> Activity_Basic_A
     Visitors B -> Activity_Basic_B
-
-  Route-owned navigation
-    Go to Activity C
-      no ActivityContentBinding required
-      available independently of A/B visibility
 
 Scenes/SCN_GameFlow_Basic_A.unity
   Activity-owned scene content for Activity_Basic_A
@@ -60,13 +72,51 @@ Activity_Basic_C.asset
 
 The `Visitors A` and `Visitors B` objects remain authored in the Route Primary Scene and use `ActivityContentBinding` for Activity-driven visibility. They are not Activity scene materialization.
 
-`SCN_GameFlow_Basic_A.unity` and `SCN_GameFlow_Basic_B.unity` remain separate Activity-owned scenes so the same Basic Flow scenario demonstrates Activity scene composition and release.
-
 Entering `Activity_Basic_C` proves the negative case: the previous Activity-owned scene is released and A/B local content is hidden while C remains a valid active Activity with no owned content profile.
+
+## Readiness Showcase content roles
+
+```text
+Route_ReadinessShowcase
+  Primary Scene -> SCN_GameFlow_Basic_Readiness
+  Startup Activity -> Activity_Basic_C
+
+Activity_Basic_C
+  neutral baseline
+  Observe Only
+  no ActivityContentProfile
+
+Activity_Basic_D
+  Wait Visible
+  Fade With Loading
+  ActivityContentReadiness
+
+Activity_Basic_E
+  Wait Covered
+  Fade With Loading
+  ActivityContentReadiness
+
+ActivityContentReadiness
+  -> SCN_GameFlow_Content_Readiness
+  -> release on Activity change
+```
+
+`SCN_GameFlow_Content_Readiness.unity` owns the sample preparation content and the official `ActivityReadinessParticipant`. D and E intentionally use the same physical preparation so the product difference is the authored readiness policy rather than a different mechanic.
+
+The Readiness Route menu uses `ActivityContentBinding` to constrain the demonstration to:
+
+```text
+C -> D -> C
+C -> E -> C
+```
+
+while C is active, D/E controls are visible. While D or E is active, only the return-to-C control is visible. The controls still use normal `ActivityRequestTrigger` requests; visibility is not request authority.
+
+Returning to C unloads `SCN_GameFlow_Content_Readiness`, so the next D or E request materializes fresh Activity-owned content and creates a fresh readiness occurrence. `D -> C -> D` and `E -> C -> E` are repeatable.
 
 ## Persistent presentation roles
 
-`SCN_GameFlow_Persistence.unity` explicitly composes the current sample presentation surfaces:
+`SCN_GameFlow_Persistence.unity` explicitly composes:
 
 ```text
 Transition
@@ -80,26 +130,30 @@ The proven presentation paths are:
 
 ```text
 Route_Hub -> Route_BasicFlow
-  Fade cover/reveal
-  Loading presentation
-
-Route_BasicFlow -> Route_Hub
+Route_Hub -> Route_ReadinessShowcase
   Fade cover/reveal
   Loading presentation
 
 Activity A <-> B
   Seamless
 
-Activity A -> C
-Activity B -> C
+Activity A/B -> C
   Fade
   no Loading presentation
 
-Activity C -> A / B
-  Seamless
+Readiness C -> D
+  Fade With Loading
+  Wait Visible
+  preparation visible after reveal
+
+Readiness C -> E
+  Fade With Loading
+  Wait Covered
+  Loading remains governed by readiness until Ready
+  determinate readiness progress
 ```
 
-`FadeWithLoading`, readiness-governed waits and participant-aware progress are not claimed by this materialization yet.
+The successful Readiness proof uses one Required participant. For Wait Covered the runtime reaches terminal Loading through `ActivityReadiness`, with Required `1/1` completed and `blockingIssues=0`.
 
 ## Current BGM proof
 
@@ -124,24 +178,41 @@ Activity_Basic_B BGM
   -> Activity B BGM remains confirmed
 ```
 
-Therefore the sample now demonstrates all three normal intent outcomes needed by the baseline BGM contract: explicit Play, no-request Preserve, and explicit Silence.
+Therefore the sample demonstrates explicit Play, no-request Preserve and explicit Silence under normal Route/Activity lifetime.
+
+## Current closure
+
+Consumer-proven in this materialization:
+
+```text
+Basic Route / Activity flow
+Activity-local visibility
+Activity-owned scene load/release
+content-less Activity
+Route Fade + Loading
+Activity Seamless
+Activity Fade
+Activity Fade With Loading
+Wait Visible
+Wait Covered
+Required readiness participant
+participant-aware determinate Loading progress
+readiness scene release/reentry
+contextual BGM Play / Preserve / Silence
+```
 
 ## Remaining evolutionary materialization
 
-Create only as justified by the scenario catalog:
+Create only as justified by a distinct scenario contract:
 
 ```text
-additional Scenario Route assets only when a distinct contract requires them
-additional Scenario Activity assets only when a distinct contract requires them
-Loading Readiness / participant-aware progress coverage
-Restart / Recovery coverage
+terminal Readiness failure / recovery
+Restart / Recovery
 contextual Camera presentation/requests where natural
 additional Audio coverage only where it teaches a new contract
 supporting Player configuration only if a scenario actually requires Player
 ```
 
-Composition / Visibility does not require a separate scenario because its basic contract is already demonstrated inside Basic Flow.
-
-Basic Transition presentation does not require a separate scenario because Route Fade + Loading, Activity Seamless and Activity Fade are already demonstrated inside the same Basic Flow cycle.
+Composition / Visibility, baseline Transition presentation and successful readiness waiting/progress do not require new scenario allocation; they are already demonstrated by the current Game Flow Showcase.
 
 Exact future scenario allocation remains evolutionary. Do not create assets merely to mirror the ADR inventory.
