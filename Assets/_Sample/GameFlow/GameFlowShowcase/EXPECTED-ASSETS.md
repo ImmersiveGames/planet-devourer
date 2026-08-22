@@ -193,6 +193,7 @@ Route Fade + Loading
 Activity Seamless
 Activity Fade
 Activity Fade With Loading
+Observe Only
 Wait Visible
 Wait Covered
 Required readiness participant
@@ -201,13 +202,14 @@ readiness scene release/reentry
 contextual BGM Play / Preserve / Silence
 ```
 
-## Remaining evolutionary materialization
+The intended Game Flow consumer proof is closed by these valid paths. Negative/invalid/interrupted/terminal failure cases remain technical QA responsibility and are not materialization targets for this Sample.
 
-Create only as justified by a distinct scenario contract:
+## Evolutionary materialization
+
+Create additional assets only when a distinct positive consumer contract justifies them. Possible later feature-owned demonstrations include:
 
 ```text
-terminal Readiness failure / recovery
-Restart / Recovery
+Activity Restart when it teaches a real gameplay restart flow
 contextual Camera presentation/requests where natural
 additional Audio coverage only where it teaches a new contract
 supporting Player configuration only if a scenario actually requires Player
@@ -215,4 +217,4 @@ supporting Player configuration only if a scenario actually requires Player
 
 Composition / Visibility, baseline Transition presentation and successful readiness waiting/progress do not require new scenario allocation; they are already demonstrated by the current Game Flow Showcase.
 
-Exact future scenario allocation remains evolutionary. Do not create assets merely to mirror the ADR inventory.
+Exact future scenario allocation remains evolutionary. Do not create assets merely to mirror the ADR inventory or to duplicate negative-path QA.
