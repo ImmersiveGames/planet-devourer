@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a35fe899a80d2d64dac72e8bfe3079df, type: 3}
+  m_Name: Route_ReadinessShowcase
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.RouteAsset
+  routeId: a8648e713dc1435db49bfba42e587657
+  routeName: Readiness Showcase
+  primaryScenePath: Assets/_Sample/GameFlow/GameFlowShowcase/Scenes/SCN_GameFlow_Basic_Readiness.unity
+  primarySceneName: SCN_GameFlow_Basic_Readiness
+  routeContentProfile: {fileID: 0}
+  startupActivity: {fileID: 11400000, guid: 25bb7e2463edac14db7ff11f9d870366, type: 2}
+  transitionGateMode: 30
+  description: 

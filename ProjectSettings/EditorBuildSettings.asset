@@ -29,5 +29,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Sample/GameFlow/GameFlowShowcase/Scenes/SCN_GameFlow_Basic_Readiness.unity
     guid: a587d2caf38cae04891411f742027de7
+  - enabled: 1
+    path: Assets/_Sample/GameFlow/GameFlowShowcase/Scenes/SCN_GameFlow_Content_Readiness.unity
+    guid: a9779090051c15849ac4c4493927c85b
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
