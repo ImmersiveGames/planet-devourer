@@ -2,7 +2,7 @@
 
 ## Purpose
 
-Game Flow demonstrates how one coherent Framework application moves between Routes and Activities and how contextual content follows that lifecycle.
+Game Flow demonstrates how one coherent Framework application moves between Routes and Activities and how contextual content and presentation follow that lifecycle.
 
 Frozen structural shape:
 
@@ -41,12 +41,24 @@ HUB
   Activity = None
   BGM intent = Silence
 
+  Route switch -> Basic Flow
+    Transition = Fade cover/reveal
+    Loading surface = active for Route work
+
 Basic Flow
   Route_BasicFlow
   SCN_GameFlow_Basic
   Startup Activity = Activity_Basic_A
 
   Activity_Basic_A <-> Activity_Basic_B
+    target policy = Seamless
+
+  Activity_Basic_A -> Activity_Basic_C
+  Activity_Basic_B -> Activity_Basic_C
+    target policy = Fade
+
+  Activity_Basic_C -> Activity_Basic_A / Activity_Basic_B
+    target policy = Seamless
 
   Route-owned scene content
     remains present while the Activity changes
@@ -60,17 +72,28 @@ Basic Flow
     Activity_Basic_A -> SCN_GameFlow_Basic_A
     Activity_Basic_B -> SCN_GameFlow_Basic_B
 
+  content-less Activity proof
+    Activity_Basic_C has no ActivityContentProfile
+    no Activity-owned scene is materialized for C
+    A/B Activity-local content is hidden while C is active
+
   contextual BGM
     Activity A BGM -> Activity B BGM
+    Activity C publishes no new BGM intent
+    A -> C preserves Activity A BGM
+    B -> C preserves Activity B BGM
 
   return to HUB
-  Activity = None
-  BGM intent = Silence
+    Route switch = Fade cover/reveal + Loading
+    Activity = None
+    BGM intent = Silence
 ```
 
-The Basic Flow cycle, Activity-local visibility, Activity-owned scene composition, contextual BGM behavior and return-to-HUB teardown are proven in Play Mode.
+The Basic Flow cycle, Activity-local visibility, Activity-owned scene composition, content-less Activity isolation, contextual BGM replacement/preservation, Route cover/loading presentation and return-to-HUB teardown are proven in Play Mode.
 
-Composition / Visibility is intentionally absorbed into Basic Flow instead of being materialized as a separate scenario. The same Activity switch demonstrates both local visibility changes inside the Route scene and load/release of Activity-owned scenes.
+Composition / Visibility remains intentionally absorbed into Basic Flow instead of being materialized as a separate scenario. Activity A/B demonstrate both local visibility changes inside the Route scene and load/release of Activity-owned scenes. Activity C provides the negative case: it is a valid Activity with no Activity Content Profile, so A/B content does not leak into it.
+
+Basic Transition presentation is also absorbed into this same flow rather than becoming a separate HUB scenario. Route switches use the persistent Transition + Loading surfaces, while Activity requests demonstrate authored `Seamless` and `Fade` presentation policies.
 
 ## Shared content
 
@@ -82,4 +105,4 @@ Do not create hidden dependencies on sibling top-level sample groups. Cross-grou
 
 Game Flow is the natural home for contextual Route/Activity Camera and BGM behavior when those concepts arise naturally.
 
-The current Basic Flow already proves contextual Route/Activity BGM behavior. Camera/Audio should remain supporting or ambient unless a later scenario explicitly needs one of them to teach a new contract. Optional Audio package boundaries must remain explicit.
+The current Basic Flow proves contextual Route/Activity BGM behavior, including the distinction between explicit Silence, explicit Play and no-request preservation. Camera/Audio should remain supporting or ambient unless a later scenario explicitly needs one of them to teach a new contract. Optional Audio package boundaries must remain explicit.
