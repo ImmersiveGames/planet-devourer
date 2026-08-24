@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 7315675300297126293}
   - component: {fileID: 2384549898576298004}
   m_Layer: 0
-  m_Name: Manager-Provisioned Logical Player
+  m_Name: Local Player Logical
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

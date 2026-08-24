@@ -9,18 +9,27 @@ Minimal Game is the Getting Started demonstration application for the minimum co
 
 It proves **navigation, not gameplay**.
 
-## Canonical Scene-Provided reference
+## Canonical Scene Player reference
 
-Minimal Game is the **canonical executable Scene-Provided Player reference** for the sample program.
+Minimal Game is the **canonical executable Scene Player reference** for the sample program.
 
 ```text
 Assets/_Sample/GettingStarted/MinimalGame/
-  -> canonical Scene-Provided coverage
+  -> canonical Scene Player coverage
 ```
 
-The Player sample family must not duplicate this baseline as a dedicated Scene-Provided Demonstration Application under Player unless future implementation evidence reveals a distinct Scene-Provided consumer contract that cannot be demonstrated here.
+Runtime policy:
 
-Player-specific sample sequencing and blockers are governed by:
+```text
+PlayerSessionProfile
+  HostProvisioning = SceneProvided
+```
+
+`SceneProvided` is the Host Provisioning mode. The product-facing composition demonstrated here is a **Scene Player**: a Local Player Host already authored in the Scene.
+
+The Player sample family must not duplicate this baseline as a dedicated Scene Player Demonstration Application under Player unless future implementation evidence reveals a distinct Scene Player consumer contract that cannot be demonstrated here.
+
+Player-specific sample sequencing, blockers and terminology are governed by:
 
 ```text
 Assets/Documentation~/Architecture/ADRs/
@@ -37,8 +46,8 @@ Persistent Content
 one Route
 one Activity
 one gameplay scene
-one Scene-Provided Local Player
-one Scene-Provided Logical Player
+one Scene-authored Local Player Host
+one Scene Logical Player
 Mounted / First Person Camera
 minimal movement/look Input
 ```
@@ -57,6 +66,8 @@ Shared/Prefabs/Scene-Provided Logical Player.prefab
 Scripts/MinimalFirstPersonLocomotion.cs
 ```
 
+The existing prefab/file names above describe the currently materialized Unity assets. They should be renamed only through an asset-safe Unity move/rename that preserves `.meta` identity; documentation terminology does not silently rename serialized assets.
+
 ## Runtime contract proven
 
 The accepted runtime proof for this authoring cut reached:
@@ -72,7 +83,7 @@ startup Activity
   -> Ready
   -> blockingIssues = 0
 
-Scene-Provided Player
+Scene Player
   -> gameplay admission completed
 
 PlayerGameplayInputConsumerBinding
@@ -110,7 +121,7 @@ Play
   -> application starts
   -> Route enters
   -> Activity enters
-  -> Scene-Provided Player becomes gameplay-ready
+  -> Scene Player becomes gameplay-ready
   -> Mounted Camera presents first-person view
   -> user navigates
 ```
@@ -123,11 +134,13 @@ The canonical inspection path is:
 
 ```text
 GameApplication
-  -> PlayerSessionProfile
+  -> PlayerSessionProfile (HostProvisioning = SceneProvided)
   -> Route
   -> Activity
-  -> Scene-Provided Local Player
-  -> Scene-Provided Logical Player
+  -> Scene Player
+      -> Local Player Host
+      -> Scene Local Player Admission
+      -> Scene Logical Player
   -> PlayerGameplayInputConsumerBinding
   -> PlayerGameplayCameraAuthoring
   -> First Person Camera Rig / CameraRigComposer

@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 214730761009475982}
   - component: {fileID: 2664473413697865159}
   m_Layer: 0
-  m_Name: Manager-Provisioned Local Player Host
+  m_Name: Local Player Host
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

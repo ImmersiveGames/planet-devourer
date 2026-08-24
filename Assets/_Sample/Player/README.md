@@ -1,6 +1,6 @@
 # Player Samples
 
-Status: **PLAYER SCOPE GOVERNED BY FG-ADR-002 — 2026-08-22**
+Status: **PLAYER SCOPE GOVERNED BY FG-ADR-002 — TERMINOLOGY REVISION 2026-08-24**
 
 Canonical Player sample authority:
 
@@ -11,14 +11,34 @@ Assets/Documentation~/Architecture/ADRs/
 
 General sample-program strategy remains in FG-ADR-001.
 
-## Canonical Scene-Provided coverage
+## Naming model
 
-`Assets/_Sample/GettingStarted/MinimalGame/` is the canonical executable reference for the Scene-Provided Player flow.
+The Player samples use short product-facing names while preserving the existing runtime provisioning terms.
+
+```text
+Local Player Host
+  common technical host for one local Player
+
+Scene Player
+  Local Player Host already authored in a Scene
+  HostProvisioning = SceneProvided
+
+Player Provisioning
+  Session/UIGlobal authority that can create Local Player Hosts
+  HostProvisioning = ManagerProvisioned
+```
+
+`SceneProvided` and `ManagerProvisioned` remain valid runtime modes. They are not presented as two peer Player Host object types.
+
+## Canonical Scene Player coverage
+
+`Assets/_Sample/GettingStarted/MinimalGame/` is the canonical executable reference for the Scene Player flow.
 
 It already demonstrates:
 
-- Scene-Provided Local Player;
-- Scene-Provided Logical Player;
+- a Scene-authored Local Player Host;
+- `HostProvisioning = SceneProvided`;
+- Scene Logical Player authoring;
 - admission on Activity entry;
 - logical Actor preparation;
 - gameplay readiness;
@@ -26,26 +46,39 @@ It already demonstrates:
 - Mounted / First Person Camera;
 - minimal Move / Look gameplay input.
 
-These contracts are intentionally **not duplicated** as a dedicated Scene-Provided Demonstration Application under Player.
+These contracts are intentionally **not duplicated** as a dedicated Scene Player Demonstration Application under Player.
 
-A dedicated Scene-Provided Player application should be added only if future implementation evidence reveals a distinct consumer contract that Getting Started cannot demonstrate clearly.
+A dedicated Scene Player application should be added only if future implementation evidence reveals a distinct consumer contract that Getting Started cannot demonstrate clearly.
 
 ## Current Player demonstrations
 
-| Demonstration | Status | Meaning |
-|---|---|---|
-| Getting Started / Minimal Game | **CANONICAL / PROVEN** | Scene-Provided Player reference |
-| Manager-Provisioned | **NEXT PLAYER APPLICATION** | Next distinct provisioning/application path to materialize |
-| Character Selection | **PLANNED / BLOCKED** | Requires a sufficient public arbitrary Actor-selection surface |
-| Local Multiplayer | **PLANNED / BLOCKED** | Requires a sufficient public Slot/device/input contract |
+| Demonstration | Runtime provisioning | Status | Meaning |
+|---|---|---|---|
+| Getting Started / Minimal Game | `SceneProvided` | **CANONICAL / PROVEN** | Scene Player reference |
+| Player Provisioning | `ManagerProvisioned` | **NEXT PLAYER APPLICATION** | Session-authorized Local Player Host creation/provisioning |
+| Character Selection | depends on final application model | **PLANNED / BLOCKED** | Requires a sufficient public arbitrary Actor-selection surface |
+| Local Multiplayer | depends on final application model | **PLANNED / BLOCKED** | Requires a sufficient public Slot/device/input contract |
 
 This is the current implementation sequence, not a permanent closed catalog.
 
-## Manager-Provisioned
+## Player Provisioning
 
-Manager-Provisioned is the next Player Demonstration Application.
+Player Provisioning is the next Player Demonstration Application.
 
-Its first cut should prove the smallest coherent public consumer path for Session-authorized provisioning. Compatible Player behaviors remain Scenarios by default and should be added only when they clarify the provisioning contract.
+Its first cut should prove the smallest coherent public consumer path for Session-authorized Local Player Host provisioning:
+
+```text
+Player Provisioning authority
+  -> Local Player Host Prefab
+  -> explicit Join request
+  -> Local Player Host instance
+  -> admission
+  -> Session ownership
+```
+
+The provisioning object is **not itself a Player Host**.
+
+Compatible Player behaviors remain Scenarios by default and should be added only when they clarify the provisioning contract.
 
 ## Character Selection
 

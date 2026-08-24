@@ -1,10 +1,11 @@
 # FG-ADR-002 — Player Sample Scope and Demonstration Architecture
 
-Status: **ACCEPTED — CANONICAL PLAYER SAMPLE SCOPE / REVISION 1**  
+Status: **ACCEPTED — CANONICAL PLAYER SAMPLE SCOPE / REVISION 2**  
 Accepted on: **2026-08-22**  
-Current document revision: **1**  
+Revision 2 updated on: **2026-08-24**  
+Current document revision: **2**  
 Canonical filename: **`FG-ADR-002-Player-Sample-Scope-and-Demonstration-Architecture.md`**  
-Scope: **Player sample coverage, Demonstration Application boundaries, implementation sequence, public-surface blockers and Player-specific sharing**  
+Scope: **Player sample coverage, Demonstration Application boundaries, implementation sequence, public-surface blockers, Player-specific sharing and product-facing terminology**  
 Related strategy: **FG-ADR-001 — Immersive Framework Sample and Demonstration Strategy**  
 Framework authority: **official IF-ADRs and current `com.immersive.framework` implementation remain authoritative for runtime architecture**
 
@@ -30,11 +31,12 @@ no hidden sample runtime authority
 FG-ADR-002 owns the Player-specific decisions that should no longer be duplicated or frozen inside FG-ADR-001:
 
 ```text
-where Scene-Provided is demonstrated canonically
+where the Scene Player path is demonstrated canonically
 which Player Demonstration Application is next
 which later Player demonstrations are planned
 which public product surfaces currently block those demonstrations
 when Player/Shared is allowed to exist as real shared ownership
+how Player Host and Player Provisioning are named in product-facing surfaces
 ```
 
 Canonical relationship:
@@ -47,6 +49,54 @@ FG-ADR-002
   Player sample scope and demonstration architecture
 ```
 
+### 1.1 Product-facing terminology
+
+Status: **CANONICAL — REVISION 2**
+
+The Player model contains one common technical host and more than one way for that host to enter the Session.
+
+```text
+Local Player Host
+  the technical host for one local Player
+  owns PlayerInput evidence, Actor Mount and Slot-admission evidence
+  is common to both provisioning paths
+
+Scene Player
+  product/sample/editor name for a Local Player Host already authored in a Scene
+  uses HostProvisioning = SceneProvided
+
+Player Provisioning
+  product/sample/editor name for the Session/UIGlobal authority that can create Local Player Hosts
+  uses HostProvisioning = ManagerProvisioned
+```
+
+Canonical distinction:
+
+```text
+SceneProvided
+ManagerProvisioned
+  = parallel Host Provisioning modes
+
+Scene Player
+Player Provisioning
+  = different product compositions
+  = not parallel Player Host types
+```
+
+`SceneProvided`, `ManagerProvisioned`, `PlayerHostProvisioningMode` and existing runtime/API type names remain valid runtime terminology. Revision 2 does **not** rename those contracts merely to change presentation vocabulary.
+
+Product-facing surfaces should prefer short contextual grouping over repeating runtime-mode names as if they described equivalent objects.
+
+Preferred grouping:
+
+```text
+Player
+├── Scene
+│   └── Local Player
+└── Provisioning
+    └── Setup / Authority
+```
+
 ---
 
 ## 2. Problem
@@ -55,13 +105,34 @@ The earlier Player sample baseline treated a fixed application catalog as if all
 
 Implementation evidence changed that conclusion.
 
-Getting Started / Minimal Game now provides a complete executable Scene-Provided reference. Creating another dedicated Scene-Provided application under Player would duplicate a contract already demonstrated canonically.
+Getting Started / Minimal Game now provides a complete executable **Scene Player** reference. Creating another dedicated Scene Player application under Player would duplicate a contract already demonstrated canonically.
+
+A second terminology problem also became visible while building the authoring tools. The previous labels presented:
+
+```text
+Scene-Provided Local Player
+Manager-Provisioned Local Player
+```
+
+as if both creation actions materialized the same kind of object.
+
+They do not.
+
+```text
+Scene creation surface
+  materializes a Local Player Host in the Scene
+
+Provisioning creation surface
+  materializes Session/UIGlobal provisioning authority
+  does not create a Player Host instance
+```
 
 At the same time, later Player demonstrations do not all have the same implementation readiness:
 
 ```text
-Manager-Provisioned
+Player Provisioning
   can be the next distinct Player application
+  proves HostProvisioning = ManagerProvisioned
 
 Character Selection
   depends on a sufficient public arbitrary Actor-selection surface
@@ -77,9 +148,11 @@ canonical coverage that already exists
 next materializable application
 planned but product-blocked demonstrations
 future applications justified only by new evidence
+runtime provisioning mode
+product composition being authored
 ```
 
-It must not preserve empty structural promises merely because an older scaffold contained folders for them.
+It must not preserve empty structural promises or false naming symmetry merely because an older scaffold contained folders or labels for them.
 
 ---
 
@@ -89,11 +162,13 @@ The canonical Player sample scope is:
 
 ```text
 GETTING STARTED / MINIMAL GAME
-  canonical Scene-Provided coverage
+  canonical Scene Player coverage
+  HostProvisioning = SceneProvided
 
 PLAYER
-  Manager-Provisioned
+  Provisioning
     next Player Demonstration Application
+    HostProvisioning = ManagerProvisioned
 
   Character Selection
     planned
@@ -110,11 +185,11 @@ A new Player Demonstration Application is added only when a materially distinct 
 
 ---
 
-## 4. Scene-Provided coverage
+## 4. Scene Player coverage
 
 Status: **CANONICAL / ALREADY PROVEN**
 
-The canonical Scene-Provided demonstration is:
+The canonical Scene Player demonstration is:
 
 ```text
 Assets/_Sample/GettingStarted/MinimalGame/
@@ -123,8 +198,8 @@ Assets/_Sample/GettingStarted/MinimalGame/
 It already demonstrates the coherent consumer path:
 
 ```text
-Scene-authored Player candidate
-  -> Scene-Provided admission
+Scene-authored Local Player Host
+  -> SceneProvided admission
   -> Session ownership after admission
   -> Activity participation / representation
   -> gameplay readiness
@@ -136,34 +211,43 @@ Scene-authored Player candidate
 Therefore:
 
 ```text
-a dedicated Scene-Provided application under Player
+a dedicated Scene Player application under Player
   is not required
 ```
 
-Do not create a duplicate Scene-Provided Player application merely to make the Player folder appear symmetrical.
+Do not create a duplicate Scene Player application merely to make the Player folder appear symmetrical with Player Provisioning.
 
-A dedicated Player Scene-Provided application becomes justified only if future implementation evidence reveals a **distinct consumer contract** that cannot be clearly demonstrated by Getting Started / Minimal Game.
+A dedicated Player Scene application becomes justified only if future implementation evidence reveals a **distinct consumer contract** that cannot be clearly demonstrated by Getting Started / Minimal Game.
 
 The burden of proof is the new contract, not the old scaffold.
 
 ---
 
-## 5. Manager-Provisioned
+## 5. Player Provisioning
 
 Status: **NEXT PLAYER DEMONSTRATION APPLICATION**
 
-Manager-Provisioned is the next Player application to materialize because it introduces a genuinely distinct provisioning origin and authoring path.
+`Player Provisioning` is the product-facing name for the next Player application. Its underlying Session configuration uses:
+
+```text
+HostProvisioning = ManagerProvisioned
+```
+
+The application is distinct because it introduces Session-authorized authority that can create Local Player Hosts from the authored Host prefab.
 
 Core mental model:
 
 ```text
-Session-authorized provisioning
-  -> Player candidate is created/provided
+Player Provisioning authority
+  -> uses the authored Local Player Host Prefab
+  -> creates a Local Player Host when join is explicitly requested
   -> admission succeeds
   -> Session owns the admitted physical Player
 ```
 
-The sample should demonstrate the smallest coherent Manager-Provisioned consumer composition.
+The provisioning setup is **not itself a Player Host**.
+
+The sample should demonstrate the smallest coherent public consumer composition for this authority.
 
 It should not attempt to absorb every Player capability at once.
 
@@ -178,7 +262,7 @@ input / Pause
 leave / rejoin
 ```
 
-Only the behaviors necessary to explain the Manager-Provisioned contract should be included in the first cut.
+Only the behaviors necessary to explain the Player Provisioning contract should be included in the first cut.
 
 ---
 
@@ -287,7 +371,7 @@ Create another Demonstration Application only when the initial application/sessi
 Strong signals include:
 
 ```text
-Host Provisioning origin
+Host Provisioning mode
 Supported Slot universe
 initial Joining intent
 initial Actor-resolution intent
@@ -403,11 +487,13 @@ An existing empty or placeholder Shared scaffold does not establish architectura
 The Player sequence is:
 
 ```text
-0. Scene-Provided
+0. Scene Player
+   HostProvisioning = SceneProvided
    already covered canonically by Getting Started / Minimal Game
    do not duplicate
 
-1. Manager-Provisioned
+1. Player Provisioning
+   HostProvisioning = ManagerProvisioned
    next Player Demonstration Application
 
 2. Character Selection
@@ -450,7 +536,7 @@ Do not create a global runtime Player HUB that silently switches Active GameAppl
 
 Getting Started remains intentionally minimal.
 
-Its Scene-Provided Player is not incidental sample plumbing anymore; it is the **canonical Scene-Provided consumer reference**.
+Its Scene Player is not incidental sample plumbing anymore; it is the **canonical Scene Player consumer reference** and proves the `SceneProvided` Host Provisioning mode.
 
 This does not turn Getting Started into a full Player tutorial.
 
@@ -494,7 +580,9 @@ FG-ADR-002 supersedes the following earlier assumptions:
 ```text
 Player requires a fixed initial Demonstration Application catalog
 
-Scene-Provided requires a second dedicated application under Player
+SceneProvided requires a second dedicated application under Player
+
+SceneProvided and ManagerProvisioned should be exposed as peer object/composition names
 
 Character Selection is ready merely because it is a valid conceptual archetype
 
@@ -510,12 +598,25 @@ The remaining general FG-ADR-001 rules continue to apply.
 ## 16. Normative summary
 
 ```text
-Scene-Provided
+Local Player Host
+  common technical Player Host
+  may already exist in the Scene or be created by provisioning
+
+Scene Player
+  product/sample/editor name for the Scene-authored Local Player Host path
+  runtime HostProvisioning = SceneProvided
   canonical coverage = Getting Started / Minimal Game
   no duplicate dedicated Player application by default
 
-Manager-Provisioned
+Player Provisioning
+  product/sample/editor name for Session-authorized Host creation authority
+  runtime HostProvisioning = ManagerProvisioned
   next Player Demonstration Application
+  provisioning setup is not itself a Player Host
+
+SceneProvided / ManagerProvisioned
+  remain valid runtime provisioning-mode terminology
+  are parallel modes, not peer object types
 
 Character Selection
   planned / blocked
@@ -545,6 +646,6 @@ Missing public surface
 
 ## 17. Closure
 
-This ADR is the canonical Player sample-scope authority.
+This ADR is the canonical Player sample-scope and product-facing terminology authority.
 
-FG-ADR-001 continues to own the general sample-program architecture and distribution strategy. Any future change to the Player demonstration catalog, sequencing, blocker status or Player-specific sharing rule should be reconciled here first and reflected into operational READMEs without reintroducing a competing Player catalog in FG-ADR-001.
+FG-ADR-001 continues to own the general sample-program architecture and distribution strategy. Any future change to the Player demonstration catalog, sequencing, blocker status, Player-specific sharing rule or product-facing naming should be reconciled here first and reflected into operational READMEs without reintroducing a competing Player catalog or false Player Host symmetry in FG-ADR-001.

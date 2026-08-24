@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1462345425520102147
+--- !u!1 &8042724931698345236
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,10 +8,10 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8252024683431189408}
-  - component: {fileID: 3708115489886931226}
-  - component: {fileID: 1886838363843648320}
-  - component: {fileID: 4150322324720537090}
+  - component: {fileID: 245458506996215994}
+  - component: {fileID: 2954319921103477822}
+  - component: {fileID: 705112361570185431}
+  - component: {fileID: 2944184384344255312}
   m_Layer: 0
   m_Name: Local Player Provisioning
   m_TagString: Untagged
@@ -19,13 +19,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8252024683431189408
+--- !u!4 &245458506996215994
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1462345425520102147}
+  m_GameObject: {fileID: 8042724931698345236}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -34,20 +34,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3708115489886931226
+--- !u!114 &2954319921103477822
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1462345425520102147}
+  m_GameObject: {fileID: 8042724931698345236}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 621567455fd1c4ceb811cc8a00b6a1a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInputManager
   m_NotificationBehavior: 3
-  m_MaxPlayerCount: 1
+  m_MaxPlayerCount: -1
   m_AllowJoining: 1
   m_JoinBehavior: 2
   m_PlayerJoinedEvent:
@@ -62,7 +62,7 @@ MonoBehaviour:
       m_Name: 
       m_Type: 0
       m_ExpectedControlType: 
-      m_Id: dba1ac40-f380-490c-ac63-9836e149aa9d
+      m_Id: 33724b06-012a-45ab-b630-a4e3fff90801
       m_Processors: 
       m_Interactions: 
       m_SingletonActionBindings: []
@@ -78,30 +78,30 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
---- !u!114 &1886838363843648320
+--- !u!114 &705112361570185431
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1462345425520102147}
+  m_GameObject: {fileID: 8042724931698345236}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 90eccb4f117c4d5b8a2ef8284db2ad36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.LocalPlayerProvisioningAuthoring
-  playerInputManager: {fileID: 3708115489886931226}
+  playerInputManager: {fileID: 2954319921103477822}
   localPlayerHostPrefab: {fileID: 7628873072989428652, guid: e7e07742b884e5242847f9323e1ac6b3, type: 3}
---- !u!114 &4150322324720537090
+--- !u!114 &2944184384344255312
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1462345425520102147}
+  m_GameObject: {fileID: 8042724931698345236}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f08330a12176478e8ac8020cd8e09feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.LocalPlayerProvisioningHostRegistration
-  provisioningAuthoring: {fileID: 1886838363843648320}
+  provisioningAuthoring: {fileID: 705112361570185431}

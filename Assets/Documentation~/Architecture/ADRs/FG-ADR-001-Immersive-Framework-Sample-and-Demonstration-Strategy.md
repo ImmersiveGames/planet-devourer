@@ -1,6 +1,6 @@
 # FG-ADR-001 — Immersive Framework Sample and Demonstration Strategy
 
-Status: **FROZEN BASELINE — REVISION 11 / PLAYER SCOPE DELEGATED TO FG-ADR-002**  
+Status: **FROZEN BASELINE — REVISION 12 / PLAYER SCOPE + TERMINOLOGY DELEGATED TO FG-ADR-002**  
 Baseline frozen on: **2026-08-16**  
 Revision 2 consolidated on: **2026-08-16**  
 Revision 3 consolidated on: **2026-08-16**  
@@ -12,7 +12,8 @@ Revision 8 finalized on: **2026-08-16**
 Revision 9 finalized on: **2026-08-16**  
 Revision 10 updated on: **2026-08-16**  
 Revision 11 updated on: **2026-08-22**  
-Current document revision: **11**  
+Revision 12 updated on: **2026-08-24**  
+Current document revision: **12**  
 Canonical filename: **`FG-ADR-001-Immersive-Framework-Sample-and-Demonstration-Strategy.md`**  
 Scope: **Samples authoring + `Samples~` distribution strategy / product UX exploration / consumer demonstration**  
 Source of truth for framework architecture: **`com.immersive.framework` ADRs 001–022 and current package implementation**  
@@ -28,7 +29,11 @@ The goal is not to freeze the final number of demonstrations, final names, visua
 
 The previous sample/package attempt must not be treated as the structural baseline for the new sample program. Existing graphical assets, materials, models, textures, animations and other presentation-only resources may be reused where useful, but previous scene composition, sample taxonomy and technical setup do not define the new architecture.
 
-Revision 11 preserves the general sample-program grammar while moving the **Player-specific sample scope, sequencing and blockers** into `FG-ADR-002 — Player Sample Scope and Demonstration Architecture`. This removes the obsolete assumption that a fixed Player Demonstration Application catalog is frozen up front.
+Revision 10 preserves the Revision 9 sample architecture, adopts a **stable canonical filename**, and records the current operational authoring baseline.
+
+Revision 11 delegates the **Player-specific sample scope, sequencing and blockers** to `FG-ADR-002 — Player Sample Scope and Demonstration Architecture`. The older fixed four-application Player catalog is no longer authoritative here.
+
+Revision 12 clarifies Player product-facing terminology without renaming runtime contracts. `SceneProvided` and `ManagerProvisioned` remain parallel **Host Provisioning modes**. Product/editor/sample surfaces distinguish the **Scene Player** composition from **Player Provisioning** authority; both use the common `LocalPlayerHostAuthoring` technical Host at different points in the flow. FG-ADR-002 is authoritative for this Player terminology.
 
 During active development, samples are currently authored under the visible `Assets/_Sample/` workspace in `planet-devourer:main`, so Unity imports them normally and they can be created, inspected and edited through the Project Browser. The official final distribution remains package-owned and uses the UPM `Samples~/` convention plus `package.json` `samples` metadata.
 
@@ -81,7 +86,7 @@ New ideas discovered while building the samples are expected and should not requ
 
 ## 1.2 Canonical document maintenance
 
-Status: **FROZEN CONVENTION — REVISION 11**
+Status: **FROZEN CONVENTION — REVISION 12**
 
 This ADR uses one stable repository path.
 
@@ -118,9 +123,9 @@ Create a separate ADR only when the decision itself becomes a genuinely separate
 
 ## 1.3 Current operational authoring baseline
 
-Status: **CANONICAL PROVISIONAL BASELINE — 2026-08-22**
+Status: **CANONICAL PROVISIONAL BASELINE — 2026-08-24**
 
-For ongoing sample construction, the current `main` Git state is the operational truth:
+For ongoing sample construction, the current Git state is the operational truth:
 
 ```text
 Repository
@@ -147,16 +152,16 @@ Assets/Documentation~/
   architecture / ADR / plan documentation
 ```
 
-Current sample group shape at the strategy level:
+Current sample group shape:
 
 ```text
 Assets/_Sample/
 ├── GettingStarted/
-│   └── MinimalGame/              # canonical Scene-Provided coverage
+│   └── MinimalGame/              # canonical Scene Player coverage
 ├── GameFlow/
 │   └── GameFlowShowcase/
 ├── Player/
-│   ├── ManagerProvisioned/       # next Player Demonstration Application
+│   ├── Provisioning/             # next Player Demonstration Application
 │   ├── CharacterSelection/       # planned; public Actor-selection blocker
 │   └── LocalMultiplayer/         # planned; public Slot/device/input blocker
 ├── AdvancedContext/
@@ -166,7 +171,7 @@ Assets/_Sample/
 └── Shared/
 ```
 
-The exact Player sample scope is **not frozen by this tree**. `FG-ADR-002` is authoritative for Player-specific Demonstration Applications, sequencing, blockers and the rule for materializing `Player/Shared` only after concrete reuse exists.
+The exact Player sample scope is **not frozen by this tree**. `FG-ADR-002` is authoritative for Player Demonstration Applications, sequencing, blockers and the rule for materializing `Player/Shared` only after concrete reuse exists.
 
 The branch state is **canonical provisionally**, not immutable.
 
@@ -333,6 +338,8 @@ A developer may therefore use the sample progression as a careful learning path,
 
 ---
 
+
+
 ## 5. Core principle
 
 ### Progressive in concept, independent in execution
@@ -379,11 +386,9 @@ A coherent example with its own `GameApplicationAsset` and, when applicable, its
 
 A Demonstration Application exists when the example needs a meaningfully different application/session archetype.
 
-Player may contain more than one Demonstration Application when application/session intent genuinely differs, but the concrete Player catalog is not defined here.
+Player may contain more than one Demonstration Application when application/session intent genuinely differs, but the concrete Player catalog is not defined here. `FG-ADR-002` is authoritative for the current Player applications, sequencing and blockers.
 
-`FG-ADR-002` is authoritative for which Player applications currently exist, which are next, and which remain blocked.
-
-Each materialized Demonstration Application folder should make its `GameApplication` obvious.
+Each materialized application folder should make its `GameApplication` obvious.
 
 ### 6.3 Scenario
 
@@ -638,8 +643,9 @@ IMMERSIVE FRAMEWORK SAMPLES
 │   ├── Session Configuration
 │   ├── Slots / Joining
 │   ├── Actor Selection
-│   ├── Scene-Provided
-│   ├── Manager-Provisioned
+│   ├── Host Provisioning
+│   │   ├── SceneProvided mode -> Scene Player
+│   │   └── ManagerProvisioned mode -> Player Provisioning
 │   ├── Activity Participation
 │   ├── Physical Lifetime
 │   ├── Initial Placement
@@ -666,8 +672,6 @@ CAMERA COVERAGE
 AUTHORING / UX
 IDENTITY / OWNERSHIP / DIAGNOSTICS
 ```
-
-The Player entries in this mental-model catalog describe **capability space**, not a frozen Demonstration Application catalog. Concrete Player sample structure is governed by FG-ADR-002.
 
 ---
 
@@ -746,7 +750,7 @@ Persistent Content
 one Route
 one Activity
 one gameplay scene
-one Scene-Provided Player
+one Scene Player
 one Mounted / First Person Camera presentation
 minimal movement/look Input
 ```
@@ -762,7 +766,7 @@ Play
   -> Framework starts the application
   -> startup Route enters
   -> startup Activity enters
-  -> Scene-Provided Player is admitted
+  -> Scene Player is admitted
   -> Mounted Camera presents first-person view
   -> user navigates through the environment
 ```
@@ -791,18 +795,15 @@ The consumer should spend time understanding **how the game starts**, not playin
 Getting Started uses:
 
 ```text
-Scene-Provided Player
+Scene Player
 ```
 
 Reason:
 
 - it is the simplest current Player origin to inspect;
-- this Minimal Game is the **canonical executable Scene-Provided reference** for the sample program;
-- the Player sample family must not duplicate a dedicated Scene-Provided Demonstration Application under Player merely to restate the same contract;
-- Manager-Provisioned and later Player demonstrations exist only when they add a distinct Player contract;
+- the dedicated Player sample group will expose materially distinct Player application/session contracts;
+- therefore Getting Started does not need to carry Player Provisioning infrastructure merely to avoid implying exclusivity;
 - the first-person presentation means the physical Player does not need to be visually emphasized.
-
-The Player-specific demonstration sequence and blockers are governed by `FG-ADR-002`.
 
 The Player may be a deliberately simple object whose only visible purpose is to provide:
 
@@ -817,7 +818,7 @@ It does not need a complete character mesh or character-gameplay presentation.
 
 ## 13.5 Player Session intent
 
-The application should use the smallest coherent Session configuration compatible with the official Scene-Provided path.
+The application should use the smallest coherent Session configuration compatible with the official Scene Player path (`HostProvisioning = SceneProvided`).
 
 Target conceptual shape:
 
@@ -826,7 +827,7 @@ Supported Slots
   one Slot
 
 Host Provisioning
-  Scene-Provided
+  SceneProvided
 
 Actor Resolution
   configured/default direct path
@@ -969,7 +970,7 @@ Primary
   minimal Framework application composition
 
 Supporting
-  Scene-Provided Player
+  Scene Player
   Mounted / First Person Camera
   movement/look Input
   Persistent Content
@@ -1265,169 +1266,180 @@ This is the intended balance for the Game Flow group.
 
 # 15. Player
 
-Status of this section: **GENERAL STRATEGY ONLY — PLAYER-SPECIFIC AUTHORITY DELEGATED TO FG-ADR-002 — 2026-08-22**
+Status of this section: **PLAYER-SPECIFIC SCOPE DELEGATED TO FG-ADR-002 — TERMINOLOGY RECONCILED 2026-08-24**
 
-Player remains a major sample domain, but Revision 11 deliberately stops freezing a concrete Player application catalog inside FG-ADR-001.
+Player remains a major sample domain, but this general strategy no longer freezes a fixed Player application catalog.
 
-The general sample-program grammar remains authoritative here:
+The authoritative Player-specific document is:
 
 ```text
-UPM Sample Group
-  broad consumer problem
-
-Demonstration Application
-  materially distinct GameApplication / Session initialization intent
-
-Scenario
-  compatible runtime behavior inside one Demonstration Application
+FG-ADR-002 — Player Sample Scope and Demonstration Architecture
 ```
 
-The concrete Player sample model is owned by:
+The domain still asks:
 
 ```text
-Assets/Documentation~/Architecture/ADRs/
-  FG-ADR-002-Player-Sample-Scope-and-Demonstration-Architecture.md
+What Slots exist?
+Is Joining open?
+Which Slot joins?
+Which Actor is selected?
+Where does the Local Player Host come from?
+Who owns the admitted physical Player?
+Does this Activity include/exclude the Player?
+Is the Player represented now?
+Where is the Player initially placed?
+Can the Player receive input?
+What happens during Pause?
+What happens during Activity transitions?
+How does the Player Leave?
+What happens when the Slot is reused?
 ```
 
-FG-ADR-002 is authoritative for:
+## 15.1 Canonical Player terminology
+
+The runtime policy and the product-facing object vocabulary are related but are not the same classification.
 
 ```text
-canonical Scene-Provided coverage
-current Player Demonstration Applications
-implementation sequence
-public-surface blockers
-Player/Shared materialization rules
+Local Player Host
+  common technical host for one local Player
+  represented by LocalPlayerHostAuthoring
+
+Scene Player
+  a Local Player Host already authored in a Scene
+  uses HostProvisioning = SceneProvided
+
+Player Provisioning
+  Session/UIGlobal authority that can create Local Player Hosts
+  uses HostProvisioning = ManagerProvisioned
 ```
 
-## 15.1 Canonical Scene-Provided coverage
-
-Getting Started / Minimal Game is the canonical executable reference for the Scene-Provided Player path.
+Canonical distinction:
 
 ```text
-Assets/_Sample/GettingStarted/MinimalGame/
-  -> canonical Scene-Provided coverage
+SceneProvided
+ManagerProvisioned
+  = parallel Host Provisioning modes
+
+Scene Player
+Player Provisioning
+  = different product/editor composition roles
+  = not peer Player Host object types
 ```
 
-Do not create a dedicated Scene-Provided application under Player unless future implementation evidence proves that a distinct Scene-Provided-specific consumer contract cannot be demonstrated by the existing canonical reference.
+Do not present a provisioning authority as if it were a materialized Local Player Host.
 
-## 15.2 Current Player application direction
+## 15.2 Current Player demonstration scope
 
-FG-ADR-001 records only the current high-level direction:
+The current sample sequence is owned by FG-ADR-002:
 
 ```text
-Manager-Provisioned
+GETTING STARTED / MINIMAL GAME
+  canonical Scene Player reference
+  HostProvisioning = SceneProvided
+  already proven
+
+PLAYER / PROVISIONING
   next Player Demonstration Application
+  HostProvisioning = ManagerProvisioned
+  demonstrates Session-authorized creation of Local Player Hosts
 
-Character Selection
-  planned
-  blocked until a public arbitrary Actor-selection surface is sufficient
-  for game-owned selection UI without private/internal workarounds
+CHARACTER SELECTION
+  planned / blocked
+  requires sufficient public arbitrary Actor-selection surface
 
-Local Multiplayer
-  planned
-  blocked until the public Slot/device/input contract is sufficient
-  for a canonical consumer sample without parallel sample-owned authority
+LOCAL MULTIPLAYER
+  planned / blocked
+  requires sufficient public Slot/device/input contract
 ```
 
-These statuses are not a new permanent closed catalog. FG-ADR-002 owns their exact scope and exit criteria.
+Getting Started therefore remains the canonical Scene Player coverage; a duplicate Scene Player application under `Player/` is not required merely for symmetry.
 
-## 15.3 Application/Scenario rule
+## 15.3 Demonstration Application vs Scenario
 
-The Player domain follows the same split rule as the rest of the sample program:
+Player follows the general split rule from this ADR.
 
 ```text
 materially incompatible initial Player Session intent
   -> separate Demonstration Application
 
 compatible runtime behavior
-  -> Scenario inside that Demonstration Application
+  -> Scenario inside that application
 ```
 
-Player capabilities such as:
+Strong application-level signals include:
 
 ```text
-Joining
-Slot occupancy
-Actor Selection
-Activity Participation
-Activity Representation
-Physical Player Lifetime
-Initial Placement
-Input / Pause
-Leave / Rejoin
+Host Provisioning mode
+Supported Slot universe
+initial Joining intent
+initial Actor-resolution intent
+application-level duplicate-selection policy
+other application/session creation-time authority
 ```
 
-do not automatically create new Demonstration Applications.
+Participation, representation, physical lifetime, Initial Placement, Input/Pause and Leave/Rejoin remain Scenarios by default.
 
-## 15.4 Public-surface rule
+> **Samples show representative canonical use, not the full combinatorial matrix.**
 
-A Player sample must consume public/product Framework surfaces.
+QAFramework remains responsible for broad technical contract coverage and regression combinations.
 
-Do not use sample code to bypass a missing product contract for:
+## 15.4 Player navigation
 
-```text
-Actor selection
-Slot ownership
-device association
-input routing
-joining/admission
-runtime observation
-```
-
-When the required public surface does not exist or is not sufficient, the demonstration remains **planned / blocked**. The missing surface is product evidence, not permission to create a parallel sample architecture.
-
-## 15.5 No combinatorial matrix
-
-Do not build an exhaustive Player sample matrix across provisioning, participation, lifetime, placement, Pause, Leave/Rejoin or other capabilities.
-
-Representative canonical consumer use belongs in Samples.
-
-Broad contract combinations and regressions belong in QAFramework.
-
-## 15.6 Player Shared rule
-
-`Player/Shared` is **not** a required scaffold or preallocated architecture layer.
-
-```text
-no concrete reuse
-  -> keep content local
-  -> do not promote to Player/Shared
-
-two or more concrete Player Demonstration Applications genuinely reuse content
-  -> Player/Shared may be introduced/promoted
-```
-
-Application/session authority remains local to the owning Demonstration Application.
-
-Do not move authoritative assets such as `GameApplicationAsset`, `PlayerSessionProfile`, Route/Activity definitions or application-specific policies into `Player/Shared` merely to deduplicate files.
-
-## 15.7 Player navigation
-
-When more than one Player Demonstration Application is materialized:
+When more than one runnable Player Demonstration Application exists:
 
 ```text
 Player README
-  -> explains the available applications and status
+  -> explains the available applications and their purpose
 
-consumer chooses one application
-  -> selects its GameApplication
-  -> Set Active
+consumer selects the intended GameApplication
+  -> Set Active through the official Framework surface
 
-optional per-application HUB
-  -> selects compatible Scenarios
+Play
+  -> optional application-local HUB selects compatible Scenarios
 ```
 
-A global Player runtime HUB must not silently switch Active GameApplications.
+Do not create a global Player runtime HUB that silently changes the Active Game Application.
 
-## 15.8 Player / Camera / Audio
+## 15.5 Player/Shared
 
-Player demonstrations may use Camera and optional Audio as Supporting/Ambient concerns when that helps expose the Player contract.
+`Player/Shared` is conditional and is created by concrete reuse, not by plan.
 
-They must not distort the Player sample scope or introduce optional-package dependencies merely for decoration.
+```text
+used by one Player Demonstration Application
+  -> keep local
 
-## 15.9 Governing rule
+used concretely by two or more Player Demonstration Applications
+  -> consider promotion to Player/Shared
 
-> **FG-ADR-001 owns the general sample grammar. FG-ADR-002 owns the concrete Player sample scope, sequence, blockers and Player-specific sharing decisions.**
+no concrete cross-application reuse
+  -> do not create/promote Player/Shared content
+```
+
+Shared presentation content never moves application/session authority upward.
+
+## 15.6 Gameplay, Camera and Audio
+
+Player samples may use game-like UI or minimal gameplay only when needed to expose the Player contract.
+
+Examples include:
+
+```text
+join prompts
+character-selection UI
+simple locomotion
+Pause-visible movement
+leave/rejoin controls
+```
+
+Camera and Audio remain transversal Supporting/Ambient concerns. Optional package boundaries remain explicit.
+
+## 15.7 Public-surface gate
+
+A missing public consumer contract blocks a sample; it does not authorize sample-owned replacement architecture.
+
+Player sample code must not introduce private discovery, reflection, direct Session mutation, parallel Slot/device/input authority or hidden fallback merely to make a demonstration appear complete.
+
+FG-ADR-002 owns the current Player blockers and exit criteria.
 
 ---
 
@@ -1966,27 +1978,26 @@ Rule:
 
 ## 19.2 `<Group>/Shared`
 
-Shared by multiple Demonstration Applications inside one group **only after concrete reuse exists**.
+Shared by multiple Demonstration Applications inside one group.
 
-This is an available promotion scope, not a folder that every group must pre-create.
-
-For Player specifically, `FG-ADR-002` governs the stricter rule:
+Example `Player/Shared`:
 
 ```text
-no concrete reuse
-  -> no Player/Shared ownership is established
-
-concrete reuse across two or more Player Demonstration Applications
-  -> promote the reusable content to Player/Shared
+character models
+portraits
+selection-screen visual pieces
+shared Player input assets
+common Player sample HUD
+presentation prefabs
 ```
 
-Reusable content must not define one application's authority.
+These assets are Player-specific but do not define one Player application.
 
 ## 19.3 `<DemonstrationApplication>/Shared`
 
 Shared by multiple Routes/Activities/Scenes inside one Demonstration Application.
 
-Example `Player/ManagerProvisioned/Shared`:
+Example `Player/Provisioning/Shared`:
 
 ```text
 Local Player Host prefab
@@ -2146,9 +2157,16 @@ _Sample/
 │
 ├── Player/
 │   ├── README.md
-│   ├── ManagerProvisioned/       # next Player application
+│   ├── Provisioning/             # next materialized Player application
+│   │   ├── README.md
+│   │   ├── Shared/
+│   │   ├── Routes/
+│   │   ├── Activities/
+│   │   └── Scenes/
 │   ├── CharacterSelection/       # planned / blocked
 │   └── LocalMultiplayer/         # planned / blocked
+│
+│   # Player/Shared is introduced only after concrete cross-application reuse.
 │
 ├── AdvancedContext/
 │   ├── README.md
@@ -2176,8 +2194,6 @@ _Sample/
 ```
 
 This is the **authoring tree**. The `_Sample` name is intentional while samples are being built: it stays visible to Unity and is visually distinct from the final UPM `Samples~` root.
-
-For Player, the tree is a current planning/materialization snapshot rather than a predetermined Player-application structural freeze. Getting Started owns canonical Scene-Provided coverage; `Player/Shared` is omitted from the required scaffold and may appear only after concrete reuse, as defined by FG-ADR-002.
 
 ## 21.0.1 Final UPM distribution tree — frozen
 
@@ -2287,7 +2303,7 @@ The sample program uses two physical phases.
 ### Phase A — visible authoring
 
 ```text
-planet-devourer / main
+planet-devourer / FirstGame
 └── Assets/_Sample/
 ```
 
@@ -2392,16 +2408,15 @@ A sample is not release-ready if it only works while directly visible under pack
 
 Because Package Manager imports the whole selected sample subfolder, each declared group must be self-contained relative to sample content.
 
-Allowed:
+Allowed when concrete reuse exists:
 
 ```text
-<Group>/Shared
-  used by two or more concrete Demonstration Applications
-  inside the same final import root
-  only after reuse is real
+Player/Shared
+  used by two or more materialized Player Demonstration Applications
+  because all consumers are inside the Player import root
 ```
 
-For Player, `Player/Shared` is permitted only under the concrete-reuse rule in FG-ADR-002.
+`Player/Shared` is not preallocated merely because the Player group may eventually contain several applications.
 
 Allowed:
 
@@ -2455,13 +2470,13 @@ Framework concepts
 Example:
 
 ```text
-Manager-Provisioned
+Character Selection
 
 Demonstrates
-  Session-authorized Player provisioning.
+  Single-player Join with explicit Actor selection.
 
 Application
-  GameApplication_ManagerProvisioned.asset
+  GameApplication_CharacterSelection.asset
 
 Run
   Set this GameApplication Active.
@@ -2469,12 +2484,12 @@ Run
   Play.
 
 Observe
-  The Session provisions/adopts the Player through the official Manager-Provisioned path.
+  Player joins, chooses an Actor and enters gameplay.
 
 Inspect
   GameApplication
   PlayerSessionProfile
-  provisioning authoring composition
+  selection UI
   public Player request/observation surfaces
 ```
 
@@ -2616,14 +2631,15 @@ The ledger is a planning aid. QAFramework remains responsible for technical cont
 
 ---
 
-# 26. Frozen baseline catalog — Revision 11
+# 26. Frozen baseline catalog — Revision 7
 
 This is the initial implementation catalog.
 
 ```text
 GETTING STARTED
   Minimal Game
-    Scene-Provided Player
+    Scene Player
+    HostProvisioning = SceneProvided
     Mounted / First Person
     one Route
     one Activity
@@ -2641,23 +2657,21 @@ GAME FLOW
   natural contextual Camera + BGM coverage
 
 PLAYER
-  specific scope delegated to FG-ADR-002
+  current scope governed by FG-ADR-002:
+    Provisioning            # next application; ManagerProvisioned mode
+    Character Selection     # planned / blocked
+    Local Multiplayer       # planned / blocked
 
-  canonical Scene-Provided coverage:
-    Getting Started / Minimal Game
+  Getting Started / Minimal Game supplies canonical Scene Player coverage.
 
-  current Player direction:
-    Manager-Provisioned
-      next Player Demonstration Application
-
-    Character Selection
-      planned / blocked by public arbitrary Actor-selection surface
-
-    Local Multiplayer
-      planned / blocked by public Slot/device/input contract
-
-  Player/Shared
-    only after concrete reuse
+  capabilities remain evolutionary Scenarios:
+    Joining / Slots
+    Actor Selection
+    Activity Participation
+    Physical Lifetime
+    Initial Placement
+    Input / Pause
+    Leave / Rejoin
 
 ADVANCED CONTEXT
   one Demonstration Application
@@ -2680,7 +2694,7 @@ This catalog is intentionally smaller than the ADR inventory.
 
 # 27. Consolidated decisions
 
-1. **Getting Started / Minimal Game is frozen.** It uses one Scene-Provided Player, first-person `Mounted` Camera presentation, one Route, one Activity, minimal movement/look Input and a reasonably populated environment. Navigation is the complete gameplay requirement.
+1. **Getting Started / Minimal Game is frozen.** It uses one Scene Player (`HostProvisioning = SceneProvided`), first-person `Mounted` Camera presentation, one Route, one Activity, minimal movement/look Input and a reasonably populated environment. Navigation is the complete gameplay requirement.
 
 2. **Camera is transversal by default.** Different demonstrations should use different Camera models naturally; a dedicated Camera group is optional and only justified by uncovered concepts.
 
@@ -2692,7 +2706,7 @@ This catalog is intentionally smaller than the ADR inventory.
 
 6. **GameApplication switching should remain explicit.** Use the official `Set Active` path and explain it in Getting Started/group README rather than hiding it with sample magic.
 
-7. **Character Selection remains a valuable planned game-owned Player demonstration surface, but it is currently blocked.** The sample must wait for a sufficient public arbitrary Actor-selection surface rather than bypass the Framework with sample-owned internals.
+7. **Character Selection is a valuable game-owned Player demonstration surface.** It can progressively evolve from single-player selection to local multiplayer joining/selection.
 
 8. **Three Shared scopes are useful:** global sample, group, and Demonstration Application.
 
@@ -2718,19 +2732,19 @@ This catalog is intentionally smaller than the ADR inventory.
 
 19. **Farm-game assets are a current content candidate, not a structural requirement.** The visual library may incorporate other owned-game content when useful without changing the sample architecture.
 
-20. **Player-specific sample scope is delegated to FG-ADR-002.** FG-ADR-001 no longer freezes a fixed Player Demonstration Application catalog.
+20. **Player-specific scope is governed by FG-ADR-002.** The general strategy does not freeze a fixed Player application catalog.
 
-21. **Getting Started / Minimal Game is the canonical Scene-Provided Player reference.** Do not duplicate it as a dedicated Scene-Provided application under Player without new consumer-contract evidence.
+21. **SceneProvided and ManagerProvisioned are parallel Host Provisioning modes, not peer physical Player object types.** The common technical object is the Local Player Host.
 
-22. **Manager-Provisioned is the next Player Demonstration Application.** It is the next distinct provisioning/application path to materialize after the canonical Scene-Provided coverage.
+22. **Getting Started / Minimal Game is the canonical Scene Player reference.** A duplicate Scene Player application under Player is not required by symmetry.
 
-23. **Character Selection is planned but blocked by the public arbitrary Actor-selection surface.** The sample must not invent a private workaround.
+23. **Player Provisioning is the next Player Demonstration Application.** It demonstrates the Session/UIGlobal provisioning authority that can create Local Player Hosts using `HostProvisioning = ManagerProvisioned`.
 
-24. **Local Multiplayer is planned but blocked by the public Slot/device/input contract.** The sample must not create parallel sample-owned Slot/device/input authority.
+24. **Character Selection and Local Multiplayer remain planned but blocked by missing public consumer surfaces.** Samples must not implement substitute Framework authority.
 
-25. **Player capabilities are Scenarios by default and the combinatorial matrix remains out of scope.** Representative canonical uses belong in Samples; exhaustive combinations belong in QAFramework.
+25. **Player capabilities are Scenarios by default.** Participation, lifetime, placement, Input/Pause, Leave/Rejoin and related concepts do not automatically create GameApplications.
 
-26. **`Player/Shared` is conditional, not preallocated.** Introduce/promote it only after concrete reuse across Player Demonstration Applications; application authority stays local.
+26. **Player/Shared is conditional.** Promote content only after concrete reuse across two or more Player applications; application authority stays local.
 
 27. **Camera and Audio are transversal concerns.** They should be visible naturally across Getting Started, Game Flow, Player and Advanced Context rather than appearing to belong only to specialist demonstrations.
 
@@ -2796,7 +2810,7 @@ This catalog is intentionally smaller than the ADR inventory.
 
 2. **Player is the largest current sample domain.** The ADRs distinguish Session configuration, Slots, Joining, Actor selection, provisioning origin, Activity participation, physical lifetime, Initial Placement, public commands/observation, Input/Pause and Leave.
 
-3. **Scene-Provided and Manager-Provisioned are peer origins before admission.** After successful admission both converge on Session ownership of the physical Player.
+3. **SceneProvided and ManagerProvisioned are peer Host Provisioning modes before admission.** They do not describe peer product objects: a Scene Player is an already-authored Local Player Host, while Player Provisioning is the Session/UIGlobal authority that can create Local Player Hosts. After successful admission both paths converge on Session ownership of the physical Player.
 
 4. **Activity representation and physical Player lifetime are separate.** Activity transitions should demonstrate contextual replacement while preserving the same physical Player instance when appropriate.
 
@@ -2874,7 +2888,7 @@ The official ADRs and repository state remain the source of truth if implementat
 
 # 29.1 Frozen sample-structure summary
 
-As of Revision 11:
+As of Revision 7:
 
 ```text
 UPM Sample Group
@@ -2890,12 +2904,13 @@ Sample HUB / Menu
   optional navigation when several Scenarios share one application
 
 Player
-  concrete scope delegated to FG-ADR-002
-  Getting Started / Minimal Game = canonical Scene-Provided coverage
-  Manager-Provisioned = next Player application
-  Character Selection = planned / blocked on public Actor selection
-  Local Multiplayer = planned / blocked on public Slot/device/input
-  Player/Shared only after concrete reuse
+  scope delegated to FG-ADR-002
+  Getting Started = canonical Scene Player coverage
+  Provisioning = next Demonstration Application
+  Character Selection = planned / blocked
+  Local Multiplayer = planned / blocked
+  per-application optional HUB
+  Scenario allocation remains evolutionary
   no silent global GameApplication switching
 
 Camera + Audio
@@ -2944,8 +2959,8 @@ The strategy is closed even though implementation details remain intentionally o
 final UPM display names/descriptions
 exact metadata normalization mechanics proven during final Package Manager import
 final Game Flow Scenario catalog and naming
-final Scenario allocation inside materialized Player Demonstration Applications
-future Player application additions only when FG-ADR-002 criteria and public surfaces justify them
+final Scenario distribution across materialized Player applications
+whether implementation evidence later adds/consolidates a Player archetype
 final Camera presentation/request distribution
 final visual form of HUB/Menu surfaces
 final display name and exact Scenario catalog for Advanced Context
@@ -2969,10 +2984,10 @@ The planning phase is complete enough to begin implementation and repository reo
 Recommended package implementation order:
 
 ```text
-1. Create/use the visible Assets/_Sample/ authoring scaffold.
+1. Create the visible Samples/ authoring scaffold.
 2. Materialize Getting Started / Minimal Game.
 3. Build Game Flow around one Demonstration Application + HUB.
-4. Follow FG-ADR-002 for Player: build Manager-Provisioned next; do not implement Character Selection or Local Multiplayer until their public-surface blockers are resolved.
+4. Build Player / Provisioning next; materialize later Player applications only when their public product surfaces are sufficient.
 5. Add Advanced Context only for transversal gaps.
 6. Build Persistence / Preferences + Progression Save.
 7. Audit Camera/Audio coverage.
@@ -3041,6 +3056,9 @@ A concrete FIRSTGAME folder migration should be designed from the current `plane
 
 ---
 
+
+---
+
 ## Revision 9 naming decision — historical basis
 
 Revision 9 changes only the **authoring workspace name**.
@@ -3082,7 +3100,7 @@ Revision 10 adds two maintenance decisions:
 1. ADR filename is stable.
    Revision lives inside the file.
 
-2. Current visible authoring truth is the FirstGame branch:
+2. Current visible authoring truth is the main branch:
    planet-devourer/Assets/_Sample/
 ```
 
@@ -3095,47 +3113,6 @@ com.immersive.framework/Samples~/
 ```
 
 ---
-
-## Revision 11 Player-scope delegation decision
-
-Revision 11 resolves the Player sample contradiction introduced by the earlier predetermined Player-application baseline.
-
-Canonical relationship:
-
-```text
-FG-ADR-001
-  general sample-program grammar
-  UPM grouping / authoring / distribution
-  Demonstration Application vs Scenario rules
-
-FG-ADR-002
-  Player-specific sample scope
-  canonical Scene-Provided coverage
-  Player application sequence
-  public-surface blockers
-  Player/Shared promotion rule
-```
-
-The previous fixed Player-application freeze is superseded.
-
-Current canonical Player direction is:
-
-```text
-Getting Started / Minimal Game
-  canonical Scene-Provided reference
-
-Player / Manager-Provisioned
-  next Player Demonstration Application
-
-Character Selection
-  planned / blocked by public arbitrary Actor selection
-
-Local Multiplayer
-  planned / blocked by public Slot/device/input
-
-Player/Shared
-  only after concrete reuse
-```
 
 ## Unity packaging evidence used by Revision 8
 
@@ -3155,7 +3132,7 @@ The authoring convention does not replace the official final `Samples~/` package
 
 # 33. Closure
 
-Revision 11 keeps the general sample-program baseline frozen, records `planet-devourer:main/Assets/_Sample/` as the current operational authoring baseline, and delegates the concrete Player sample architecture to FG-ADR-002.
+Revision 12 keeps the general sample-program grammar frozen while delegating Player-specific application scope and terminology to FG-ADR-002. The current provisional authoring baseline is `planet-devourer:main/Assets/_Sample/`.
 
 Frozen baseline:
 
@@ -3174,11 +3151,10 @@ Game Flow
   one Demonstration Application + HUB
 
 Player
-  concrete scope delegated to FG-ADR-002
-  Getting Started / Minimal Game = canonical Scene-Provided coverage
-  Manager-Provisioned = next Player application
-  Character Selection = planned / blocked
-  Local Multiplayer = planned / blocked
+  scope governed by FG-ADR-002
+  Getting Started = canonical Scene Player
+  Provisioning = next Player application
+  later applications evidence-gated
 
 Camera + Audio
   transversal
