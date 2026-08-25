@@ -1,6 +1,6 @@
 # Minimal Game
 
-Status: **AUTHORING COMPLETE / PLAY MODE PROVEN — 2026-08-22**  
+Status: **AUTHORING COMPLETE / PLAY MODE PROVEN — AUDIO ROUTE EVIDENCE UPDATED 2026-08-24**  
 UPM promotion: **PENDING package finalization/import proof**
 
 ## Purpose
@@ -50,6 +50,8 @@ one Scene-authored Local Player Host
 one Scene Logical Player
 Mounted / First Person Camera
 minimal movement/look Input
+optional persistent Audio runtime
+Route-owned ambient BGM
 ```
 
 The current materialized application uses:
@@ -101,9 +103,18 @@ MinimalFirstPersonLocomotion
   -> READY
   -> Move input received
   -> Look input received
+
+Route BGM
+  -> FrameworkRouteBgmBinding = PlayOwn / BGM_Floresta
+  -> Startup Activity publishes no Activity BGM intent
+  -> activityContentHandles = 0
+  -> Activity entry completion resolves pending Route intent
+  -> BGM_Floresta = Applied / confirmed
 ```
 
 The Player-owned first-person rig remains a normal eligible Local Player Camera request. The persistent `Session Camera Rig` is the explicit output Default and is not a fake Session Camera request.
+
+Audio is **Ambient/Supporting**, not a primary Getting Started lesson. This sample intentionally demonstrates the simplest Route-owned BGM shape: the Route publishes `PlayOwn`, the Startup Activity has no Activity BGM binding, and lifecycle completion applies the pending Route cue without requiring Route -> Activity authoring.
 
 ## Run
 
@@ -145,6 +156,8 @@ GameApplication
   -> PlayerGameplayCameraAuthoring
   -> First Person Camera Rig / CameraRigComposer
   -> Persistent Content / CameraOutputSessionBinding
+  -> Persistent Content / AudioRuntimeHost + FrameworkBgmDirector
+  -> Route / FrameworkRouteBgmBinding (PlayOwn / BGM_Floresta)
 ```
 
 ## Completion boundary

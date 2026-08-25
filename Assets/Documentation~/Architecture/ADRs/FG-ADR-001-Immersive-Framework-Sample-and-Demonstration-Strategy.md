@@ -1,6 +1,6 @@
 # FG-ADR-001 — Immersive Framework Sample and Demonstration Strategy
 
-Status: **FROZEN BASELINE — REVISION 12 / PLAYER SCOPE + TERMINOLOGY DELEGATED TO FG-ADR-002**  
+Status: **FROZEN BASELINE — REVISION 13 / AUDIO TRANSVERSAL EVIDENCE + PLAYER SCOPE DELEGATED TO FG-ADR-002**  
 Baseline frozen on: **2026-08-16**  
 Revision 2 consolidated on: **2026-08-16**  
 Revision 3 consolidated on: **2026-08-16**  
@@ -13,7 +13,8 @@ Revision 9 finalized on: **2026-08-16**
 Revision 10 updated on: **2026-08-16**  
 Revision 11 updated on: **2026-08-22**  
 Revision 12 updated on: **2026-08-24**  
-Current document revision: **12**  
+Revision 13 updated on: **2026-08-24**  
+Current document revision: **13**  
 Canonical filename: **`FG-ADR-001-Immersive-Framework-Sample-and-Demonstration-Strategy.md`**  
 Scope: **Samples authoring + `Samples~` distribution strategy / product UX exploration / consumer demonstration**  
 Source of truth for framework architecture: **`com.immersive.framework` ADRs 001–022 and current package implementation**  
@@ -34,6 +35,8 @@ Revision 10 preserves the Revision 9 sample architecture, adopts a **stable cano
 Revision 11 delegates the **Player-specific sample scope, sequencing and blockers** to `FG-ADR-002 — Player Sample Scope and Demonstration Architecture`. The older fixed four-application Player catalog is no longer authoritative here.
 
 Revision 12 clarifies Player product-facing terminology without renaming runtime contracts. `SceneProvided` and `ManagerProvisioned` remain parallel **Host Provisioning modes**. Product/editor/sample surfaces distinguish the **Scene Player** composition from **Player Provisioning** authority; both use the common `LocalPlayerHostAuthoring` technical Host at different points in the flow. FG-ADR-002 is authoritative for this Player terminology.
+
+Revision 13 records current transversal Audio evidence without creating a dedicated basic Audio application. Getting Started / Minimal Game now proves the simplest **Route-owned BGM** case, Player Provisioning proves an independent **Activity-owned BGM** case, and Game Flow remains the primary home for contextual Route/Activity BGM transitions. The current Framework contract is sticky: owner exit preserves confirmed presentation; there is no automatic contextual restoration and no Route -> Startup Activity BGM authoring reference.
 
 During active development, samples are currently authored under the visible `Assets/_Sample/` workspace in `planet-devourer:main`, so Unity imports them normally and they can be created, inspected and edited through the Project Browser. The official final distribution remains package-owned and uses the UPM `Samples~/` convention plus `package.json` `samples` metadata.
 
@@ -1241,7 +1244,7 @@ Audio
   inheritance
   override
   silence
-  contextual restoration
+  sticky preserve / explicit replacement
 ```
 
 These behaviors should be demonstrated as part of Flow when they arise naturally, not copied into separate basic Camera/Audio samples.
@@ -1612,12 +1615,49 @@ Activity BGM
 inherit
 override
 silence
-restore according to context
+No Request / sticky preserve
 ```
 
-This communicates that Audio intent participates in game lifecycle rather than existing only in a specialist scene.
+This communicates that Audio intent participates in game lifecycle rather than existing only in a specialist scene. Owner exit does not automatically restore an older Route or Activity cue; a new presentation requires explicit Play/Silence intent, while No Request preserves the confirmed presentation.
 
-Player or other samples may also use Audio naturally as Supporting/Ambient content when that does not distort dependency boundaries.
+Current transversal consumer evidence is now concrete:
+
+```text
+Getting Started / Minimal Game
+  Route BGM = PlayOwn / BGM_Floresta
+  Startup Activity publishes no Activity BGM intent
+  activityContentHandles = 0
+  lifecycle completion resolves pending Route intent
+
+Game Flow
+  primary contextual Route/Activity BGM coverage
+  Play / Preserve / Silence across transitions
+
+Player / Provisioning
+  no Route BGM Binding
+  Activity BGM = BGM_Antiguidade
+  Activity-owned BGM works independently
+```
+
+Audio remains Supporting/Ambient outside the Game Flow contextual demonstration and must not distort dependency boundaries.
+
+### Current BGM authoring/lifecycle rule — Revision 13
+
+```text
+FrameworkRouteBgmBinding
+  publishes Route intent only
+
+FrameworkActivityBgmBinding
+  publishes Activity intent only
+
+Route with Startup Activity
+  may defer Route intent
+  ActivityFlow lifecycle completion closes ordering
+  Activity intent wins if published
+  otherwise pending Route intent resolves
+```
+
+There is no Route -> Activity BGM binding reference in the current Framework product surface. Startup ordering is lifecycle-owned and the persistent `FrameworkBgmDirector` receives completion through explicit runtime wiring.
 
 ## 17.4 Audio ownership boundary — frozen
 
@@ -2604,7 +2644,8 @@ Activity BGM
 inherit
 override
 silence
-restore
+No Request / sticky preserve
+Startup Activity lifecycle ordering without Route -> Activity binding
 optional provider/ecosystem behavior
 ```
 
@@ -2613,14 +2654,15 @@ Expected natural homes:
 ```text
 Getting Started
   Mounted / First Person
+  optional Route-owned ambient BGM when dependency-safe
 
 Game Flow
   contextual Route/Activity Camera
-  contextual Route/Activity BGM
+  primary contextual Route/Activity BGM
 
 Player
   Player-natural Camera models/scopes
-  optional supporting Audio when dependency-safe
+  optional Activity-owned supporting/ambient BGM when dependency-safe
 
 Advanced Context
   same-Activity Camera switching
