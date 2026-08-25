@@ -33,7 +33,7 @@ namespace _Sample.GettingStarted.MinimalGame.Scripts
         private void Awake()
         {
             _characterController = GetComponent<CharacterController>();
-            _gameplayInputReader = GetComponent<PlayerGameplayInputConsumerBinding>();
+            _gameplayInputReader = GetComponent<PlayerGameplayInputReader>();
 
             if (cameraMount != null)
             {
@@ -116,7 +116,7 @@ namespace _Sample.GettingStarted.MinimalGame.Scripts
 
             if (_gameplayInputReader == null)
             {
-                Log.Error("PlayerGameplayInputConsumerBinding is missing on the same GameObject.");
+                Log.Error("PlayerGameplayInputReader is missing on the same GameObject.");
             }
 
             if (moveAction == null)

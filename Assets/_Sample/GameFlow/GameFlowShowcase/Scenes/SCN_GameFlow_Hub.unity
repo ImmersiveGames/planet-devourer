@@ -388,9 +388,9 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f37a6125514e4491a7174d4372fc4c22, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.RouteLifecycle.RouteContentBinding
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.RouteLifecycle.RouteContentContribution
   route: {fileID: 11400000, guid: 50f22f5c2cf5d154a9cbfa9132994c68, type: 2}
-  localContentId: route-local-content.route-content-routecontentbinding-0
+  localContentId: route-local-content.route-content-routeContentContribution-0
   requiredness: 10
 --- !u!4 &1427141901
 Transform:

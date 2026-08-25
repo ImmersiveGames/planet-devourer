@@ -6,7 +6,7 @@ namespace Immersive.Framework.Samples.Player
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(CharacterController))]
-    [RequireComponent(typeof(PlayerGameplayInputConsumerBinding))]
+    [RequireComponent(typeof(PlayerGameplayInputReader))]
     public sealed class MinimalPlayerMovement : MonoBehaviour
     {
         [SerializeField]
@@ -16,12 +16,12 @@ namespace Immersive.Framework.Samples.Player
         private float moveSpeed = 4f;
 
         private CharacterController _characterController;
-        private PlayerGameplayInputConsumerBinding _gameplayInput;
+        private PlayerGameplayInputReader _gameplayInput;
 
         private void Awake()
         {
             _characterController = GetComponent<CharacterController>();
-            _gameplayInput = GetComponent<PlayerGameplayInputConsumerBinding>();
+            _gameplayInput = GetComponent<PlayerGameplayInputReader>();
         }
 
         private void Update()

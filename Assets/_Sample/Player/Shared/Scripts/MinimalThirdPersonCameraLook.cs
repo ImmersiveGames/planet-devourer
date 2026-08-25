@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 namespace Immersive.Framework.Samples.Player
 {
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(PlayerGameplayInputConsumerBinding))]
+    [RequireComponent(typeof(PlayerGameplayInputReader))]
     public sealed class MinimalThirdPersonLook : MonoBehaviour
     {
         [SerializeField]
@@ -23,13 +23,13 @@ namespace Immersive.Framework.Samples.Player
         [SerializeField]
         private float maximumPitch = 70f;
 
-        private PlayerGameplayInputConsumerBinding _gameplayInput;
+        private PlayerGameplayInputReader _gameplayInput;
         private float _pitch;
 
         private void Awake()
         {
             _gameplayInput =
-                GetComponent<PlayerGameplayInputConsumerBinding>();
+                GetComponent<PlayerGameplayInputReader>();
 
             if (trackingPivot != null)
             {

@@ -123,7 +123,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 391777011822377884}
-        m_TargetAssemblyTypeName: Immersive.Framework.PlayerParticipation.PlayerProvisioningCommandTrigger,
+        m_TargetAssemblyTypeName: Immersive.Framework.PlayerParticipation.PlayerSessionCommandTrigger,
           Immersive.Framework.Runtime
         m_MethodName: InvokeConfiguredOperation
         m_Mode: 1
@@ -335,7 +335,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c2a9eb535ca8432da14fd9195ef7b812, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.PlayerProvisioningCommandTrigger
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.PlayerSessionCommandTrigger
   operation: 60
   consumerAccessBinding: {fileID: 8346845859423529395}
   controlScheme: 
@@ -712,7 +712,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c2a9eb535ca8432da14fd9195ef7b812, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.PlayerProvisioningCommandTrigger
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.PlayerSessionCommandTrigger
   operation: 40
   consumerAccessBinding: {fileID: 8346845859423529395}
   controlScheme: 
@@ -966,7 +966,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 8570675275941843826}
-        m_TargetAssemblyTypeName: Immersive.Framework.PlayerParticipation.PlayerProvisioningCommandTrigger,
+        m_TargetAssemblyTypeName: Immersive.Framework.PlayerParticipation.PlayerSessionCommandTrigger,
           Immersive.Framework.Runtime
         m_MethodName: InvokeConfiguredOperation
         m_Mode: 1
