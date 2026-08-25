@@ -206,6 +206,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2706233871067227582, guid: d0bb76da3f6dc77499ca8b6418b4f19d, type: 3}
+      propertyPath: lastApplyRebuildStatus
+      value: ValidationSucceeded
+      objectReference: {fileID: 0}
+    - target: {fileID: 2706233871067227582, guid: d0bb76da3f6dc77499ca8b6418b4f19d, type: 3}
+      propertyPath: materializationRevision
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2706233871067227582, guid: d0bb76da3f6dc77499ca8b6418b4f19d, type: 3}
+      propertyPath: lastMaterializationSummary
+      value: Validation completed. No rig was changed.
+      objectReference: {fileID: 0}
     - target: {fileID: 3724838434628451047, guid: d0bb76da3f6dc77499ca8b6418b4f19d, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

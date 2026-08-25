@@ -129,6 +129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 254469660}
   - component: {fileID: 254469659}
+  - component: {fileID: 500000000}
   m_Layer: 0
   m_Name: Ativity Content
   m_TagString: Untagged
@@ -147,13 +148,11 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 186d5c674b9947cbb89d1c02ae9e8317, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ActivityFlow.ActivityLocalVisibilityAdapter
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ActivityFlow.ActivityVisibilityRule
   activities:
   - {fileID: 11400000, guid: 1de60b795043d8349acc5bcb9c8e0db2, type: 2}
   matchMode: 0
   noActiveActivityPolicy: 0
-  localContentId: activity-local-content.ativity-content-activitylocalvisibilityadapter-0
-  requiredness: 10
 --- !u!4 &254469660
 Transform:
   m_ObjectHideFlags: 0
@@ -478,3 +477,18 @@ SceneRoots:
   - {fileID: 662647456}
   - {fileID: 711808751}
   - {fileID: 254469660}
+--- !u!114 &500000000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 254469658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b946bb8df6944fdb886d3433c93d6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ActivityFlow.ActivityContentContribution
+  activity: {fileID: 11400000, guid: 1de60b795043d8349acc5bcb9c8e0db2, type: 2}
+  localContentId: activity-local-content.ativity-content-activitylocalvisibilityadapter-0
+  requiredness: 10

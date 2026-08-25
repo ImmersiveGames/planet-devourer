@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2740129479775980679}
   - component: {fileID: 5773039269403168542}
   - component: {fileID: 9085494174138595361}
-  - component: {fileID: 5003001349547330676}
+  - component: {fileID: 3836730046461109107}
   - component: {fileID: 2706233871067227582}
   m_Layer: 0
   m_Name: Session Camera Rig
@@ -28,13 +28,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 289802579495635910}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.31622776, y: 4.4353745e-17, z: 1.5008464e-17, w: 0.9486833}
+  m_LocalRotation: {x: 0.27568254, y: 0, z: 0, w: 0.96124876}
   m_LocalPosition: {x: 0, y: 17, z: -16}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3724838434628451047}
-  m_LocalEulerAnglesHint: {x: 31.95, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 35, y: 0, z: 0}
 --- !u!114 &5773039269403168542
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -97,7 +97,7 @@ MonoBehaviour:
     RotationDamping: {x: 1, y: 1, z: 1}
     QuaternionDamping: 1
   FollowOffset: {x: 0, y: 5, z: -8}
---- !u!114 &5003001349547330676
+--- !u!114 &3836730046461109107
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -106,26 +106,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 289802579495635910}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f38bda98361e1de48a4ca2bd86ea3c17, type: 3}
+  m_Script: {fileID: 11500000, guid: 1e8b78ac948f05a46a6d8339a503172b, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineRotationComposer
-  Composition:
-    ScreenPosition: {x: 0, y: 0}
-    DeadZone:
-      Enabled: 0
-      Size: {x: 0.2, y: 0.2}
-    HardLimits:
-      Enabled: 0
-      Size: {x: 0.8, y: 0.8}
-      Offset: {x: 0, y: 0}
-  CenterOnActivate: 1
-  TargetOffset: {x: 0, y: -1, z: 0}
-  Damping: {x: 0.5, y: 0.5}
-  Lookahead:
-    Enabled: 0
-    Time: 0
-    Smoothing: 0
-    IgnoreY: 0
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineHardLookAt
+  LookAtOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &2706233871067227582
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,18 +138,20 @@ MonoBehaviour:
   thirdPersonCameraDistance: 2
   thirdPersonDamping: {x: 0.1, y: 0.5, z: 0.3}
   cinemachineCamera: {fileID: 5773039269403168542}
-  materializedPresentationIntent: 0
+  materializedPresentationIntent: 10
   frameworkOwnedCinemachineCamera: {fileID: 0}
   frameworkOwnedPositionControl: {fileID: 0}
-  frameworkOwnedRotationControl: {fileID: 0}
-  materializationRevision: 0
+  frameworkOwnedRotationControl: {fileID: 3836730046461109107}
+  materializationRevision: 1
   logApplyRebuildDiagnostics: 1
-  lastApplyRebuildStatus: 
+  lastApplyRebuildStatus: ApplySucceeded
   lastBlockingIssue: 
-  lastTargetResolutionSummary: 
-  lastMaterializationSummary: 
-  lastResolvedFollowTarget: {fileID: 0}
-  lastResolvedLookAtTarget: {fileID: 0}
+  lastTargetResolutionSummary: Camera target requirements satisfied.
+  lastMaterializationSummary: created='1' repaired='0' alreadyValid='5' skipped='2'
+    blocked='0' presentation='Follow' cameraOwnership='ExternalOrUnknown' positionOwnership='ExternalOrUnknown'
+    rotationOwnership='FrameworkOwned' revision='1'
+  lastResolvedFollowTarget: {fileID: 8091125778278855379}
+  lastResolvedLookAtTarget: {fileID: 8091125778278855379}
 --- !u!1 &2525267510779617927
 GameObject:
   m_ObjectHideFlags: 0
@@ -194,13 +180,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2525267510779617927}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.31622782, y: 5.552615e-17, z: -1.8508719e-17, w: 0.9486833}
+  m_LocalRotation: {x: 0.27568254, y: 0, z: 0, w: 0.96124876}
   m_LocalPosition: {x: 0, y: 17, z: -16}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3724838434628451047}
-  m_LocalEulerAnglesHint: {x: 31.1, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 35, y: 0, z: 0}
 --- !u!20 &1486248935081468161
 Camera:
   m_ObjectHideFlags: 0

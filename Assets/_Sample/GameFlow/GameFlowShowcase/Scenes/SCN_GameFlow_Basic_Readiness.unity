@@ -899,13 +899,11 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 186d5c674b9947cbb89d1c02ae9e8317, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ActivityFlow.ActivityContentBinding
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ActivityFlow.ActivityVisibilityRule
   activities:
   - {fileID: 11400000, guid: 25bb7e2463edac14db7ff11f9d870366, type: 2}
   matchMode: 0
   noActiveActivityPolicy: 0
-  localContentId: activity-local-content.menuroute-canvas-menuhub-menu-routenavigation-btn-gotoactivitye-activitycontentbinding-0
-  requiredness: 10
 --- !u!1 &1922753789
 GameObject:
   m_ObjectHideFlags: 0
@@ -1072,13 +1070,11 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 186d5c674b9947cbb89d1c02ae9e8317, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ActivityFlow.ActivityContentBinding
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ActivityFlow.ActivityVisibilityRule
   activities:
   - {fileID: 11400000, guid: 25bb7e2463edac14db7ff11f9d870366, type: 2}
   matchMode: 1
   noActiveActivityPolicy: 0
-  localContentId: activity-local-content.menuroute-canvas-menuhub-menu-routenavigation-btn-gotoactivityc-activitycontentbinding-0
-  requiredness: 10
 --- !u!1 &1972975057 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 849629364786563314, guid: 94b74a0c6c1689f43b39b3f06361d234, type: 3}
@@ -1095,13 +1091,11 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 186d5c674b9947cbb89d1c02ae9e8317, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ActivityFlow.ActivityContentBinding
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ActivityFlow.ActivityVisibilityRule
   activities:
   - {fileID: 11400000, guid: 25bb7e2463edac14db7ff11f9d870366, type: 2}
   matchMode: 0
   noActiveActivityPolicy: 0
-  localContentId: activity-local-content.menuroute-canvas-menuhub-menu-routenavigation-btn-gotoactivityd-activitycontentbinding-0
-  requiredness: 10
 --- !u!1 &1988420205
 GameObject:
   m_ObjectHideFlags: 0

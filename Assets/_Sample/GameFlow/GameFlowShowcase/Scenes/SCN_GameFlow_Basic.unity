@@ -489,14 +489,12 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 186d5c674b9947cbb89d1c02ae9e8317, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ActivityFlow.ActivityContentBinding
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ActivityFlow.ActivityVisibilityRule
   activities:
   - {fileID: 11400000, guid: 1de60b795043d8349acc5bcb9c8e0db2, type: 2}
   - {fileID: 11400000, guid: 25bb7e2463edac14db7ff11f9d870366, type: 2}
   matchMode: 0
   noActiveActivityPolicy: 0
-  localContentId: activity-local-content.menuroute-canvas-menuhub-menu-routenavigation-btn-gotoactivitya-activitycontentbinding-0
-  requiredness: 10
 --- !u!1001 &1079241607
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -640,6 +638,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3075015778471964599, guid: d4e6b1ea546af3b4f863693a6f859e22, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1372037530}
+    - targetCorrespondingSourceObject: {fileID: 3075015778471964599, guid: d4e6b1ea546af3b4f863693a6f859e22, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 500000001}
   m_SourcePrefab: {fileID: 100100000, guid: d4e6b1ea546af3b4f863693a6f859e22, type: 3}
 --- !u!4 &1372037528 stripped
 Transform:
@@ -662,13 +663,11 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 186d5c674b9947cbb89d1c02ae9e8317, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ActivityFlow.ActivityContentBinding
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ActivityFlow.ActivityVisibilityRule
   activities:
   - {fileID: 11400000, guid: 082033c485b15ac4ba095eb3386156d8, type: 2}
   matchMode: 0
   noActiveActivityPolicy: 0
-  localContentId: activity-local-content.rooms-visitors-b-activitycontentbinding-0
-  requiredness: 10
 --- !u!1 &1414099494
 GameObject:
   m_ObjectHideFlags: 0
@@ -869,6 +868,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 879044399388274724, guid: 142633ad0828df946815104b1e075af6, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1542037441}
+    - targetCorrespondingSourceObject: {fileID: 879044399388274724, guid: 142633ad0828df946815104b1e075af6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 500000000}
   m_SourcePrefab: {fileID: 100100000, guid: 142633ad0828df946815104b1e075af6, type: 3}
 --- !u!4 &1542037439 stripped
 Transform:
@@ -891,13 +893,11 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 186d5c674b9947cbb89d1c02ae9e8317, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ActivityFlow.ActivityContentBinding
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ActivityFlow.ActivityVisibilityRule
   activities:
   - {fileID: 11400000, guid: 1de60b795043d8349acc5bcb9c8e0db2, type: 2}
   matchMode: 0
   noActiveActivityPolicy: 0
-  localContentId: activity-local-content.rooms-visitors-a-activitycontentbinding-0
-  requiredness: 10
 --- !u!1001 &1642577637
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1141,14 +1141,12 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 186d5c674b9947cbb89d1c02ae9e8317, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ActivityFlow.ActivityContentBinding
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ActivityFlow.ActivityVisibilityRule
   activities:
   - {fileID: 11400000, guid: 082033c485b15ac4ba095eb3386156d8, type: 2}
   - {fileID: 11400000, guid: 25bb7e2463edac14db7ff11f9d870366, type: 2}
   matchMode: 0
   noActiveActivityPolicy: 0
-  localContentId: activity-local-content.menuroute-canvas-menuhub-menu-routenavigation-btn-gotoactivityb-activitycontentbinding-0
-  requiredness: 10
 --- !u!1 &1988420205
 GameObject:
   m_ObjectHideFlags: 0
@@ -1421,3 +1419,33 @@ SceneRoots:
   - {fileID: 2065010462}
   - {fileID: 1079241607}
   - {fileID: 1566985443227401893}
+--- !u!114 &500000000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1542037440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b946bb8df6944fdb886d3433c93d6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ActivityFlow.ActivityContentContribution
+  activity: {fileID: 11400000, guid: 1de60b795043d8349acc5bcb9c8e0db2, type: 2}
+  localContentId: activity-local-content.rooms-visitors-a-activitycontentbinding-0
+  requiredness: 10
+--- !u!114 &500000001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1372037529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b946bb8df6944fdb886d3433c93d6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ActivityFlow.ActivityContentContribution
+  activity: {fileID: 11400000, guid: 082033c485b15ac4ba095eb3386156d8, type: 2}
+  localContentId: activity-local-content.rooms-visitors-b-activitycontentbinding-0
+  requiredness: 10

@@ -572,6 +572,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1779670681}
   - component: {fileID: 1779670682}
+  - component: {fileID: 500000000}
   m_Layer: 0
   m_Name: Activity Content
   m_TagString: Untagged
@@ -606,13 +607,11 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 186d5c674b9947cbb89d1c02ae9e8317, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ActivityFlow.ActivityContentBinding
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ActivityFlow.ActivityVisibilityRule
   activities:
   - {fileID: 11400000, guid: 628963e6d36f19349851130af36982ab, type: 2}
   matchMode: 0
   noActiveActivityPolicy: 0
-  localContentId: activity-local-content.route-content-activitycontentbinding-0
-  requiredness: 10
 --- !u!1001 &1792624374
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -858,7 +857,8 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8346845859423529395, guid: 10b079b713f1b314791047a2063d4940, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -872,3 +872,18 @@ SceneRoots:
   - {fileID: 2989816013269408614}
   - {fileID: 1537543364}
   - {fileID: 1779670681}
+--- !u!114 &500000000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1779670679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b946bb8df6944fdb886d3433c93d6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ActivityFlow.ActivityContentContribution
+  activity: {fileID: 11400000, guid: 628963e6d36f19349851130af36982ab, type: 2}
+  localContentId: activity-local-content.route-content-activitycontentbinding-0
+  requiredness: 10
