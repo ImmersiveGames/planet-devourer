@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2668358071969456492}
   - component: {fileID: 545585289317328475}
   - component: {fileID: 1054333260362919034}
+  - component: {fileID: 9219751570133027984}
   m_Layer: 0
   m_Name: btn_JoinPlayer
   m_TagString: Untagged
@@ -122,10 +123,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 391777011822377884}
-        m_TargetAssemblyTypeName: Immersive.Framework.PlayerParticipation.PlayerSessionCommandTrigger,
+      - m_Target: {fileID: 9219751570133027984}
+        m_TargetAssemblyTypeName: Immersive.Framework.PlayerParticipation.PlayerSessionJoinCommandTrigger,
           Immersive.Framework.Runtime
-        m_MethodName: InvokeConfiguredOperation
+        m_MethodName: Invoke
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -155,6 +156,21 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &9219751570133027984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1721205024264716538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a1ab0b68f54b074babd906b60740182, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.PlayerSessionJoinCommandTrigger
+  scope: 20
+  reason: join-player
+  controlScheme: 
 --- !u!1 &3012759930154254365
 GameObject:
   m_ObjectHideFlags: 0
@@ -292,59 +308,6 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!1 &3059133560341635703
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4191332460266566555}
-  - component: {fileID: 8570675275941843826}
-  m_Layer: 0
-  m_Name: Leave Player Command
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4191332460266566555
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3059133560341635703}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7112014590103858445}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8570675275941843826
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3059133560341635703}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2a9eb535ca8432da14fd9195ef7b812, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.PlayerSessionCommandTrigger
-  operation: 60
-  consumerAccessBinding: {fileID: 8346845859423529395}
-  controlScheme: 
-  defaultActorSelectionRequest: {fileID: 0}
-  selectedPlayerSlot: {fileID: 0}
-  expectedSelectionRevision: -1
-  leavePlayerSlot: {fileID: 11400000, guid: c1dee36a59ff7ec45ad47e8224ad7622, type: 2}
-  expectedLeaveOccurrenceRevision: -1
-  reason: 
 --- !u!1 &3413051603390255525
 GameObject:
   m_ObjectHideFlags: 0
@@ -354,8 +317,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7112014590103858445}
-  - component: {fileID: 8346845859423529395}
-  - component: {fileID: 5871870085627602850}
   m_Layer: 0
   m_Name: Manager-Provisioned Player Controls
   m_TagString: Untagged
@@ -376,38 +337,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 4191332460266566555}
-  - {fileID: 7113857272218998617}
   - {fileID: 1404339271096935692}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8346845859423529395
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3413051603390255525}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ebf679d50fa62684ab15cd8bfc764416, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.LocalPlayerProvisioningConsumerAccessBinding
-  scope: 20
---- !u!114 &5871870085627602850
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3413051603390255525}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9a206419dbd04d2697fa0a2b881a7a1b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.PlayerProvisioningStatusBinding
-  consumerAccessBinding: {fileID: 8346845859423529395}
-  commandTrigger: {fileID: 0}
 --- !u!1 &3981010491532691889
 GameObject:
   m_ObjectHideFlags: 0
@@ -669,59 +601,6 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: Leave Player
---- !u!1 &7290667424503405616
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7113857272218998617}
-  - component: {fileID: 391777011822377884}
-  m_Layer: 0
-  m_Name: Join Player Command
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7113857272218998617
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7290667424503405616}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7112014590103858445}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &391777011822377884
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7290667424503405616}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2a9eb535ca8432da14fd9195ef7b812, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.PlayerSessionCommandTrigger
-  operation: 40
-  consumerAccessBinding: {fileID: 8346845859423529395}
-  controlScheme: 
-  defaultActorSelectionRequest: {fileID: 0}
-  selectedPlayerSlot: {fileID: 0}
-  expectedSelectionRevision: -1
-  leavePlayerSlot: {fileID: 0}
-  expectedLeaveOccurrenceRevision: -1
-  reason: 
 --- !u!1 &8017737929459579114
 GameObject:
   m_ObjectHideFlags: 0
@@ -856,6 +735,7 @@ GameObject:
   - component: {fileID: 7562605282417676231}
   - component: {fileID: 4195774754625469748}
   - component: {fileID: 5309408638334001219}
+  - component: {fileID: 4819873679633151831}
   m_Layer: 0
   m_Name: btn_LeavePlayer
   m_TagString: Untagged
@@ -965,10 +845,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8570675275941843826}
-        m_TargetAssemblyTypeName: Immersive.Framework.PlayerParticipation.PlayerSessionCommandTrigger,
+      - m_Target: {fileID: 4819873679633151831}
+        m_TargetAssemblyTypeName: Immersive.Framework.PlayerParticipation.PlayerSessionLeaveCommandTrigger,
           Immersive.Framework.Runtime
-        m_MethodName: InvokeConfiguredOperation
+        m_MethodName: Invoke
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -998,6 +878,22 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &4819873679633151831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9024621009955831711}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb8a3699997f18f43b0f8310c61d7ff8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.PlayerSessionLeaveCommandTrigger
+  scope: 20
+  reason: 
+  playerSlot: {fileID: 11400000, guid: c1dee36a59ff7ec45ad47e8224ad7622, type: 2}
+  expectedLeaveOccurrenceRevision: -1
 --- !u!1001 &5128907779780982917
 PrefabInstance:
   m_ObjectHideFlags: 0
