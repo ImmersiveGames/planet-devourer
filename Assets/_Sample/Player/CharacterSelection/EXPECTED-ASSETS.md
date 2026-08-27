@@ -1,18 +1,61 @@
 # Expected Unity Assets
 
-Status: **PLANNED / BLOCKED — DO NOT MATERIALIZE YET**
+Status: **READY FOR MATERIALIZATION / NOT YET PLAY MODE PROVEN — 2026-08-26**
 
-Character Selection remains blocked by the public arbitrary Actor-selection surface defined in FG-ADR-002.
+The previous public arbitrary Actor-selection blocker is closed. Character Selection may now be materialized using only official public Player surfaces.
 
-When that blocker is resolved, the expected materialization may include:
+Expected application-local assets may include:
 
 ```text
 GameApplication_CharacterSelection.asset
 PlayerSessionProfile_CharacterSelection.asset
-game-owned character-selection UI
-public Framework Join / Actor Selection command consumption
-supporting Route / Activity / Scene assets
-optional application-local HUB when multiple compatible Scenarios exist
+  HostProvisioning = ManagerProvisioned
+  ActorResolution = LeaveUnresolved
+
+supporting Player Slot / participation profiles
+at least two application-owned ActorProfile choices when suitable assets exist
+Local Player Host prefab for Manager-Provisioned acquisition
+supporting Route / Activity assets
+supporting Scene assets
+game-owned Character Selection UI
+public Player Session Join / Select Actor command components
+optional PlayerSessionObserver for read-only UI evidence
+optional application-local HUB only when multiple compatible Scenarios justify it
 ```
 
-Do not create sample-owned internal Actor-selection infrastructure to satisfy this list.
+Expected runtime teaching path:
+
+```text
+Join
+  -> Joined Slot
+  -> unresolved Actor
+
+Character choice
+  -> PlayerSessionSelectActorCommandTrigger
+  -> PlayerActorSelectionResult
+
+Framework lifecycle
+  -> selection commit
+  -> Actor preparation
+  -> Manager-Provisioned materialization
+  -> Activity admission / GameplayReady
+```
+
+Do not materialize sample-owned internal Actor-selection infrastructure.
+
+Do not add:
+
+```text
+private/internal Player runtime access
+reflection-based Player discovery
+direct Session mutation
+parallel Actor registry/selection authority
+hidden Default Actor fallback
+sample-owned Actor preparation/materialization
+physical hot-swap behavior
+Local Multiplayer Slot/device/input architecture
+```
+
+`PlayerSessionReplaceActorSelectionCommandTrigger` and `PlayerSessionClearActorSelectionCommandTrigger` exist as public lifecycle commands but are not required assets for the initial Character Selection demonstration.
+
+This file describes the expected materialization boundary only. Asset existence and Play Mode behavior must be recorded after implementation and validation; they are not claimed by this status update.
