@@ -1,9 +1,10 @@
 # FG-ADR-002 — Player Sample Scope and Demonstration Architecture
 
-Status: **ACCEPTED — CANONICAL PLAYER SAMPLE SCOPE / REVISION 2**  
+Status: **ACCEPTED — CANONICAL PLAYER SAMPLE SCOPE / REVISION 3**  
 Accepted on: **2026-08-22**  
 Revision 2 updated on: **2026-08-24**  
-Current document revision: **2**  
+Revision 3 updated on: **2026-08-26**  
+Current document revision: **3**  
 Canonical filename: **`FG-ADR-002-Player-Sample-Scope-and-Demonstration-Architecture.md`**  
 Scope: **Player sample coverage, Demonstration Application boundaries, implementation sequence, public-surface blockers, Player-specific sharing and product-facing terminology**  
 Related strategy: **FG-ADR-001 — Immersive Framework Sample and Demonstration Strategy**  
@@ -32,9 +33,9 @@ FG-ADR-002 owns the Player-specific decisions that should no longer be duplicate
 
 ```text
 where the Scene Player path is demonstrated canonically
+which Player Demonstration Applications are materialized / proven
 which Player Demonstration Application is next
-which later Player demonstrations are planned
-which public product surfaces currently block those demonstrations
+which later Player demonstrations remain blocked by missing public contracts
 when Player/Shared is allowed to exist as real shared ownership
 how Player Host and Player Provisioning are named in product-facing surfaces
 ```
@@ -51,7 +52,7 @@ FG-ADR-002
 
 ### 1.1 Product-facing terminology
 
-Status: **CANONICAL — REVISION 2**
+Status: **CANONICAL — REVISION 3**
 
 The Player model contains one common technical host and more than one way for that host to enter the Session.
 
@@ -83,7 +84,7 @@ Player Provisioning
   = not parallel Player Host types
 ```
 
-`SceneProvided`, `ManagerProvisioned`, `PlayerHostProvisioningMode` and existing runtime/API type names remain valid runtime terminology. Revision 2 does **not** rename those contracts merely to change presentation vocabulary.
+`SceneProvided`, `ManagerProvisioned`, `PlayerHostProvisioningMode` and existing runtime/API type names remain valid runtime terminology. Revision 3 does **not** rename those contracts merely to change presentation vocabulary.
 
 Product-facing surfaces should prefer short contextual grouping over repeating runtime-mode names as if they described equivalent objects.
 
@@ -99,84 +100,57 @@ Player
 
 ---
 
-## 2. Problem
+## 2. Current product evidence
 
-The earlier Player sample baseline treated a fixed application catalog as if all of its entries were already frozen and equally ready for implementation.
+The Player sample architecture must track real implementation status rather than preserve an old fixed catalog.
 
-Implementation evidence changed that conclusion.
-
-Getting Started / Minimal Game now provides a complete executable **Scene Player** reference. Creating another dedicated Scene Player application under Player would duplicate a contract already demonstrated canonically.
-
-A second terminology problem also became visible while building the authoring tools. The previous labels presented:
+Current evidence is:
 
 ```text
-Scene-Provided Local Player
-Manager-Provisioned Local Player
-```
+Getting Started / Minimal Game
+  canonical Scene Player reference
+  SceneProvided
+  proven
 
-as if both creation actions materialized the same kind of object.
-
-They do not.
-
-```text
-Scene creation surface
-  materializes a Local Player Host in the Scene
-
-Provisioning creation surface
-  materializes Session/UIGlobal provisioning authority
-  does not create a Player Host instance
-```
-
-At the same time, later Player demonstrations do not all have the same implementation readiness:
-
-```text
 Player Provisioning
-  can be the next distinct Player application
-  proves HostProvisioning = ManagerProvisioned
+  ManagerProvisioned
+  materialized
+  Play Mode proven 2026-08-24
 
 Character Selection
-  depends on a sufficient public arbitrary Actor-selection surface
+  public arbitrary Actor-selection blocker closed 2026-08-26
+  next Player implementation cut
 
 Local Multiplayer
-  depends on a sufficient public Slot/device/input contract
+  still blocked by public Slot/device/input ownership/observation contract
 ```
 
-The sample architecture must therefore distinguish:
-
-```text
-canonical coverage that already exists
-next materializable application
-planned but product-blocked demonstrations
-future applications justified only by new evidence
-runtime provisioning mode
-product composition being authored
-```
-
-It must not preserve empty structural promises or false naming symmetry merely because an older scaffold contained folders or labels for them.
+The public Actor-selection closure changes the Character Selection status from the older Revision 2 `PLANNED / BLOCKED` state. It does not change the Local Multiplayer blocker.
 
 ---
 
 ## 3. Decision
 
-The canonical Player sample scope is:
+The canonical Player sample scope is now:
 
 ```text
 GETTING STARTED / MINIMAL GAME
   canonical Scene Player coverage
   HostProvisioning = SceneProvided
+  PROVEN
 
 PLAYER
   Provisioning
-    next Player Demonstration Application
     HostProvisioning = ManagerProvisioned
+    MATERIALIZED / PLAY MODE PROVEN
 
   Character Selection
-    planned
-    blocked by public arbitrary Actor-selection surface
+    NEXT / PUBLIC SURFACE UNBLOCKED
+    use public explicit Actor-selection commands
 
   Local Multiplayer
-    planned
-    blocked by public Slot/device/input contract
+    PLANNED / BLOCKED
+    wait for public Slot/device/input ownership/observation contract
 ```
 
 This is the current implementation sequence, not a permanent closed catalog.
@@ -225,9 +199,9 @@ The burden of proof is the new contract, not the old scaffold.
 
 ## 5. Player Provisioning
 
-Status: **NEXT PLAYER DEMONSTRATION APPLICATION**
+Status: **MATERIALIZED / PLAY MODE PROVEN 2026-08-24**
 
-`Player Provisioning` is the product-facing name for the next Player application. Its underlying Session configuration uses:
+`Player Provisioning` is the product-facing name for the Manager-Provisioned Player application. Its underlying Session configuration uses:
 
 ```text
 HostProvisioning = ManagerProvisioned
@@ -247,69 +221,120 @@ Player Provisioning authority
 
 The provisioning setup is **not itself a Player Host**.
 
-The sample should demonstrate the smallest coherent public consumer composition for this authority.
+The current sample proves Join, Local Player Host creation, default Actor selection/preparation, physical materialization, Activity participation/readiness, gameplay input, Player Camera, Leave and Rejoin through the public product surface.
 
-It should not attempt to absorb every Player capability at once.
-
-Compatible behaviors remain Scenarios by default, for example when useful:
-
-```text
-joining
-Activity participation
-physical lifetime
-initial placement
-input / Pause
-leave / rejoin
-```
-
-Only the behaviors necessary to explain the Player Provisioning contract should be included in the first cut.
+Compatible additional Player behaviors remain Scenarios by default when they do not require a different initial application/session contract.
 
 ---
 
 ## 6. Character Selection
 
-Status: **PLANNED / BLOCKED**
+Status: **NEXT PLAYER CUT / PUBLIC SURFACE UNBLOCKED — 2026-08-26**
 
-Character Selection remains a valid Player sample goal.
+Character Selection remains a distinct valid Player Demonstration Application and its previous public-surface blocker is now closed.
+
+The Framework now exposes the required explicit public Actor-selection surface:
+
+```text
+PlayerSessionObserver
+
+PlayerSessionSelectActorCommandTrigger
+PlayerSessionDefaultActorSelectionCommandTrigger
+PlayerSessionReplaceActorSelectionCommandTrigger
+PlayerSessionClearActorSelectionCommandTrigger
+
+PlayerActorSelectionResult
+```
 
 The intended consumer model is game-owned selection UI using official public Framework surfaces:
 
 ```text
+PlayerSessionProfile
+  ActorResolution = LeaveUnresolved
+        ↓
 Player joins
-  -> no final Actor selected yet
-  -> game-owned UI presents eligible Actors
-  -> consumer requests selection through public API
-  -> Framework confirms effective Actor
-  -> gameplay continues
+  -> Slot Joined
+  -> Actor unresolved
+        ↓
+game-owned UI presents eligible ActorProfile choices
+        ↓
+consumer invokes PlayerSessionSelectActorCommandTrigger
+        ↓
+Framework validates and commits selected Actor
+        ↓
+existing Actor preparation / Manager-Provisioned materialization
+        ↓
+Activity participation / GameplayReady
 ```
 
-The sample is currently blocked until the Framework exposes a sufficient **public arbitrary Actor-selection surface** for this flow.
+### 6.1 Sample ownership boundary
 
-The required product surface must allow a normal game-owned consumer to request/select the intended Actor without:
+The game/sample owns:
+
+```text
+which ActorProfile choices are presented
+character labels / portraits / visual presentation
+which explicit selection command the user invokes
+```
+
+The Framework owns:
+
+```text
+Joined Slot validity
+selection revision
+selection commit
+Session duplicate-selection policy
+Actor preparation barrier
+physical Actor materialization
+Activity participation/admission/readiness
+```
+
+The sample must not use:
 
 ```text
 private/internal runtime access
 reflection
-sample-specific service discovery
+sample-specific Session discovery
 direct mutation of internal Session state
 parallel Actor-selection authority
-hidden fallback
+hidden fallback Actor
+sample-owned Actor preparation/materialization
 ```
 
-### 6.1 Exit criterion
+### 6.2 Initial selection, not hot swap
 
-Character Selection may move from **PLANNED / BLOCKED** to implementation when a consumer can:
+The Character Selection sample demonstrates **initial explicit Actor selection** after Join.
+
+Do not add Replace/Clear UI merely because the public API exists. Those operations are useful public lifecycle contracts but are not required to teach the initial Character Selection flow.
+
+`Replace Actor Selection` is not a physical hot-swap command. Once the Logical Actor is prepared, the canonical preparation barrier rejects logical selection changes that would imply physical replacement.
+
+### 6.3 Default Actor behavior
+
+Normal Character Selection flow must not invoke Default Actor selection.
+
+The application uses:
 
 ```text
-observe the relevant Player/Actor state
+ActorResolution = LeaveUnresolved
+```
+
+so `PlayerSessionDefaultActorSelectionCommandTrigger` correctly rejects instead of selecting a hidden fallback.
+
+### 6.4 Exit criterion — SATISFIED
+
+Revision 2 required that a normal game-owned consumer be able to:
+
+```text
+observe relevant Player/Actor state
 identify/select an eligible Actor through supported public data
-request the Actor change/selection through a supported public command
+request the Actor selection through a supported public command
 observe the confirmed result
 ```
 
-using only official product surfaces.
+The 2026-08-26 Framework public-surface closure and integrated Player QA satisfy this gate.
 
-The sample must not be used to conceal the absence of that contract.
+Character Selection can therefore proceed to materialization and consumer Play Mode proof.
 
 ---
 
@@ -331,7 +356,9 @@ Actor selection when applicable
 leave / rejoin when applicable
 ```
 
-The sample is currently blocked until the Framework exposes a sufficient public **Slot/device/input contract** for a normal consumer.
+The sample remains blocked until the Framework exposes a sufficient public **Slot/device/input ownership and observation contract** for a normal consumer.
+
+The current public Join command is not an exact-Slot Join surface and does not expose a complete durable Slot-to-device/InputUser/control-scheme observation contract.
 
 The required contract must not depend on the sample inventing its own authority for:
 
@@ -377,6 +404,16 @@ initial Joining intent
 initial Actor-resolution intent
 application-level duplicate-selection policy
 other application/session creation-time authority
+```
+
+Character Selection justifies a separate Demonstration Application because its initial Actor-resolution intent deliberately differs from the default-resolving Player Provisioning sample:
+
+```text
+Player Provisioning
+  ResolveConfiguredDefault
+
+Character Selection
+  LeaveUnresolved
 ```
 
 Use a Scenario when the same application/session archetype remains coherent and only runtime behavior changes.
@@ -426,7 +463,7 @@ reflection-based binding
 silent fallback that makes invalid configuration appear valid
 ```
 
-When a sample cannot be built cleanly through public surfaces, that is product evidence for `com.immersive.framework`.
+The Character Selection blocker is now closed because the Framework surface exists. The same rule continues to block Local Multiplayer until its own missing public contract is delivered.
 
 ---
 
@@ -484,25 +521,25 @@ An existing empty or placeholder Shared scaffold does not establish architectura
 
 ## 11. Current implementation order
 
-The Player sequence is:
+The Player sequence is now:
 
 ```text
 0. Scene Player
    HostProvisioning = SceneProvided
-   already covered canonically by Getting Started / Minimal Game
-   do not duplicate
+   canonical Getting Started / Minimal Game
+   PROVEN
 
 1. Player Provisioning
    HostProvisioning = ManagerProvisioned
-   next Player Demonstration Application
+   MATERIALIZED / PLAY MODE PROVEN
 
 2. Character Selection
-   planned / blocked
-   wait for public arbitrary Actor-selection surface
+   ActorResolution = LeaveUnresolved
+   NEXT / PUBLIC SURFACE UNBLOCKED
 
 3. Local Multiplayer
-   planned / blocked
-   wait for public Slot/device/input contract
+   PLANNED / BLOCKED
+   wait for public Slot/device/input ownership/observation contract
 ```
 
 This order may change only from concrete implementation/product evidence.
@@ -536,7 +573,7 @@ Do not create a global runtime Player HUB that silently switches Active GameAppl
 
 Getting Started remains intentionally minimal.
 
-Its Scene Player is not incidental sample plumbing anymore; it is the **canonical Scene Player consumer reference** and proves the `SceneProvided` Host Provisioning mode.
+Its Scene Player is not incidental sample plumbing; it is the **canonical Scene Player consumer reference** and proves the `SceneProvided` Host Provisioning mode.
 
 This does not turn Getting Started into a full Player tutorial.
 
@@ -567,13 +604,15 @@ FIRSTGAME
   real-game integration and ergonomics
 ```
 
+The 2026-08-26 Full Player aggregate completed `27/27` mandatory contracts with Actor Lifecycle and Public Surface both PASS. This is technical certification evidence for the public surface, not a substitute for the Character Selection sample's own consumer Play Mode proof.
+
 Do not duplicate every Player permutation in Samples.
 
 Do not use FIRSTGAME as justification for bypassing a missing public surface in Samples.
 
 ---
 
-## 15. Superseded Player assumptions from FG-ADR-001 Revision 10
+## 15. Superseded Player assumptions
 
 FG-ADR-002 supersedes the following earlier assumptions:
 
@@ -584,7 +623,8 @@ SceneProvided requires a second dedicated application under Player
 
 SceneProvided and ManagerProvisioned should be exposed as peer object/composition names
 
-Character Selection is ready merely because it is a valid conceptual archetype
+Character Selection is blocked by missing public arbitrary Actor-selection surface
+  -> superseded 2026-08-26; public surface now delivered
 
 Local Multiplayer is ready merely because multiple Slots are conceptually supported
 
@@ -606,25 +646,29 @@ Scene Player
   product/sample/editor name for the Scene-authored Local Player Host path
   runtime HostProvisioning = SceneProvided
   canonical coverage = Getting Started / Minimal Game
-  no duplicate dedicated Player application by default
+  PROVEN
 
 Player Provisioning
   product/sample/editor name for Session-authorized Host creation authority
   runtime HostProvisioning = ManagerProvisioned
-  next Player Demonstration Application
   provisioning setup is not itself a Player Host
+  MATERIALIZED / PLAY MODE PROVEN
 
 SceneProvided / ManagerProvisioned
   remain valid runtime provisioning-mode terminology
   are parallel modes, not peer object types
 
 Character Selection
-  planned / blocked
-  requires sufficient public arbitrary Actor-selection surface
+  NEXT / PUBLIC SURFACE UNBLOCKED
+  PlayerSessionProfile.ActorResolution = LeaveUnresolved
+  game-owned Actor catalog/UI
+  public explicit Select Actor command
+  no sample-owned Session or Actor preparation authority
+  no physical hot swap
 
 Local Multiplayer
-  planned / blocked
-  requires sufficient public Slot/device/input contract
+  PLANNED / BLOCKED
+  requires sufficient public Slot/device/input ownership/observation contract
 
 Player/Shared
   not preallocated
@@ -635,7 +679,7 @@ Player application count
   not frozen to a predetermined count
 
 Player capabilities
-  Scenarios by default
+  Scenarios by default unless initial Session intent is materially incompatible
 
 Missing public surface
   blocks the sample
@@ -647,5 +691,7 @@ Missing public surface
 ## 17. Closure
 
 This ADR is the canonical Player sample-scope and product-facing terminology authority.
+
+Revision 3 records that Player Provisioning is Play Mode proven and that the public arbitrary Actor-selection blocker has been closed by the Framework's explicit scoped command surface. Character Selection is therefore the next Player implementation cut. Local Multiplayer remains blocked by a different public contract and must not be pulled into the Character Selection work.
 
 FG-ADR-001 continues to own the general sample-program architecture and distribution strategy. Any future change to the Player demonstration catalog, sequencing, blocker status, Player-specific sharing rule or product-facing naming should be reconciled here first and reflected into operational READMEs without reintroducing a competing Player catalog or false Player Host symmetry in FG-ADR-001.
