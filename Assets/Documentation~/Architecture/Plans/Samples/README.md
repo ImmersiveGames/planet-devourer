@@ -1,6 +1,7 @@
 # Samples Authoring Guide and Status
 
-Last updated: **2026-08-21**
+Player status reconciled: **2026-08-26**  
+Previous general construction snapshot: **2026-08-21**
 
 Canonical strategy:
 
@@ -9,7 +10,17 @@ Assets/Documentation~/Architecture/ADRs/
   FG-ADR-001-Immersive-Framework-Sample-and-Demonstration-Strategy.md
 ```
 
-This file is the **operational guide/status surface** for the active sample-construction program. The ADR defines the frozen strategy; this guide records where current work happens, what is already proven in authoring/Play Mode, and what remains before final UPM release.
+Player-specific authority:
+
+```text
+Assets/Documentation~/Architecture/ADRs/
+  FG-ADR-002-Player-Sample-Scope-and-Demonstration-Architecture.md
+  Revision 3
+```
+
+This file is the **operational guide/status surface** for the active sample-construction program. The ADRs define the strategy; this guide records where current work happens, what is already proven in authoring/Play Mode, and what remains before final UPM release.
+
+The 2026-08-26 edit reconciles the Player row and Player section after the Framework arbitrary Actor-selection public-surface closure. Unrelated Game Flow construction details below retain the previously recorded snapshot unless explicitly noted.
 
 ## Current operational baseline
 
@@ -19,10 +30,6 @@ Repository
 
 Branch
   main
-
-Observed repository baseline for this documentation cut
-  3642fb2ad207b7dcfc0c230f657a475fdf67a27d
-  "Activity C"
 
 Authoring workspace
   Assets/_Sample/
@@ -35,8 +42,8 @@ The older `FirstGame` branch references are historical Revision 10 context. Curr
 | Order | Group / Demonstration | Authoring / Play Mode | UPM release |
 |---|---|---|---|
 | 00 | Getting Started / Minimal Game | **COMPLETE / PROVEN** | Pending promotion + Package Manager import proof |
-| 01 | Game Flow / GameFlowShowcase | **IN PROGRESS — HUB + Basic Flow + baseline Transition PROVEN** | Pending |
-| 02 | Player | Planned | Pending |
+| 01 | Game Flow / GameFlowShowcase | **See dated Game Flow section below** | Pending |
+| 02 | Player | **IN PROGRESS — Scene Player PROVEN; Player Provisioning PROVEN; Character Selection NEXT / UNBLOCKED** | Pending |
 | 03 | Advanced Context | Planned | Pending |
 | 04 | Persistence | Planned | Pending |
 
@@ -80,15 +87,17 @@ UPM promotion/import proof
   PENDING
 ```
 
-### Sample 01 current state
+### Sample 01 dated Game Flow state
 
-Game Flow is actively materialized under:
+The following Game Flow section preserves the previously recorded construction snapshot and is not the subject of the 2026-08-26 Player reconciliation.
+
+Game Flow is materialized under:
 
 ```text
 Assets/_Sample/GameFlow/GameFlowShowcase/
 ```
 
-Current application shape:
+Recorded application shape:
 
 ```text
 GameApplication_GameFlow.asset
@@ -125,7 +134,7 @@ Activities
     Visual Transition -> Fade
 ```
 
-Authoring/Play Mode evidence closed for the current Basic Flow vertical:
+Recorded authoring/Play Mode evidence for the Basic Flow vertical:
 
 ```text
 Framework boots into Game Flow HUB
@@ -161,7 +170,7 @@ Activity A <-> B presentation is proven Seamless
   Loading presentation skipped by authored Activity policy
 
 Activity C proves a content-less Activity
-  Activity Content Profile = None
+  Activity Content Profile -> None
   no Activity-owned scene is materialized
   previous A/B Activity scene is released
   Visitors A and Visitors B are hidden
@@ -193,29 +202,58 @@ cycles are repeatable
 blockingIssues = 0 in the proven flow
 ```
 
-Composition / Visibility is therefore no longer tracked as a separate immediate scenario. Its basic contract is intentionally demonstrated inside Basic Flow through the combination of:
+### Sample 02 — Player current state
+
+Player sample status is governed by FG-ADR-002 Revision 3.
+
+Current sequence:
 
 ```text
-Route-owned scene content
-Activity-local visibility via ActivityContentBinding
-Activity-owned scene composition via ActivityContent profiles/scenes
-content-less Activity C as a negative isolation case
+Getting Started / Minimal Game
+  Scene Player
+  HostProvisioning = SceneProvided
+  CANONICAL / PROVEN
+
+Player Provisioning
+  HostProvisioning = ManagerProvisioned
+  MATERIALIZED / PLAY MODE PROVEN 2026-08-24
+
+Character Selection
+  HostProvisioning = ManagerProvisioned
+  ActorResolution = LeaveUnresolved
+  NEXT / PUBLIC SURFACE UNBLOCKED 2026-08-26
+
+Local Multiplayer
+  PLANNED / BLOCKED
+  requires public Slot/device/input ownership/observation contract
 ```
 
-Baseline Transition presentation is also no longer tracked as a separate scenario. The same Basic Flow now demonstrates:
+The Framework public arbitrary Actor-selection gate is closed. The current explicit Player Session command surface includes:
 
 ```text
-Route switch
-  -> Fade cover/reveal + Loading
-
-Activity target A/B
-  -> Seamless
-
-Activity target C
-  -> Fade without Loading presentation
+Open Joining
+Close Joining
+Join
+Select Actor
+Select Default Actor
+Replace Actor Selection
+Clear Actor Selection
+Leave
 ```
 
-The broader Game Flow scenario catalog remains evolutionary. The next unresolved presentation contract is **readiness-governed Loading**: `FadeWithLoading`, `WaitCovered` / `WaitVisible`, participant-aware progress, terminal readiness/recovery and truthful 100% completion. Restart / Recovery also remains implementation work. Contextual Camera/Audio coverage should be added only where it naturally teaches an additional contract; the current Basic Flow closes the baseline contextual BGM integration path including no-request preservation.
+The Character Selection implementation target is:
+
+```text
+Join
+  -> Joined Slot + unresolved Actor
+  -> game-owned ActorProfile choices
+  -> explicit Select Actor command
+  -> Framework selection commit
+  -> existing Actor preparation / Manager-Provisioned materialization
+  -> Activity participation / GameplayReady
+```
+
+The sample must not introduce internal Player discovery, direct Session mutation, parallel Actor selection, hidden fallback, physical hot swap or Local Multiplayer device/input architecture.
 
 ## Completion vocabulary
 
@@ -273,34 +311,23 @@ RELEASE VALIDATION
 - final consumer behavior is proven from the Package Manager imported copy;
 - finishing a sample's authoring phase does not silently claim UPM release validation;
 - a committed/materialized configuration is not marked **PROVEN** until the corresponding observable runtime behavior has been verified;
-- the canonical ADR filename is stable; structural strategy changes belong in that ADR, while ordinary construction progress belongs here and in sample-local README files.
+- the canonical ADR filenames are stable; structural strategy changes belong in the ADRs, while ordinary construction progress belongs here and in sample-local README files.
 
-## Current implementation cut
+## Current Player implementation cut
 
 ```text
-Sample 01
-  Game Flow
+Sample 02
+  Player
 
-Closed so far
-  HUB / Route_Hub
-  Basic Flow Route
-  Activity A <-> B cycle
-  Activity C content-less negative case
-  Activity-local visibility in the Route scene
-  Activity-owned scene composition and release
-  contextual Route / Activity BGM replacement
-  BGM no-request preservation through Activity C
-  Route Fade cover/reveal
-  Route Loading presentation
-  Activity Seamless presentation
-  Activity Fade presentation
-  return to HUB / Activity None
+Closed
+  canonical Scene Player coverage in Getting Started
+  Player Provisioning / ManagerProvisioned Play Mode proof
+  Framework public arbitrary Actor-selection blocker
 
-Still active
-  readiness-governed Loading / participant-aware progress
-  Restart / Recovery
-  contextual Camera coverage where natural
-  additional Audio coverage only where it teaches a new contract
+Next
+  Character Selection materialization
+  consumer Play Mode proof of LeaveUnresolved -> explicit Select -> preparation -> GameplayReady
+
+Still blocked
+  Local Multiplayer public Slot/device/input ownership/observation contract
 ```
-
-Game Flow continues to follow the frozen strategy: one initial Demonstration Application, a sample HUB/Menu, and evolutionary scenarios as needed. The Basic Flow now absorbs the baseline Route/Activity, content/visibility, Activity scene composition, Transition presentation, Route Loading and contextual BGM demonstrations; later scenarios should add distinct contracts rather than duplicate those proofs.
