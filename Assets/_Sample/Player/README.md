@@ -1,6 +1,6 @@
 # Player Samples
 
-Status: **PLAYER SCOPE GOVERNED BY FG-ADR-002 — PUBLIC SESSION SURFACE UPDATED 2026-08-25**
+Status: **PLAYER SCOPE GOVERNED BY FG-ADR-002 REVISION 3 — PUBLIC ACTOR SELECTION UNBLOCKED 2026-08-26**
 
 Canonical Player sample authority:
 
@@ -48,16 +48,14 @@ It already demonstrates:
 
 These contracts are intentionally **not duplicated** as a dedicated Scene Player Demonstration Application under Player.
 
-A dedicated Scene Player application should be added only if future implementation evidence reveals a distinct consumer contract that Getting Started cannot demonstrate clearly.
-
 ## Current Player demonstrations
 
-| Demonstration | Runtime provisioning | Status | Meaning |
+| Demonstration | Runtime / initial policy | Status | Meaning |
 |---|---|---|---|
 | Getting Started / Minimal Game | `SceneProvided` | **CANONICAL / PROVEN** | Scene Player reference |
-| Player Provisioning | `ManagerProvisioned` | **CURRENT IMPLEMENTATION** | Session-authorized Local Player Host creation/provisioning |
-| Character Selection | depends on final application model | **PLANNED / BLOCKED** | Requires a sufficient public arbitrary Actor-selection surface |
-| Local Multiplayer | depends on final application model | **PLANNED / BLOCKED** | Requires a sufficient public Slot/device/input contract |
+| Player Provisioning | `ManagerProvisioned` + configured Default Actor | **MATERIALIZED / PLAY MODE PROVEN** | Session-authorized Local Player Host creation/provisioning |
+| Character Selection | `ManagerProvisioned` + `ActorResolution = LeaveUnresolved` | **NEXT / PUBLIC SURFACE UNBLOCKED** | Explicit game-owned Actor choice through public Player commands |
+| Local Multiplayer | final application model pending public contract | **PLANNED / BLOCKED** | Requires a sufficient public Slot/device/input ownership/observation contract |
 
 This is the current implementation sequence, not a permanent closed catalog.
 
@@ -70,45 +68,17 @@ Player Provisioning authority
   -> Local Player Host Prefab
   -> explicit Join request
   -> Local Player Host instance
+  -> default Actor selection / preparation
   -> admission
   -> Session ownership
+  -> GameplayReady
 ```
 
 The provisioning object is **not itself a Player Host**.
 
-Current public control composition:
+The application is Play Mode proven, including Join, gameplay, Camera and Leave/Rejoin behavior. See its local README for the exact evidence and composition.
 
-```text
-Join control
-  -> PlayerSessionJoinCommandTrigger.Invoke()
-
-Leave control
-  -> PlayerSessionLeaveCommandTrigger.Invoke()
-```
-
-The sample no longer uses one generic `PlayerSessionCommandTrigger` whose serialized enum changes the command identity.
-
-The Framework public command family is now explicit:
-
-```text
-PlayerSessionOpenJoiningCommandTrigger
-PlayerSessionCloseJoiningCommandTrigger
-PlayerSessionJoinCommandTrigger
-PlayerSessionDefaultActorSelectionCommandTrigger
-PlayerSessionLeaveCommandTrigger
-```
-
-Each command component represents one request and owns only its own typed result evidence.
-
-### Session observation
-
-When a Hub, UI or another scene needs to present current Player Session information, use:
-
-```text
-PlayerSessionObserver
-```
-
-The Observer is read-only and does not require a reference to the physically materialized Player GameObject.
+## Current public Player Session surface
 
 Canonical distinction:
 
@@ -120,85 +90,99 @@ explicit Player Session Command Trigger
   = request/change
 ```
 
-The Observer is **not required** for Join or Leave to work. Compose it only where Session observation is needed.
-
-Example:
+The current public command family contains eight explicit components:
 
 ```text
-Hub / Controls
-├─ optional PlayerSessionObserver
-│    Session / Slot / Actor / gameplay presentation
-│
-├─ Join Button
-│    └─ PlayerSessionJoinCommandTrigger.Invoke()
-│
-└─ Leave Button
-     └─ PlayerSessionLeaveCommandTrigger.Invoke()
+PlayerSessionOpenJoiningCommandTrigger
+PlayerSessionCloseJoiningCommandTrigger
+PlayerSessionJoinCommandTrigger
+PlayerSessionSelectActorCommandTrigger
+PlayerSessionDefaultActorSelectionCommandTrigger
+PlayerSessionReplaceActorSelectionCommandTrigger
+PlayerSessionClearActorSelectionCommandTrigger
+PlayerSessionLeaveCommandTrigger
 ```
 
-The current prefab migration is recorded by consumer commit:
+Each command component represents one request and owns only its own typed result evidence.
+
+`PlayerSessionObserver` remains read-only and may be composed where Session / Slot / Actor state presentation is needed. It is not required for commands to function and does not route or aggregate command results.
+
+## Character Selection — next Player cut
+
+Character Selection is no longer blocked by missing public arbitrary Actor selection.
+
+Its canonical initial Session intent is:
 
 ```text
-b8c59065ad2945b04698a6a862e2121c5f7ae983
-PLAYER SESSION PUBLIC SURFACE
+HostProvisioning = ManagerProvisioned
+ActorResolution = LeaveUnresolved
 ```
 
-Join and Leave UnityEvents target the explicit command components and their public `Invoke()` entry points.
-
-### Deferred command availability follow-up
-
-A current run exposed a non-blocking timing window where the first Join interaction may occur before the scoped command access is bound:
+Expected flow:
 
 ```text
-first Join
-  -> Unbound
-  -> RejectedRuntimeUnavailable
-
-binding completes
-
-subsequent Join
-  -> Bound
-  -> SucceededJoined
+Join
+  -> Slot Joined
+  -> Actor unresolved
+        ↓
+game-owned Character Selection UI
+  -> presents application-owned ActorProfile choices
+        ↓
+PlayerSessionSelectActorCommandTrigger.Invoke()
+        ↓
+PlayerActorSelectionResult
+        ↓
+Framework-owned selection commit
+        ↓
+existing Actor preparation / materialization
+        ↓
+Activity participation / GameplayReady
 ```
 
-This is tracked in the Framework documentation as `PLAYER-COMMAND-SURFACE-READINESS / DEFERRED`.
+The sample owns presentation and the choice catalog. The Framework owns Slot validity, selection revision/commit, duplicate policy, preparation, physical materialization and Activity admission.
 
-The sample must not hide this with global lookup or a parallel Session authority. A future product cut should expose command availability clearly enough for normal UI interaction gating.
+Normal Character Selection should demonstrate the **initial explicit Select** operation. Do not expose Replace/Clear merely because those APIs exist, and do not invoke Default selection in the normal `LeaveUnresolved` path.
 
-Compatible Player behaviors remain Scenarios by default and should be added only when they clarify the provisioning contract.
+`Replace Actor Selection` is not physical hot swap. After Actor preparation, the canonical preparation barrier rejects logical selection changes that would imply replacing the prepared physical Actor.
 
-## Character Selection
+## Scoped binding and command availability
 
-Character Selection remains planned but must not be implemented while the sample would need to bypass the public Framework surface.
-
-The blocker is the public ability for game-owned UI to:
+Keep authoring configuration and runtime availability distinct:
 
 ```text
-observe eligible/current Actor state
-  -> request an arbitrary supported Actor selection
-  -> observe the confirmed result
+valid Route / Activity authoring
+  !=
+current scoped access Bound
 ```
 
-without private/internal access, reflection, direct Session mutation or parallel sample-owned Actor authority.
+A valid command can temporarily be runtime-unbound and must reject without global lookup, alternate Session authority or mutation.
 
-`PlayerSessionDefaultActorSelectionCommandTrigger` does **not** satisfy this blocker: it requests the Slot's configured default Actor and does not provide arbitrary Actor selection.
+This remains tracked as:
+
+```text
+PLAYER-COMMAND-SURFACE-READINESS / DEFERRED
+```
+
+Character Selection must not hide this debt with a fallback. If UI gating is required, use only public readiness/binding evidence available to the consumer.
 
 ## Local Multiplayer
 
-Local Multiplayer remains planned but must not be implemented while the sample would need to invent its own Slot/device/input architecture.
+Local Multiplayer remains planned but blocked by a different product contract.
 
-The blocker is a sufficient public contract for:
+The missing public boundary is sufficient ownership/observation for:
 
 ```text
 local participant / device intent
   -> Slot association
   -> Player admission
   -> correct input ownership/routing
-  -> observable occupancy
+  -> observable Slot / device / control-scheme state
   -> release/reuse when applicable
 ```
 
-without parallel sample-owned Slot, device or input authority.
+The current ordinary Join command does not provide exact-Slot public Join and does not by itself provide a complete durable Slot-to-device/InputUser contract.
+
+Do not invent sample-owned Slot, device or input authority.
 
 ## Application / Scenario rule
 
@@ -208,6 +192,16 @@ materially incompatible initial Player Session intent
 
 compatible runtime behavior
   -> Scenario inside that application
+```
+
+Character Selection is a separate application because its creation-time Actor Resolution intent is intentionally different:
+
+```text
+Player Provisioning
+  ResolveConfiguredDefault
+
+Character Selection
+  LeaveUnresolved
 ```
 
 Participation, physical lifetime, placement, Input/Pause and Leave/Rejoin do not automatically create new GameApplications.
@@ -234,4 +228,6 @@ An existing empty or placeholder `Shared/` scaffold does not establish shared ow
 
 Player samples consume public/product Framework APIs.
 
-If a required public Player contract is missing, the demonstration remains **PLANNED / BLOCKED**. Sample code must not hide the product gap with internal discovery, reflection, direct runtime mutation, parallel registries or silent fallbacks.
+If a required public Player contract is missing, the demonstration remains **PLANNED / BLOCKED**. Sample code must not hide a product gap with internal discovery, reflection, direct runtime mutation, parallel registries or silent fallbacks.
+
+The Character Selection gate is now satisfied. The Local Multiplayer gate is not.
