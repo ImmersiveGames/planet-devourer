@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ce6d27d442ac76449f283afbc33d04f, type: 3}
+  m_Name: GameApplication_JoiningControl
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.GameApplicationAsset
+  applicationName: Joining Control
+  startupRoute: {fileID: 11400000, guid: 1929e60769dedea4dbf889c679a2a66c, type: 2}
+  playerSessionEnabled: 1
+  defaultPlayerSessionProfile: {fileID: 11400000, guid: 0d02b8103c77ad54a9e2881da1edaa3a, type: 2}
+  playerActorSelectionDuplicatePolicy: 10
+  progressionSaveEnabled: 0
+  defaultProgressionSaveProfile: {fileID: 0}
+  persistentContent:
+    containerScene: {fileID: 102900000, guid: cdff4c15f56010749b29338a5c224253, type: 3}
+  validationMode: 1
