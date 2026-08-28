@@ -1,6 +1,6 @@
 # Samples Authoring Guide and Status
 
-Player status reconciled: **2026-08-26**  
+Player status reconciled: **2026-08-28**  
 Previous general construction snapshot: **2026-08-21**
 
 Canonical strategy:
@@ -15,12 +15,10 @@ Player-specific authority:
 ```text
 Assets/Documentation~/Architecture/ADRs/
   FG-ADR-002-Player-Sample-Scope-and-Demonstration-Architecture.md
-  Revision 3
+  Revision 4
 ```
 
 This file is the **operational guide/status surface** for the active sample-construction program. The ADRs define the strategy; this guide records where current work happens, what is already proven in authoring/Play Mode, and what remains before final UPM release.
-
-The 2026-08-26 edit reconciles the Player row and Player section after the Framework arbitrary Actor-selection public-surface closure. Unrelated Game Flow construction details below retain the previously recorded snapshot unless explicitly noted.
 
 ## Current operational baseline
 
@@ -35,19 +33,19 @@ Authoring workspace
   Assets/_Sample/
 ```
 
-The older `FirstGame` branch references are historical Revision 10 context. Current implementation work and operational truth are on `main`.
+The older `FirstGame` branch references are historical context. Current implementation work and operational truth are on `main`.
 
 ## Current sample progress
 
 | Order | Group / Demonstration | Authoring / Play Mode | UPM release |
 |---|---|---|---|
 | 00 | Getting Started / Minimal Game | **COMPLETE / PROVEN** | Pending promotion + Package Manager import proof |
-| 01 | Game Flow / GameFlowShowcase | **See dated Game Flow section below** | Pending |
-| 02 | Player | **IN PROGRESS — Scene Player PROVEN; Player Provisioning PROVEN; Character Selection NEXT / UNBLOCKED** | Pending |
+| 01 | Game Flow / GameFlowShowcase | **MATERIALIZED / core flow proven in dated snapshot** | Pending |
+| 02 | Player | **IN PROGRESS — Scene Player PROVEN; Player Provisioning PROVEN; Character Selection PROVEN; Local Multiplayer BLOCKED** | Pending |
 | 03 | Advanced Context | Planned | Pending |
 | 04 | Persistence | Planned | Pending |
 
-### Sample 00 closure
+## Sample 00 — Getting Started closure
 
 Getting Started / Minimal Game satisfies the current authoring-phase goal:
 
@@ -64,7 +62,7 @@ Mounted / First Person Camera
 minimal movement/look Input
 ```
 
-Observed Play Mode terminal evidence:
+Observed Play Mode terminal evidence includes:
 
 ```text
 Framework boot succeeded
@@ -87,124 +85,37 @@ UPM promotion/import proof
   PENDING
 ```
 
-### Sample 01 dated Game Flow state
+## Sample 01 — Game Flow dated state
 
-The following Game Flow section preserves the previously recorded construction snapshot and is not the subject of the 2026-08-26 Player reconciliation.
-
-Game Flow is materialized under:
+Game Flow remains materialized under:
 
 ```text
 Assets/_Sample/GameFlow/GameFlowShowcase/
 ```
 
-Recorded application shape:
+The previously recorded core proof remains:
 
 ```text
-GameApplication_GameFlow.asset
-  Player Session disabled
-  Persistent Content -> SCN_GameFlow_Persistence
-  Startup Route -> Route_Hub
-
-SCN_GameFlow_Persistence
-  persistent Camera / EventSystem / Audio baseline
-  Transition adapter -> UnityFadeCurtainEffectAdapter
-  Loading adapter -> UnityLoadingSurfaceAdapter
-
-Route_Hub
-  primary scene -> SCN_GameFlow_Hub
-  no Startup Activity
-  BGM intent -> Silence
-
-Route_BasicFlow
-  primary scene -> SCN_GameFlow_Basic
-  Startup Activity -> Activity_Basic_A
-
-Activities
-  Activity_Basic_A
-    Activity-owned scene -> SCN_GameFlow_Basic_A
-    Visual Transition -> Seamless
-
-  Activity_Basic_B
-    Activity-owned scene -> SCN_GameFlow_Basic_B
-    Visual Transition -> Seamless
-
-  Activity_Basic_C
-    Activity Content Profile -> None
-    Activity-owned scene -> None
-    Visual Transition -> Fade
-```
-
-Recorded authoring/Play Mode evidence for the Basic Flow vertical:
-
-```text
-Framework boots into Game Flow HUB
-SCN_GameFlow_Persistence is loaded as Persistent Content
-Transition adapter count = 1
-Loading adapter count = 1
+Framework boots into the Game Flow HUB
+Persistent Content loads correctly
 Route_Hub is valid with no Startup Activity
-HUB settles with Activity = None
-Route_Hub explicit BGM Silence is applied
-
-Route_Hub -> Route_BasicFlow
-  Transition = SucceededWithUnitySurface
-  Transition effect = Fade
-  Loading = SucceededWithUnitySurface
-  Route gate applies/releases cleanly
-  Activity_Basic_A becomes Ready
-  blockingIssues = 0
-
-SCN_GameFlow_Basic remains the Route Primary Scene while Activities switch
-
-Activity-local visibility is proven inside SCN_GameFlow_Basic
-  Visitors A -> Activity_Basic_A
-  Visitors B -> Activity_Basic_B
-  ActivityContentBinding activates/deactivates the correct local content
-
+Route_Hub -> Route_BasicFlow succeeds through Transition/Loading envelope
+Activity_Basic_A / B switching is proven
 Activity-owned scene composition is proven
-  Activity_Basic_A -> SCN_GameFlow_Basic_A
-  Activity_Basic_B -> SCN_GameFlow_Basic_B
-  A <-> B loads the target Activity scene and releases the previous Activity scene
-
-Activity A <-> B presentation is proven Seamless
-  Transition skipped by authored Activity policy
-  Loading presentation skipped by authored Activity policy
-
-Activity C proves a content-less Activity
-  Activity Content Profile -> None
-  no Activity-owned scene is materialized
-  previous A/B Activity scene is released
-  Visitors A and Visitors B are hidden
-  Activity remains Active + Ready
-  blockingIssues = 0
-
-Activity A -> C and B -> C prove Activity Fade
-  Transition = SucceededWithUnitySurface
-  Transition effect = Fade
-  canonical Loading presentation remains skipped by Fade policy
-
-contextual BGM is proven
-  Route_Hub Silence
-    -> Activity_Basic_A BGM
-    -> Activity_Basic_B BGM
-    -> Route_Hub Silence
-
-BGM no-request preservation is proven through Activity C
-  Activity A -> C preserves Activity A confirmed BGM
-  Activity B -> C preserves Activity B confirmed BGM
-  owner exit does not mutate the confirmed BGM
-
-return to HUB
-  uses the Route transition/loading envelope
-  restores Activity = None
-  destination Route explicit Silence determines final BGM presentation
-
+Activity-local visibility through ActivityContentBinding is proven
+content-less Activity_Basic_C is proven
+Seamless and Fade Activity presentation policies are proven
+contextual Route/Activity BGM behavior is proven
+return to HUB restores Activity = None
 cycles are repeatable
 blockingIssues = 0 in the proven flow
 ```
 
-### Sample 02 — Player current state
+This 2026-08-28 Player cleanup does not redefine the Game Flow architecture. Re-open Game Flow only when that sample itself is the active construction cut.
 
-Player sample status is governed by FG-ADR-002 Revision 3.
+## Sample 02 — Player current state
+
+Player status is governed by FG-ADR-002 Revision 4.
 
 Current sequence:
 
@@ -221,39 +132,103 @@ Player Provisioning
 Character Selection
   HostProvisioning = ManagerProvisioned
   ActorResolution = LeaveUnresolved
-  NEXT / PUBLIC SURFACE UNBLOCKED 2026-08-26
+  AUTHORING COMPLETE / PLAY MODE PROVEN 2026-08-28
 
 Local Multiplayer
+  NEXT PLANNED PLAYER DEMONSTRATION
   PLANNED / BLOCKED
   requires public Slot/device/input ownership/observation contract
 ```
 
-The Framework public arbitrary Actor-selection gate is closed. The current explicit Player Session command surface includes:
+### Character Selection proven composition
+
+The Character Selection consumer path is now proven:
 
 ```text
 Open Joining
-Close Joining
-Join
-Select Actor
-Select Default Actor
-Replace Actor Selection
-Clear Actor Selection
-Leave
+  -> Join
+  -> Joined Slot + unresolved Actor
+  -> Preparing / WaitingForActorSelection
+        ↓
+PlayerSessionObserver.OnPlayerJoined
+  -> show Character Selection Controls
+        ↓
+Farmer / Cow ActorProfile choices
+  -> PlayerSessionSelectActorCommandTrigger
+        ↓
+Framework selection commit
+  -> Actor preparation
+  -> Manager-Provisioned materialization
+  -> Activity participation / GameplayReady
+        ↓
+PlayerSessionObserver.OnActorSelected
+  -> hide Character Selection Controls
 ```
 
-The Character Selection implementation target is:
+Leave/Rejoin returns to `WaitingForActorSelection` and supports another explicit Actor choice.
+
+The selection buttons project presentation from the same `ActorProfile` that the command will select:
 
 ```text
-Join
-  -> Joined Slot + unresolved Actor
-  -> game-owned ActorProfile choices
-  -> explicit Select Actor command
-  -> Framework selection commit
-  -> existing Actor preparation / Manager-Provisioned materialization
-  -> Activity participation / GameplayReady
+PlayerSessionSelectActorCommandTrigger.ActorProfile
+  ├── DisplayName -> label
+  └── Icon        -> image
 ```
 
-The sample must not introduce internal Player discovery, direct Session mutation, parallel Actor selection, hidden fallback, physical hot swap or Local Multiplayer device/input architecture.
+This projection is implemented by the sample-owned `CharacterSelectionActorButtonPresenter`; it does not own Session or Actor selection state.
+
+### Character Selection framework evidence
+
+The `LeaveUnresolved` reconcile defect found during consumer proof was corrected in the Framework. A Joined Slot with no Actor now remains a legitimate pending state instead of attempting Default Actor resolution.
+
+Full Player certification after the fix:
+
+```text
+historicalFullPlayer = 25/25
+leaveUnresolved = PASS
+sessionChangeObservation = PASS
+designerEventProjection = PASS
+mandatoryContracts = 30
+executedContracts = 30
+passedContracts = 30
+```
+
+Character Selection therefore closes authoring/proving work. No additional sample-owned runtime authority is required.
+
+### Current public Player Session surface
+
+```text
+PlayerSessionObserver
+  read-only observation / designer-facing lifecycle projection
+
+PlayerSessionOpenJoiningCommandTrigger
+PlayerSessionCloseJoiningCommandTrigger
+PlayerSessionJoinCommandTrigger
+PlayerSessionSelectActorCommandTrigger
+PlayerSessionDefaultActorSelectionCommandTrigger
+PlayerSessionReplaceActorSelectionCommandTrigger
+PlayerSessionClearActorSelectionCommandTrigger
+PlayerSessionLeaveCommandTrigger
+```
+
+The sample program must not introduce internal Player discovery, direct Session mutation, parallel Actor selection, hidden fallback, physical hot swap or Local Multiplayer device/input architecture.
+
+### Next Player gate
+
+Local Multiplayer cannot begin as a normal sample until the Framework exposes a sufficient public contract for:
+
+```text
+local participant / device intent
+  -> Slot association
+  -> Player admission
+  -> correct input ownership/routing
+  -> observable Slot / device / control-scheme state
+  -> release/reuse when applicable
+```
+
+The current ordinary Join surface does not provide exact-Slot public Join and does not establish a complete durable Slot-to-device/InputUser contract.
+
+Do not hide this blocker with sample-owned Slot/device/input authority.
 
 ## Completion vocabulary
 
@@ -291,7 +266,7 @@ GROUP CLOSURE
   update local/group README and this status guide
 
 FINALIZATION
-  resolve cross-group Assets/_Sample/Shared dependencies
+  resolve cross-demonstration/sample-group reuse deliberately
   materialize/promote mature sample groups into com.immersive.framework/Samples~/
   activate/update package.json samples metadata
 
@@ -306,12 +281,13 @@ RELEASE VALIDATION
 - the current `main` tree is the operational truth for active sample construction;
 - `_Sample/` is authoring/proving infrastructure, not the shipped UPM sample root;
 - `Assets/_Project/` is the real FIRSTGAME/game structure and is not the sample taxonomy;
-- final groups must not depend on sibling sample groups;
-- authoring-only `Assets/_Sample/Shared` cross-group dependencies must be resolved before package finalization;
+- final UPM sample groups must not depend on sibling top-level sample groups;
+- reuse inside one Player group may be reorganized during finalization when concrete reuse justifies it;
+- application/session authority must not be promoted into `Player/Shared` merely for deduplication;
 - final consumer behavior is proven from the Package Manager imported copy;
 - finishing a sample's authoring phase does not silently claim UPM release validation;
-- a committed/materialized configuration is not marked **PROVEN** until the corresponding observable runtime behavior has been verified;
-- the canonical ADR filenames are stable; structural strategy changes belong in the ADRs, while ordinary construction progress belongs here and in sample-local README files.
+- a committed/materialized configuration is not marked **PROVEN** until corresponding observable runtime behavior has been verified;
+- canonical ADR filenames are stable; structural strategy changes belong in ADRs, ordinary construction progress belongs here and in sample-local READMEs.
 
 ## Current Player implementation cut
 
@@ -322,12 +298,13 @@ Sample 02
 Closed
   canonical Scene Player coverage in Getting Started
   Player Provisioning / ManagerProvisioned Play Mode proof
-  Framework public arbitrary Actor-selection blocker
+  Character Selection / LeaveUnresolved explicit Actor selection Play Mode proof
+  Character Selection observer-driven UI presentation
+  Character Selection ActorProfile DisplayName/Icon projection
 
-Next
-  Character Selection materialization
-  consumer Play Mode proof of LeaveUnresolved -> explicit Select -> preparation -> GameplayReady
+Next planned
+  Local Multiplayer
 
-Still blocked
-  Local Multiplayer public Slot/device/input ownership/observation contract
+Blocked before implementation
+  public exact-Slot/device/input ownership and observation contract
 ```

@@ -956,8 +956,8 @@ GameObject:
   - component: {fileID: 4824535699224996987}
   - component: {fileID: 5460546127625496154}
   - component: {fileID: 8200119475194065775}
-  - component: {fileID: 8200119475194065776}
   - component: {fileID: 8200119475194065777}
+  - component: {fileID: 8200119475194065776}
   m_Layer: 0
   m_Name: btn_Actor02
   m_TagString: Untagged
