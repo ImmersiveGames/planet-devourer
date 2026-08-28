@@ -16,6 +16,6 @@ MonoBehaviour:
   displayName: Player 1
   description: 
   accentColor: {r: 0.20828493, g: 0.6415094, b: 0.021181926, a: 1}
-  icon: {fileID: 21300000, guid: 34f2c6a3e1699814dad515cd8d7e100f, type: 3}
+  icon: {fileID: 1336217474, guid: 36e3096ddf7fa8e4ab672733716d062f, type: 3}
   displayOrder: 0
   defaultActorProfile: {fileID: 11400000, guid: e805fa5cefd9add4284fa0db42596b13, type: 2}

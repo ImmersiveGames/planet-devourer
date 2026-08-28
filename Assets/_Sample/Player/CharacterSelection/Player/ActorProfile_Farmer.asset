@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1a5153a396724567a7dd4e0628405071, type: 3}
-  m_Name: ActorProfile_ManagerProvisionedPlayer
+  m_Name: ActorProfile_Farmer
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Actors.ActorProfile
-  actorProfileId: actor-profile.manager-provisioned.player
-  displayName: Bira
+  actorProfileId: actor-profile.farmer
+  displayName: Farmer
   description: 
-  icon: {fileID: 21300000, guid: 34f2c6a3e1699814dad515cd8d7e100f, type: 3}
+  icon: {fileID: -2056499465, guid: d7d75d5fe6436614cbafe3dac5388ef5, type: 3}
   actorKind: 10
   actorRole: 10
-  logicalActorHostPrefab: {fileID: 8608380030864485636, guid: 08287dbd294018c47a0d3c0c476ad8b6, type: 3}
+  logicalActorHostPrefab: {fileID: 3435731335869163966, guid: 05bcd58f3666cb046bd4374240445dec, type: 3}

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ce6d27d442ac76449f283afbc33d04f, type: 3}
+  m_Name: GameApplication_CharacterSelection
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.GameApplicationAsset
+  applicationName: Character Selection
+  startupRoute: {fileID: 11400000, guid: 797ac8016fa11614492aa7a88d581eb4, type: 2}
+  playerSessionEnabled: 1
+  defaultPlayerSessionProfile: {fileID: 11400000, guid: 87a370597327ef641a45bde9ebdd7a39, type: 2}
+  playerActorSelectionDuplicatePolicy: 10
+  progressionSaveEnabled: 0
+  defaultProgressionSaveProfile: {fileID: 0}
+  persistentContent:
+    containerScene: {fileID: 102900000, guid: cdff4c15f56010749b29338a5c224253, type: 3}
+  validationMode: 1

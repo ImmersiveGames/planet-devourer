@@ -38,5 +38,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Sample/Player/ManagerProvisioned/Scenes/ManagerProvisioned.unity
     guid: f00ab664ec8111f43b1d4d952b7955a4
+  - enabled: 1
+    path: Assets/_Sample/Player/CharacterSelection/Scenes/CharacterSelection_UI.unity
+    guid: 7c62e220b9fce8a4686785f6a1c1910c
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

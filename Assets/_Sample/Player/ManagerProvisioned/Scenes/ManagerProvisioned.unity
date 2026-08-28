@@ -807,6 +807,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Manager-Provisioned Player Controls
       objectReference: {fileID: 0}
+    - target: {fileID: 4721749517850794987, guid: 10b079b713f1b314791047a2063d4940, type: 3}
+      propertyPath: activities.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4721749517850794987, guid: 10b079b713f1b314791047a2063d4940, type: 3}
+      propertyPath: 'activities.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 436fc6a6a75c3a2458a36f58ccb350a9, type: 2}
+    - target: {fileID: 5526489511028732355, guid: 10b079b713f1b314791047a2063d4940, type: 3}
+      propertyPath: activities.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5526489511028732355, guid: 10b079b713f1b314791047a2063d4940, type: 3}
+      propertyPath: 'activities.Array.data[1]'
+      value: 
+      objectReference: {fileID: 11400000, guid: 436fc6a6a75c3a2458a36f58ccb350a9, type: 2}
     - target: {fileID: 6212519353177161487, guid: 10b079b713f1b314791047a2063d4940, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
