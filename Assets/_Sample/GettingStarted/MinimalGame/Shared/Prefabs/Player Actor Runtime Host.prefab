@@ -219,7 +219,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7585685555332619861}
   m_Layer: 0
-  m_Name: ModelMount
+  m_Name: PresentationMount
   m_TagString: Untagged
   m_Icon: {fileID: 4422084297763085224, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -250,12 +250,13 @@ GameObject:
   m_Component:
   - component: {fileID: 8025667312746550385}
   - component: {fileID: 6450611891836702178}
+  - component: {fileID: 8865193233918711129}
   - component: {fileID: 3921673782170465721}
   - component: {fileID: 5167754915206357280}
   - component: {fileID: 8008570540604461571}
   - component: {fileID: 6576297046216607493}
   m_Layer: 0
-  m_Name: Scene-Provided Logical Player
+  m_Name: Player Actor Runtime Host
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -297,6 +298,20 @@ MonoBehaviour:
   displayName: Minimal Player
   reason: actor.declaration
   playerInput: {fileID: 0}
+--- !u!114 &8865193233918711129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8115659310846711129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd151acf79cd456a9997d26d3af27439, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.PlayerActorRuntimeHost
+  playerActorDeclaration: {fileID: 6450611891836702178}
+  presentationMount: {fileID: 7585685555332619861}
 --- !u!143 &3921673782170465721
 CharacterController:
   m_ObjectHideFlags: 0
