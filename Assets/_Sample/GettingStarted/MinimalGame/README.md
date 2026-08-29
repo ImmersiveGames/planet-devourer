@@ -1,6 +1,6 @@
 # Minimal Game
 
-Status: **AUTHORING COMPLETE / PLAY MODE PROVEN — AUDIO ROUTE EVIDENCE UPDATED 2026-08-24**  
+Status: **AUTHORING COMPLETE / PLAY MODE PROVEN — PLAYER COMPOSITION ALIGNED 2026-08-29**  
 UPM promotion: **PENDING package finalization/import proof**
 
 ## Purpose
@@ -47,7 +47,8 @@ one Route
 one Activity
 one gameplay scene
 one Scene-authored Local Player Host
-one Scene Logical Player
+one Player Actor Runtime Host
+one Actor Presentation
 Mounted / First Person Camera
 minimal movement/look Input
 optional persistent Audio runtime
@@ -59,16 +60,69 @@ The current materialized application uses:
 ```text
 GameApplication_MinimalGame.asset
 PlayerProfiles/PlayerSessionProfile_MinimalGame.asset
+PlayerProfiles/PlayerSlotProfile_Player1_MinimalGame.asset
+PlayerProfiles/ActorProfile_MinimalPlayer.asset
 Routes/Route_MinimalGame.asset
 Activities/Activity_MinimalGame.asset
 Scenes/MinimalGame_Gameplay.unity
 Scenes/MinimalGame_Persistent.unity
 Shared/Prefabs/Scene-Provided Local Player.prefab
-Shared/Prefabs/Scene-Provided Logical Player.prefab
+Shared/Prefabs/Player Actor Runtime Host.prefab
+Shared/Prefabs/Presentation.prefab
 Scripts/MinimalFirstPersonLocomotion.cs
 ```
 
-The existing prefab/file names above describe the currently materialized Unity assets. They should be renamed only through an asset-safe Unity move/rename that preserves `.meta` identity; documentation terminology does not silently rename serialized assets.
+The prefab/file names above are the currently materialized Unity assets. Asset names are changed only through asset-safe Unity move/rename operations that preserve `.meta` identity; documentation terminology does not silently rename serialized assets.
+
+## Scene-Provided Player composition
+
+The current Player authoring chain is:
+
+```text
+ActorProfile_MinimalPlayer
+  PresentationPrefab = Presentation.prefab
+
+Scene-Provided Local Player
+  PlayerInput
+  LocalPlayerHostAuthoring
+    ActorMount -> ActorMount
+    PlayerActorRuntimeHostPrefab -> Player Actor Runtime Host.prefab
+  SceneLocalPlayerAdmissionAuthoring
+  UnityPlayerInputGateAdapter
+  ActorMount
+    Player Actor Runtime Host
+      PlayerActorDeclaration
+      PlayerActorRuntimeHost
+        PresentationMount -> PresentationMount
+      CharacterController
+      MinimalFirstPersonLocomotion
+      PlayerGameplayInputConsumerBinding
+      PlayerGameplayCameraAuthoring
+      CameraMount
+      First Person Camera Rig
+        CameraRigComposer
+        Cinemachine Camera
+      PresentationMount
+        Presentation
+          ScenePlayerActorPresentationEvidence
+```
+
+`Player Actor Runtime Host.prefab` is the Actor-independent runtime/gameplay shell supplied by `LocalPlayerHostAuthoring`. Its `PresentationMount` is the explicit mount for the Actor-specific `ActorProfile.PresentationPrefab`.
+
+For the Scene-Provided path, `SceneLocalPlayerAdmissionAuthoring` adopts the authored Runtime Host and the Presentation materialized under its exact `PresentationMount`. **Apply / Rebuild** materializes or repairs this composition; **Validate** verifies the resulting Profile + Runtime Host + Presentation evidence.
+
+Gameplay-specific components remain on the Runtime Host in this sample. They are not part of the Actor Presentation:
+
+```text
+CharacterController
+MinimalFirstPersonLocomotion
+PlayerGameplayInputConsumerBinding
+PlayerGameplayCameraAuthoring
+CameraMount
+First Person Camera Rig / CameraRigComposer
+```
+
+The `Presentation.prefab` is intentionally minimal in this Getting Started sample. It proves the current Actor Presentation contract without adding unrelated character-visual complexity.
 
 ## Runtime contract proven
 
@@ -86,7 +140,9 @@ startup Activity
   -> blockingIssues = 0
 
 Scene Player
-  -> gameplay admission completed
+  -> Scene-Provided admission completed
+  -> Player Actor Runtime Host adopted
+  -> Presentation evidence valid
 
 PlayerGameplayInputConsumerBinding
   -> current gameplay binding available
@@ -149,12 +205,25 @@ GameApplication
   -> Route
   -> Activity
   -> Scene Player
-      -> Local Player Host
-      -> Scene Local Player Admission
-      -> Scene Logical Player
-  -> PlayerGameplayInputConsumerBinding
-  -> PlayerGameplayCameraAuthoring
-  -> First Person Camera Rig / CameraRigComposer
+      -> Scene-Provided Local Player
+          -> PlayerInput
+          -> LocalPlayerHostAuthoring
+          -> SceneLocalPlayerAdmissionAuthoring
+          -> UnityPlayerInputGateAdapter
+          -> ActorMount
+              -> Player Actor Runtime Host
+                  -> PlayerActorDeclaration
+                  -> PlayerActorRuntimeHost
+                  -> PlayerGameplayInputConsumerBinding
+                  -> PlayerGameplayCameraAuthoring
+                  -> CharacterController
+                  -> MinimalFirstPersonLocomotion
+                  -> CameraMount
+                  -> First Person Camera Rig / CameraRigComposer
+                  -> PresentationMount
+                      -> Presentation
+                          -> ScenePlayerActorPresentationEvidence
+      -> ActorProfile_MinimalPlayer / PresentationPrefab
   -> Persistent Content / CameraOutputSessionBinding
   -> Persistent Content / AudioRuntimeHost + FrameworkBgmDirector
   -> Route / FrameworkRouteBgmBinding (PlayOwn / BGM_Floresta)
