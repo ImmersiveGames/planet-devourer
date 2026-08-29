@@ -1,8 +1,8 @@
 # Minimal Game — Materialization Checklist
 
-Status: **MATERIALIZED / PLAY MODE PROVEN — 2026-08-17**
+Status: **MATERIALIZED / PLAY MODE PROVEN — PLAYER COMPOSITION ALIGNED 2026-08-29**
 
-The planning scaffold originally used this file to record Unity assets that still had to be created. The Minimal Game materialization target is now present.
+The planning scaffold originally used this file to record Unity assets that still had to be created. The Minimal Game materialization target is now present and aligned with the current Player Actor Runtime Host + Presentation contract.
 
 ## Materialized application assets
 
@@ -26,26 +26,48 @@ Scenes/
 
 Shared/Prefabs/
   Scene-Provided Local Player.prefab
-  Scene-Provided Logical Player.prefab
+  Player Actor Runtime Host.prefab
+  Presentation.prefab
 
 Scripts/
   MinimalFirstPersonLocomotion.cs
 ```
 
-## Required composition verified
+## Required Player composition verified
 
 ```text
+PlayerSessionProfile_MinimalGame
+  Host Provisioning = SceneProvided
+
+ActorProfile_MinimalPlayer
+  PresentationPrefab = Presentation.prefab
+
+Scene-Provided Local Player
+  PlayerInput
+  LocalPlayerHostAuthoring
+    ActorMount = ActorMount
+    PlayerActorRuntimeHostPrefab = Player Actor Runtime Host.prefab
+  SceneLocalPlayerAdmissionAuthoring
+  UnityPlayerInputGateAdapter
+  ActorMount
+    Player Actor Runtime Host
+      PlayerActorDeclaration
+      PlayerActorRuntimeHost
+        PresentationMount = PresentationMount
+      CharacterController
+      MinimalFirstPersonLocomotion
+      PlayerGameplayInputConsumerBinding
+      PlayerGameplayCameraAuthoring
+      CameraMount
+      First Person Camera Rig
+        CameraRigComposer presentation = Mounted
+        Cinemachine Camera
+      PresentationMount
+        Presentation
+          ScenePlayerActorPresentationEvidence
+
 Activity_MinimalGame
   Player participation requirement = GameplayReady
-
-Scene-Provided Logical Player
-  PlayerGameplayInputConsumerBinding
-  PlayerGameplayCameraAuthoring
-  First Person Camera Rig
-  CameraRigComposer presentation = Mounted
-  CameraMount
-  CharacterController
-  MinimalFirstPersonLocomotion
 
 MinimalGame_Persistent
   CameraOutputSessionBinding
@@ -54,15 +76,21 @@ MinimalGame_Persistent
   explicit Default Camera Rig = Session Camera Rig
 ```
 
+The Runtime Host owns the sample-specific gameplay composition. The Actor-specific Presentation is materialized separately under the exact `PresentationMount`; it does not own the CharacterController, locomotion, gameplay input binding or gameplay camera authoring.
+
+For the Scene-Provided path, `SceneLocalPlayerAdmissionAuthoring` adopts the authored Runtime Host and Presentation. **Apply / Rebuild** materializes or repairs the current Profile + Runtime Host + Presentation composition, and **Validate** verifies the resulting evidence.
+
 ## Runtime evidence
 
 The accepted Play Mode proof reached:
 
 ```text
-Camera Output initialized
+Scene-Provided authoring Validate = Valid
+Framework boot succeeded
 Activity Ready
 blockingIssues = 0
 Player gameplay binding READY
+Mounted / First Person Camera active
 Move input received
 Look input received
 ```
