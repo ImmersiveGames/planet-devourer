@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a35fe899a80d2d64dac72e8bfe3079df, type: 3}
-  m_Name: Route_Joining Control
+  m_Name: Route_ManagerProvisioned
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.RouteAsset
-  routeId: 9754b0ebd1114fe58b64c9b9ea5bc8e8
-  routeName: Joining Control
-  primaryScenePath: Assets/_Sample/Player/ManagerProvisioned/Scenes/ManagerProvisioned.unity
+  routeId: bdcbbd37769f421ead18a87669393e9e
+  routeName: Manager Provisioned
+  primaryScenePath: Assets/_Sample/PlayerSamples/ManagerProvisioned/Scenes/ManagerProvisioned.unity
   primarySceneName: ManagerProvisioned
   routeContentProfile: {fileID: 0}
-  startupActivity: {fileID: 11400000, guid: ac4e343051977344e899da10e5f7e4eb, type: 2}
+  startupActivity: {fileID: 11400000, guid: 628963e6d36f19349851130af36982ab, type: 2}
   playerSpatialEntryPolicy: 0
   transitionGateMode: 30
   description: 

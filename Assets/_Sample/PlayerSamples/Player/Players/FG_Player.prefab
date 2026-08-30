@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &117748869745451586
+--- !u!1 &2062052188325363965
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,30 +8,30 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8380450189404620237}
+  - component: {fileID: 5135312034103569340}
   m_Layer: 0
-  m_Name: Actor Mount
+  m_Name: ActorMount
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8380450189404620237
+--- !u!4 &5135312034103569340
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 117748869745451586}
+  m_GameObject: {fileID: 2062052188325363965}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4926838949411906696}
+  m_Father: {fileID: 2866633632960482771}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &7628873072989428652
+--- !u!1 &8346089643163849069
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -39,40 +39,40 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4926838949411906696}
-  - component: {fileID: 6130267332229167645}
-  - component: {fileID: 214730761009475982}
-  - component: {fileID: 2664473413697865159}
+  - component: {fileID: 2866633632960482771}
+  - component: {fileID: 600347203740001927}
+  - component: {fileID: 4134174271972620789}
+  - component: {fileID: 1648891923434020978}
   m_Layer: 0
-  m_Name: Local Player Host
+  m_Name: FG_Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4926838949411906696
+--- !u!4 &2866633632960482771
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7628873072989428652}
+  m_GameObject: {fileID: 8346089643163849069}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 8380450189404620237}
+  - {fileID: 5135312034103569340}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6130267332229167645
+--- !u!114 &600347203740001927
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7628873072989428652}
+  m_GameObject: {fileID: 8346089643163849069}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
@@ -96,33 +96,34 @@ MonoBehaviour:
   m_DefaultActionMap: 
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &214730761009475982
+--- !u!114 &4134174271972620789
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7628873072989428652}
+  m_GameObject: {fileID: 8346089643163849069}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 43020ea2bdd04515a9232be09bdd3684, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.LocalPlayerHostAuthoring
-  playerInput: {fileID: 6130267332229167645}
-  actorMount: {fileID: 8380450189404620237}
---- !u!114 &2664473413697865159
+  playerInput: {fileID: 600347203740001927}
+  actorMount: {fileID: 5135312034103569340}
+  playerActorRuntimeHostPrefab: {fileID: 5114150452398911245, guid: 9d6582bebe8f58242a88a024533538a4, type: 3}
+--- !u!114 &1648891923434020978
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7628873072989428652}
+  m_GameObject: {fileID: 8346089643163849069}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dcfea0d7cc4144be8c064041108b58b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.UnityInput.UnityPlayerInputGateAdapter
-  playerInput: {fileID: 6130267332229167645}
+  playerInput: {fileID: 600347203740001927}
   gameplayActionMap:
     actionAsset: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     actionMapId: df70fa95-8a34-4494-b137-73ab6b9c7d37

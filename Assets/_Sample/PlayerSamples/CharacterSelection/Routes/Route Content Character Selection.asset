@@ -15,7 +15,7 @@ MonoBehaviour:
   profileId: route-content-profile.route-content-character-selection
   additionalScenes:
   - contentId: route-content.characterselection-ui
-    scenePath: Assets/_Sample/Player/CharacterSelection/Scenes/CharacterSelection_UI.unity
+    scenePath: Assets/_Sample/PlayerSamples/CharacterSelection/Scenes/CharacterSelection_UI.unity
     sceneName: CharacterSelection_UI
     requiredness: 10
   description: 

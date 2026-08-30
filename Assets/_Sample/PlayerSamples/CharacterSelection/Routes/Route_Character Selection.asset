@@ -10,13 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a35fe899a80d2d64dac72e8bfe3079df, type: 3}
-  m_Name: Route_ManagerProvisioned
+  m_Name: Route_Character Selection
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.RouteAsset
-  routeId: bdcbbd37769f421ead18a87669393e9e
-  routeName: Manager Provisioned
-  primaryScenePath: Assets/_Sample/Player/ManagerProvisioned/Scenes/ManagerProvisioned.unity
+  routeId: 91e2eb02d7c24fdd89f5b4bf8eaa701a
+  routeName: Character Selection
+  primaryScenePath: Assets/_Sample/PlayerSamples/ManagerProvisioned/Scenes/ManagerProvisioned.unity
   primarySceneName: ManagerProvisioned
-  routeContentProfile: {fileID: 0}
-  startupActivity: {fileID: 11400000, guid: 628963e6d36f19349851130af36982ab, type: 2}
+  routeContentProfile: {fileID: 11400000, guid: d2131d92cdc03784aa055be18d9b7e5b, type: 2}
+  startupActivity: {fileID: 11400000, guid: 436fc6a6a75c3a2458a36f58ccb350a9, type: 2}
+  playerSpatialEntryPolicy: 0
   transitionGateMode: 30
   description: 

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1a5153a396724567a7dd4e0628405071, type: 3}
-  m_Name: ActorProfile_MinimalPlayer
+  m_Name: FG_FirstPersonActorProfile
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Actors.ActorProfile
   actorProfileId: actor-profile.minimal-game.player
   displayName: Minimal Player
@@ -18,4 +18,4 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 34f2c6a3e1699814dad515cd8d7e100f, type: 3}
   actorKind: 10
   actorRole: 10
-  presentationPrefab: {fileID: 3181838575044023687, guid: 828abf0dd729d75489ec69a74a08e012, type: 3}
+  presentationPrefab: {fileID: 1818770758136001976, guid: bec780e03595b4b44944088b9562f0f3, type: 3}
