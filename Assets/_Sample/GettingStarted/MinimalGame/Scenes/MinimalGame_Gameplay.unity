@@ -364,9 +364,31 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 702242558554302021, guid: a7d0a4ff538063546a3e0880fa1aa701, type: 3}
+      propertyPath: materializationRevision
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 702242558554302021, guid: a7d0a4ff538063546a3e0880fa1aa701, type: 3}
+      propertyPath: lastMaterializationSummary
+      value: created='0' repaired='0' alreadyValid='7' skipped='2' blocked='0' presentation='Mounted'
+        cameraOwnership='FrameworkOwned' positionOwnership='FrameworkOwned' rotationOwnership='FrameworkOwned'
+        revision='3'
+      objectReference: {fileID: 0}
+    - target: {fileID: 1244483380791031427, guid: a7d0a4ff538063546a3e0880fa1aa701, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3563749034687392588, guid: a7d0a4ff538063546a3e0880fa1aa701, type: 3}
       propertyPath: m_Name
       value: FG_SceneProvidedPlayer
+      objectReference: {fileID: 0}
+    - target: {fileID: 5321781909238082000, guid: a7d0a4ff538063546a3e0880fa1aa701, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5321781909238082000, guid: a7d0a4ff538063546a3e0880fa1aa701, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7309318606938699762, guid: a7d0a4ff538063546a3e0880fa1aa701, type: 3}
       propertyPath: m_LocalPosition.x
@@ -422,7 +444,8 @@ PrefabInstance:
         are valid.
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 4796638029534737258, guid: a7d0a4ff538063546a3e0880fa1aa701, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a7d0a4ff538063546a3e0880fa1aa701, type: 3}

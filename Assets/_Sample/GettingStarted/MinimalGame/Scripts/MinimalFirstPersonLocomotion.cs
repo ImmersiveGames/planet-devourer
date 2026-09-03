@@ -3,10 +3,10 @@ using Immersive.Logging.Loggers;
 using Immersive.Logging.Unity;
 using UnityEngine;
 using UnityEngine.InputSystem;
+
 namespace _Sample.GettingStarted.MinimalGame.Scripts
 {
     [DisallowMultipleComponent]
-    [RequireComponent(typeof(CharacterController))]
     public sealed class MinimalFirstPersonLocomotion : MonoBehaviour
     {
         private static readonly ScopedLogger Log =
@@ -26,14 +26,25 @@ namespace _Sample.GettingStarted.MinimalGame.Scripts
         [SerializeField] private float minimumPitch = -80f;
         [SerializeField] private float maximumPitch = 80f;
 
+        private PlayerActorRuntimeHost _playerActorRuntimeHost;
         private CharacterController _characterController;
         private IPlayerGameplayInputReader _gameplayInputReader;
+        private Transform _actorRoot;
         private float _pitch;
 
         private void Awake()
         {
-            _characterController = GetComponent<CharacterController>();
             _gameplayInputReader = GetComponent<PlayerGameplayInputReader>();
+
+            _playerActorRuntimeHost =
+                GetComponentInParent<PlayerActorRuntimeHost>(true);
+
+            if (_playerActorRuntimeHost != null)
+            {
+                _actorRoot = _playerActorRuntimeHost.transform;
+                _characterController =
+                    _actorRoot.GetComponent<CharacterController>();
+            }
 
             if (cameraMount != null)
             {
@@ -48,7 +59,9 @@ namespace _Sample.GettingStarted.MinimalGame.Scripts
 
         private void Update()
         {
-            if (_characterController == null ||
+            if (_actorRoot == null ||
+                _characterController == null ||
+                !_characterController.enabled ||
                 _gameplayInputReader == null ||
                 !_gameplayInputReader.GameplayReady)
             {
@@ -62,7 +75,9 @@ namespace _Sample.GettingStarted.MinimalGame.Scripts
         private void ApplyMove()
         {
             if (moveAction == null ||
-                !_gameplayInputReader.TryReadValue(moveAction, out Vector2 move))
+                !_gameplayInputReader.TryReadValue(
+                    moveAction,
+                    out Vector2 move))
             {
                 return;
             }
@@ -74,10 +89,11 @@ namespace _Sample.GettingStarted.MinimalGame.Scripts
             }
 
             var yawRotation =
-                Quaternion.Euler(0f, transform.eulerAngles.y, 0f);
+                Quaternion.Euler(0f, _actorRoot.eulerAngles.y, 0f);
 
             var planarDirection =
-                yawRotation * new Vector3(planarInput.x, 0f, planarInput.y);
+                yawRotation *
+                new Vector3(planarInput.x, 0f, planarInput.y);
 
             _characterController.Move(
                 planarDirection * (moveSpeed * Time.deltaTime));
@@ -87,13 +103,15 @@ namespace _Sample.GettingStarted.MinimalGame.Scripts
         {
             if (lookAction == null ||
                 cameraMount == null ||
-                !_gameplayInputReader.TryReadValue(lookAction, out Vector2 look) ||
+                !_gameplayInputReader.TryReadValue(
+                    lookAction,
+                    out Vector2 look) ||
                 look.sqrMagnitude <= 0.0001f)
             {
                 return;
             }
 
-            transform.Rotate(
+            _actorRoot.Rotate(
                 0f,
                 look.x * lookSensitivity,
                 0f,
@@ -104,34 +122,59 @@ namespace _Sample.GettingStarted.MinimalGame.Scripts
                 minimumPitch,
                 maximumPitch);
 
-            cameraMount.localRotation = Quaternion.Euler(_pitch, 0f, 0f);
+            cameraMount.localRotation =
+                Quaternion.Euler(_pitch, 0f, 0f);
         }
 
         private void ValidateSetup()
         {
+            if (_playerActorRuntimeHost == null)
+            {
+                Log.Error(
+                    "PlayerActorRuntimeHost was not found in the Presentation ancestry.");
+                return;
+            }
+
+            if (_playerActorRuntimeHost.PresentationMount == null)
+            {
+                Log.Error(
+                    "PlayerActorRuntimeHost has no PresentationMount.");
+            }
+            else if (transform.parent !=
+                     _playerActorRuntimeHost.PresentationMount)
+            {
+                Log.Error(
+                    "MinimalFirstPersonLocomotion must be on the root of the Presentation directly under PlayerActorRuntimeHost.PresentationMount.");
+            }
+
             if (_characterController == null)
             {
-                Log.Error("CharacterController is missing.");
+                Log.Error(
+                    "CharacterController is missing on the canonical Player Actor root.");
             }
 
             if (_gameplayInputReader == null)
             {
-                Log.Error("PlayerGameplayInputReader is missing on the same GameObject.");
+                Log.Error(
+                    "PlayerGameplayInputReader is missing on the same Presentation GameObject.");
             }
 
             if (moveAction == null)
             {
-                Log.Error("Move InputActionReference is not assigned.");
+                Log.Error(
+                    "Move InputActionReference is not assigned.");
             }
 
             if (lookAction == null)
             {
-                Log.Error("Look InputActionReference is not assigned.");
+                Log.Error(
+                    "Look InputActionReference is not assigned.");
             }
 
             if (cameraMount == null)
             {
-                Log.Error("CameraMount is not assigned.");
+                Log.Error(
+                    "CameraMount is not assigned.");
             }
         }
 
