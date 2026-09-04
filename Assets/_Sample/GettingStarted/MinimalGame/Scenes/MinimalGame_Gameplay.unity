@@ -236,9 +236,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 372482401}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6cec04ceedf47199f91ad2205976097, type: 3}
+  m_Script: {fileID: 11500000, guid: d3d4f1b900974056a6247b2e4dbaa266, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.SceneLocalPlayerAdmissionRuntimeHostModule
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.SceneProvidedLocalPlayerAuthoring
+  localPlayerHost: {fileID: 1619461686}
+  playerSlotProfile: {fileID: 11400000, guid: 74a665a54f2420e448955b454bb29b06, type: 2}
+  actorProfile: {fileID: 11400000, guid: 30911786217ab5e4f935786bbd92111c, type: 2}
+  admissionTiming: 0
+  lastAuthoringStatus: 130
+  lastAuthoringDiagnostic: Scene-Provided Local Player Presentation prefab source
+    does not match the selected Actor Profile Presentation prefab.
 --- !u!1 &410777663
 GameObject:
   m_ObjectHideFlags: 0
@@ -619,6 +626,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2866633632960482771, guid: 76bf03f147d23c54c82e08582e106ecd, type: 3}
   m_PrefabInstance: {fileID: 1619461683}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1619461686 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4134174271972620789, guid: 76bf03f147d23c54c82e08582e106ecd, type: 3}
+  m_PrefabInstance: {fileID: 1619461683}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43020ea2bdd04515a9232be09bdd3684, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.LocalPlayerHostAuthoring
 --- !u!1 &1742954444
 GameObject:
   m_ObjectHideFlags: 0
