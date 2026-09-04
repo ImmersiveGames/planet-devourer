@@ -45,11 +45,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.SceneProvidedLocalPlayerAuthoring
   localPlayerHost: {fileID: 8932950380015993812}
-  playerSlotProfile: {fileID: 11400000, guid: c1dee36a59ff7ec45ad47e8224ad7622, type: 2}
+  playerSlotProfile: {fileID: 11400000, guid: 74a665a54f2420e448955b454bb29b06, type: 2}
   actorProfile: {fileID: 11400000, guid: 30911786217ab5e4f935786bbd92111c, type: 2}
   admissionTiming: 0
   lastAuthoringStatus: 10
-  lastAuthoringDiagnostic: Scene-Provided Local Player authored composition is ready for validation.
+  lastAuthoringDiagnostic: Scene-Provided Local Player authored composition and prefab
+    provenance are valid.
 --- !u!1001 &639283755356491776
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -58,9 +59,23 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6859243539264267374}
     m_Modifications:
+    - target: {fileID: 99621057030911557, guid: bec780e03595b4b44944088b9562f0f3, type: 3}
+      propertyPath: materializationRevision
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 99621057030911557, guid: bec780e03595b4b44944088b9562f0f3, type: 3}
+      propertyPath: lastMaterializationSummary
+      value: created='0' repaired='0' alreadyValid='7' skipped='2' blocked='0' presentation='Mounted'
+        cameraOwnership='FrameworkOwned' positionOwnership='FrameworkOwned' rotationOwnership='FrameworkOwned'
+        revision='3'
+      objectReference: {fileID: 0}
     - target: {fileID: 1818770758136001976, guid: bec780e03595b4b44944088b9562f0f3, type: 3}
       propertyPath: m_Name
       value: FG_FirstPersonPresentation
+      objectReference: {fileID: 0}
+    - target: {fileID: 1844921389780215427, guid: bec780e03595b4b44944088b9562f0f3, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2137699828295470116, guid: bec780e03595b4b44944088b9562f0f3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -107,11 +122,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bec780e03595b4b44944088b9562f0f3, type: 3}
---- !u!1 &1288772138272286136 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1818770758136001976, guid: bec780e03595b4b44944088b9562f0f3, type: 3}
-  m_PrefabInstance: {fileID: 639283755356491776}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1546304340082596900 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2137699828295470116, guid: bec780e03595b4b44944088b9562f0f3, type: 3}
@@ -187,17 +197,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 8421911180079054407, guid: 9d6582bebe8f58242a88a024533538a4, type: 3}
   m_PrefabInstance: {fileID: 3157109310664596009}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7865908991604176164 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5114150452398911245, guid: 9d6582bebe8f58242a88a024533538a4, type: 3}
-  m_PrefabInstance: {fileID: 3157109310664596009}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bd151acf79cd456a9997d26d3af27439, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.PlayerActorRuntimeHost
 --- !u!1001 &4803017062114392609
 PrefabInstance:
   m_ObjectHideFlags: 0
