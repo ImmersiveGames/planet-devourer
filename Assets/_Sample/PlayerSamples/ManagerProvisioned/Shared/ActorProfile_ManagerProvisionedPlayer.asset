@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ActorProfile_ManagerProvisionedPlayer
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Actors.ActorProfile
   actorProfileId: actor-profile.manager-provisioned.player
-  displayName: Bira
+  displayName: Fazendeiro
   description: 
   icon: {fileID: 21300000, guid: 34f2c6a3e1699814dad515cd8d7e100f, type: 3}
   actorKind: 10
