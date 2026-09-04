@@ -26,20 +26,12 @@ namespace Immersive.Framework.Samples.Player
         [SerializeField]
         private float maximumPitch = 70f;
 
-        private PlayerActorRuntimeHost _playerActorRuntimeHost;
         private IPlayerGameplayInputReader _gameplayInputReader;
-        private Transform _actorRoot;
         private float _pitch;
 
         private void Awake()
         {
             _gameplayInputReader = GetComponent<PlayerGameplayInputReader>();
-            _playerActorRuntimeHost = GetComponentInParent<PlayerActorRuntimeHost>(true);
-
-            if (_playerActorRuntimeHost != null)
-            {
-                _actorRoot = _playerActorRuntimeHost.transform;
-            }
 
             if (trackingPivot != null)
             {
@@ -54,8 +46,7 @@ namespace Immersive.Framework.Samples.Player
 
         private void Update()
         {
-            if (_actorRoot == null ||
-                _gameplayInputReader == null ||
+            if (_gameplayInputReader == null ||
                 !_gameplayInputReader.GameplayReady ||
                 trackingPivot == null ||
                 lookAction == null)
@@ -69,7 +60,7 @@ namespace Immersive.Framework.Samples.Player
                 return;
             }
 
-            _actorRoot.Rotate(
+            transform.Rotate(
                 0f,
                 look.x * lookSensitivity,
                 0f,
@@ -86,27 +77,6 @@ namespace Immersive.Framework.Samples.Player
 
         private void ValidateSetup()
         {
-            if (_playerActorRuntimeHost == null)
-            {
-                Debug.LogError(
-                    "MinimalThirdPersonLook requires a PlayerActorRuntimeHost in the Presentation ancestry.",
-                    this);
-                return;
-            }
-
-            if (_playerActorRuntimeHost.PresentationMount == null)
-            {
-                Debug.LogError(
-                    "MinimalThirdPersonLook requires PlayerActorRuntimeHost.PresentationMount.",
-                    this);
-            }
-            else if (transform.parent != _playerActorRuntimeHost.PresentationMount)
-            {
-                Debug.LogError(
-                    "MinimalThirdPersonLook must be on the Presentation root directly under PlayerActorRuntimeHost.PresentationMount.",
-                    this);
-            }
-
             if (_gameplayInputReader == null)
             {
                 Debug.LogError(

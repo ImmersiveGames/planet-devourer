@@ -1,194 +1,167 @@
 using Immersive.Framework.PlayerParticipation;
-using Immersive.Logging.Loggers;
-using Immersive.Logging.Unity;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace _Sample.GettingStarted.MinimalGame.Scripts
+[DisallowMultipleComponent]
+[RequireComponent(typeof(PlayerGameplayInputReader))]
+[RequireComponent(typeof(CharacterController))]
+public sealed class MinimalFirstPersonLocomotion : MonoBehaviour
 {
-    [DisallowMultipleComponent]
-    public sealed class MinimalFirstPersonLocomotion : MonoBehaviour
+    [Header("Input")]
+    [SerializeField]
+    private InputActionReference moveAction;
+
+    [SerializeField]
+    private InputActionReference lookAction;
+
+    [Header("Movement")]
+    [SerializeField, Min(0f)]
+    private float moveSpeed = 5f;
+
+    [Header("Look")]
+    [SerializeField]
+    private Transform cameraMount;
+
+    [SerializeField, Min(0f)]
+    private float lookSensitivity = 0.1f;
+
+    [SerializeField]
+    private float minimumPitch = -80f;
+
+    [SerializeField]
+    private float maximumPitch = 80f;
+
+    private CharacterController _characterController;
+    private IPlayerGameplayInputReader _gameplayInputReader;
+    private float _pitch;
+
+    private void Awake()
     {
-        private static readonly ScopedLogger Log =
-            UnityLoggingFactory.CreateLogger()
-                .For<MinimalFirstPersonLocomotion>("Immersive.Sample00");
+        _characterController = GetComponent<CharacterController>();
+        _gameplayInputReader = GetComponent<PlayerGameplayInputReader>();
 
-        [Header("Input")]
-        [SerializeField] private InputActionReference moveAction;
-        [SerializeField] private InputActionReference lookAction;
-
-        [Header("Movement")]
-        [SerializeField, Min(0f)] private float moveSpeed = 5f;
-
-        [Header("Look")]
-        [SerializeField] private Transform cameraMount;
-        [SerializeField, Min(0f)] private float lookSensitivity = 0.1f;
-        [SerializeField] private float minimumPitch = -80f;
-        [SerializeField] private float maximumPitch = 80f;
-
-        private PlayerActorRuntimeHost _playerActorRuntimeHost;
-        private CharacterController _characterController;
-        private IPlayerGameplayInputReader _gameplayInputReader;
-        private Transform _actorRoot;
-        private float _pitch;
-
-        private void Awake()
+        if (cameraMount != null)
         {
-            _gameplayInputReader = GetComponent<PlayerGameplayInputReader>();
-
-            _playerActorRuntimeHost =
-                GetComponentInParent<PlayerActorRuntimeHost>(true);
-
-            if (_playerActorRuntimeHost != null)
-            {
-                _actorRoot = _playerActorRuntimeHost.transform;
-                _characterController =
-                    _actorRoot.GetComponent<CharacterController>();
-            }
-
-            if (cameraMount != null)
-            {
-                _pitch = Mathf.Clamp(
-                    NormalizeSignedAngle(cameraMount.localEulerAngles.x),
-                    minimumPitch,
-                    maximumPitch);
-            }
-
-            ValidateSetup();
-        }
-
-        private void Update()
-        {
-            if (_actorRoot == null ||
-                _characterController == null ||
-                !_characterController.enabled ||
-                _gameplayInputReader == null ||
-                !_gameplayInputReader.GameplayReady)
-            {
-                return;
-            }
-
-            ApplyMove();
-            ApplyLook();
-        }
-
-        private void ApplyMove()
-        {
-            if (moveAction == null ||
-                !_gameplayInputReader.TryReadValue(
-                    moveAction,
-                    out Vector2 move))
-            {
-                return;
-            }
-
-            var planarInput = Vector2.ClampMagnitude(move, 1f);
-            if (planarInput.sqrMagnitude <= 0.0001f)
-            {
-                return;
-            }
-
-            var yawRotation =
-                Quaternion.Euler(0f, _actorRoot.eulerAngles.y, 0f);
-
-            var planarDirection =
-                yawRotation *
-                new Vector3(planarInput.x, 0f, planarInput.y);
-
-            _characterController.Move(
-                planarDirection * (moveSpeed * Time.deltaTime));
-        }
-
-        private void ApplyLook()
-        {
-            if (lookAction == null ||
-                cameraMount == null ||
-                !_gameplayInputReader.TryReadValue(
-                    lookAction,
-                    out Vector2 look) ||
-                look.sqrMagnitude <= 0.0001f)
-            {
-                return;
-            }
-
-            _actorRoot.Rotate(
-                0f,
-                look.x * lookSensitivity,
-                0f,
-                Space.Self);
-
             _pitch = Mathf.Clamp(
-                _pitch - look.y * lookSensitivity,
+                NormalizeSignedAngle(cameraMount.localEulerAngles.x),
                 minimumPitch,
                 maximumPitch);
-
-            cameraMount.localRotation =
-                Quaternion.Euler(_pitch, 0f, 0f);
         }
 
-        private void ValidateSetup()
+        ValidateSetup();
+    }
+
+    private void Update()
+    {
+        if (_characterController == null ||
+            !_characterController.enabled ||
+            _gameplayInputReader == null ||
+            !_gameplayInputReader.GameplayReady)
         {
-            if (_playerActorRuntimeHost == null)
-            {
-                Log.Error(
-                    "PlayerActorRuntimeHost was not found in the Presentation ancestry.");
-                return;
-            }
-
-            if (_playerActorRuntimeHost.PresentationMount == null)
-            {
-                Log.Error(
-                    "PlayerActorRuntimeHost has no PresentationMount.");
-            }
-            else if (transform.parent !=
-                     _playerActorRuntimeHost.PresentationMount)
-            {
-                Log.Error(
-                    "MinimalFirstPersonLocomotion must be on the root of the Presentation directly under PlayerActorRuntimeHost.PresentationMount.");
-            }
-
-            if (_characterController == null)
-            {
-                Log.Error(
-                    "CharacterController is missing on the canonical Player Actor root.");
-            }
-
-            if (_gameplayInputReader == null)
-            {
-                Log.Error(
-                    "PlayerGameplayInputReader is missing on the same Presentation GameObject.");
-            }
-
-            if (moveAction == null)
-            {
-                Log.Error(
-                    "Move InputActionReference is not assigned.");
-            }
-
-            if (lookAction == null)
-            {
-                Log.Error(
-                    "Look InputActionReference is not assigned.");
-            }
-
-            if (cameraMount == null)
-            {
-                Log.Error(
-                    "CameraMount is not assigned.");
-            }
+            return;
         }
 
-        private void OnValidate()
+        ApplyMove();
+        ApplyLook();
+    }
+
+    private void ApplyMove()
+    {
+        if (moveAction == null ||
+            !_gameplayInputReader.TryReadValue(moveAction, out Vector2 move))
         {
-            if (maximumPitch < minimumPitch)
-            {
-                maximumPitch = minimumPitch;
-            }
+            return;
         }
 
-        private static float NormalizeSignedAngle(float angle)
+        Vector2 planarInput = Vector2.ClampMagnitude(move, 1f);
+        if (planarInput.sqrMagnitude <= 0.0001f)
         {
-            return angle > 180f ? angle - 360f : angle;
+            return;
         }
+
+        Quaternion yawRotation =
+            Quaternion.Euler(0f, transform.eulerAngles.y, 0f);
+
+        Vector3 planarDirection =
+            yawRotation * new Vector3(planarInput.x, 0f, planarInput.y);
+
+        _characterController.Move(
+            planarDirection * (moveSpeed * Time.deltaTime));
+    }
+
+    private void ApplyLook()
+    {
+        if (lookAction == null ||
+            cameraMount == null ||
+            !_gameplayInputReader.TryReadValue(lookAction, out Vector2 look) ||
+            look.sqrMagnitude <= 0.0001f)
+        {
+            return;
+        }
+
+        transform.Rotate(
+            0f,
+            look.x * lookSensitivity,
+            0f,
+            Space.Self);
+
+        _pitch = Mathf.Clamp(
+            _pitch - look.y * lookSensitivity,
+            minimumPitch,
+            maximumPitch);
+
+        cameraMount.localRotation =
+            Quaternion.Euler(_pitch, 0f, 0f);
+    }
+
+    private void ValidateSetup()
+    {
+        if (_characterController == null)
+        {
+            Debug.LogError(
+                "MinimalFirstPersonLocomotion requires CharacterController on the same Presentation GameObject.",
+                this);
+        }
+
+        if (_gameplayInputReader == null)
+        {
+            Debug.LogError(
+                "MinimalFirstPersonLocomotion requires PlayerGameplayInputReader on the same Presentation GameObject.",
+                this);
+        }
+
+        if (moveAction == null)
+        {
+            Debug.LogError(
+                "MinimalFirstPersonLocomotion requires an authored Move InputActionReference.",
+                this);
+        }
+
+        if (lookAction == null)
+        {
+            Debug.LogError(
+                "MinimalFirstPersonLocomotion requires an authored Look InputActionReference.",
+                this);
+        }
+
+        if (cameraMount == null)
+        {
+            Debug.LogError(
+                "MinimalFirstPersonLocomotion requires an authored Camera Mount.",
+                this);
+        }
+    }
+
+    private void OnValidate()
+    {
+        if (maximumPitch < minimumPitch)
+        {
+            maximumPitch = minimumPitch;
+        }
+    }
+
+    private static float NormalizeSignedAngle(float angle)
+    {
+        return angle > 180f ? angle - 360f : angle;
     }
 }

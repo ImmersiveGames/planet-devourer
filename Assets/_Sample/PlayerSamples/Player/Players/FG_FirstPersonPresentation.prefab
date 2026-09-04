@@ -164,7 +164,7 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1818770758136001976, guid: 415b0b4f2abd676408948fd4ebaa390b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: -3680561668479663}
+      addedObject: {fileID: 3563678939179053256}
     - targetCorrespondingSourceObject: {fileID: 1818770758136001976, guid: 415b0b4f2abd676408948fd4ebaa390b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 719117990383172847}
@@ -182,7 +182,7 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1818770758136001976, guid: 415b0b4f2abd676408948fd4ebaa390b, type: 3}
   m_PrefabInstance: {fileID: 180730278134997795}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &-3680561668479663
+--- !u!114 &3563678939179053256
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -191,9 +191,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1999465626278860443}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d8560546c5ebb44e837368f4289d17c, type: 3}
+  m_Script: {fileID: 11500000, guid: 28dcf5208b1223545b6d0c6104523fa9, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::_Sample.GettingStarted.MinimalGame.Scripts.MinimalFirstPersonLocomotion
+  m_EditorClassIdentifier: Assembly-CSharp::MinimalFirstPersonLocomotion
   moveAction: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   lookAction: {fileID: -5630151704836100654, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   moveSpeed: 5

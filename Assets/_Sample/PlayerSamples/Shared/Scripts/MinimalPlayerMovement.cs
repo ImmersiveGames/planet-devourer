@@ -6,6 +6,7 @@ namespace Immersive.Framework.Samples.Player
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(PlayerGameplayInputReader))]
+    [RequireComponent(typeof(CharacterController))]
     public sealed class MinimalPlayerMovement : MonoBehaviour
     {
         [Header("Input")]
@@ -16,29 +17,20 @@ namespace Immersive.Framework.Samples.Player
         [SerializeField, Min(0f)]
         private float moveSpeed = 4f;
 
-        private PlayerActorRuntimeHost _playerActorRuntimeHost;
         private CharacterController _characterController;
         private IPlayerGameplayInputReader _gameplayInputReader;
-        private Transform _actorRoot;
 
         private void Awake()
         {
             _gameplayInputReader = GetComponent<PlayerGameplayInputReader>();
-            _playerActorRuntimeHost = GetComponentInParent<PlayerActorRuntimeHost>(true);
-
-            if (_playerActorRuntimeHost != null)
-            {
-                _actorRoot = _playerActorRuntimeHost.transform;
-                _characterController = _actorRoot.GetComponent<CharacterController>();
-            }
+            _characterController = GetComponent<CharacterController>();
 
             ValidateSetup();
         }
 
         private void Update()
         {
-            if (_actorRoot == null ||
-                _characterController == null ||
+            if (_characterController == null ||
                 !_characterController.enabled ||
                 _gameplayInputReader == null ||
                 !_gameplayInputReader.GameplayReady ||
@@ -59,7 +51,7 @@ namespace Immersive.Framework.Samples.Player
             }
 
             Quaternion yawRotation =
-                Quaternion.Euler(0f, _actorRoot.eulerAngles.y, 0f);
+                Quaternion.Euler(0f, transform.eulerAngles.y, 0f);
 
             Vector3 worldDirection =
                 yawRotation * new Vector3(planarInput.x, 0f, planarInput.y);
@@ -70,31 +62,10 @@ namespace Immersive.Framework.Samples.Player
 
         private void ValidateSetup()
         {
-            if (_playerActorRuntimeHost == null)
-            {
-                Debug.LogError(
-                    "MinimalPlayerMovement requires a PlayerActorRuntimeHost in the Presentation ancestry.",
-                    this);
-                return;
-            }
-
-            if (_playerActorRuntimeHost.PresentationMount == null)
-            {
-                Debug.LogError(
-                    "MinimalPlayerMovement requires PlayerActorRuntimeHost.PresentationMount.",
-                    this);
-            }
-            else if (transform.parent != _playerActorRuntimeHost.PresentationMount)
-            {
-                Debug.LogError(
-                    "MinimalPlayerMovement must be on the Presentation root directly under PlayerActorRuntimeHost.PresentationMount.",
-                    this);
-            }
-
             if (_characterController == null)
             {
                 Debug.LogError(
-                    "MinimalPlayerMovement requires CharacterController on the canonical Player Actor root.",
+                    "MinimalPlayerMovement requires CharacterController on the same Presentation GameObject.",
                     this);
             }
 
