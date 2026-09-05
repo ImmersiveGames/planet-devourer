@@ -1,11 +1,12 @@
 # FG-ADR-002 — Player Sample Scope and Demonstration Architecture
 
-Status: **ACCEPTED — CANONICAL PLAYER SAMPLE SCOPE / REVISION 4**  
+Status: **ACCEPTED — CANONICAL PLAYER SAMPLE SCOPE / REVISION 5**  
 Accepted on: **2026-08-22**  
 Revision 2 updated on: **2026-08-24**  
 Revision 3 updated on: **2026-08-26**  
 Revision 4 updated on: **2026-08-28**  
-Current document revision: **4**  
+Revision 5 updated on: **2026-09-05**  
+Current document revision: **5**  
 Canonical filename: **`FG-ADR-002-Player-Sample-Scope-and-Demonstration-Architecture.md`**  
 Scope: **Player sample coverage, Demonstration Application boundaries, implementation sequence, public-surface blockers, Player-specific sharing and product-facing terminology**  
 Related strategy: **FG-ADR-001 — Immersive Framework Sample and Demonstration Strategy**  
@@ -50,7 +51,9 @@ FG-ADR-002
   Player sample scope and demonstration architecture
 ```
 
-Revision 4 records the closure of Character Selection authoring/proving, the corrected `LeaveUnresolved` runtime behavior, the public `PlayerSessionObserver` composition used by the sample, ActorProfile-driven button presentation, and the Full Player `30/30` certification evidence.
+Revision 4 recorded the original Character Selection closure on 2026-08-28: corrected `LeaveUnresolved` behavior, public `PlayerSessionObserver` composition, ActorProfile-driven button presentation and Full Player `30/30` evidence.
+
+Revision 5 records the **current-composition closure** after the Player prefab rebuild: Actor profiles now resolve concrete `PresentationPrefab` assets through the current Player Actor Runtime Host / Presentation boundary, the shared technical prefab baseline is concrete reuse, and Character Selection was reproven in consumer Play Mode on 2026-09-05. Revision 5 does **not** declare the historical Local Multiplayer blocker solved; it moves that sample to a current public-contract re-audit before construction.
 
 ---
 
@@ -90,8 +93,6 @@ Player Provisioning
 
 `SceneProvided`, `ManagerProvisioned`, `PlayerHostProvisioningMode` and existing runtime/API names remain valid runtime terminology.
 
-Product-facing surfaces should prefer short contextual grouping rather than presenting Scene Player and Player Provisioning as equivalent objects.
-
 ---
 
 ## 3. Current product evidence
@@ -109,19 +110,20 @@ Getting Started / Minimal Game
 Player Provisioning
   HostProvisioning = ManagerProvisioned
   configured Default Actor resolution
-  MATERIALIZED / PLAY MODE PROVEN 2026-08-24
+  MATERIALIZED / PLAY MODE PROVEN
 
 Character Selection
   HostProvisioning = ManagerProvisioned
   ActorResolution = LeaveUnresolved
-  AUTHORING COMPLETE / PLAY MODE PROVEN 2026-08-28
+  CLOSED / PLAY MODE REPROVEN 2026-09-05
+  current ActorProfile.PresentationPrefab composition
 
 Local Multiplayer
-  PLANNED / BLOCKED
-  public Slot/device/input ownership/observation contract still missing
+  NEXT PLAYER WORK ITEM
+  PRE-IMPLEMENTATION PUBLIC-CONTRACT RE-AUDIT
 ```
 
-Character Selection is no longer merely “unblocked”. Revision 4 records successful materialization and consumer Play Mode proof.
+The 2026-08-28 Character Selection lifecycle proof remains historical evidence. The 2026-09-05 run is the current physical-composition proof after the Player Actor / Presentation rebuild.
 
 ---
 
@@ -144,11 +146,12 @@ PLAYER
   Character Selection
     HostProvisioning = ManagerProvisioned
     ActorResolution = LeaveUnresolved
-    AUTHORING COMPLETE / PLAY MODE PROVEN
+    CLOSED / PLAY MODE REPROVEN
 
   Local Multiplayer
-    PLANNED / BLOCKED
-    wait for public Slot/device/input ownership/observation contract
+    NEXT
+    first re-audit current public Slot/device/input ownership contract
+    construct only if public product surface is sufficient
 ```
 
 This is the current implementation sequence, not a permanent closed catalog.
@@ -180,15 +183,13 @@ Scene-authored Local Player Host
   -> minimal Move / Look navigation
 ```
 
-Therefore a second dedicated Scene Player application under `Player/` is not required merely for symmetry.
-
-A new Scene Player application would require evidence of a distinct consumer contract not already demonstrated by Getting Started / Minimal Game.
+Therefore a second dedicated Scene Player application under Player is not required merely for symmetry.
 
 ---
 
 ## 6. Player Provisioning
 
-Status: **MATERIALIZED / PLAY MODE PROVEN 2026-08-24**
+Status: **MATERIALIZED / PLAY MODE PROVEN**
 
 `Player Provisioning` is the product-facing name for the Manager-Provisioned application whose Session configuration resolves a configured Default Actor.
 
@@ -200,7 +201,8 @@ Player Provisioning authority
   -> creates Local Player Host when Join is explicitly requested
   -> Session Slot is joined
   -> configured Default Actor is selected/prepared
-  -> physical Actor is materialized
+  -> Player Actor Runtime Host
+  -> configured Actor Presentation
   -> Activity participation/readiness completes
 ```
 
@@ -212,7 +214,7 @@ This application remains the canonical demonstration of Session-authorized Local
 
 ## 7. Character Selection
 
-Status: **AUTHORING COMPLETE / PLAY MODE PROVEN — 2026-08-28**
+Status: **CLOSED / PLAY MODE REPROVEN — 2026-09-05**
 
 Character Selection is a distinct Player Demonstration Application because its Session creation-time Actor-resolution intent differs from Player Provisioning:
 
@@ -226,7 +228,7 @@ Character Selection
 
 ### 7.1 Public consumer model
 
-The proven consumer flow is:
+The canonical flow is:
 
 ```text
 PlayerSessionProfile
@@ -249,7 +251,8 @@ PlayerSessionSelectActorCommandTrigger.Invoke()
 Framework validates and commits selected Actor
         ↓
 Actor preparation
-  -> Manager-Provisioned materialization
+  -> Player Actor Runtime Host
+  -> ActorProfile.PresentationPrefab materialization
   -> Activity participation / GameplayReady
         ↓
 PlayerSessionObserver.OnActorSelected
@@ -271,8 +274,6 @@ without an intermediate failed readiness state.
 
 `LeaveUnresolved` is an intentional pending state, not a failed/default-resolution state.
 
-For a Joined Slot with no selected Actor:
-
 ```text
 Joined
   -> selected Actor = none
@@ -281,8 +282,6 @@ Joined
 ```
 
 The Framework must **not** invoke Default Actor resolution in this branch.
-
-Revision 4 records the runtime correction that made the reconcile consult the immutable Session Actor-resolution policy before attempting `TrySelectDefaultActor`.
 
 Canonical behavior:
 
@@ -295,7 +294,7 @@ LeaveUnresolved
   -> waits for explicit selection
 ```
 
-Do not reinterpret `RejectedDefaultResolutionDisabled` as pseudo-success after issuing a forbidden default request. The request must not occur in the `LeaveUnresolved` branch.
+Revision 4 recorded the runtime correction that established this behavior.
 
 ### 7.3 PlayerSessionObserver presentation boundary
 
@@ -314,8 +313,6 @@ On Player Left
   -> hide Character Selection Controls
 ```
 
-`On Actor Cleared` is intentionally not used to show the panel because Actor clear occurs during Leave before terminal Player Left.
-
 The Observer remains outside the panel it activates/deactivates so its scoped observation lifetime is not disabled with the UI.
 
 ### 7.4 ActorProfile-driven button presentation
@@ -330,20 +327,57 @@ PlayerSessionSelectActorCommandTrigger.ActorProfile
   └── Icon        -> button image
 ```
 
-This avoids authoring the same ActorProfile twice and keeps command semantics separate from presentation.
+The presenter does not select Actors, mutate Session state, own Player lifecycle, perform Player discovery, register another ActorProfile authority or silently wire the Button command.
 
-The presenter does not:
+### 7.5 Current Player Actor / Presentation composition
+
+Revision 5 records the current physical composition used by Character Selection.
+
+The reusable technical prefab baseline is:
 
 ```text
-select Actors
-mutate Session state
-own Player lifecycle
-perform Player discovery
-register another ActorProfile authority
-silently wire the Button command
+Assets/_Sample/PlayerSamples/Shared/Prefabs/
+  FG_Player.prefab
+  FG_PlayerActor.prefab
+  FG_Presentation.prefab
 ```
 
-### 7.5 Sample ownership boundary
+Character Selection Actor profiles now use the current presentation contract:
+
+```text
+ActorProfile_Farmer
+  -> PresentationPrefab = FG_FarmerPresentation
+
+ActorProfile_Cow
+  -> PresentationPrefab = FG_CowPresentation
+```
+
+Concrete presentation prefabs:
+
+```text
+Assets/_Sample/PlayerSamples/Player/Players/
+  FG_FarmerPresentation.prefab
+  FG_CowPresentation.prefab
+```
+
+Both concrete variants derive from the shared `FG_Presentation` baseline.
+
+Canonical physical teaching chain:
+
+```text
+selected ActorProfile
+  -> Actor preparation
+  -> Player Actor Runtime Host
+  -> Presentation Mount
+  -> ActorProfile.PresentationPrefab
+  -> selected concrete Presentation
+```
+
+The old `LogicalActorHostPrefab` composition is not part of the current Character Selection sample contract.
+
+The concrete presentations provide the sample-facing gameplay/presentation behavior required by the demonstration, including the selected character presentation, Player gameplay input consumption and Follow camera composition.
+
+### 7.6 Sample ownership boundary
 
 The game/sample owns:
 
@@ -352,6 +386,7 @@ which ActorProfile choices are presented
 character labels/icons/layout
 UI visibility wiring
 which explicit selection command the user invokes
+concrete Farmer/Cow Presentation authoring
 ```
 
 The Framework owns:
@@ -363,33 +398,24 @@ selection revision
 selection commit
 Session duplicate-selection policy
 Actor preparation barrier
-physical Actor materialization
+Player Actor Runtime Host lifecycle
+PresentationPrefab materialization
 Activity participation/admission/readiness
 ```
 
-The sample must not use:
+The sample must not use private/internal runtime access, reflection, sample-specific Session discovery, direct mutation of internal Session state, parallel Actor-selection authority, hidden fallback Actor or sample-owned Actor preparation/materialization.
 
-```text
-private/internal runtime access
-reflection
-sample-specific Session discovery
-direct mutation of internal Session state
-parallel Actor-selection authority
-hidden fallback Actor
-sample-owned Actor preparation/materialization
-```
-
-### 7.6 Initial selection, not hot swap
+### 7.7 Initial selection, not hot swap
 
 Character Selection demonstrates **initial explicit Actor selection** after Join.
 
 Do not add Replace/Clear UI merely because those public APIs exist.
 
-`Replace Actor Selection` is not a physical hot-swap command. Once the Logical Actor is prepared, the canonical preparation barrier prevents logical selection changes that would imply replacing the prepared physical Actor.
+`Replace Actor Selection` is not a physical hot-swap command. Once the Actor is prepared, the preparation barrier governs later replacement semantics.
 
-### 7.7 Character Selection validation evidence
+### 7.8 Validation evidence
 
-Consumer Play Mode proved:
+Historical consumer proof — **2026-08-28**:
 
 ```text
 Open Joining -> Succeeded
@@ -402,7 +428,7 @@ Rejoin -> WaitingForActorSelection
 Cow -> SucceededSelected -> Prepared -> Materialized -> GameplayReady
 ```
 
-The corresponding Framework Full Player aggregate passed:
+Historical Framework Full Player aggregate:
 
 ```text
 historicalFullPlayer = 25/25
@@ -421,13 +447,28 @@ executedContracts = 30
 passedContracts = 30
 ```
 
-This closes Character Selection authoring/proving. Final UPM promotion/import proof remains a later Player sample-group release gate.
+Current-composition consumer reproof — **2026-09-05**:
+
+```text
+Join
+-> WaitingForActorSelection
+-> select Farmer / Cow
+-> correct PresentationPrefab materialized
+-> Follow camera functional
+-> gameplay movement/input functional
+-> GameplayReady
+-> Leave
+-> Rejoin
+-> fresh explicit Actor selection functional
+```
+
+This closes Character Selection authoring/proving on the current Player architecture. Final UPM promotion/import proof remains a later Player sample-group release gate.
 
 ---
 
 ## 8. Local Multiplayer
 
-Status: **NEXT PLANNED PLAYER DEMONSTRATION / PLANNED / BLOCKED**
+Status: **NEXT PLAYER DEMONSTRATION / PRE-IMPLEMENTATION PUBLIC-CONTRACT RE-AUDIT**
 
 Local Multiplayer requires more than multiple Player objects in one scene.
 
@@ -443,11 +484,13 @@ Actor selection when applicable
 leave / rejoin when applicable
 ```
 
-The sample remains blocked until the Framework exposes a sufficient public **Slot/device/input ownership and observation contract** for a normal consumer.
+### 8.1 Historical blocker
 
-The current ordinary Join command does not provide exact-Slot public Join and does not expose a complete durable Slot-to-device/InputUser/control-scheme observation contract.
+The last confirmed blocker, recorded in August 2026, was insufficient public **Slot/device/input ownership and observation** for a normal consumer.
 
-The required contract must not depend on the sample inventing authority for:
+At that time the ordinary Join surface did not provide exact/deterministic Slot targeting and did not expose a complete durable Slot-to-device/InputUser/control-scheme observation contract.
+
+The sample was therefore forbidden from inventing authority for:
 
 ```text
 which device owns which Slot
@@ -457,7 +500,30 @@ how that association is observed
 how ownership is released/reused
 ```
 
-### 8.1 Exit criterion
+### 8.2 Revision 5 re-audit rule
+
+The historical blocker predates later Player framework cuts. Revision 5 therefore does **not** present it as freshly verified current truth.
+
+Before Local Multiplayer prefab/sample construction, re-audit the current public Framework implementation and answer:
+
+```text
+who owns the local Player Slot
+how a second participant requests Join
+how device/InputUser/control-scheme association is established
+how PlayerGameplayInputReader receives only the owning Player's input
+what public evidence exposes the association
+how ownership is released/reused on Leave/Rejoin
+```
+
+Until this audit is complete:
+
+```text
+do not assume the August blocker still exists unchanged
+do not assume it has been solved
+do not invent sample-owned Slot/device/input authority
+```
+
+### 8.3 Exit criterion
 
 Local Multiplayer may move to implementation when the public product surface supports a canonical consumer flow such as:
 
@@ -514,42 +580,19 @@ This prevents Player samples from becoming a combinatorial matrix.
 
 A sample is executable documentation of the product surface.
 
-Therefore:
-
 > **A missing public consumer contract blocks the sample; it does not authorize the sample to implement a substitute framework.**
 
-Player sample code may provide game-owned presentation and interaction such as:
+Player sample code may provide game-owned presentation and interaction such as join prompts, character-selection UI, ActorProfile button presenters, simple HUD, minimal locomotion and sample navigation.
 
-```text
-join prompts
-character-selection UI
-ActorProfile button presenters
-simple HUD
-minimal locomotion
-sample navigation
-```
+It must not provide hidden Framework responsibilities such as internal Player discovery, private Actor mutation, parallel Slot registry, parallel device ownership, parallel input routing authority, reflection-based binding or silent fallback.
 
-It must not provide hidden Framework responsibilities such as:
-
-```text
-internal Player discovery
-private Actor mutation
-parallel Slot registry
-parallel device ownership
-parallel input routing authority
-reflection-based binding
-silent fallback that makes invalid configuration appear valid
-```
-
-Character Selection satisfies this gate and is proven. Local Multiplayer remains blocked by its own missing public contract.
+Character Selection satisfies this gate and is closed. Local Multiplayer proceeds next through public-contract re-audit.
 
 ---
 
 ## 11. Player/Shared
 
-Status: **CONDITIONAL / CREATED BY REUSE, NOT BY PLAN**
-
-`Player/Shared` is not a required Player architecture layer.
+Status: **CONDITIONAL / CREATED BY CONCRETE REUSE**
 
 Canonical rule:
 
@@ -558,24 +601,22 @@ used by one Player Demonstration Application
   -> keep local
 
 concretely reused by two or more Player Demonstration Applications
-  -> consider promotion of reusable presentation/content to Player/Shared
+  -> promote reusable technical/presentation content to Player/Shared
 
 no concrete cross-application reuse
   -> do not create/promote Player/Shared content
 ```
 
-This may apply to:
+Revision 5 records concrete shared Player prefab reuse:
 
 ```text
-character visuals
-portraits/icons
-UI visual pieces
-input assets
-presentation prefabs
-sample-only visual helpers
+Player/Shared/Prefabs/
+  FG_Player
+  FG_PlayerActor
+  FG_Presentation
 ```
 
-It does **not** justify moving application authority upward.
+This does **not** justify moving application authority upward.
 
 Keep authoritative application/session configuration local, including as applicable:
 
@@ -589,7 +630,7 @@ application-specific Persistent Content composition
 application-specific bindings
 ```
 
-Current authoring may reuse compatible content between Player demonstrations. Final UPM organization may promote genuinely reusable presentation/content when that improves clarity, but reuse never creates shared Session authority.
+Reusable presentation/content may be shared; application/session authority remains local.
 
 ---
 
@@ -609,17 +650,15 @@ Current authoring may reuse compatible content between Player demonstrations. Fi
 2. Character Selection
    HostProvisioning = ManagerProvisioned
    ActorResolution = LeaveUnresolved
-   AUTHORING COMPLETE / PLAY MODE PROVEN
+   CLOSED / PLAY MODE REPROVEN 2026-09-05
 
 3. Local Multiplayer
-   NEXT PLANNED PLAYER DEMONSTRATION
-   PLANNED / BLOCKED
-   wait for public Slot/device/input ownership/observation contract
+   CURRENT NEXT PLAYER WORK ITEM
+   public-contract re-audit first
+   construct only after the Slot/device/input boundary is known
 ```
 
 This order may change only from concrete implementation/product evidence.
-
-It must not be interpreted as permission to implement a blocked demonstration with sample-owned replacement infrastructure.
 
 ---
 
@@ -663,11 +702,9 @@ FIRSTGAME / authoring workspace
   real integration, ergonomics and consumer composition proof
 ```
 
-The Full Player `30/30` result is technical certification for the current Player runtime surface. Character Selection's own Play Mode run proves that a normal consumer composition can use that surface without private/internal access.
+The historical Full Player `30/30` result is technical certification for the corresponding Player runtime surface. Character Selection's 2026-09-05 Play Mode rerun proves the rebuilt consumer composition on the current Player Actor / Presentation chain.
 
-Do not duplicate every Player permutation in Samples.
-
-Do not use FIRSTGAME as justification for bypassing a missing public surface.
+Do not duplicate every Player permutation in Samples and do not use FIRSTGAME as justification for bypassing a missing public surface.
 
 ---
 
@@ -688,12 +725,19 @@ Character Selection is blocked by missing public arbitrary Actor-selection surfa
 Character Selection is only “next/unblocked” and not yet proven
   -> superseded 2026-08-28
 
+Character Selection proof still represents the current physical Player composition
+  -> superseded 2026-09-05 by PresentationPrefab/current prefab-chain reproof
+
 LeaveUnresolved may attempt Default Actor resolution during Activity reconcile
   -> superseded; LeaveUnresolved waits for explicit Actor selection
 
 Local Multiplayer is ready merely because multiple Slots are conceptually supported
 
+The August Local Multiplayer blocker may be copied forward forever without re-auditing later Player cuts
+  -> superseded; current public surface must be re-audited before construction
+
 Player/Shared is a pre-created required group-level structure
+  -> superseded; Shared exists only where concrete reuse justifies it
 ```
 
 The remaining general FG-ADR-001 rules continue to apply.
@@ -721,17 +765,21 @@ Character Selection
   Joined + no Actor = WaitingForActorSelection
   PlayerSessionObserver controls presentation only
   PlayerSessionSelectActorCommandTrigger owns explicit choice request
-  ActorProfile DisplayName/Icon may drive sample presentation
-  Framework owns selection/preparation/materialization/readiness
-  AUTHORING COMPLETE / PLAY MODE PROVEN
-
-Local Multiplayer
-  planned but blocked until public Slot/device/input ownership/observation is sufficient
+  ActorProfile DisplayName/Icon may drive sample UI presentation
+  ActorProfile.PresentationPrefab owns the selected concrete Actor presentation reference
+  current concrete variants = FG_FarmerPresentation / FG_CowPresentation
+  Framework owns selection/preparation/Player Actor materialization/readiness
+  CLOSED / PLAY MODE REPROVEN 2026-09-05
 
 Player/Shared
   created by concrete reuse only
-  presentation/content may be shared
+  current reusable prefab baseline = FG_Player / FG_PlayerActor / FG_Presentation
   application/session authority remains local
+
+Local Multiplayer
+  next Player sample work item
+  historical Slot/device/input blocker must be re-audited against current Framework
+  no prefab construction before the public ownership/routing contract is known
 
 Public-surface rule
   missing product contract blocks the sample
