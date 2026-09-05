@@ -18,4 +18,4 @@ MonoBehaviour:
   icon: {fileID: 122160563, guid: 8bbc8d6a86170fd49ad5e73b620148ff, type: 3}
   actorKind: 10
   actorRole: 10
-  logicalActorHostPrefab: {fileID: 3435731335869163966, guid: 39a8020a6555cb641af1ed304816a738, type: 3}
+  presentationPrefab: {fileID: 2202270384285838805, guid: 09c3d4d04e97c454baf79191dab7af90, type: 3}
