@@ -1,8 +1,10 @@
 # Expected Unity Assets
 
-Status: **MATERIALIZED / PLAY MODE PROVEN — 2026-08-28**
+Status: **MATERIALIZED / PLAY MODE REPROVEN — 2026-09-05**
 
-This file now records the materialized Character Selection boundary rather than a future asset plan. The earlier arbitrary Actor-selection blocker is closed and the application has been proven using public Player surfaces only.
+This file records the materialized Character Selection boundary on the **current Player Actor / Presentation architecture**.
+
+The original Character Selection application was proven on 2026-08-28. After the Player prefab architecture was rebuilt, the sample assets were migrated and consumer Play Mode was reproven on 2026-09-05.
 
 ## Materialized application intent
 
@@ -16,39 +18,89 @@ PlayerSessionProfile_CharacterSelection.asset
 
 Character Selection intentionally differs from the default-resolving Player Provisioning application at Session creation time, so it remains a separate Demonstration Application.
 
-## Materialized composition
-
-The current authoring composition includes:
+## Current materialized composition
 
 ```text
-GameApplication_CharacterSelection.asset
-PlayerSessionProfile_CharacterSelection.asset
+CharacterSelection/
+  GameApplication_CharacterSelection.asset
 
-Routes/
-  Route_Character Selection.asset
+  Player/
+    PlayerSessionProfile_CharacterSelection.asset
+    ActorProfile_Farmer.asset
+    ActorProfile_Cow.asset
 
-Activities/
-  Character Selection Activity
+  Routes/
+    Route_Character Selection.asset
 
-Scenes/
-  CharacterSelection_UI.unity
+  Activities/
+    Character Selection Activity
 
-Player/
-  Character Selection Player/session assets
-
-ActorProfile choices
-  Farmer
-  Cow
-
-Scripts/
-  CharacterSelectionActorButtonPresenter.cs
+  Scenes/
+    CharacterSelection_UI.unity
 ```
 
-The Character Selection Route currently reuses the existing Manager-Provisioned primary scene and adds `CharacterSelection_UI.unity` as Route Content.
+The current shared Player technical prefab baseline is:
 
-That reuse belongs to the current Player authoring group. Final UPM promotion may reorganize genuinely reusable presentation/content when useful, but it must not move application/session authority into a shared layer merely for deduplication.
+```text
+Assets/_Sample/PlayerSamples/Shared/Prefabs/
+  FG_Player.prefab
+  FG_PlayerActor.prefab
+  FG_Presentation.prefab
+```
 
-## UI composition
+The concrete Character Selection presentations are:
+
+```text
+Assets/_Sample/PlayerSamples/Player/Players/
+  FG_FarmerPresentation.prefab
+  FG_CowPresentation.prefab
+```
+
+Both concrete presentations derive from the shared `FG_Presentation` prefab baseline.
+
+## ActorProfile -> Presentation contract
+
+The Character Selection Actor profiles now use the current public Actor presentation field:
+
+```text
+ActorProfile_Farmer
+  -> presentationPrefab = FG_FarmerPresentation
+
+ActorProfile_Cow
+  -> presentationPrefab = FG_CowPresentation
+```
+
+The old `LogicalActorHostPrefab` composition is not part of the current sample.
+
+Runtime teaching path:
+
+```text
+selected ActorProfile
+  -> Actor preparation
+  -> Player Actor Runtime Host
+  -> Presentation Mount
+  -> ActorProfile.PresentationPrefab
+  -> selected concrete Presentation
+```
+
+The sample authors the concrete presentation; Framework runtime remains responsible for Actor preparation and physical materialization.
+
+## Presentation behavior used by the proof
+
+The concrete Farmer/Cow presentations provide the sample gameplay-facing presentation needed by Character Selection, including:
+
+```text
+Player gameplay input consumption
+character-specific visible presentation
+Follow camera authoring / rig composition
+minimal movement used by the sample proof
+```
+
+The purpose of these components is to prove that selecting a different `ActorProfile` results in the correct usable Player presentation rather than only changing logical Session state.
+
+## Route / UI composition
+
+The Character Selection Route reuses the compatible Manager-Provisioned gameplay scene and adds `CharacterSelection_UI.unity` as Route Content.
 
 `CharacterSelection_UI.unity` contains a Route-scoped `PlayerSessionObserver` outside the selection panel.
 
@@ -65,7 +117,7 @@ On Player Left
   -> hide Character Selection Controls
 ```
 
-The selection controls contain at least two explicit Actor choices.
+The selection controls contain the Farmer and Cow choices.
 
 Each choice uses:
 
@@ -98,7 +150,8 @@ Character choice
 Framework lifecycle
   -> selection commit
   -> Actor preparation
-  -> Manager-Provisioned materialization
+  -> Player Actor Runtime Host
+  -> selected PresentationPrefab materialization
   -> Activity admission / GameplayReady
 
 Leave / Rejoin
@@ -127,9 +180,11 @@ Local Multiplayer Slot/device/input architecture
 
 ## Proof status
 
-Play Mode consumer validation confirmed Farmer and Cow selection through the same explicit lifecycle, including Leave/Rejoin.
+### Historical lifecycle proof — 2026-08-28
 
-Framework certification also reports:
+Play Mode consumer validation confirmed Farmer and Cow selection through the explicit `LeaveUnresolved` lifecycle, including Leave/Rejoin.
+
+Framework certification also reported:
 
 ```text
 historicalFullPlayer = 25/25
@@ -137,6 +192,24 @@ leaveUnresolved = PASS
 mandatoryContracts = 30
 executedContracts = 30
 passedContracts = 30
+```
+
+### Current physical-composition proof — 2026-09-05
+
+After migration to `ActorProfile.PresentationPrefab` and the current shared Player prefab baseline, consumer Play Mode was rerun successfully.
+
+The closure verifies:
+
+```text
+Join
+-> WaitingForActorSelection
+-> select Farmer / Cow
+-> correct PresentationPrefab materialized
+-> Follow camera functional
+-> gameplay movement/input functional
+-> GameplayReady
+-> Leave / Rejoin
+-> fresh selection remains functional
 ```
 
 The remaining release gate is final Player UPM promotion/import validation, not Character Selection materialization.
