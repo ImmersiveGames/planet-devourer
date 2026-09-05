@@ -1,6 +1,7 @@
 # Samples Authoring Guide and Status
 
-Player status reconciled: **2026-08-28**  
+Player status reconciled: **2026-09-05**  
+Previous Player snapshot: **2026-08-28**  
 Previous general construction snapshot: **2026-08-21**
 
 Canonical strategy:
@@ -15,10 +16,10 @@ Player-specific authority:
 ```text
 Assets/Documentation~/Architecture/ADRs/
   FG-ADR-002-Player-Sample-Scope-and-Demonstration-Architecture.md
-  Revision 4
+  Revision 5
 ```
 
-This file is the **operational guide/status surface** for the active sample-construction program. The ADRs define the strategy; this guide records where current work happens, what is already proven in authoring/Play Mode, and what remains before final UPM release.
+This file is the **operational guide/status surface** for the active sample-construction program. The ADRs define strategy and boundaries; this guide records where current work happens, what is already proven in authoring/Play Mode, and what remains before final UPM release.
 
 ## Current operational baseline
 
@@ -41,7 +42,7 @@ The older `FirstGame` branch references are historical context. Current implemen
 |---|---|---|---|
 | 00 | Getting Started / Minimal Game | **COMPLETE / PROVEN** | Pending promotion + Package Manager import proof |
 | 01 | Game Flow / GameFlowShowcase | **MATERIALIZED / core flow proven in dated snapshot** | Pending |
-| 02 | Player | **IN PROGRESS — Scene Player PROVEN; Player Provisioning PROVEN; Character Selection PROVEN; Local Multiplayer BLOCKED** | Pending |
+| 02 | Player | **IN PROGRESS — Scene Player PROVEN; Player Provisioning PROVEN; Character Selection CLOSED/REPROVEN; Local Multiplayer NEXT** | Pending |
 | 03 | Advanced Context | Planned | Pending |
 | 04 | Persistence | Planned | Pending |
 
@@ -62,28 +63,7 @@ Mounted / First Person Camera
 minimal movement/look Input
 ```
 
-Observed Play Mode terminal evidence includes:
-
-```text
-Framework boot succeeded
-Activity readiness = Ready
-blockingIssues = 0
-Camera Output initialized
-Default Camera Rig = Session Camera Rig
-Player gameplay binding READY
-Move input received
-Look input received
-```
-
-Therefore:
-
-```text
-Sample 00 implementation work
-  CLOSED
-
-UPM promotion/import proof
-  PENDING
-```
+Sample 00 implementation work remains **CLOSED**. UPM promotion/import proof remains **PENDING**.
 
 ## Sample 01 — Game Flow dated state
 
@@ -93,29 +73,11 @@ Game Flow remains materialized under:
 Assets/_Sample/GameFlow/GameFlowShowcase/
 ```
 
-The previously recorded core proof remains:
-
-```text
-Framework boots into the Game Flow HUB
-Persistent Content loads correctly
-Route_Hub is valid with no Startup Activity
-Route_Hub -> Route_BasicFlow succeeds through Transition/Loading envelope
-Activity_Basic_A / B switching is proven
-Activity-owned scene composition is proven
-Activity-local visibility through ActivityContentBinding is proven
-content-less Activity_Basic_C is proven
-Seamless and Fade Activity presentation policies are proven
-contextual Route/Activity BGM behavior is proven
-return to HUB restores Activity = None
-cycles are repeatable
-blockingIssues = 0 in the proven flow
-```
-
-This 2026-08-28 Player cleanup does not redefine the Game Flow architecture. Re-open Game Flow only when that sample itself is the active construction cut.
+The previously recorded core proof remains valid. This Player reconciliation does not redefine the Game Flow architecture.
 
 ## Sample 02 — Player current state
 
-Player status is governed by FG-ADR-002 Revision 4.
+Player status is governed by FG-ADR-002 Revision 5.
 
 Current sequence:
 
@@ -127,22 +89,34 @@ Getting Started / Minimal Game
 
 Player Provisioning
   HostProvisioning = ManagerProvisioned
-  MATERIALIZED / PLAY MODE PROVEN 2026-08-24
+  MATERIALIZED / PLAY MODE PROVEN
 
 Character Selection
   HostProvisioning = ManagerProvisioned
   ActorResolution = LeaveUnresolved
-  AUTHORING COMPLETE / PLAY MODE PROVEN 2026-08-28
+  CLOSED / PLAY MODE REPROVEN 2026-09-05
 
 Local Multiplayer
-  NEXT PLANNED PLAYER DEMONSTRATION
-  PLANNED / BLOCKED
-  requires public Slot/device/input ownership/observation contract
+  NEXT PLAYER CONSTRUCTION TARGET
+  PRE-IMPLEMENTATION PUBLIC-CONTRACT RE-AUDIT
 ```
 
-### Character Selection proven composition
+### Current shared Player prefab baseline
 
-The Character Selection consumer path is now proven:
+The Player prefab rebuild established concrete reusable technical composition under:
+
+```text
+Assets/_Sample/PlayerSamples/Shared/Prefabs/
+  FG_Player.prefab
+  FG_PlayerActor.prefab
+  FG_Presentation.prefab
+```
+
+This shared layer contains reusable technical/presentation composition only. Application/session authority remains local to each Demonstration Application.
+
+### Character Selection historical lifecycle proof
+
+The original consumer path, proven on 2026-08-28, remains the canonical lifecycle:
 
 ```text
 Open Joining
@@ -158,7 +132,7 @@ Farmer / Cow ActorProfile choices
         ↓
 Framework selection commit
   -> Actor preparation
-  -> Manager-Provisioned materialization
+  -> physical materialization
   -> Activity participation / GameplayReady
         ↓
 PlayerSessionObserver.OnActorSelected
@@ -175,13 +149,63 @@ PlayerSessionSelectActorCommandTrigger.ActorProfile
   └── Icon        -> image
 ```
 
-This projection is implemented by the sample-owned `CharacterSelectionActorButtonPresenter`; it does not own Session or Actor selection state.
+### Character Selection current physical composition
 
-### Character Selection framework evidence
+The sample was rebuilt after the current Player Actor / Presentation architecture replaced the previous logical-host composition.
 
-The `LeaveUnresolved` reconcile defect found during consumer proof was corrected in the Framework. A Joined Slot with no Actor now remains a legitimate pending state instead of attempting Default Actor resolution.
+Current Actor mapping:
 
-Full Player certification after the fix:
+```text
+ActorProfile_Farmer
+  -> PresentationPrefab = FG_FarmerPresentation
+
+ActorProfile_Cow
+  -> PresentationPrefab = FG_CowPresentation
+```
+
+Concrete presentations:
+
+```text
+Assets/_Sample/PlayerSamples/Player/Players/
+  FG_FarmerPresentation.prefab
+  FG_CowPresentation.prefab
+```
+
+Both concrete variants derive from the shared `FG_Presentation` baseline.
+
+The current teaching chain is therefore:
+
+```text
+Join
+  -> explicit Actor selection
+  -> Actor preparation
+  -> Player Actor Runtime Host
+  -> Presentation Mount
+  -> ActorProfile.PresentationPrefab
+  -> selected concrete Presentation
+  -> GameplayReady
+```
+
+### Character Selection current reproof — 2026-09-05
+
+After the prefab rebuild and `PresentationPrefab` migration, consumer Play Mode was rerun successfully.
+
+Observed closure covers:
+
+```text
+Join
+-> WaitingForActorSelection
+-> select Farmer / Cow
+-> correct PresentationPrefab materialized
+-> Follow camera functional
+-> gameplay movement/input functional
+-> GameplayReady
+-> Leave
+-> Rejoin
+-> fresh explicit Actor selection functional
+```
+
+The 2026-08-28 Full Player certification remains historical technical evidence:
 
 ```text
 historicalFullPlayer = 25/25
@@ -193,7 +217,7 @@ executedContracts = 30
 passedContracts = 30
 ```
 
-Character Selection therefore closes authoring/proving work. No additional sample-owned runtime authority is required.
+Character Selection is therefore **closed for authoring/proving under `Assets/_Sample/` on the current Player composition**.
 
 ### Current public Player Session surface
 
@@ -211,24 +235,32 @@ PlayerSessionClearActorSelectionCommandTrigger
 PlayerSessionLeaveCommandTrigger
 ```
 
-The sample program must not introduce internal Player discovery, direct Session mutation, parallel Actor selection, hidden fallback, physical hot swap or Local Multiplayer device/input architecture.
+The sample program must not introduce internal Player discovery, direct Session mutation, parallel Actor selection, hidden fallback or sample-owned Player runtime authority.
 
-### Next Player gate
+### Next Player gate — Local Multiplayer
 
-Local Multiplayer cannot begin as a normal sample until the Framework exposes a sufficient public contract for:
+Local Multiplayer is the **next Player work item**, but construction begins with a public-contract audit rather than prefab authoring.
+
+The last documented blocker, confirmed in August, was the absence of a sufficient public contract for:
 
 ```text
 local participant / device intent
-  -> Slot association
+  -> deterministic Slot association
   -> Player admission
   -> correct input ownership/routing
   -> observable Slot / device / control-scheme state
   -> release/reuse when applicable
 ```
 
-The current ordinary Join surface does not provide exact-Slot public Join and does not establish a complete durable Slot-to-device/InputUser contract.
+That finding predates the latest Player framework cuts. Therefore the next action is to **re-audit the current Framework implementation/API** and determine whether this blocker still exists, changed shape, or is now satisfied.
 
-Do not hide this blocker with sample-owned Slot/device/input authority.
+Until that audit is complete:
+
+```text
+do not assume the old blocker is still current
+do not assume the blocker is solved
+do not invent sample-owned Slot/device/input authority
+```
 
 ## Completion vocabulary
 
@@ -297,14 +329,17 @@ Sample 02
 
 Closed
   canonical Scene Player coverage in Getting Started
-  Player Provisioning / ManagerProvisioned Play Mode proof
-  Character Selection / LeaveUnresolved explicit Actor selection Play Mode proof
-  Character Selection observer-driven UI presentation
-  Character Selection ActorProfile DisplayName/Icon projection
+  Player Provisioning / ManagerProvisioned proof
+  Character Selection / LeaveUnresolved lifecycle proof
+  Character Selection migration to ActorProfile.PresentationPrefab
+  FG_FarmerPresentation / FG_CowPresentation current composition
+  Character Selection Follow camera + gameplay input/movement reproof
+  Character Selection Leave/Rejoin fresh-selection reproof
 
-Next planned
-  Local Multiplayer
+Next
+  Local Multiplayer public-contract re-audit
 
-Blocked before implementation
-  public exact-Slot/device/input ownership and observation contract
+After audit
+  if public contract is sufficient -> author canonical Local Multiplayer setup
+  if contract is insufficient -> record exact Framework blocker before sample construction
 ```
