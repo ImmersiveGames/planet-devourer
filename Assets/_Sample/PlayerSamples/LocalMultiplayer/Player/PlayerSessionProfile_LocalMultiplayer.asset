@@ -15,6 +15,6 @@ MonoBehaviour:
   supportedSlots:
   - {fileID: 11400000, guid: 2f980de85e9627643b15656c8d3dc815, type: 2}
   - {fileID: 11400000, guid: 3d9415299ea976c4f9b00a15407404d3, type: 2}
-  initialJoiningOpen: 1
+  initialJoiningOpen: 0
   hostProvisioning: 10
   actorResolutionPolicy: 10
