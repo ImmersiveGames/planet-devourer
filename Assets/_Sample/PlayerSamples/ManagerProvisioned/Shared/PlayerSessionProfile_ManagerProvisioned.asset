@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.PlayerSessionProfile
   supportedSlots:
   - {fileID: 11400000, guid: c1dee36a59ff7ec45ad47e8224ad7622, type: 2}
-  initialJoiningOpen: 1
+  initialJoiningOpen: 0
   hostProvisioning: 10
   actorResolutionPolicy: 10

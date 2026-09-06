@@ -16,7 +16,7 @@ MonoBehaviour:
   routeName: Local Multiplayer
   primaryScenePath: Assets/_Sample/PlayerSamples/LocalMultiplayer/Scenes/LocalMultiplayer.unity
   primarySceneName: LocalMultiplayer
-  routeContentProfile: {fileID: 0}
+  routeContentProfile: {fileID: 11400000, guid: 794c8df91012b5a4b959c330f56d82c8, type: 2}
   startupActivity: {fileID: 11400000, guid: a0458b79a8513cb40bebe31eb39aab76, type: 2}
   playerSpatialEntryPolicy: 0
   transitionGateMode: 30
