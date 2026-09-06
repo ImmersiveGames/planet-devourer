@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6d702c1ba364e70ad76a85eb5f1b842, type: 3}
+  m_Name: Activity_LocalMultiplayer
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.ActivityAsset
+  activityId: c30c0b515102465f96867320eb9a4cb6
+  activityName: Local Multiplayer
+  description: 
+  playerParticipationProjectionMode: 20
+  playerParticipationZeroParticipantPolicy: 10
+  playerParticipationExplicitSlotProfiles:
+  - {fileID: 11400000, guid: 2f980de85e9627643b15656c8d3dc815, type: 2}
+  - {fileID: 11400000, guid: 3d9415299ea976c4f9b00a15407404d3, type: 2}
+  playerParticipationRequirementLevel: 40
+  activityContentProfile: {fileID: 0}
+  playerRelocationPolicy: 1
+  activityEntryReadinessPolicy: 0
+  visualTransitionMode: 0
+  transitionGateMode: 10

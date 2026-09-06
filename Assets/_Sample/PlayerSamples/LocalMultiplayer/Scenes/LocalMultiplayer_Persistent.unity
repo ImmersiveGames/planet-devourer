@@ -405,10 +405,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1674905164032223181, guid: 94907d0e3a2818249a06d4de55d6d5ba, type: 3}
-      propertyPath: m_MaxPlayerCount
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 4152643091235605823, guid: 94907d0e3a2818249a06d4de55d6d5ba, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0
@@ -451,7 +447,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5472436990286204017, guid: 94907d0e3a2818249a06d4de55d6d5ba, type: 3}
       propertyPath: m_Name
-      value: Multi Player Provisioning
+      value: Local Player Provisioning
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
