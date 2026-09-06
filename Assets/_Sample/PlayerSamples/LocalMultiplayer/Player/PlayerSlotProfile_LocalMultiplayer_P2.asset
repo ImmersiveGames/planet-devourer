@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 35f657670d594601a6d7dcb3ba9c61c4, type: 3}
-  m_Name: PlayerSlotProfile_ManagerProvisioned
+  m_Name: PlayerSlotProfile_LocalMultiplayer_P2
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.PlayerSlotProfile
-  playerSlotId: player.slot.1
-  displayName: Player 1
+  playerSlotId: player.2
+  displayName: Player 2
   description: 
-  accentColor: {r: 0.20828493, g: 0.6415094, b: 0.021181926, a: 1}
-  icon: {fileID: 1336217474, guid: 36e3096ddf7fa8e4ab672733716d062f, type: 3}
-  displayOrder: 0
-  defaultActorProfile: {fileID: 11400000, guid: e805fa5cefd9add4284fa0db42596b13, type: 2}
+  accentColor: {r: 0.85321903, g: 0.9056604, b: 0.24350302, a: 1}
+  icon: {fileID: -323242799, guid: 36e3096ddf7fa8e4ab672733716d062f, type: 3}
+  displayOrder: 1
+  defaultActorProfile: {fileID: 11400000, guid: 9d8a3b63b47fc5c4f81a216f3df4bd46, type: 2}

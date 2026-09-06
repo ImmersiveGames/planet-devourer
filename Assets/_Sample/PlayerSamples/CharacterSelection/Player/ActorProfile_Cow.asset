@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: ActorProfile_Cow
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Actors.ActorProfile
   actorProfileId: actor-profile.cow
-  displayName: Pig
+  displayName: Cow
   description: 
-  icon: {fileID: 122160563, guid: 8bbc8d6a86170fd49ad5e73b620148ff, type: 3}
+  icon: {fileID: -604135437, guid: 8bbc8d6a86170fd49ad5e73b620148ff, type: 3}
   actorKind: 10
   actorRole: 10
   presentationPrefab: {fileID: 2202270384285838805, guid: 09c3d4d04e97c454baf79191dab7af90, type: 3}
