@@ -1,93 +1,195 @@
 # Local Multiplayer
 
-Status: **NEXT / PRE-IMPLEMENTATION PUBLIC-CONTRACT RE-AUDIT — 2026-09-05**
+Status: **MATERIALIZED / FIRST LIFECYCLE SLICE PLAY MODE PROVEN — 2026-09-07**
 
-Canonical Player sample authority: `FG-ADR-002 — Player Sample Scope and Demonstration Architecture`, Revision 5.
+Canonical Player sample authority: `FG-ADR-002 — Player Sample Scope and Demonstration Architecture`, Revision 6.
 
-Local Multiplayer is now the **next Player Demonstration Application work item** after Character Selection closure.
-
-It is **not yet ready for prefab/sample construction**. The first step is to re-audit the current Framework public surface because the previous blocker was confirmed against an older Player implementation.
-
-## Previous blocker
-
-Last confirmed: **2026-08-26**.
-
-The missing public boundary was:
+Local Multiplayer is an active **Player Demonstration Application** under:
 
 ```text
-Slot / device / input ownership and observation contract
+Assets/_Sample/PlayerSamples/LocalMultiplayer/
 ```
 
-A normal consumer needed a canonical public way to author and observe the relationship among:
+The historical August blocker for public Slot/device/input ownership and observation has been re-audited against the current Framework and is **closed for the implemented sample path**. The sample does not own a parallel Slot registry, device ownership authority, input router or Session authority.
+
+## Current purpose
+
+The sample demonstrates a canonical local two-Player Manager-Provisioned flow:
 
 ```text
-local participant / device intent
-Slot association
-Player admission
-input ownership / routing
-effective device / control-scheme evidence
-release / reuse when applicable
+Open Joining
+  -> request Join from an InputDevice
+  -> Framework allocates the next available configured Slot
+  -> Local Player Host is created/admitted
+  -> configured Default Actor is selected/prepared
+  -> Player Actor / Presentation is materialized
+  -> Activity placement is applied
+  -> GameplayReady
 ```
 
-At that time, the ordinary `PlayerSessionJoinCommandTrigger` did not expose exact-Slot Join and did not by itself provide a complete durable Slot-to-device/InputUser/control-scheme observation contract.
-
-## Why this is being re-audited
-
-Character Selection and the Player sample prefab chain have since been rebuilt on the current Player Actor / Presentation architecture.
-
-The Framework also received later Player cuts after the August blocker was recorded.
-
-Therefore the August conclusion must **not** be copied forward as current truth without checking the current product surface.
-
-Current documentation state is intentionally:
+The current configured Slots are:
 
 ```text
-previous blocker = recorded historical gate
-current blocker state = not yet revalidated
-next action = audit current public Framework contract
+player.1
+player.2
 ```
 
-## Required audit questions
+The sample tutorial/UI observes the current Session state rather than counting historical Join operations.
 
-Before authoring Local Multiplayer, establish from the current public API/runtime:
+## Public consumer boundary
+
+Commands remain explicit Framework product commands:
 
 ```text
-1. Who owns the local Player Slot?
-
-2. How does a second local participant request Join?
-
-3. How is a device / InputUser / control-scheme association established for a Slot?
-
-4. How is gameplay input routed so each PlayerGameplayInputReader receives only its Player's input?
-
-5. What public evidence allows the game/sample to observe the Slot <-> participant/device association?
-
-6. How is that ownership released or reused on Leave / Rejoin?
+PlayerSessionOpenJoiningCommandTrigger
+PlayerSessionCloseJoiningCommandTrigger
+PlayerSessionJoinCommandTrigger
+PlayerSessionLeaveCommandTrigger
 ```
 
-## Exit criterion for implementation
-
-Local Multiplayer may move from audit to construction only when the public product surface supports a canonical consumer path equivalent to:
+The tutorial observes current Slot occupancy through the scoped public Session surface:
 
 ```text
-local participant / device intent
-  -> deterministic Slot association
-  -> Join / admission
-  -> correct Player input ownership
-  -> observable Slot / device / control-scheme state
-  -> correct release / reuse lifecycle
+IPlayerSessionScopedAccess
+  -> Changed
+  -> TryGetObservation(...)
+  -> PlayerSessionScopedObservationSnapshot
+  -> Slots
+  -> PlayerSessionScopedSlotObservation.IsJoined
 ```
 
-without parallel sample-owned authority.
+This means presentation is derived from the authoritative current Session state:
 
-## Non-goals during the audit
+```text
+P1 Available + P2 Available
+  -> Waiting for Player 1
 
-Do not bridge a missing contract with:
+P1 Joined + P2 Available
+  -> Player 1 joined; waiting for Player 2
+
+P1 Available + P2 Joined
+  -> Player 2 joined; waiting for Player 1
+
+P1 Joined + P2 Joined
+  -> Completed / both Players joined
+```
+
+`LocalMultiplayerJoinTutorialController` therefore does **not** use a historical successful-Join counter as Player occupancy authority.
+
+## Materialized application
+
+Current application-owned assets include:
+
+```text
+GameApplication_LocalMultiplayer.asset
+
+Player/
+  PlayerSessionProfile_LocalMultiplayer.asset
+  PlayerSlotProfile_LocalMultiplayer_P1.asset
+  PlayerSlotProfile_LocalMultiplayer_P2.asset
+
+Routes/
+  Route_LocalMultiplayer.asset
+  MultiplayerRouteContentProfile.asset
+
+Activities/
+  Activity_LocalMultiplayer.asset
+
+Scenes/
+  LocalMultiplayer_Persistent.unity
+  LocalMultiplayer.unity
+  LocalMUltiplayerUI.unity
+
+Scripts/
+  LocalMultiplayerJoinInputSource.cs
+  LocalMultiplayerJoinTutorialController.cs
+  LocalMultiplayerKeyboardGamepadSimulator.cs
+```
+
+The keyboard/gamepad simulator creates test InputDevices for this sample; it does not become Slot or input-ownership authority.
+
+## Play Mode proof — 2026-09-07
+
+The first Local Multiplayer lifecycle slice is proven in consumer Play Mode.
+
+Observed flow:
+
+```text
+Open Joining
+-> Join P1
+-> P1 prepared / materialized / GameplayReady
+-> UI = Player 1 joined; waiting for Player 2
+
+Leave P1
+-> exact P1 occurrence released
+-> player.1 returns to Available
+-> Actor / Presentation / technical host evidence released
+-> UI = Waiting for Player 1
+
+Rejoin P1
+-> same logical Slot player.1
+-> new Session Player occurrence
+-> new host / assignment / Actor materialization
+-> Activity placement reapplied correctly
+-> UI remains waiting for Player 2
+
+Join P2
+-> player.2 joins
+-> configured Actor prepared/materialized
+-> both Players GameplayReady
+-> Activity readiness completes
+-> UI = both Players joined
+
+Leave P1 while P2 remains Joined
+-> P1 resources released
+-> P2 remains active
+-> UI = Player 2 joined; waiting for Player 1
+
+Rejoin P1
+-> fresh P1 occurrence
+-> placement reapplied
+-> Activity returns to completed readiness
+-> UI returns to both Players joined
+```
+
+Manual visual validation also confirmed that the status UI tracks the actual Slot occupancy and that the rejoined Player is positioned at the correct authored placement.
+
+## Framework / QA evidence supporting this slice
+
+The corresponding current Framework Player lifecycle is technically certified by the Full Player QA aggregate:
+
+```text
+PLAYER QA CERTIFIED
+17/17
+```
+
+This includes the corrected Leave/Rejoin reconciliation and Activity relocation lifecycle used by the sample.
+
+## Still to prove before Local Multiplayer closure
+
+The Demonstration Application is **not closed yet**.
+
+Next consumer proofs should cover at least:
+
+```text
+Leave / Rejoin P2 while P1 remains active
+independent input/device ownership for P1 and P2
+no cross-control between Players
+behavior when both configured Slots are already occupied
+Close Joining behavior and preservation of already Joined Players
+reopening Joining after Close when applicable
+```
+
+Additional presentation/camera topology such as split-screen remains outside the current proven slice and should be introduced only if the intended sample scope requires it.
+
+## Non-goals
+
+Do not add:
 
 ```text
 sample-owned Slot registry
 sample-owned device ownership
-sample-owned input router
+sample-owned input routing authority
 hidden PlayerInput / InputUser discovery
 reflection
 private/internal Player runtime access
@@ -95,17 +197,4 @@ a second Session authority
 silent fallback
 ```
 
-Arbitrary Actor Selection may be reused later if the final multiplayer scenario needs it, but Actor selection is not the missing Local Multiplayer ownership boundary.
-
-Split-screen is not implied by this README. Camera/output topology should be decided only after the local participant/Slot/input contract is known.
-
-## Current sequencing
-
-```text
-Scene Player                 CLOSED / PROVEN
-Player Provisioning          CLOSED / PROVEN
-Character Selection          CLOSED / REPROVEN 2026-09-05
-Local Multiplayer            <- CURRENT NEXT ITEM
-  public-contract re-audit
-  then canonical setup if unblocked
-```
+The Framework remains authoritative for Player Session, Slot allocation, Join/Leave lifecycle, Actor preparation, placement, gameplay admission and input ownership. The sample owns only demonstration interaction/presentation and test-device simulation.
