@@ -1,6 +1,6 @@
 # Player Samples
 
-Status: **PLAYER SCOPE GOVERNED BY FG-ADR-002 REVISION 5 — CHARACTER SELECTION CLOSED / REPROVEN 2026-09-05**
+Status: **PLAYER SCOPE GOVERNED BY FG-ADR-002 REVISION 6 — LOCAL MULTIPLAYER FIRST LIFECYCLE SLICE PROVEN 2026-09-07**
 
 Canonical Player sample authority:
 
@@ -45,7 +45,7 @@ These contracts are intentionally **not duplicated** as a dedicated Scene Player
 | Getting Started / Minimal Game | `SceneProvided` | **CANONICAL / PROVEN** | Scene Player reference |
 | Player Provisioning | `ManagerProvisioned` + configured Default Actor | **MATERIALIZED / PLAY MODE PROVEN** | Session-authorized Local Player Host creation/provisioning |
 | Character Selection | `ManagerProvisioned` + `ActorResolution = LeaveUnresolved` | **CLOSED / PLAY MODE REPROVEN — 2026-09-05** | Explicit Actor choice on the current Player Actor / Presentation composition |
-| Local Multiplayer | public Slot/device/input contract | **NEXT / PRE-IMPLEMENTATION RE-AUDIT** | Re-audit the current Framework contract before sample construction |
+| Local Multiplayer | `ManagerProvisioned` + two configured Slots | **MATERIALIZED / FIRST LIFECYCLE SLICE PROVEN — 2026-09-07** | Two-Player Join/Leave/Rejoin, occupancy-driven UI and placement lifecycle |
 
 This is the current implementation sequence, not a permanent closed catalog.
 
@@ -93,8 +93,11 @@ Canonical distinction:
 PlayerSessionObserver
   = read / presentation observation
 
+IPlayerSessionScopedAccess
+  = provider-neutral scoped Session observation + request surface
+
 explicit Player Session Command Trigger
-  = request/change
+  = authored request/change component
 ```
 
 The documented public command family contains:
@@ -112,7 +115,7 @@ PlayerSessionLeaveCommandTrigger
 
 Each command component represents one request and owns only its own typed result evidence.
 
-`PlayerSessionObserver` remains read-only. It may be composed where Session / Slot / Actor state presentation is needed and does not become another Player authority.
+`PlayerSessionObserver` remains read-only. `IPlayerSessionScopedAccess` provides the current scoped Session snapshot/observation surface, including `Changed` and `TryGetObservation(...)`, without requiring a global Session authority.
 
 ## Character Selection — closed on current Player architecture
 
@@ -258,24 +261,96 @@ A valid command can temporarily be runtime-unbound and must reject without globa
 
 Presentation gating must use public scoped observation/binding evidence rather than a fallback authority.
 
-## Local Multiplayer — next construction target
+## Local Multiplayer — active construction target
 
-Local Multiplayer is now the next Player sample work item.
-
-The last documented product blocker, confirmed in August, was the lack of a sufficient public boundary for:
+Local Multiplayer is materialized under:
 
 ```text
-local participant / device intent
-  -> Slot association
-  -> Player admission
-  -> correct input ownership/routing
-  -> observable Slot / device / control-scheme state
-  -> release/reuse when applicable
+Assets/_Sample/PlayerSamples/LocalMultiplayer/
 ```
 
-That blocker predates the most recent Player framework cuts. Therefore the **next step is a current Framework public-contract re-audit before prefab/sample construction**.
+The historical August blocker for public Slot/device/input ownership and observation was re-audited against the current Framework and is **closed for the implemented path**.
 
-Until that audit closes the question, do not invent sample-owned Slot, device or input authority and do not assume that the August blocker is either still valid or already solved.
+The current consumer flow is:
+
+```text
+Open Joining
+  -> InputDevice intent
+  -> PlayerSessionJoinCommandTrigger
+  -> Framework allocates next available configured Slot
+  -> Local Player Host admitted
+  -> configured Default Actor selected/prepared
+  -> Presentation materialized
+  -> Activity placement
+  -> GameplayReady
+```
+
+The sample has two configured Slots and uses current scoped observation as its UI source of truth:
+
+```text
+IPlayerSessionScopedAccess.Changed
+IPlayerSessionScopedAccess.TryGetObservation(...)
+PlayerSessionScopedObservationSnapshot.Slots
+PlayerSessionScopedSlotObservation.IsJoined
+```
+
+Therefore tutorial state is derived from current occupancy, not historical Join count:
+
+```text
+P1 Available + P2 Available
+  -> Waiting for Player 1
+
+P1 Joined + P2 Available
+  -> Waiting for Player 2
+
+P1 Available + P2 Joined
+  -> Waiting for Player 1
+
+P1 Joined + P2 Joined
+  -> Completed
+```
+
+### Local Multiplayer first Play Mode proof — 2026-09-07
+
+Consumer validation currently proves:
+
+```text
+Open Joining
+-> Join P1
+-> P1 Leave
+-> P1 returns to Available
+-> UI returns to Waiting for Player 1
+-> P1 Rejoin creates a fresh occurrence
+-> authored placement is reapplied
+-> UI still waits for P2
+-> Join P2
+-> both Players active / Activity readiness completed
+-> Leave P1 while P2 remains active
+-> UI = Player 2 joined; waiting for Player 1
+-> Rejoin P1
+-> placement reapplied
+-> Activity returns to completed readiness
+-> UI returns to both Players joined
+```
+
+Manual visual validation confirmed both the status UI and the Player placement behavior.
+
+Current Full Player QA is also certified `17/17`, including the Leave/Rejoin reconciliation and relocation contracts exercised by this consumer flow.
+
+### Local Multiplayer remaining proof
+
+The application is not closed yet. Next work should prove:
+
+```text
+P2 Leave/Rejoin while P1 remains active
+independent P1/P2 gameplay input/device ownership
+no cross-control between Players
+both configured Slots occupied behavior
+Close Joining behavior
+Reopen Joining behavior when applicable
+```
+
+Do not invent sample-owned Slot, device or input authority for those remaining cases.
 
 ## Application / Scenario rule
 
@@ -325,4 +400,4 @@ Player samples consume public/product Framework APIs.
 
 If a required public Player contract is missing, the demonstration remains blocked at that boundary. Sample code must not hide a product gap with internal discovery, reflection, direct runtime mutation, parallel registries or silent fallbacks.
 
-Character Selection satisfies this gate and is closed on the current composition. Local Multiplayer proceeds next through contract re-audit, then implementation only if the public surface is sufficient.
+Character Selection satisfies this gate and is closed on the current composition. Local Multiplayer also satisfies the public-surface gate for its current Join/Leave/Rejoin/occupancy slice and remains in active construction for the remaining multiplayer behavior.
