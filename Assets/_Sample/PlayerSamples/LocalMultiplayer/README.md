@@ -1,6 +1,6 @@
 # Local Multiplayer
 
-Status: **MATERIALIZED / FIRST LIFECYCLE SLICE PLAY MODE PROVEN — 2026-09-07**
+Status: **MATERIALIZED / BIDIRECTIONAL LEAVE-REJOIN + DEVICE OWNERSHIP PLAY MODE PROVEN — 2026-09-07**
 
 Canonical Player sample authority: `FG-ADR-002 — Player Sample Scope and Demonstration Architecture`, Revision 6.
 
@@ -47,16 +47,20 @@ PlayerSessionJoinCommandTrigger
 PlayerSessionLeaveCommandTrigger
 ```
 
-The tutorial observes current Slot occupancy through the scoped public Session surface:
+The tutorial observes current Slot occupancy and input ownership through the scoped public Session surface:
 
 ```text
 IPlayerSessionScopedAccess
   -> Changed
+  -> deferred/coalesced refresh
   -> TryGetObservation(...)
   -> PlayerSessionScopedObservationSnapshot
   -> Slots
   -> PlayerSessionScopedSlotObservation.IsJoined
+  -> PlayerSessionScopedSlotObservation.InputOwnership
 ```
+
+`PlayerSessionChange` is treated as invalidation only. `LocalMultiplayerJoinTutorialController` does not synchronously force a full observation while a Framework mutation is still publishing intermediate changes; it coalesces the change and reads the canonical snapshot later from `Update`.
 
 This means presentation is derived from the authoritative current Session state:
 
@@ -75,6 +79,8 @@ P1 Joined + P2 Joined
 ```
 
 `LocalMultiplayerJoinTutorialController` therefore does **not** use a historical successful-Join counter as Player occupancy authority.
+
+The tutorial also uses canonical per-Slot `InputOwnership` evidence as a UX guard. A device already owned by a current Player is not forwarded to `PlayerSessionJoinCommandTrigger`; Framework ownership validation remains authoritative and is not bypassed or weakened.
 
 ## Materialized application
 
@@ -110,9 +116,9 @@ The keyboard/gamepad simulator creates test InputDevices for this sample; it doe
 
 ## Play Mode proof — 2026-09-07
 
-The first Local Multiplayer lifecycle slice is proven in consumer Play Mode.
+### First lifecycle slice
 
-Observed flow:
+The first Local Multiplayer lifecycle slice proved the base Join/Leave/Rejoin and placement path:
 
 ```text
 Open Joining
@@ -154,6 +160,60 @@ Rejoin P1
 
 Manual visual validation also confirmed that the status UI tracks the actual Slot occupancy and that the rejoined Player is positioned at the correct authored placement.
 
+### Bidirectional Leave/Rejoin and device-ownership proof
+
+A later run on the same date extended the consumer proof in both Player directions.
+
+Observed successful lifecycle included six Join operations and six successful Leave operations across repeated P1/P2 cycles. The run proves:
+
+```text
+P1 Join with Device 1
+P2 Join with Device 2
+
+P2 Leave while P1 remains Joined
+-> P1 remains current
+-> Device 1 remains owned by P1
+-> tutorial waits for P2
+-> Device 1 is blocked locally by the tutorial
+-> Device 2 rejoins P2 successfully
+
+P1 Leave while P2 remains Joined
+-> P2 remains current
+-> Device 2 remains owned by P2
+-> tutorial waits for P1
+-> Device 2 is blocked locally by the tutorial
+-> Device 1 rejoins P1 successfully
+
+additional Leave/Rejoin cycles
+-> both logical Slots continue to rejoin as fresh occurrences
+-> UI always returns to the current occupancy state
+```
+
+The Framework ownership observations remained successful and distinct:
+
+```text
+P1
+  playerIndex = 0
+  Device 1 ownership
+
+P2
+  playerIndex = 1
+  Device 2 ownership
+```
+
+The happy-path tutorial run produced no `RejectedDeviceAlreadyOwned`, no `RegisteredHost.NotRegistered`, no failed ownership diagnostic, no warning and no error. Already-owned simulated devices were rejected by the tutorial before a Join command was issued.
+
+This proves the intended consumer-side boundary:
+
+```text
+PlayerSessionChange
+  -> mark canonical refresh pending
+  -> deferred/coalesced observation
+  -> current occupancy + current InputOwnership
+  -> tutorial view
+  -> only unowned device forwarded to Join
+```
+
 ## Framework / QA evidence supporting this slice
 
 The corresponding current Framework Player lifecycle is technically certified by the Full Player QA aggregate:
@@ -163,22 +223,22 @@ PLAYER QA CERTIFIED
 17/17
 ```
 
-This includes the corrected Leave/Rejoin reconciliation and Activity relocation lifecycle used by the sample.
+This includes Leave/Rejoin reconciliation, ownership preservation and Activity relocation contracts supporting this sample.
 
 ## Still to prove before Local Multiplayer closure
 
 The Demonstration Application is **not closed yet**.
 
-Next consumer proofs should cover at least:
+The next consumer proofs should cover:
 
 ```text
-Leave / Rejoin P2 while P1 remains active
-independent input/device ownership for P1 and P2
-no cross-control between Players
-behavior when both configured Slots are already occupied
-Close Joining behavior and preservation of already Joined Players
+actual gameplay input no-cross-control between P1 and P2
+explicit behavior when both configured Slots are occupied and another Join is attempted
+Close Joining behavior while already Joined Players remain preserved
 reopening Joining after Close when applicable
 ```
+
+Distinct per-Player device ownership, P1/P2 Leave preservation and bidirectional Rejoin are no longer pending proof items.
 
 Additional presentation/camera topology such as split-screen remains outside the current proven slice and should be introduced only if the intended sample scope requires it.
 

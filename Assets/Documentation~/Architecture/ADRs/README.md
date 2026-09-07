@@ -27,6 +27,8 @@ Do not reproduce a separate frozen Player application catalog in FG-ADR-001.
 
 Dated Player examples still present in the general FG-ADR-001 operational snapshot are historical/subordinate to the current FG-ADR-002 and operational status guide. FG-ADR-001 is not reopened solely to duplicate Player delivery status.
 
+Ordinary construction/proof progress after an accepted ADR revision is tracked in the operational Samples guide and sample/group READMEs unless the architecture decision itself changes.
+
 ## Current Player direction
 
 ```text
@@ -49,7 +51,7 @@ Local Multiplayer
   two configured local Player Slots
   historical Slot/device/input blocker closed for implemented path
   MATERIALIZED
-  FIRST LIFECYCLE SLICE PLAY MODE PROVEN 2026-09-07
+  BIDIRECTIONAL LEAVE / REJOIN + DEVICE OWNERSHIP PLAY MODE PROVEN 2026-09-07
   ACTIVE CONSTRUCTION CONTINUES
 
 Player/Shared
@@ -78,7 +80,7 @@ The current physical composition was reproven on 2026-09-05 using `ActorProfile.
 
 ## Local Multiplayer current evidence
 
-Revision 6 records that the previous public Slot/device/input blocker was re-audited and is closed for the implemented Manager-Provisioned two-Slot path.
+FG-ADR-002 Revision 6 records that the previous public Slot/device/input blocker was re-audited and is closed for the implemented Manager-Provisioned two-Slot path. The architecture decision remains unchanged; the operational consumer proof has now advanced beyond the first slice recorded in that revision.
 
 Current consumer composition uses:
 
@@ -89,25 +91,28 @@ PlayerSessionJoinCommandTrigger
 PlayerSessionLeaveCommandTrigger
 
 IPlayerSessionScopedAccess.Changed
+  -> deferred/coalesced refresh
 IPlayerSessionScopedAccess.TryGetObservation(...)
 typed per-Slot IsJoined evidence
+typed per-Slot InputOwnership evidence
 ```
 
-The first Play Mode slice proven on 2026-09-07 covers:
+Current Play Mode evidence on 2026-09-07 covers:
 
 ```text
-P1 Join
-P1 Leave
-P1 Rejoin as a fresh occurrence
+P1 Join / Leave / Rejoin as fresh occurrences
+P2 Join / Leave / Rejoin as fresh occurrences
 Activity placement reapplied
 UI derived from current Slot occupancy
-P2 Join
 both Players active / Activity readiness complete
-P1 Leave while P2 remains active
-P1 Rejoin after completed Activity
+P1 preservation while P2 leaves
+P2 preservation while P1 leaves
+distinct current device ownership for P1 and P2
+already-owned device blocked by tutorial before Join
+repeated bidirectional Leave/Rejoin cycles
 ```
 
-Manual visual validation confirmed both the UI status and placement result.
+The later run produced six successful Join operations and six successful Leave operations. It contained no `RejectedDeviceAlreadyOwned`, no transient `RegisteredHost.NotRegistered`, no failed ownership diagnostic, no warning and no error.
 
 Current Framework Full Player certification is:
 
@@ -116,7 +121,14 @@ PLAYER QA CERTIFIED
 17/17
 ```
 
-Local Multiplayer is not closed yet; P2 Leave/Rejoin, independent P1/P2 input ownership, full-Slot behavior and Close/Reopen Joining remain the next proof cut.
+Local Multiplayer is not closed yet. Remaining consumer proof is intentionally narrower:
+
+```text
+actual gameplay no-cross-control between P1 and P2
+explicit extra-Join behavior when both configured Slots are occupied
+Close Joining while existing Players remain joined
+Reopen Joining behavior when applicable
+```
 
 Operational construction status is tracked in:
 

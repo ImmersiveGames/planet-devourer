@@ -42,7 +42,7 @@ The older `FirstGame` branch references are historical context. Current implemen
 |---|---|---|---|
 | 00 | Getting Started / Minimal Game | **COMPLETE / PROVEN** | Pending promotion + Package Manager import proof |
 | 01 | Game Flow / GameFlowShowcase | **MATERIALIZED / core flow proven in dated snapshot** | Pending |
-| 02 | Player | **IN PROGRESS — Scene Player PROVEN; Player Provisioning PROVEN; Character Selection CLOSED/REPROVEN; Local Multiplayer MATERIALIZED / first lifecycle slice PROVEN** | Pending |
+| 02 | Player | **IN PROGRESS — Scene Player PROVEN; Player Provisioning PROVEN; Character Selection CLOSED/REPROVEN; Local Multiplayer bidirectional Leave/Rejoin + device ownership PROVEN** | Pending |
 | 03 | Advanced Context | Planned | Pending |
 | 04 | Persistence | Planned | Pending |
 
@@ -77,7 +77,7 @@ The previously recorded core proof remains valid. This Player reconciliation doe
 
 ## Sample 02 — Player current state
 
-Player status is governed by FG-ADR-002 Revision 6.
+Player status is governed by FG-ADR-002 Revision 6. The current proof progression below is operational status and does not change that ADR's architecture decision.
 
 Current sequence:
 
@@ -100,7 +100,7 @@ Local Multiplayer
   HostProvisioning = ManagerProvisioned
   two configured local Player Slots
   MATERIALIZED
-  FIRST JOIN / LEAVE / REJOIN LIFECYCLE SLICE PLAY MODE PROVEN 2026-09-07
+  BIDIRECTIONAL LEAVE / REJOIN + DEVICE OWNERSHIP PLAY MODE PROVEN 2026-09-07
   ACTIVE CONSTRUCTION CONTINUES
 ```
 
@@ -262,9 +262,10 @@ InputDevice intent
 
 current Session state
   -> IPlayerSessionScopedAccess.Changed
+  -> deferred/coalesced refresh
   -> TryGetObservation(...)
-  -> typed per-Slot IsJoined evidence
-  -> tutorial presentation
+  -> typed per-Slot IsJoined + InputOwnership evidence
+  -> tutorial presentation / local device guard
 ```
 
 The sample does not contain a parallel Slot registry, device ownership authority or gameplay input router.
@@ -307,9 +308,9 @@ Scripts/
 
 The keyboard/gamepad simulator provides deterministic sample InputDevices only; Slot allocation and ownership remain Framework-owned.
 
-### Local Multiplayer first Play Mode proof — 2026-09-07
+### Local Multiplayer Play Mode proof history — 2026-09-07
 
-Observed consumer sequence:
+The first consumer run proved:
 
 ```text
 Open Joining
@@ -345,7 +346,39 @@ Rejoin P1
 -> UI Completed
 ```
 
-Manual visual validation confirmed both the UI status and the placement result.
+A later same-day consumer run proved the inverse direction and the tutorial ownership boundary:
+
+```text
+P2 Leave while P1 remains Joined
+-> P1 remains current
+-> P1 retains Device 1
+-> tutorial rejects Device 1 locally for P2
+-> no duplicate-device Join request reaches Framework
+-> Device 2 rejoins P2
+
+P1 Leave while P2 remains Joined
+-> P2 remains current
+-> P2 retains Device 2
+-> tutorial rejects Device 2 locally for P1
+-> no duplicate-device Join request reaches Framework
+-> Device 1 rejoins P1
+
+repeated cycles
+-> six successful Joins
+-> six successful Leaves
+-> occupancy remains canonical after each cycle
+```
+
+The observation timing fix is also consumer-proven:
+
+```text
+PlayerSessionChange
+-> invalidate / mark refresh pending
+-> Update performs deferred/coalesced canonical observation
+-> Joined Slot ownership read only from stable scoped snapshot
+```
+
+The happy-path run contains no `RejectedDeviceAlreadyOwned`, no `RegisteredHost.NotRegistered`, no failed ownership diagnostic, no warning and no error.
 
 Current Framework Full Player certification is:
 
@@ -354,7 +387,7 @@ PLAYER QA CERTIFIED
 17/17
 ```
 
-The QA aggregate includes the Leave/Rejoin reconciliation and Activity relocation contracts used by this sample.
+The QA aggregate includes ownership preservation, Leave/Rejoin reconciliation and Activity relocation contracts used by this sample.
 
 ### Local Multiplayer remaining work
 
@@ -363,13 +396,13 @@ Local Multiplayer is not closed yet.
 Next proof cut:
 
 ```text
-P2 Leave/Rejoin while P1 remains active
-independent P1/P2 gameplay input/device ownership
-no cross-control between Players
-behavior when both Slots are occupied
-Close Joining behavior
+actual gameplay no-cross-control between P1 and P2
+explicit attempt to Join when both configured Slots are already occupied
+Close Joining while current Players remain joined
 Reopen Joining behavior when applicable
 ```
+
+P2 Leave/Rejoin preservation and distinct P1/P2 current device ownership are now proven and no longer belong in the remaining-work list.
 
 Additional camera/output topology is not implied by the current proof.
 
@@ -457,10 +490,15 @@ Local Multiplayer — proven current slice
   both-Player readiness completion
   P1 Leave while P2 remains active
   P1 Rejoin after Activity had completed
+  P2 Leave while P1 remains active
+  P2 Rejoin
+  distinct P1/P2 device ownership from scoped observation
+  tutorial blocks already-owned device before Join
+  deferred/coalesced stable observation after Session changes
+  repeated bidirectional Leave/Rejoin cycles
 
 Next
-  P2 Leave/Rejoin preservation
-  independent P1/P2 input ownership and no cross-control
-  full-Slot behavior
+  actual P1/P2 gameplay no-cross-control proof
+  explicit full-Slot extra-Join behavior
   Close/Reopen Joining behavior
 ```

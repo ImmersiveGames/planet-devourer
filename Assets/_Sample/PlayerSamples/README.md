@@ -1,6 +1,6 @@
 # Player Samples
 
-Status: **PLAYER SCOPE GOVERNED BY FG-ADR-002 REVISION 6 — LOCAL MULTIPLAYER FIRST LIFECYCLE SLICE PROVEN 2026-09-07**
+Status: **PLAYER SCOPE GOVERNED BY FG-ADR-002 REVISION 6 — LOCAL MULTIPLAYER BIDIRECTIONAL LEAVE-REJOIN + DEVICE OWNERSHIP PROVEN 2026-09-07**
 
 Canonical Player sample authority:
 
@@ -45,7 +45,7 @@ These contracts are intentionally **not duplicated** as a dedicated Scene Player
 | Getting Started / Minimal Game | `SceneProvided` | **CANONICAL / PROVEN** | Scene Player reference |
 | Player Provisioning | `ManagerProvisioned` + configured Default Actor | **MATERIALIZED / PLAY MODE PROVEN** | Session-authorized Local Player Host creation/provisioning |
 | Character Selection | `ManagerProvisioned` + `ActorResolution = LeaveUnresolved` | **CLOSED / PLAY MODE REPROVEN — 2026-09-05** | Explicit Actor choice on the current Player Actor / Presentation composition |
-| Local Multiplayer | `ManagerProvisioned` + two configured Slots | **MATERIALIZED / FIRST LIFECYCLE SLICE PROVEN — 2026-09-07** | Two-Player Join/Leave/Rejoin, occupancy-driven UI and placement lifecycle |
+| Local Multiplayer | `ManagerProvisioned` + two configured Slots | **MATERIALIZED / BIDIRECTIONAL LEAVE-REJOIN + DEVICE OWNERSHIP PROVEN — 2026-09-07** | Two-Player Join/Leave/Rejoin, canonical occupancy/ownership-driven UI and placement lifecycle |
 
 This is the current implementation sequence, not a permanent closed catalog.
 
@@ -285,13 +285,15 @@ Open Joining
   -> GameplayReady
 ```
 
-The sample has two configured Slots and uses current scoped observation as its UI source of truth:
+The sample has two configured Slots and uses current scoped observation as its UI and device-ownership source of truth:
 
 ```text
 IPlayerSessionScopedAccess.Changed
+  -> deferred/coalesced refresh
 IPlayerSessionScopedAccess.TryGetObservation(...)
 PlayerSessionScopedObservationSnapshot.Slots
 PlayerSessionScopedSlotObservation.IsJoined
+PlayerSessionScopedSlotObservation.InputOwnership
 ```
 
 Therefore tutorial state is derived from current occupancy, not historical Join count:
@@ -310,9 +312,11 @@ P1 Joined + P2 Joined
   -> Completed
 ```
 
-### Local Multiplayer first Play Mode proof — 2026-09-07
+An already-owned device is filtered by the tutorial before the Join command is invoked. Framework ownership validation remains authoritative.
 
-Consumer validation currently proves:
+### Local Multiplayer Play Mode proof history — 2026-09-07
+
+The first consumer validation proved:
 
 ```text
 Open Joining
@@ -333,24 +337,45 @@ Open Joining
 -> UI returns to both Players joined
 ```
 
-Manual visual validation confirmed both the status UI and the Player placement behavior.
+A later same-day run extended that proof to the inverse direction and input ownership:
 
-Current Full Player QA is also certified `17/17`, including the Leave/Rejoin reconciliation and relocation contracts exercised by this consumer flow.
+```text
+P2 Leave while P1 remains active
+-> P1 ownership preserved
+-> Device 1 remains P1-owned
+-> Device 1 is blocked by tutorial for P2 Join
+-> Device 2 rejoins P2
+
+P1 Leave while P2 remains active
+-> P2 ownership preserved
+-> Device 2 remains P2-owned
+-> Device 2 is blocked by tutorial for P1 Join
+-> Device 1 rejoins P1
+
+repeated P1/P2 Leave/Rejoin cycles
+-> six successful Joins total
+-> six successful Leaves total
+-> current occupancy remains correct after every cycle
+```
+
+The validated happy path contained no `RejectedDeviceAlreadyOwned`, no transient `RegisteredHost.NotRegistered`, no failed ownership diagnostic, no warning and no error.
+
+Current Full Player QA is also certified `17/17`, including the ownership-preservation, Leave/Rejoin reconciliation and relocation contracts exercised by this consumer flow.
 
 ### Local Multiplayer remaining proof
 
-The application is not closed yet. Next work should prove:
+The application is not closed yet. Remaining consumer work is:
 
 ```text
-P2 Leave/Rejoin while P1 remains active
-independent P1/P2 gameplay input/device ownership
-no cross-control between Players
-both configured Slots occupied behavior
-Close Joining behavior
+actual gameplay input no-cross-control between P1 and P2
+explicit extra-Join behavior while both configured Slots are occupied
+Close Joining behavior while current Players remain preserved
 Reopen Joining behavior when applicable
 ```
 
-Do not invent sample-owned Slot, device or input authority for those remaining cases.
+P2 Leave/Rejoin and distinct P1/P2 current device ownership are now proven and are no longer pending items.
+
+Do not invent sample-owned Slot, device or input authority for the remaining cases.
 
 ## Application / Scenario rule
 
@@ -400,4 +425,4 @@ Player samples consume public/product Framework APIs.
 
 If a required public Player contract is missing, the demonstration remains blocked at that boundary. Sample code must not hide a product gap with internal discovery, reflection, direct runtime mutation, parallel registries or silent fallbacks.
 
-Character Selection satisfies this gate and is closed on the current composition. Local Multiplayer also satisfies the public-surface gate for its current Join/Leave/Rejoin/occupancy slice and remains in active construction for the remaining multiplayer behavior.
+Character Selection satisfies this gate and is closed on the current composition. Local Multiplayer also satisfies the public-surface gate for its current Join/Leave/Rejoin/occupancy/device-ownership slice and remains in active construction for the remaining multiplayer behavior.

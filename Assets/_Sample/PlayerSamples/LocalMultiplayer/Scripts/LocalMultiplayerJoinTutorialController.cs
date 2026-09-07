@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Immersive.Framework.PlayerParticipation;
 using TMPro;
 using UnityEngine;
@@ -36,6 +37,9 @@ public sealed class LocalMultiplayerJoinTutorialController : MonoBehaviour
     private bool _awaitingDevice;
     private bool _playerOneJoined;
     private bool _playerTwoJoined;
+    private bool _hasStableSessionState;
+    private bool _sessionRefreshPending;
+    private readonly HashSet<int> _ownedDeviceIds = new();
 
     private void OnEnable()
     {
@@ -45,6 +49,7 @@ public sealed class LocalMultiplayerJoinTutorialController : MonoBehaviour
         }
 
         TryBindSessionAccess();
+        ScheduleSessionRefresh();
         RefreshView();
     }
 
@@ -54,8 +59,10 @@ public sealed class LocalMultiplayerJoinTutorialController : MonoBehaviour
         // access becomes available; after that all state updates are event-driven.
         if (_sessionAccess == null && TryBindSessionAccess())
         {
-            RefreshView();
+            ScheduleSessionRefresh();
         }
+
+        ProcessPendingSessionRefresh();
     }
 
     private void OnDisable()
@@ -87,11 +94,10 @@ public sealed class LocalMultiplayerJoinTutorialController : MonoBehaviour
             return;
         }
 
-        _joiningOpen = true;
         _awaitingDevice = false;
 
         TryBindSessionAccess();
-        RefreshSessionState();
+        ScheduleSessionRefresh();
 
         SetStatus(result.IgnoredNoChange
             ? "Joining was already open."
@@ -119,11 +125,10 @@ public sealed class LocalMultiplayerJoinTutorialController : MonoBehaviour
             return;
         }
 
-        _joiningOpen = false;
         _awaitingDevice = false;
 
         TryBindSessionAccess();
-        RefreshSessionState();
+        ScheduleSessionRefresh();
 
         SetStatus(result.IgnoredNoChange
             ? "Joining was already closed."
@@ -135,7 +140,12 @@ public sealed class LocalMultiplayerJoinTutorialController : MonoBehaviour
     public void RequestJoin()
     {
         TryBindSessionAccess();
-        RefreshSessionState();
+
+        if (!_hasStableSessionState || _sessionRefreshPending)
+        {
+            SetStatus("Player Session state is still updating. Try again after the tutorial refreshes.");
+            return;
+        }
 
         if (!_joiningOpen)
         {
@@ -178,9 +188,9 @@ public sealed class LocalMultiplayerJoinTutorialController : MonoBehaviour
 
     private bool CanConsumeDeviceInput()
     {
-        RefreshSessionState();
-
-        return _joiningOpen &&
+        return _hasStableSessionState &&
+            !_sessionRefreshPending &&
+            _joiningOpen &&
             _awaitingDevice &&
             !AreBothPlayersJoined();
     }
@@ -196,6 +206,21 @@ public sealed class LocalMultiplayerJoinTutorialController : MonoBehaviour
         if (device == null || !device.added)
         {
             SetStatus("Join requires a valid added InputDevice.");
+            return;
+        }
+
+        int nextPlayerNumber = GetNextPlayerNumber();
+        if (nextPlayerNumber == 0)
+        {
+            SetStatus("Both tutorial Players are already joined.");
+            return;
+        }
+
+        if (_ownedDeviceIds.Contains(device.deviceId))
+        {
+            SetStatus(
+                $"{deviceLabel} is already owned by a current Player. " +
+                $"Waiting for an unowned device for Player {nextPlayerNumber}.");
             return;
         }
 
@@ -217,9 +242,11 @@ public sealed class LocalMultiplayerJoinTutorialController : MonoBehaviour
 
         _awaitingDevice = false;
 
-        // Re-read canonical Slot occupancy instead of counting Join events.
+        // The command can publish Slot Joined before its physical Host finishes
+        // registration. Consume the coalesced canonical state on a later frame.
+        _hasStableSessionState = false;
         TryBindSessionAccess();
-        RefreshSessionState();
+        ScheduleSessionRefresh();
 
         string slotId = result.Slot.PlayerSlotId.IsValid
             ? result.Slot.PlayerSlotId.StableText
@@ -257,7 +284,7 @@ public sealed class LocalMultiplayerJoinTutorialController : MonoBehaviour
 
         _sessionAccess = resolvedAccess;
         _sessionAccess.Changed += OnSessionChanged;
-        RefreshSessionState();
+        ScheduleSessionRefresh();
         return true;
     }
 
@@ -270,10 +297,37 @@ public sealed class LocalMultiplayerJoinTutorialController : MonoBehaviour
 
         _sessionAccess.Changed -= OnSessionChanged;
         _sessionAccess = null;
+        _hasStableSessionState = false;
+        _sessionRefreshPending = false;
+        _ownedDeviceIds.Clear();
     }
 
     private void OnSessionChanged(PlayerSessionChange change)
     {
+        _ = change;
+
+        // Several notifications can be raised by one Framework mutation. Never
+        // inspect its intermediate state synchronously from this callback.
+        _hasStableSessionState = false;
+        ScheduleSessionRefresh();
+    }
+
+    private void ScheduleSessionRefresh()
+    {
+        if (_sessionAccess != null)
+        {
+            _sessionRefreshPending = true;
+        }
+    }
+
+    private void ProcessPendingSessionRefresh()
+    {
+        if (!_sessionRefreshPending)
+        {
+            return;
+        }
+
+        _sessionRefreshPending = false;
         if (!RefreshSessionState())
         {
             return;
@@ -290,6 +344,8 @@ public sealed class LocalMultiplayerJoinTutorialController : MonoBehaviour
 
     private bool RefreshSessionState()
     {
+        _hasStableSessionState = false;
+
         if (_sessionAccess == null ||
             !_sessionAccess.TryGetObservation(
                 out PlayerSessionScopedObservationSnapshot observation) ||
@@ -299,38 +355,56 @@ public sealed class LocalMultiplayerJoinTutorialController : MonoBehaviour
             return false;
         }
 
-        if (observation.Participation != null)
-        {
-            _joiningOpen = observation.Participation.JoiningOpen;
-        }
-
-        _playerOneJoined = IsConfiguredSlotJoined(
-            observation, PlayerOneConfiguredIndex);
-        _playerTwoJoined = IsConfiguredSlotJoined(
-            observation, PlayerTwoConfiguredIndex);
-
-        return true;
-    }
-
-    private static bool IsConfiguredSlotJoined(
-        PlayerSessionScopedObservationSnapshot observation,
-        int configuredIndex)
-    {
-        if (observation == null || !observation.IsAvailable)
-        {
-            return false;
-        }
+        bool playerOneJoined = false;
+        bool playerTwoJoined = false;
+        var ownedDeviceIds = new HashSet<int>();
 
         for (int index = 0; index < observation.Slots.Count; index++)
         {
             PlayerSessionScopedSlotObservation slot = observation.Slots[index];
-            if (slot.Slot.ConfiguredIndex == configuredIndex)
+            if (slot.Slot.ConfiguredIndex == PlayerOneConfiguredIndex)
             {
-                return slot.IsJoined;
+                playerOneJoined = slot.IsJoined;
+            }
+            else if (slot.Slot.ConfiguredIndex == PlayerTwoConfiguredIndex)
+            {
+                playerTwoJoined = slot.IsJoined;
+            }
+
+            if (!slot.IsJoined)
+            {
+                continue;
+            }
+
+            if (!slot.HasInputOwnershipEvidence ||
+                slot.InputOwnership.Devices.Count == 0)
+            {
+                return false;
+            }
+
+            for (int deviceIndex = 0;
+                 deviceIndex < slot.InputOwnership.Devices.Count;
+                 deviceIndex++)
+            {
+                ownedDeviceIds.Add(
+                    slot.InputOwnership.Devices[deviceIndex].DeviceId);
             }
         }
 
-        return false;
+        _joiningOpen = observation.Participation != null &&
+            observation.Participation.JoiningOpen;
+        _playerOneJoined = playerOneJoined;
+        _playerTwoJoined = playerTwoJoined;
+
+        _ownedDeviceIds.Clear();
+        foreach (int deviceId in ownedDeviceIds)
+        {
+            _ownedDeviceIds.Add(deviceId);
+        }
+
+        _hasStableSessionState = true;
+
+        return true;
     }
 
     private bool AreBothPlayersJoined()
@@ -375,8 +449,6 @@ public sealed class LocalMultiplayerJoinTutorialController : MonoBehaviour
 
     private void RefreshView()
     {
-        RefreshSessionState();
-
         bool completed = AreBothPlayersJoined();
 
         SetActive(joiningClosedRoot, !_joiningOpen && !completed);

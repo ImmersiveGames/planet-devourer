@@ -1,8 +1,8 @@
 # Local Multiplayer Assets
 
-Status: **MATERIALIZED / FIRST LIFECYCLE SLICE PLAY MODE PROVEN — 2026-09-07**
+Status: **MATERIALIZED / BIDIRECTIONAL LEAVE-REJOIN + DEVICE OWNERSHIP PLAY MODE PROVEN — 2026-09-07**
 
-The historical public Slot/device/input ownership blocker is closed for the current Local Multiplayer implementation path. This file now records the materialized application rather than a blocked future asset list.
+The historical public Slot/device/input ownership blocker is closed for the current Local Multiplayer implementation path. This file records the materialized application rather than a blocked future asset list.
 
 ## Current application-owned assets
 
@@ -45,11 +45,14 @@ Leave command per configured Slot
 IPlayerSessionScopedAccess.Changed
 IPlayerSessionScopedAccess.TryGetObservation(...)
 PlayerSessionScopedSlotObservation.IsJoined
+PlayerSessionScopedSlotObservation.InputOwnership
 ```
+
+Session changes invalidate the tutorial cache. Canonical observation is read later through a deferred/coalesced refresh instead of synchronously inside `PlayerSessionChange` publication.
 
 The keyboard/gamepad simulator exists only to provide deterministic test InputDevices in the sample. It does not own Slot assignment, Player input routing or Session state.
 
-## Proven lifecycle slice
+## Proven lifecycle and ownership slice
 
 ```text
 P1 Join
@@ -59,16 +62,23 @@ P2 Join
 both Players active / Activity ready
 P1 Leave while P2 remains active
 P1 Rejoin / Activity completes again
+P2 Leave while P1 remains active
+P2 Rejoin
+repeated P1/P2 Leave/Rejoin cycles
 UI derived from current Slot occupancy
+P1 and P2 retain distinct current device ownership
+already-owned device blocked by tutorial before Join
 ```
+
+The validated happy path produced no Framework duplicate-device rejection and no transient `RegisteredHost.NotRegistered` ownership diagnostic.
 
 ## Remaining proof before closure
 
 ```text
-P2 Leave/Rejoin while P1 remains active
-P1/P2 independent gameplay input ownership
-both-Slots-occupied behavior
-Close/Reopen Joining behavior
+actual gameplay no-cross-control between P1 and P2
+explicit extra-Join behavior while both configured Slots are occupied
+Close Joining behavior
+Reopen Joining behavior when applicable
 ```
 
 Do not introduce sample-owned Slot, device or input authority to complete those remaining proofs.
