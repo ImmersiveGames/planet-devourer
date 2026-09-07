@@ -1,7 +1,7 @@
 # Samples Authoring Guide and Status
 
-Player status reconciled: **2026-09-05**  
-Previous Player snapshot: **2026-08-28**  
+Player status reconciled: **2026-09-07**  
+Previous Player snapshot: **2026-09-05**  
 Previous general construction snapshot: **2026-08-21**
 
 Canonical strategy:
@@ -16,7 +16,7 @@ Player-specific authority:
 ```text
 Assets/Documentation~/Architecture/ADRs/
   FG-ADR-002-Player-Sample-Scope-and-Demonstration-Architecture.md
-  Revision 5
+  Revision 6
 ```
 
 This file is the **operational guide/status surface** for the active sample-construction program. The ADRs define strategy and boundaries; this guide records where current work happens, what is already proven in authoring/Play Mode, and what remains before final UPM release.
@@ -42,7 +42,7 @@ The older `FirstGame` branch references are historical context. Current implemen
 |---|---|---|---|
 | 00 | Getting Started / Minimal Game | **COMPLETE / PROVEN** | Pending promotion + Package Manager import proof |
 | 01 | Game Flow / GameFlowShowcase | **MATERIALIZED / core flow proven in dated snapshot** | Pending |
-| 02 | Player | **IN PROGRESS — Scene Player PROVEN; Player Provisioning PROVEN; Character Selection CLOSED/REPROVEN; Local Multiplayer NEXT** | Pending |
+| 02 | Player | **IN PROGRESS — Scene Player PROVEN; Player Provisioning PROVEN; Character Selection CLOSED/REPROVEN; Local Multiplayer MATERIALIZED / first lifecycle slice PROVEN** | Pending |
 | 03 | Advanced Context | Planned | Pending |
 | 04 | Persistence | Planned | Pending |
 
@@ -77,7 +77,7 @@ The previously recorded core proof remains valid. This Player reconciliation doe
 
 ## Sample 02 — Player current state
 
-Player status is governed by FG-ADR-002 Revision 5.
+Player status is governed by FG-ADR-002 Revision 6.
 
 Current sequence:
 
@@ -97,8 +97,11 @@ Character Selection
   CLOSED / PLAY MODE REPROVEN 2026-09-05
 
 Local Multiplayer
-  NEXT PLAYER CONSTRUCTION TARGET
-  PRE-IMPLEMENTATION PUBLIC-CONTRACT RE-AUDIT
+  HostProvisioning = ManagerProvisioned
+  two configured local Player Slots
+  MATERIALIZED
+  FIRST JOIN / LEAVE / REJOIN LIFECYCLE SLICE PLAY MODE PROVEN 2026-09-07
+  ACTIVE CONSTRUCTION CONTINUES
 ```
 
 ### Current shared Player prefab baseline
@@ -225,6 +228,11 @@ Character Selection is therefore **closed for authoring/proving under `Assets/_S
 PlayerSessionObserver
   read-only observation / designer-facing lifecycle projection
 
+IPlayerSessionScopedAccess
+  scoped Session snapshot/observation + current product request surface
+  Changed
+  TryGetObservation(...)
+
 PlayerSessionOpenJoiningCommandTrigger
 PlayerSessionCloseJoiningCommandTrigger
 PlayerSessionJoinCommandTrigger
@@ -235,32 +243,135 @@ PlayerSessionClearActorSelectionCommandTrigger
 PlayerSessionLeaveCommandTrigger
 ```
 
-The sample program must not introduce internal Player discovery, direct Session mutation, parallel Actor selection, hidden fallback or sample-owned Player runtime authority.
+The sample program must not introduce internal Player discovery, direct Session mutation, parallel Actor selection, parallel Slot/device ownership, hidden fallback or sample-owned Player runtime authority.
 
-### Next Player gate — Local Multiplayer
+### Local Multiplayer historical blocker — closed for current path
 
-Local Multiplayer is the **next Player work item**, but construction begins with a public-contract audit rather than prefab authoring.
+The previous blocker, recorded in August, was insufficient public Slot/device/input ownership and observation for a normal consumer.
 
-The last documented blocker, confirmed in August, was the absence of a sufficient public contract for:
-
-```text
-local participant / device intent
-  -> deterministic Slot association
-  -> Player admission
-  -> correct input ownership/routing
-  -> observable Slot / device / control-scheme state
-  -> release/reuse when applicable
-```
-
-That finding predates the latest Player framework cuts. Therefore the next action is to **re-audit the current Framework implementation/API** and determine whether this blocker still exists, changed shape, or is now satisfied.
-
-Until that audit is complete:
+That boundary was re-audited against the current Player Framework surface before construction. The implemented sample now has a canonical public path equivalent to:
 
 ```text
-do not assume the old blocker is still current
-do not assume the blocker is solved
-do not invent sample-owned Slot/device/input authority
+InputDevice intent
+  -> PlayerSessionJoinCommandTrigger
+  -> Framework-controlled available Slot allocation
+  -> Local Player Host / PlayerInput admission
+  -> Framework input ownership
+  -> configured Actor preparation
+  -> Activity placement / GameplayReady
+
+current Session state
+  -> IPlayerSessionScopedAccess.Changed
+  -> TryGetObservation(...)
+  -> typed per-Slot IsJoined evidence
+  -> tutorial presentation
 ```
+
+The sample does not contain a parallel Slot registry, device ownership authority or gameplay input router.
+
+### Local Multiplayer materialized composition
+
+Current application root:
+
+```text
+Assets/_Sample/PlayerSamples/LocalMultiplayer/
+```
+
+Current application-owned core assets include:
+
+```text
+GameApplication_LocalMultiplayer.asset
+
+Player/
+  PlayerSessionProfile_LocalMultiplayer.asset
+  PlayerSlotProfile_LocalMultiplayer_P1.asset
+  PlayerSlotProfile_LocalMultiplayer_P2.asset
+
+Routes/
+  Route_LocalMultiplayer.asset
+  MultiplayerRouteContentProfile.asset
+
+Activities/
+  Activity_LocalMultiplayer.asset
+
+Scenes/
+  LocalMultiplayer_Persistent.unity
+  LocalMultiplayer.unity
+  LocalMUltiplayerUI.unity
+
+Scripts/
+  LocalMultiplayerJoinInputSource.cs
+  LocalMultiplayerJoinTutorialController.cs
+  LocalMultiplayerKeyboardGamepadSimulator.cs
+```
+
+The keyboard/gamepad simulator provides deterministic sample InputDevices only; Slot allocation and ownership remain Framework-owned.
+
+### Local Multiplayer first Play Mode proof — 2026-09-07
+
+Observed consumer sequence:
+
+```text
+Open Joining
+-> Join P1
+-> P1 prepared / materialized / GameplayReady
+-> UI waits for P2
+
+Leave P1
+-> exact occurrence released
+-> player.1 Available
+-> UI returns to Waiting for Player 1
+
+Rejoin P1
+-> fresh player.1 occurrence
+-> new host / Actor materialization
+-> authored placement reapplied
+-> UI remains waiting for P2
+
+Join P2
+-> player.2 joined
+-> both Players active
+-> Activity readiness completed
+-> UI Completed
+
+Leave P1 while P2 remains Joined
+-> P2 remains active
+-> UI = Player 2 joined; waiting for Player 1
+
+Rejoin P1
+-> fresh occurrence
+-> placement reapplied
+-> Activity readiness completes again
+-> UI Completed
+```
+
+Manual visual validation confirmed both the UI status and the placement result.
+
+Current Framework Full Player certification is:
+
+```text
+PLAYER QA CERTIFIED
+17/17
+```
+
+The QA aggregate includes the Leave/Rejoin reconciliation and Activity relocation contracts used by this sample.
+
+### Local Multiplayer remaining work
+
+Local Multiplayer is not closed yet.
+
+Next proof cut:
+
+```text
+P2 Leave/Rejoin while P1 remains active
+independent P1/P2 gameplay input/device ownership
+no cross-control between Players
+behavior when both Slots are occupied
+Close Joining behavior
+Reopen Joining behavior when applicable
+```
+
+Additional camera/output topology is not implied by the current proof.
 
 ## Completion vocabulary
 
@@ -336,10 +447,20 @@ Closed
   Character Selection Follow camera + gameplay input/movement reproof
   Character Selection Leave/Rejoin fresh-selection reproof
 
-Next
-  Local Multiplayer public-contract re-audit
+Local Multiplayer — proven current slice
+  public Slot/device/input blocker re-audited and closed for implemented path
+  application / Route / Activity / Session / two Slots materialized
+  P1 Join / Leave / Rejoin
+  current Slot occupancy-driven UI
+  Activity placement reapplied on fresh P1 occurrence
+  P2 Join
+  both-Player readiness completion
+  P1 Leave while P2 remains active
+  P1 Rejoin after Activity had completed
 
-After audit
-  if public contract is sufficient -> author canonical Local Multiplayer setup
-  if contract is insufficient -> record exact Framework blocker before sample construction
+Next
+  P2 Leave/Rejoin preservation
+  independent P1/P2 input ownership and no cross-control
+  full-Slot behavior
+  Close/Reopen Joining behavior
 ```
