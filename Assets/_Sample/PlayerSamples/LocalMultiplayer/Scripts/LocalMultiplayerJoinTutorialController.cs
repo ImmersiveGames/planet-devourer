@@ -2,364 +2,424 @@ using Immersive.Framework.PlayerParticipation;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-namespace _Sample.PlayerSamples.LocalMultiplayer.Scripts
+
+[DisallowMultipleComponent]
+public sealed class LocalMultiplayerJoinTutorialController : MonoBehaviour
 {
-    [DisallowMultipleComponent]
-    public sealed class LocalMultiplayerJoinTutorialController : MonoBehaviour
+    private const int PlayerOneConfiguredIndex = 0;
+    private const int PlayerTwoConfiguredIndex = 1;
+
+    [Header("Framework Commands")]
+    [SerializeField] private PlayerSessionOpenJoiningCommandTrigger openJoiningCommand;
+    [SerializeField] private PlayerSessionCloseJoiningCommandTrigger closeJoiningCommand;
+    [SerializeField] private PlayerSessionJoinCommandTrigger joinCommand;
+
+    [Header("Input Source")]
+    [SerializeField] private LocalMultiplayerJoinInputSource joinInputSource;
+
+    [Header("Tutorial Views")]
+    [SerializeField] private GameObject joiningClosedRoot;
+    [SerializeField] private GameObject joiningOpenRoot;
+    [SerializeField] private GameObject joinReadyRoot;
+    [SerializeField] private GameObject awaitingDeviceRoot;
+    [SerializeField] private GameObject completedRoot;
+    [SerializeField] private GameObject leavePlayer1Button;
+    [SerializeField] private GameObject leavePlayer2Button;
+
+    [Header("Tutorial Labels")]
+    [SerializeField] private TMP_Text nextPlayerLabel;
+    [SerializeField] private TMP_Text devicePromptLabel;
+    [SerializeField] private TMP_Text statusLabel;
+
+    private IPlayerSessionScopedAccess _sessionAccess;
+    private bool _joiningOpen;
+    private bool _awaitingDevice;
+    private bool _playerOneJoined;
+    private bool _playerTwoJoined;
+
+    private void OnEnable()
     {
-        private const int SupportedTutorialPlayers = 2;
-
-        [Header("Framework Commands")]
-        [SerializeField] private PlayerSessionOpenJoiningCommandTrigger openJoiningCommand;
-        [SerializeField] private PlayerSessionCloseJoiningCommandTrigger closeJoiningCommand;
-        [SerializeField] private PlayerSessionJoinCommandTrigger joinCommand;
-
-        [Header("Joining Input")]
-        [SerializeField] private InputActionReference joinAction;
-        [SerializeField] private InputActionReference simulateDevice1Action;
-        [SerializeField] private InputActionReference simulateDevice2Action;
-
-        [Header("Tutorial Views")]
-        [SerializeField] private GameObject joiningClosedRoot;
-        [SerializeField] private GameObject joiningOpenRoot;
-        [SerializeField] private GameObject joinReadyRoot;
-        [SerializeField] private GameObject awaitingDeviceRoot;
-        [SerializeField] private GameObject completedRoot;
-
-        [Header("Tutorial Labels")]
-        [SerializeField] private TMP_Text nextPlayerLabel;
-        [SerializeField] private TMP_Text devicePromptLabel;
-        [SerializeField] private TMP_Text statusLabel;
-
-        private bool _joiningOpen;
-        private bool _awaitingDevice;
-        private int _successfulJoins;
-
-        private Gamepad _simulatedDevice1;
-        private Gamepad _simulatedDevice2;
-
-        private bool _joinActionEnabledByThis;
-        private bool _simulateDevice1ActionEnabledByThis;
-        private bool _simulateDevice2ActionEnabledByThis;
-
-        private void OnEnable()
+        if (joinInputSource != null)
         {
-            Subscribe(joinAction, OnJoinPerformed, ref _joinActionEnabledByThis);
-            Subscribe(simulateDevice1Action, OnSimulateDevice1Performed, ref _simulateDevice1ActionEnabledByThis);
-            Subscribe(simulateDevice2Action, OnSimulateDevice2Performed, ref _simulateDevice2ActionEnabledByThis);
+            joinInputSource.DeviceRequested += OnDeviceRequested;
+        }
+
+        TryBindSessionAccess();
+        RefreshView();
+    }
+
+    private void Update()
+    {
+        // Scoped consumers are bound after scene composition. Retry only until
+        // access becomes available; after that all state updates are event-driven.
+        if (_sessionAccess == null && TryBindSessionAccess())
+        {
             RefreshView();
         }
+    }
 
-        private void OnDisable()
+    private void OnDisable()
+    {
+        if (joinInputSource != null)
         {
-            Unsubscribe(joinAction, OnJoinPerformed, _joinActionEnabledByThis);
-            Unsubscribe(simulateDevice1Action, OnSimulateDevice1Performed, _simulateDevice1ActionEnabledByThis);
-            Unsubscribe(simulateDevice2Action, OnSimulateDevice2Performed, _simulateDevice2ActionEnabledByThis);
-
-            _joinActionEnabledByThis = false;
-            _simulateDevice1ActionEnabledByThis = false;
-            _simulateDevice2ActionEnabledByThis = false;
+            joinInputSource.DeviceRequested -= OnDeviceRequested;
         }
 
-        private void OnDestroy()
+        ReleaseSessionAccess();
+    }
+
+    public void OpenJoining()
+    {
+        if (openJoiningCommand == null)
         {
-            RemoveSimulatedDevice(ref _simulatedDevice1);
-            RemoveSimulatedDevice(ref _simulatedDevice2);
+            SetStatus("Open Joining command is not assigned.");
+            return;
         }
 
-        public void OpenJoining()
+        openJoiningCommand.Invoke();
+
+        PlayerParticipationOperationResult result = openJoiningCommand.LastOpenJoiningResult;
+        if (result == null || !result.Completed)
         {
-            if (openJoiningCommand == null)
-            {
-                SetStatus("Open Joining command is not assigned.");
-                return;
-            }
+            SetStatus(result != null
+                ? $"Open Joining failed: {result.Status}. {result.Message}"
+                : "Open Joining returned no result.");
+            return;
+        }
 
-            openJoiningCommand.Invoke();
+        _joiningOpen = true;
+        _awaitingDevice = false;
 
-            PlayerParticipationOperationResult result = openJoiningCommand.LastOpenJoiningResult;
-            if (result == null || !result.Completed)
-            {
-                SetStatus(result != null
-                    ? $"Open Joining failed: {result.Status}. {result.Message}"
-                    : "Open Joining returned no result.");
-                return;
-            }
+        TryBindSessionAccess();
+        RefreshSessionState();
 
-            _joiningOpen = true;
+        SetStatus(result.IgnoredNoChange
+            ? "Joining was already open."
+            : "Joining is open.");
+
+        RefreshView();
+    }
+
+    public void CloseJoining()
+    {
+        if (closeJoiningCommand == null)
+        {
+            SetStatus("Close Joining command is not assigned.");
+            return;
+        }
+
+        closeJoiningCommand.Invoke();
+
+        PlayerParticipationOperationResult result = closeJoiningCommand.LastCloseJoiningResult;
+        if (result == null || !result.Completed)
+        {
+            SetStatus(result != null
+                ? $"Close Joining failed: {result.Status}. {result.Message}"
+                : "Close Joining returned no result.");
+            return;
+        }
+
+        _joiningOpen = false;
+        _awaitingDevice = false;
+
+        TryBindSessionAccess();
+        RefreshSessionState();
+
+        SetStatus(result.IgnoredNoChange
+            ? "Joining was already closed."
+            : "Joining is closed.");
+
+        RefreshView();
+    }
+
+    public void RequestJoin()
+    {
+        TryBindSessionAccess();
+        RefreshSessionState();
+
+        if (!_joiningOpen)
+        {
+            SetStatus("Open Joining before requesting another Player.");
+            return;
+        }
+
+        if (AreBothPlayersJoined())
+        {
+            SetStatus("Both tutorial Players are already joined.");
+            return;
+        }
+
+        _awaitingDevice = true;
+        SetStatus("Waiting for an input device.");
+        RefreshView();
+    }
+
+    public void CancelJoinRequest()
+    {
+        if (!_awaitingDevice)
+        {
+            return;
+        }
+
+        _awaitingDevice = false;
+        SetStatus("Join request cancelled.");
+        RefreshView();
+    }
+
+    private void OnDeviceRequested(InputDevice device, string deviceLabel)
+    {
+        if (!CanConsumeDeviceInput())
+        {
+            return;
+        }
+
+        TryJoinWithDevice(device, deviceLabel);
+    }
+
+    private bool CanConsumeDeviceInput()
+    {
+        RefreshSessionState();
+
+        return _joiningOpen &&
+            _awaitingDevice &&
+            !AreBothPlayersJoined();
+    }
+
+    private void TryJoinWithDevice(InputDevice device, string deviceLabel)
+    {
+        if (joinCommand == null)
+        {
+            SetStatus("Join command is not assigned.");
+            return;
+        }
+
+        if (device == null || !device.added)
+        {
+            SetStatus("Join requires a valid added InputDevice.");
+            return;
+        }
+
+        joinCommand.InvokeFromDevice(device);
+
+        LocalPlayerJoinResult result = joinCommand.LastJoinResult;
+        if (result == null)
+        {
+            SetStatus("Join returned no result.");
+            return;
+        }
+
+        if (!result.Succeeded)
+        {
+            SetStatus($"Join rejected: {result.Status}. {result.Message}");
+            RefreshView();
+            return;
+        }
+
+        _awaitingDevice = false;
+
+        // Re-read canonical Slot occupancy instead of counting Join events.
+        TryBindSessionAccess();
+        RefreshSessionState();
+
+        string slotId = result.Slot.PlayerSlotId.IsValid
+            ? result.Slot.PlayerSlotId.StableText
+            : "<invalid-slot>";
+
+        SetStatus(
+            $"{slotId} joined with {deviceLabel} " +
+            $"(deviceId={device.deviceId}, playerIndex={result.UnityPlayerIndex}).");
+
+        Debug.Log(
+            "[FG_LOCAL_MULTIPLAYER_TUTORIAL] " +
+            $"status='Joined' slot='{slotId}' " +
+            $"device='{deviceLabel}' deviceId='{device.deviceId}' " +
+            $"playerIndex='{result.UnityPlayerIndex}'.");
+
+        RefreshView();
+    }
+
+    private bool TryBindSessionAccess()
+    {
+        if (_sessionAccess != null && _sessionAccess.Snapshot.IsAvailable)
+        {
+            return true;
+        }
+
+        ReleaseSessionAccess();
+
+        if (joinCommand == null ||
+            !joinCommand.TryGetAccess(
+                out IPlayerSessionScopedAccess resolvedAccess,
+                out _))
+        {
+            return false;
+        }
+
+        _sessionAccess = resolvedAccess;
+        _sessionAccess.Changed += OnSessionChanged;
+        RefreshSessionState();
+        return true;
+    }
+
+    private void ReleaseSessionAccess()
+    {
+        if (_sessionAccess == null)
+        {
+            return;
+        }
+
+        _sessionAccess.Changed -= OnSessionChanged;
+        _sessionAccess = null;
+    }
+
+    private void OnSessionChanged(PlayerSessionChange change)
+    {
+        if (!RefreshSessionState())
+        {
+            return;
+        }
+
+        if (AreBothPlayersJoined())
+        {
             _awaitingDevice = false;
-
-            SetStatus(result.IgnoredNoChange
-                ? "Joining was already open."
-                : "Joining is open.");
-
-            RefreshView();
         }
 
-        public void CloseJoining()
+        RefreshView();
+        SetStatus(BuildSessionStatus());
+    }
+
+    private bool RefreshSessionState()
+    {
+        if (_sessionAccess == null ||
+            !_sessionAccess.TryGetObservation(
+                out PlayerSessionScopedObservationSnapshot observation) ||
+            observation == null ||
+            !observation.IsAvailable)
         {
-            if (closeJoiningCommand == null)
-            {
-                SetStatus("Close Joining command is not assigned.");
-                return;
-            }
-
-            closeJoiningCommand.Invoke();
-
-            PlayerParticipationOperationResult result = closeJoiningCommand.LastCloseJoiningResult;
-            if (result == null || !result.Completed)
-            {
-                SetStatus(result != null
-                    ? $"Close Joining failed: {result.Status}. {result.Message}"
-                    : "Close Joining returned no result.");
-                return;
-            }
-
-            _joiningOpen = false;
-            _awaitingDevice = false;
-
-            SetStatus(result.IgnoredNoChange
-                ? "Joining was already closed."
-                : "Joining is closed.");
-
-            RefreshView();
+            return false;
         }
 
-        public void RequestJoin()
+        if (observation.Participation != null)
         {
-            if (!_joiningOpen)
-            {
-                SetStatus("Open Joining before requesting another Player.");
-                return;
-            }
-
-            if (_successfulJoins >= SupportedTutorialPlayers)
-            {
-                SetStatus("Both tutorial Players are already joined.");
-                return;
-            }
-
-            _awaitingDevice = true;
-            SetStatus("Waiting for an input device.");
-            RefreshView();
+            _joiningOpen = observation.Participation.JoiningOpen;
         }
 
-        public void CancelJoinRequest()
-        {
-            if (!_awaitingDevice)
-            {
-                return;
-            }
+        _playerOneJoined = IsConfiguredSlotJoined(
+            observation, PlayerOneConfiguredIndex);
+        _playerTwoJoined = IsConfiguredSlotJoined(
+            observation, PlayerTwoConfiguredIndex);
 
-            _awaitingDevice = false;
-            SetStatus("Join request cancelled.");
-            RefreshView();
+        return true;
+    }
+
+    private static bool IsConfiguredSlotJoined(
+        PlayerSessionScopedObservationSnapshot observation,
+        int configuredIndex)
+    {
+        if (observation == null || !observation.IsAvailable)
+        {
+            return false;
         }
 
-        private void OnJoinPerformed(InputAction.CallbackContext context)
+        for (int index = 0; index < observation.Slots.Count; index++)
         {
-            if (!CanConsumeDeviceInput())
+            PlayerSessionScopedSlotObservation slot = observation.Slots[index];
+            if (slot.Slot.ConfiguredIndex == configuredIndex)
             {
-                return;
-            }
-
-            InputDevice device = context.control?.device;
-            if (device == null || !device.added)
-            {
-                SetStatus("Join input did not provide a valid added InputDevice.");
-                return;
-            }
-
-            TryJoinWithDevice(device, device.displayName);
-        }
-
-        private void OnSimulateDevice1Performed(InputAction.CallbackContext context)
-        {
-            _ = context;
-
-            if (!CanConsumeDeviceInput())
-            {
-                return;
-            }
-
-            if (_successfulJoins != 0)
-            {
-                SetStatus("Simulate Device 1 is reserved for the first tutorial Join. Use key 2 for the second simulated device.");
-                return;
-            }
-
-            _simulatedDevice1 ??= InputSystem.AddDevice<Gamepad>();
-            TryJoinWithDevice(_simulatedDevice1, "Simulated Gamepad 1");
-        }
-
-        private void OnSimulateDevice2Performed(InputAction.CallbackContext context)
-        {
-            _ = context;
-
-            if (!CanConsumeDeviceInput())
-            {
-                return;
-            }
-
-            if (_successfulJoins != 1)
-            {
-                SetStatus("Simulate Device 2 is reserved for the second tutorial Join.");
-                return;
-            }
-
-            _simulatedDevice2 ??= InputSystem.AddDevice<Gamepad>();
-            TryJoinWithDevice(_simulatedDevice2, "Simulated Gamepad 2");
-        }
-
-        private bool CanConsumeDeviceInput()
-        {
-            return _joiningOpen &&
-                _awaitingDevice &&
-                _successfulJoins < SupportedTutorialPlayers;
-        }
-
-        private void TryJoinWithDevice(InputDevice device, string deviceLabel)
-        {
-            if (joinCommand == null)
-            {
-                SetStatus("Join command is not assigned.");
-                return;
-            }
-
-            if (device == null || !device.added)
-            {
-                SetStatus("Join requires a valid added InputDevice.");
-                return;
-            }
-
-            joinCommand.InvokeFromDevice(device);
-
-            LocalPlayerJoinResult result = joinCommand.LastJoinResult;
-            if (result == null)
-            {
-                SetStatus("Join returned no result.");
-                return;
-            }
-
-            if (!result.Succeeded)
-            {
-                SetStatus($"Join rejected: {result.Status}. {result.Message}");
-                RefreshView();
-                return;
-            }
-
-            _awaitingDevice = false;
-            _successfulJoins++;
-
-            string slotId = result.Slot.PlayerSlotId.IsValid
-                ? result.Slot.PlayerSlotId.StableText
-                : "<invalid-slot>";
-
-            SetStatus(
-                $"{slotId} joined with {deviceLabel} " +
-                $"(deviceId={device.deviceId}, playerIndex={result.UnityPlayerIndex}).");
-
-            Debug.Log(
-                "[FG_LOCAL_MULTIPLAYER_TUTORIAL] " +
-                $"status='Joined' slot='{slotId}' " +
-                $"device='{deviceLabel}' deviceId='{device.deviceId}' " +
-                $"playerIndex='{result.UnityPlayerIndex}'.");
-
-            RefreshView();
-        }
-
-        private void RefreshView()
-        {
-            bool completed = _successfulJoins >= SupportedTutorialPlayers;
-
-            SetActive(joiningClosedRoot, !_joiningOpen && !completed);
-            SetActive(joiningOpenRoot, _joiningOpen && !completed);
-            SetActive(joinReadyRoot, _joiningOpen && !_awaitingDevice && !completed);
-            SetActive(awaitingDeviceRoot, _joiningOpen && _awaitingDevice && !completed);
-            SetActive(completedRoot, completed);
-
-            if (nextPlayerLabel != null && !completed)
-            {
-                nextPlayerLabel.text = _successfulJoins == 0
-                    ? "PLAYER 1"
-                    : "PLAYER 2";
-            }
-
-            if (devicePromptLabel != null && _awaitingDevice)
-            {
-                devicePromptLabel.text = _successfulJoins == 0
-                    ? "INPUT DEVICE REQUIRED\nPress START on a gamepad or press 1 to simulate Device 1."
-                    : "INPUT DEVICE REQUIRED\nPress START on another gamepad or press 2 to simulate Device 2.";
+                return slot.IsJoined;
             }
         }
 
-        private void SetStatus(string message)
-        {
-            if (statusLabel != null)
-            {
-                statusLabel.text = message;
-            }
+        return false;
+    }
 
-            Debug.Log($"[FG_LOCAL_MULTIPLAYER_TUTORIAL] {message}");
+    private bool AreBothPlayersJoined()
+    {
+        return _playerOneJoined && _playerTwoJoined;
+    }
+
+    private int GetNextPlayerNumber()
+    {
+        if (!_playerOneJoined)
+        {
+            return 1;
         }
 
-        private static void SetActive(GameObject target, bool active)
+        if (!_playerTwoJoined)
         {
-            if (target != null && target.activeSelf != active)
-            {
-                target.SetActive(active);
-            }
+            return 2;
         }
 
-        private static void Subscribe(
-            InputActionReference reference,
-            System.Action<InputAction.CallbackContext> callback,
-            ref bool enabledByThis)
+        return 0;
+    }
+
+    private string BuildSessionStatus()
+    {
+        if (_playerOneJoined && _playerTwoJoined)
         {
-            enabledByThis = false;
-
-            InputAction action = reference != null ? reference.action : null;
-            if (action == null)
-            {
-                return;
-            }
-
-            action.performed += callback;
-
-            if (!action.enabled)
-            {
-                action.Enable();
-                enabledByThis = true;
-            }
+            return "Player 1 and Player 2 are joined.";
         }
 
-        private static void Unsubscribe(
-            InputActionReference reference,
-            System.Action<InputAction.CallbackContext> callback,
-            bool enabledByThis)
+        if (_playerOneJoined)
         {
-            InputAction action = reference != null ? reference.action : null;
-            if (action == null)
-            {
-                return;
-            }
-
-            action.performed -= callback;
-
-            if (enabledByThis && action.enabled)
-            {
-                action.Disable();
-            }
+            return "Player 1 is joined. Waiting for Player 2.";
         }
 
-        private static void RemoveSimulatedDevice(ref Gamepad device)
+        if (_playerTwoJoined)
         {
-            if (device != null && device.added)
-            {
-                InputSystem.RemoveDevice(device);
-            }
+            return "Player 2 is joined. Waiting for Player 1.";
+        }
 
-            device = null;
+        return "Waiting for Player 1.";
+    }
+
+    private void RefreshView()
+    {
+        RefreshSessionState();
+
+        bool completed = AreBothPlayersJoined();
+
+        SetActive(joiningClosedRoot, !_joiningOpen && !completed);
+        SetActive(joiningOpenRoot, _joiningOpen && !completed);
+        SetActive(joinReadyRoot, _joiningOpen && !_awaitingDevice && !completed);
+        SetActive(awaitingDeviceRoot, _joiningOpen && _awaitingDevice && !completed);
+        SetActive(completedRoot, completed);
+
+        SetActive(leavePlayer1Button, _playerOneJoined);
+        SetActive(leavePlayer2Button, _playerTwoJoined);
+
+        int nextPlayerNumber = GetNextPlayerNumber();
+
+        if (nextPlayerLabel != null && !completed)
+        {
+            nextPlayerLabel.text = nextPlayerNumber == 2
+                ? "PLAYER 2"
+                : "PLAYER 1";
+        }
+
+        if (devicePromptLabel != null && _awaitingDevice && !completed)
+        {
+            devicePromptLabel.text = nextPlayerNumber == 2
+                ? "INPUT DEVICE REQUIRED\nPress START on another gamepad or press 2 to simulate Device 2."
+                : "INPUT DEVICE REQUIRED\nPress START on a gamepad or press 1 to simulate Device 1.";
+        }
+    }
+
+    private void SetStatus(string message)
+    {
+        if (statusLabel != null)
+        {
+            statusLabel.text = message;
+        }
+
+        Debug.Log($"[FG_LOCAL_MULTIPLAYER_TUTORIAL] {message}");
+    }
+
+    private static void SetActive(GameObject target, bool active)
+    {
+        if (target != null && target.activeSelf != active)
+        {
+            target.SetActive(active);
         }
     }
 }
