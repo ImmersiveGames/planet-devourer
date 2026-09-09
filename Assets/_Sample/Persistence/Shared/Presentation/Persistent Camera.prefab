@@ -10,8 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2740129479775980679}
   - component: {fileID: 5773039269403168542}
-  - component: {fileID: 9085494174138595361}
-  - component: {fileID: 3836730046461109107}
   - component: {fileID: 2706233871067227582}
   m_Layer: 0
   m_Name: Session Camera Rig
@@ -55,8 +53,8 @@ MonoBehaviour:
   m_StreamingVersion: 20241001
   m_LegacyPriority: 0
   Target:
-    TrackingTarget: {fileID: 8091125778278855379}
-    LookAtTarget: {fileID: 8091125778278855379}
+    TrackingTarget: {fileID: 0}
+    LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 1
   Lens:
     FieldOfView: 40
@@ -78,38 +76,6 @@ MonoBehaviour:
       BarrelClipping: 0.25
       Anamorphism: 0
   BlendHint: 0
---- !u!114 &9085494174138595361
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 289802579495635910}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b617507da6d07e749b7efdb34e1173e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineFollow
-  TrackerSettings:
-    BindingMode: 4
-    PositionDamping: {x: 1, y: 1, z: 1}
-    AngularDampingMode: 0
-    RotationDamping: {x: 1, y: 1, z: 1}
-    QuaternionDamping: 1
-  FollowOffset: {x: 0, y: 5, z: -8}
---- !u!114 &3836730046461109107
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 289802579495635910}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e8b78ac948f05a46a6d8339a503172b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineHardLookAt
-  LookAtOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &2706233871067227582
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -122,14 +88,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d1bda0d2aa64f85a2a0d71755cd1003, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.CameraAuthoring.CameraRigComposer
-  presentationIntent: 10
+  presentationIntent: 20
   targetSourceKind: 10
   targetSource: {fileID: 0}
   explicitFollowTarget: {fileID: 8091125778278855379}
   explicitLookAtTarget: {fileID: 8091125778278855379}
   followRequirement: 20
-  lookAtRequirement: 10
+  lookAtRequirement: 0
   followOffset: {x: 0, y: 5, z: -8}
+  sharedFollowMemberWeight: 1
+  sharedFollowMemberRadius: 0.5
+  sharedFollowFramingSize: 0.8
+  sharedFollowDamping: 2
+  sharedFollowFovRange: {x: 1, y: 100}
+  sharedFollowDollyRange: {x: -100, y: 100}
+  sharedFollowOrthoSizeRange: {x: 1, y: 1000}
   mountedPositionDamping: 0
   mountedRotationDamping: 0
   thirdPersonShoulderOffset: {x: 0.5, y: -0.4, z: 0}
@@ -138,10 +111,16 @@ MonoBehaviour:
   thirdPersonCameraDistance: 2
   thirdPersonDamping: {x: 0.1, y: 0.5, z: 0.3}
   cinemachineCamera: {fileID: 5773039269403168542}
-  materializedPresentationIntent: 10
+  materializedPresentationIntent: 20
   frameworkOwnedCinemachineCamera: {fileID: 0}
   frameworkOwnedPositionControl: {fileID: 0}
-  frameworkOwnedRotationControl: {fileID: 3836730046461109107}
+  frameworkOwnedRotationControl: {fileID: 0}
+  frameworkOwnedSharedFollowTargetGroup: {fileID: 0}
+  frameworkOwnedSharedFollowGroupFraming: {fileID: 0}
+  appliedViewAssignmentContextId: 
+  appliedViewAssignmentRevision: -1
+  appliedViewAvailabilityContextId: 
+  appliedViewAvailabilityRevision: -1
   materializationRevision: 1
   logApplyRebuildDiagnostics: 1
   lastApplyRebuildStatus: ApplySucceeded
@@ -150,8 +129,8 @@ MonoBehaviour:
   lastMaterializationSummary: created='1' repaired='0' alreadyValid='5' skipped='2'
     blocked='0' presentation='Follow' cameraOwnership='ExternalOrUnknown' positionOwnership='ExternalOrUnknown'
     rotationOwnership='FrameworkOwned' revision='1'
-  lastResolvedFollowTarget: {fileID: 8091125778278855379}
-  lastResolvedLookAtTarget: {fileID: 8091125778278855379}
+  lastResolvedFollowTarget: {fileID: 0}
+  lastResolvedLookAtTarget: {fileID: 0}
 --- !u!1 &2525267510779617927
 GameObject:
   m_ObjectHideFlags: 0

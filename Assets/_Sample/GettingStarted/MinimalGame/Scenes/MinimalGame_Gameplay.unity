@@ -294,6 +294,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 787573935158384079, guid: 20100056664a9fc4c821d08cf00e2113, type: 3}
+      propertyPath: Target.TrackingTarget
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3022949270163228647, guid: 20100056664a9fc4c821d08cf00e2113, type: 3}
       propertyPath: actorProfile
       value: 
@@ -315,8 +319,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: FG_SceneProvisioned
       objectReference: {fileID: 0}
+    - target: {fileID: 6659015093055891615, guid: 20100056664a9fc4c821d08cf00e2113, type: 3}
+      propertyPath: explicitFollowTarget
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6659015093055891615, guid: 20100056664a9fc4c821d08cf00e2113, type: 3}
+      propertyPath: lastResolvedFollowTarget
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 3249041974531838174, guid: 20100056664a9fc4c821d08cf00e2113, type: 3}
+    - {fileID: 8104527453674662784, guid: 20100056664a9fc4c821d08cf00e2113, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 20100056664a9fc4c821d08cf00e2113, type: 3}
