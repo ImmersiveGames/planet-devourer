@@ -174,7 +174,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bb91bee8e474876b090ac9cfd1f60e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Camera.CameraOutputAuthoring
-  outputId: e65efd6d0404476d9d6e10e2509905cd
+  outputDefinition: {fileID: 11400000, guid: cc3bf2e602b4c694895fbff2a98b3ce9, type: 2}
   unityCamera: {fileID: 6054642778055850041}
   cinemachineBrain: {fileID: 4259737009307383025}
   defaultCameraRig: {fileID: 708972637423863449}
@@ -329,12 +329,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31a959d49e7541e9b4998d2d507f02f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.CameraAuthoring.CameraSharedComposition
-  viewId: cd0e7e178db5414382cbe86e4120b0c9
-  viewDescription: 
-  assignmentContextId: 
-  assignmentOwnerId: 
+  viewDefinition: {fileID: 11400000, guid: 36d334f9b277cb44eac4e2bbc7f2194b, type: 2}
   subjectPolicy: 10
-  outputId: 
+  outputDefinition: {fileID: 11400000, guid: cc3bf2e602b4c694895fbff2a98b3ce9, type: 2}
+  viewport:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
 --- !u!1 &5444860953511319855
 GameObject:
   m_ObjectHideFlags: 0
@@ -367,7 +370,6 @@ Transform:
   - {fileID: 9207437510585411098}
   - {fileID: 4237271500586966294}
   - {fileID: 6410593396268306389}
-  - {fileID: 5744489565559327003}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5842873726263795142
@@ -415,23 +417,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d1bda0d2aa64f85a2a0d71755cd1003, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.CameraAuthoring.CameraRigComposer
-  presentationIntent: 30
-  lookAtRequirement: 10
-  followOffset: {x: 0, y: 5, z: -8}
-  sharedFollowMemberWeight: 1
-  sharedFollowMemberRadius: 0.5
-  sharedFollowFramingSize: 0.8
-  sharedFollowDamping: 2
-  sharedFollowFovRange: {x: 1, y: 100}
-  sharedFollowDollyRange: {x: -100, y: 100}
-  sharedFollowOrthoSizeRange: {x: 1, y: 1000}
-  mountedPositionDamping: 0
-  mountedRotationDamping: 0
-  thirdPersonShoulderOffset: {x: 0.5, y: -0.4, z: 0}
-  thirdPersonVerticalArmLength: 0.4
-  thirdPersonCameraSide: 1
-  thirdPersonCameraDistance: 2
-  thirdPersonDamping: {x: 0.1, y: 0.5, z: 0.3}
+  behaviorDefinition: {fileID: 11400000, guid: e33910a5b0ab070458f08f29085317e2, type: 2}
   cinemachineCamera: {fileID: 7142693970163962292}
   materializedPresentationIntent: 30
   frameworkOwnedCinemachineCamera: {fileID: 7142693970163962292}
@@ -439,54 +425,10 @@ MonoBehaviour:
   frameworkOwnedRotationControl: {fileID: 539676298434846417}
   frameworkOwnedSharedFollowTargetGroup: {fileID: 0}
   frameworkOwnedSharedFollowGroupFraming: {fileID: 0}
-  materializationRevision: 1
+  materializationRevision: 2
   logApplyRebuildDiagnostics: 1
   lastApplyRebuildStatus: ValidationSucceeded
   lastBlockingIssue: 
-  lastMaterializationSummary: Presentation settings and shared Follow provenance
-    are valid; Apply / Rebuild preflights pipeline ownership.
---- !u!1 &5903417478876308129
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5744489565559327003}
-  - component: {fileID: 1930310760865531102}
-  m_Layer: 0
-  m_Name: Camera View Output Policy
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5744489565559327003
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5903417478876308129}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 8099423410629116358}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1930310760865531102
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5903417478876308129}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 809b79f8af3546b093761335b08b18c0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Camera.CameraViewOutputPolicyAuthoring
-  bindings: []
+  lastMaterializationSummary: Behavior Definition 'Mounted Camera Rig Behavior' projects
+    Presentation model 'Mounted'. Settings and shared Follow provenance are valid;
+    Apply / Rebuild preflights pipeline ownership.
