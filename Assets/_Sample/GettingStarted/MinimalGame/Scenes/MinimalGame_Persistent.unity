@@ -127,6 +127,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 708972637423863449, guid: 246e47599a291e44fb0c133dc3eda387, type: 3}
+      propertyPath: behaviorDefinition
+      value: 
+      objectReference: {fileID: 11400000, guid: e33910a5b0ab070458f08f29085317e2, type: 2}
+    - target: {fileID: 708972637423863449, guid: 246e47599a291e44fb0c133dc3eda387, type: 3}
+      propertyPath: lastMaterializationSummary
+      value: Behavior Definition 'Mounted Camera Rig Behavior' projects Presentation
+        model 'Mounted'. Settings and shared Follow provenance are valid; Apply /
+        Rebuild preflights pipeline ownership.
+      objectReference: {fileID: 0}
     - target: {fileID: 1930310760865531102, guid: 246e47599a291e44fb0c133dc3eda387, type: 3}
       propertyPath: bindings.Array.size
       value: 1
@@ -140,6 +150,10 @@ PrefabInstance:
       value: e65efd6d0404476d9d6e10e2509905cd
       objectReference: {fileID: 0}
     - target: {fileID: 1930310760865531102, guid: 246e47599a291e44fb0c133dc3eda387, type: 3}
+      propertyPath: bindings.Array.data[0].viewDefinition
+      value: 
+      objectReference: {fileID: 11400000, guid: 36d334f9b277cb44eac4e2bbc7f2194b, type: 2}
+    - target: {fileID: 1930310760865531102, guid: 246e47599a291e44fb0c133dc3eda387, type: 3}
       propertyPath: bindings.Array.data[0].viewport.width
       value: 1
       objectReference: {fileID: 0}
@@ -147,6 +161,10 @@ PrefabInstance:
       propertyPath: bindings.Array.data[0].viewport.height
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1930310760865531102, guid: 246e47599a291e44fb0c133dc3eda387, type: 3}
+      propertyPath: bindings.Array.data[0].outputDefinition
+      value: 
+      objectReference: {fileID: 11400000, guid: cc3bf2e602b4c694895fbff2a98b3ce9, type: 2}
     - target: {fileID: 5444860953511319855, guid: 246e47599a291e44fb0c133dc3eda387, type: 3}
       propertyPath: m_Name
       value: FG_DefaultCamera
@@ -155,6 +173,14 @@ PrefabInstance:
       propertyPath: outputId
       value: e65efd6d0404476d9d6e10e2509905cd
       objectReference: {fileID: 0}
+    - target: {fileID: 7030632889773184335, guid: 246e47599a291e44fb0c133dc3eda387, type: 3}
+      propertyPath: viewDefinition
+      value: 
+      objectReference: {fileID: 11400000, guid: 36d334f9b277cb44eac4e2bbc7f2194b, type: 2}
+    - target: {fileID: 7030632889773184335, guid: 246e47599a291e44fb0c133dc3eda387, type: 3}
+      propertyPath: outputDefinition
+      value: 
+      objectReference: {fileID: 11400000, guid: cc3bf2e602b4c694895fbff2a98b3ce9, type: 2}
     - target: {fileID: 7030632889773184335, guid: 246e47599a291e44fb0c133dc3eda387, type: 3}
       propertyPath: assignmentOwnerId
       value: b4f0bb7d90f948b59c658c2ce6e71f42
@@ -203,6 +229,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8915933296880121945, guid: 246e47599a291e44fb0c133dc3eda387, type: 3}
+      propertyPath: outputDefinition
+      value: 
+      objectReference: {fileID: 11400000, guid: cc3bf2e602b4c694895fbff2a98b3ce9, type: 2}
     - target: {fileID: 9207437510585411098, guid: 246e47599a291e44fb0c133dc3eda387, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0
