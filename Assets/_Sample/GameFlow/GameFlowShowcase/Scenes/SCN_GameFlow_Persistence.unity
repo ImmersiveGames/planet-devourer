@@ -167,6 +167,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6310827678702210881, guid: d0bb76da3f6dc77499ca8b6418b4f19d, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.953717
+      objectReference: {fileID: 0}
+    - target: {fileID: 6310827678702210881, guid: d0bb76da3f6dc77499ca8b6418b4f19d, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.30070576
+      objectReference: {fileID: 0}
     - target: {fileID: 7043609277635880890, guid: d0bb76da3f6dc77499ca8b6418b4f19d, type: 3}
       propertyPath: m_Name
       value: Persistent Camera

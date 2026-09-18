@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 289802579495635910}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.27568254, y: 0, z: 0, w: 0.96124876}
+  m_LocalRotation: {x: 0.30070576, y: 0, z: 0, w: 0.953717}
   m_LocalPosition: {x: 0, y: 17, z: -16}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -88,28 +88,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d1bda0d2aa64f85a2a0d71755cd1003, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.CameraAuthoring.CameraRigComposer
-  presentationIntent: 20
-  targetSourceKind: 10
-  targetSource: {fileID: 0}
-  explicitFollowTarget: {fileID: 8091125778278855379}
-  explicitLookAtTarget: {fileID: 8091125778278855379}
-  followRequirement: 20
-  lookAtRequirement: 0
-  followOffset: {x: 0, y: 5, z: -8}
-  sharedFollowMemberWeight: 1
-  sharedFollowMemberRadius: 0.5
-  sharedFollowFramingSize: 0.8
-  sharedFollowDamping: 2
-  sharedFollowFovRange: {x: 1, y: 100}
-  sharedFollowDollyRange: {x: -100, y: 100}
-  sharedFollowOrthoSizeRange: {x: 1, y: 1000}
-  mountedPositionDamping: 0
-  mountedRotationDamping: 0
-  thirdPersonShoulderOffset: {x: 0.5, y: -0.4, z: 0}
-  thirdPersonVerticalArmLength: 0.4
-  thirdPersonCameraSide: 1
-  thirdPersonCameraDistance: 2
-  thirdPersonDamping: {x: 0.1, y: 0.5, z: 0.3}
+  behaviorDefinition: {fileID: 11400000, guid: fc4059fd9ec5c2e409c3e2cd88cfd40b, type: 2}
   cinemachineCamera: {fileID: 5773039269403168542}
   materializedPresentationIntent: 20
   frameworkOwnedCinemachineCamera: {fileID: 0}
@@ -117,20 +96,13 @@ MonoBehaviour:
   frameworkOwnedRotationControl: {fileID: 0}
   frameworkOwnedSharedFollowTargetGroup: {fileID: 0}
   frameworkOwnedSharedFollowGroupFraming: {fileID: 0}
-  appliedViewAssignmentContextId: 
-  appliedViewAssignmentRevision: -1
-  appliedViewAvailabilityContextId: 
-  appliedViewAvailabilityRevision: -1
-  materializationRevision: 1
+  materializationRevision: 2
   logApplyRebuildDiagnostics: 1
-  lastApplyRebuildStatus: ApplySucceeded
+  lastApplyRebuildStatus: ValidationSucceeded
   lastBlockingIssue: 
-  lastTargetResolutionSummary: Camera target requirements satisfied.
-  lastMaterializationSummary: created='1' repaired='0' alreadyValid='5' skipped='2'
-    blocked='0' presentation='Follow' cameraOwnership='ExternalOrUnknown' positionOwnership='ExternalOrUnknown'
-    rotationOwnership='FrameworkOwned' revision='1'
-  lastResolvedFollowTarget: {fileID: 0}
-  lastResolvedLookAtTarget: {fileID: 0}
+  lastMaterializationSummary: Behavior Definition 'CameraRigBehavior_Fixed' projects
+    Presentation model 'Fixed'. Settings and shared Follow provenance are valid;
+    Apply / Rebuild preflights pipeline ownership.
 --- !u!1 &2525267510779617927
 GameObject:
   m_ObjectHideFlags: 0
@@ -142,8 +114,8 @@ GameObject:
   - component: {fileID: 6310827678702210881}
   - component: {fileID: 1486248935081468161}
   - component: {fileID: 6678929082926894029}
-  - component: {fileID: 6839676246481327867}
   - component: {fileID: 6488489830484717355}
+  - component: {fileID: 6839676246481327867}
   m_Layer: 0
   m_Name: Camera Output
   m_TagString: Untagged
@@ -249,26 +221,6 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   CustomBlends: {fileID: 0}
---- !u!114 &6839676246481327867
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2525267510779617927}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1bb91bee8e474876b090ac9cfd1f60e4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Camera.CameraOutputSessionBinding
-  outputId: camera.output.main
-  unityCamera: {fileID: 1486248935081468161}
-  cinemachineBrain: {fileID: 6678929082926894029}
-  defaultCameraRig: {fileID: 2706233871067227582}
-  initializeOnAwake: 1
-  logDiagnostics: 1
-  lastStatus: NotInitialized
-  lastDiagnostic: 
 --- !u!114 &6488489830484717355
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -313,37 +265,26 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
---- !u!1 &5823271875592969913
-GameObject:
+--- !u!114 &6839676246481327867
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8091125778278855379}
-  m_Layer: 0
-  m_Name: Session Camera Target
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8091125778278855379
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5823271875592969913}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 12, z: -8}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 3724838434628451047}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_GameObject: {fileID: 2525267510779617927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bb91bee8e474876b090ac9cfd1f60e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Camera.CameraOutputSessionBinding
+  outputDefinition: {fileID: 11400000, guid: cc3bf2e602b4c694895fbff2a98b3ce9, type: 2}
+  unityCamera: {fileID: 1486248935081468161}
+  cinemachineBrain: {fileID: 6678929082926894029}
+  defaultCameraRig: {fileID: 2706233871067227582}
+  initializeOnAwake: 1
+  logDiagnostics: 1
+  lastStatus: NotInitialized
+  lastDiagnostic: 
 --- !u!1 &7043609277635880890
 GameObject:
   m_ObjectHideFlags: 0
@@ -374,7 +315,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6310827678702210881}
-  - {fileID: 8091125778278855379}
   - {fileID: 2740129479775980679}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
