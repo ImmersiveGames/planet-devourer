@@ -332,12 +332,6 @@ MonoBehaviour:
   viewDefinition: {fileID: 11400000, guid: 36d334f9b277cb44eac4e2bbc7f2194b, type: 2}
   subjectPolicy: 10
   outputDefinition: {fileID: 11400000, guid: cc3bf2e602b4c694895fbff2a98b3ce9, type: 2}
-  viewport:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
 --- !u!1 &5444860953511319855
 GameObject:
   m_ObjectHideFlags: 0
@@ -429,6 +423,6 @@ MonoBehaviour:
   logApplyRebuildDiagnostics: 1
   lastApplyRebuildStatus: ValidationSucceeded
   lastBlockingIssue: 
-  lastMaterializationSummary: Behavior Definition 'Mounted Camera Rig Behavior' projects
-    Presentation model 'Mounted'. Settings and shared Follow provenance are valid;
-    Apply / Rebuild preflights pipeline ownership.
+  lastMaterializationSummary: Behavior Definition 'CameraRigBehavior_MountedFirstPerson'
+    projects Presentation model 'Mounted'. Settings and shared Follow provenance
+    are valid; Apply / Rebuild preflights pipeline ownership.
