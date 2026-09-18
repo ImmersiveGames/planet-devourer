@@ -281,6 +281,54 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 849629364786563314, guid: 94b74a0c6c1689f43b39b3f06361d234, type: 3}
   m_PrefabInstance: {fileID: 1065193914}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &788238863
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 788238865}
+  - component: {fileID: 788238864}
+  m_Layer: 0
+  m_Name: Basic Flow Route Content
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &788238864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 788238863}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f37a6125514e4491a7174d4372fc4c22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.RouteLifecycle.RouteContentContribution
+  route: {fileID: 11400000, guid: f37fb102bc09c414084baf0beb644470, type: 2}
+  localContentId: gameflow.basic.camera
+  requiredness: 10
+--- !u!4 &788238865
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 788238863}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1187581119}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &929337443
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -609,6 +657,109 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7772949321786337100, guid: a2d75b4383a4bfd45836c7be15a720aa, type: 3}
   m_PrefabInstance: {fileID: 1079241607}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1187581115
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1187581119}
+  - component: {fileID: 1187581118}
+  - component: {fileID: 1187581117}
+  m_Layer: 0
+  m_Name: Basic Flow Camera Rig
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1187581117
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1187581115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d1bda0d2aa64f85a2a0d71755cd1003, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.CameraAuthoring.CameraRigComposer
+  behaviorDefinition: {fileID: 11400000, guid: fc4059fd9ec5c2e409c3e2cd88cfd40b, type: 2}
+  cinemachineCamera: {fileID: 1187581118}
+  materializedPresentationIntent: 20
+  frameworkOwnedCinemachineCamera: {fileID: 0}
+  frameworkOwnedPositionControl: {fileID: 0}
+  frameworkOwnedRotationControl: {fileID: 0}
+  frameworkOwnedSharedFollowTargetGroup: {fileID: 0}
+  frameworkOwnedSharedFollowGroupFraming: {fileID: 0}
+  materializationRevision: 1
+  logApplyRebuildDiagnostics: 1
+  lastApplyRebuildStatus: ApplySucceeded
+  lastBlockingIssue: 
+  lastMaterializationSummary: created='0' repaired='0' alreadyValid='3' skipped='2'
+    blocked='0' presentation='Fixed' cameraOwnership='ExternalOrUnknown' positionOwnership='None'
+    rotationOwnership='None' revision='1'
+--- !u!114 &1187581118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1187581115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCamera
+  Priority:
+    Enabled: 0
+    m_Value: 0
+  OutputChannel: 1
+  StandbyUpdate: 2
+  m_StreamingVersion: 20241001
+  m_LegacyPriority: 0
+  Target:
+    TrackingTarget: {fileID: 0}
+    LookAtTarget: {fileID: 0}
+    CustomLookAtTarget: 0
+  Lens:
+    FieldOfView: 40
+    OrthographicSize: 10
+    NearClipPlane: 0.1
+    FarClipPlane: 5000
+    Dutch: 0
+    ModeOverride: 0
+    PhysicalProperties:
+      GateFit: 2
+      SensorSize: {x: 21.946, y: 16.002}
+      LensShift: {x: 0, y: 0}
+      FocusDistance: 10
+      Iso: 200
+      ShutterSpeed: 0.005
+      Aperture: 16
+      BladeCount: 5
+      Curvature: {x: 2, y: 11}
+      BarrelClipping: 0.25
+      Anamorphism: 0
+  BlendHint: 0
+--- !u!4 &1187581119
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1187581115}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0.63728845, y: 0.09998884, z: -0.08390059, w: 0.7594909}
+  m_LocalPosition: {x: 0, y: 12, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 788238865}
+  m_LocalEulerAnglesHint: {x: 80, y: 15, z: 0}
 --- !u!1001 &1372037527
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1417,3 +1568,4 @@ SceneRoots:
   - {fileID: 368570451}
   - {fileID: 1079241607}
   - {fileID: 1566985443227401893}
+  - {fileID: 788238865}
