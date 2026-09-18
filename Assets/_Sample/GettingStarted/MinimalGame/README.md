@@ -1,6 +1,6 @@
 # Minimal Game
 
-Status: **AUTHORING COMPLETE / PLAY MODE PROVEN — PLAYER COMPOSITION ALIGNED 2026-08-29**  
+Status: **AUTHORING COMPLETE / PLAY MODE PROVEN — CAMERA COMPOSITION NORMALIZED 2026-09-17**  
 UPM promotion: **PENDING package finalization/import proof**
 
 ## Purpose
@@ -46,87 +46,148 @@ Persistent Content
 one Route
 one Activity
 one gameplay scene
-one Scene-authored Local Player Host
+one Scene-Provided Local Player
 one Player Actor Runtime Host
-one Actor Presentation
-Mounted / First Person Camera
+one first-person Actor Presentation
+one logical Camera View
+one physical Camera Output
+one Output-owned Default Camera Rig
+Mounted / First Person presentation
 minimal movement/look Input
 optional persistent Audio runtime
 Route-owned ambient BGM
 ```
 
-The current materialized application uses:
+The application-specific assets are:
 
 ```text
-GameApplication_MinimalGame.asset
-PlayerProfiles/PlayerSessionProfile_MinimalGame.asset
-PlayerProfiles/PlayerSlotProfile_Player1_MinimalGame.asset
-PlayerProfiles/ActorProfile_MinimalPlayer.asset
-Routes/Route_MinimalGame.asset
-Activities/Activity_MinimalGame.asset
-Scenes/MinimalGame_Gameplay.unity
-Scenes/MinimalGame_Persistent.unity
-Shared/Prefabs/Scene-Provided Local Player.prefab
-Shared/Prefabs/Player Actor Runtime Host.prefab
-Shared/Prefabs/Presentation.prefab
-Scripts/MinimalFirstPersonLocomotion.cs
+Assets/_Sample/GettingStarted/MinimalGame/
+  GameApplication_MinimalGame.asset
+  PlayerProfiles/
+    PlayerSessionProfile_MinimalGame.asset
+    PlayerSlotProfile_Player1_MinimalGame.asset
+    FG_FirstPersonActorProfile.asset
+  Routes/
+    Route_MinimalGame.asset
+  Activities/
+    Activity_MinimalGame.asset
+  Scenes/
+    MinimalGame_Gameplay.unity
+    MinimalGame_Persistent.unity
+  Scripts/
+    MinimalFirstPersonLocomotion.cs
 ```
 
-The prefab/file names above are the currently materialized Unity assets. Asset names are changed only through asset-safe Unity move/rename operations that preserve `.meta` identity; documentation terminology does not silently rename serialized assets.
+The sample intentionally reuses the canonical shared Player and Camera authoring assets:
+
+```text
+Assets/_Sample/PlayerSamples/
+  Shared/Prefabs/
+    FG_Player.prefab
+    FG_PlayerActor.prefab
+  Player/Provisioned/
+    FG_SceneProvisioned.prefab
+  Player/Players/
+    FG_FirstPersonPresentation.prefab
+
+Assets/_Sample/Shared/Camera/
+  FG_DefaultCamera.prefab
+  CameraView_Gameplay.asset
+  CameraOutput_Main.asset
+  CameraRigBehavior_MountedFirstPerson.asset
+```
+
+Asset names are changed only through asset-safe Unity move/rename operations that preserve `.meta` identity; documentation terminology does not silently rename serialized assets.
 
 ## Scene-Provided Player composition
 
 The current Player authoring chain is:
 
 ```text
-ActorProfile_MinimalPlayer
-  PresentationPrefab = Presentation.prefab
+FG_FirstPersonActorProfile
+  PresentationPrefab = FG_FirstPersonPresentation.prefab
 
-Scene-Provided Local Player
-  PlayerInput
-  LocalPlayerHostAuthoring
-    ActorMount -> ActorMount
-    PlayerActorRuntimeHostPrefab -> Player Actor Runtime Host.prefab
-  SceneLocalPlayerAdmissionAuthoring
-  UnityPlayerInputGateAdapter
-  ActorMount
-    Player Actor Runtime Host
-      PlayerActorDeclaration
-      PlayerActorRuntimeHost
-        PresentationMount -> PresentationMount
-      CharacterController
-      MinimalFirstPersonLocomotion
-      PlayerGameplayInputConsumerBinding
-      PlayerGameplayCameraAuthoring
-      CameraMount
-      First Person Camera Rig
-        CameraRigComposer
-        Cinemachine Camera
-      PresentationMount
-        Presentation
-          ScenePlayerActorPresentationEvidence
+FG_SceneProvisioned
+  SceneProvidedLocalPlayerAuthoring
+  FG_Player
+    PlayerInput
+    LocalPlayerHostAuthoring
+      ActorMount
+      PlayerActorRuntimeHostPrefab = FG_PlayerActor.prefab
+    UnityPlayerInputGateAdapter
+    ActorMount
+      FG_PlayerActor
+        PlayerActorDeclaration
+        PlayerActorRuntimeHost
+          PresentationMount
+            FG_FirstPersonPresentation
+              PlayerGameplayInputReader
+              CharacterController
+              MinimalFirstPersonLocomotion
+              ActorCameraSubjectAuthoring
+                Observation Transform = CameraMount
+              CameraMount
 ```
 
-`Player Actor Runtime Host.prefab` is the Actor-independent runtime/gameplay shell supplied by `LocalPlayerHostAuthoring`. Its `PresentationMount` is the explicit mount for the Actor-specific `ActorProfile.PresentationPrefab`.
+The Player side exposes **Camera Subject evidence** only. Ordinary Player gameplay does not own a normal Camera request, Camera View, Camera Rig or Camera Output.
 
-For the Scene-Provided path, `SceneLocalPlayerAdmissionAuthoring` adopts the authored Runtime Host and the Presentation materialized under its exact `PresentationMount`. **Apply / Rebuild** materializes or repairs this composition; **Validate** verifies the resulting Profile + Runtime Host + Presentation evidence.
+The first-person presentation supplies the explicit observation Transform through `ActorCameraSubjectAuthoring`. Camera presentation is resolved by the Camera composition described below.
 
-Gameplay-specific components remain on the Runtime Host in this sample. They are not part of the Actor Presentation:
+## Camera composition
+
+Persistent Content instantiates the shared camera prefab:
 
 ```text
-CharacterController
-MinimalFirstPersonLocomotion
-PlayerGameplayInputConsumerBinding
-PlayerGameplayCameraAuthoring
-CameraMount
-First Person Camera Rig / CameraRigComposer
+MinimalGame_Persistent
+  -> FG_DefaultCamera
 ```
 
-The `Presentation.prefab` is intentionally minimal in this Getting Started sample. It proves the current Actor Presentation contract without adding unrelated character-visual complexity.
+The current Camera chain is:
+
+```text
+FG_DefaultCamera
+  Camera Output
+    Unity Camera
+    CinemachineBrain
+    CameraOutputAuthoring
+      Output Definition = CameraOutput_Main
+      Default Camera Rig = Default Camera Rig
+
+  Shared Camera Composition
+    CameraSharedComposition
+      View Definition = CameraView_Gameplay
+      Output Definition = CameraOutput_Main
+
+  Default Camera Rig
+    CameraRigComposer
+      Behavior Definition = CameraRigBehavior_MountedFirstPerson
+      Cinemachine Camera
+```
+
+Ownership is intentionally separated:
+
+```text
+Player / Actor Presentation
+  -> Camera Subject evidence
+
+CameraSharedComposition
+  -> logical View -> Output association
+
+CameraOutputAuthoring
+  -> physical Camera Output
+  -> Output-owned Default Camera Rig
+
+Unity Camera
+  -> physical full-screen rect
+```
+
+`CameraSharedComposition` carries no viewport/layout data. The Framework does not write `Camera.rect`.
+
+This sample is single-player and `SceneProvided`, so it does not require `PlayerInputManager` as a split-screen layout authority. Samples that demonstrate manager-provisioned local multiplayer own that separate physical layout concern.
 
 ## Runtime contract proven
 
-The accepted runtime proof for this authoring cut reached:
+The accepted Play Mode proof reaches:
 
 ```text
 Framework boot
@@ -141,36 +202,33 @@ startup Activity
 
 Scene Player
   -> Scene-Provided admission completed
-  -> Player Actor Runtime Host adopted
-  -> Presentation evidence valid
-
-PlayerGameplayInputConsumerBinding
-  -> current gameplay binding available
-  -> GameplayReady = true
+  -> current contextual Player projection established
 
 Camera Output
-  -> initialized
-  -> explicit Default Camera Rig = Session Camera Rig
+  -> CameraOutputAuthoring initialized
+  -> output = CameraOutput_Main
+  -> physical Unity Camera resolved
+  -> CinemachineBrain resolved
+  -> Default Camera Rig resolved
 
-Player Camera
-  -> Mounted / First Person
+Player Camera Subject
+  -> ActorCameraSubjectAuthoring exposes CameraMount
+
+Camera presentation
+  -> CameraView_Gameplay associated with CameraOutput_Main
+  -> Mounted / First Person presentation
 
 MinimalFirstPersonLocomotion
-  -> READY
-  -> Move input received
-  -> Look input received
+  -> Move / Look navigation operational
 
 Route BGM
   -> FrameworkRouteBgmBinding = PlayOwn / BGM_Floresta
-  -> Startup Activity publishes no Activity BGM intent
-  -> activityContentHandles = 0
-  -> Activity entry completion resolves pending Route intent
-  -> BGM_Floresta = Applied / confirmed
+  -> BGM_Floresta applied after Startup Activity entry
 ```
 
-The Player-owned first-person rig remains a normal eligible Local Player Camera request. The persistent `Session Camera Rig` is the explicit output Default and is not a fake Session Camera request.
+Local Player provisioning being reported as `NotConfigured` is expected in this sample because Host Provisioning is `SceneProvided`; it is not a manager-provisioned Player sample.
 
-Audio is **Ambient/Supporting**, not a primary Getting Started lesson. This sample intentionally demonstrates the simplest Route-owned BGM shape: the Route publishes `PlayOwn`, the Startup Activity has no Activity BGM binding, and lifecycle completion applies the pending Route cue without requiring Route -> Activity authoring.
+Audio is **Ambient/Supporting**, not a primary Getting Started lesson.
 
 ## Run
 
@@ -189,6 +247,7 @@ Play
   -> Route enters
   -> Activity enters
   -> Scene Player becomes gameplay-ready
+  -> Camera Subject becomes available
   -> Mounted Camera presents first-person view
   -> user navigates
 ```
@@ -200,33 +259,35 @@ No objectives, collectibles, combat, mission flow, Route switching, Activity swi
 The canonical inspection path is:
 
 ```text
-GameApplication
-  -> PlayerSessionProfile (HostProvisioning = SceneProvided)
-  -> Route
-  -> Activity
-  -> Scene Player
-      -> Scene-Provided Local Player
-          -> PlayerInput
-          -> LocalPlayerHostAuthoring
-          -> SceneLocalPlayerAdmissionAuthoring
-          -> UnityPlayerInputGateAdapter
-          -> ActorMount
-              -> Player Actor Runtime Host
-                  -> PlayerActorDeclaration
-                  -> PlayerActorRuntimeHost
-                  -> PlayerGameplayInputConsumerBinding
-                  -> PlayerGameplayCameraAuthoring
-                  -> CharacterController
+GameApplication_MinimalGame
+  -> PlayerSessionProfile_MinimalGame (HostProvisioning = SceneProvided)
+  -> Route_MinimalGame
+  -> Activity_MinimalGame
+
+MinimalGame_Gameplay
+  -> FG_SceneProvisioned
+      -> SceneProvidedLocalPlayerAuthoring
+      -> FG_Player / PlayerInput / LocalPlayerHostAuthoring
+      -> FG_PlayerActor
+          -> PlayerActorRuntimeHost
+          -> PresentationMount
+              -> FG_FirstPersonPresentation
                   -> MinimalFirstPersonLocomotion
-                  -> CameraMount
-                  -> First Person Camera Rig / CameraRigComposer
-                  -> PresentationMount
-                      -> Presentation
-                          -> ScenePlayerActorPresentationEvidence
-      -> ActorProfile_MinimalPlayer / PresentationPrefab
-  -> Persistent Content / CameraOutputSessionBinding
-  -> Persistent Content / AudioRuntimeHost + FrameworkBgmDirector
-  -> Route / FrameworkRouteBgmBinding (PlayOwn / BGM_Floresta)
+                  -> ActorCameraSubjectAuthoring
+                     -> CameraMount
+
+MinimalGame_Persistent
+  -> FG_DefaultCamera
+      -> CameraOutputAuthoring / CameraOutput_Main
+      -> CameraSharedComposition
+         -> CameraView_Gameplay
+         -> CameraOutput_Main
+      -> Default Camera Rig / CameraRigComposer
+         -> CameraRigBehavior_MountedFirstPerson
+  -> AudioRuntimeHost + FrameworkBgmDirector
+
+Route_MinimalGame
+  -> FrameworkRouteBgmBinding (PlayOwn / BGM_Floresta)
 ```
 
 ## Completion boundary

@@ -1,6 +1,6 @@
 # Getting Started
 
-Status: **SAMPLE 00 COMPLETE FOR AUTHORING / PLAY MODE PROOF — 2026-08-22**  
+Status: **SAMPLE 00 COMPLETE FOR AUTHORING / PLAY MODE PROOF — CAMERA COMPOSITION NORMALIZED 2026-09-17**  
 UPM promotion: **PENDING package finalization/import proof**
 
 ## Demonstration Application
@@ -33,10 +33,30 @@ one Route
 one Activity
 Scene-Provided Player
 GameplayReady participation
-Mounted / First Person Camera
-explicit persistent Default Camera Rig
+explicit Actor Camera Subject
+typed Camera View -> Camera Output association
+Output-owned Default Camera Rig
+Mounted / First Person presentation
 minimal Move / Look navigation
 ```
+
+Camera presentation follows the current logical/physical ownership split:
+
+```text
+Scene Player / Actor Presentation
+  -> ActorCameraSubjectAuthoring
+  -> Camera Subject evidence
+
+CameraSharedComposition
+  -> CameraView_Gameplay
+  -> CameraOutput_Main
+
+CameraOutputAuthoring
+  -> physical Unity Camera + CinemachineBrain
+  -> explicit Default Camera Rig
+```
+
+Getting Started is single-player and Scene-Provided. It does not require a `PlayerInputManager` split-screen layout authority. The physical Unity Camera remains full-screen and the Framework does not author or write `Camera.rect`.
 
 The current Play Mode proof finishes with:
 
@@ -44,7 +64,8 @@ The current Play Mode proof finishes with:
 Framework boot succeeded
 Activity Ready
 blockingIssues = 0
-Player gameplay binding READY
+Camera Output initialized
+Scene Player admitted
 Move received
 Look received
 ```

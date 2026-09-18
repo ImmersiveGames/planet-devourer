@@ -1,36 +1,53 @@
 # Minimal Game — Materialization Checklist
 
-Status: **MATERIALIZED / PLAY MODE PROVEN — PLAYER COMPOSITION ALIGNED 2026-08-29**
+Status: **MATERIALIZED / PLAY MODE PROVEN — CAMERA COMPOSITION NORMALIZED 2026-09-17**
 
-The planning scaffold originally used this file to record Unity assets that still had to be created. The Minimal Game materialization target is now present and aligned with the current Player Actor Runtime Host + Presentation contract.
+The Minimal Game materialization target is present and aligned with the current Scene-Provided Player, Actor Camera Subject and viewport-free Camera composition contracts.
 
 ## Materialized application assets
 
 ```text
-GameApplication_MinimalGame.asset
+Assets/_Sample/GettingStarted/MinimalGame/
+  GameApplication_MinimalGame.asset
 
-PlayerProfiles/
-  PlayerSessionProfile_MinimalGame.asset
-  PlayerSlotProfile_Player1_MinimalGame.asset
-  ActorProfile_MinimalPlayer.asset
+  PlayerProfiles/
+    PlayerSessionProfile_MinimalGame.asset
+    PlayerSlotProfile_Player1_MinimalGame.asset
+    FG_FirstPersonActorProfile.asset
 
-Routes/
-  Route_MinimalGame.asset
+  Routes/
+    Route_MinimalGame.asset
 
-Activities/
-  Activity_MinimalGame.asset
+  Activities/
+    Activity_MinimalGame.asset
 
-Scenes/
-  MinimalGame_Gameplay.unity
-  MinimalGame_Persistent.unity
+  Scenes/
+    MinimalGame_Gameplay.unity
+    MinimalGame_Persistent.unity
 
-Shared/Prefabs/
-  Scene-Provided Local Player.prefab
-  Player Actor Runtime Host.prefab
-  Presentation.prefab
+  Scripts/
+    MinimalFirstPersonLocomotion.cs
+```
 
-Scripts/
-  MinimalFirstPersonLocomotion.cs
+## Reused canonical sample assets
+
+```text
+Assets/_Sample/PlayerSamples/
+  Shared/Prefabs/
+    FG_Player.prefab
+    FG_PlayerActor.prefab
+
+  Player/Provisioned/
+    FG_SceneProvisioned.prefab
+
+  Player/Players/
+    FG_FirstPersonPresentation.prefab
+
+Assets/_Sample/Shared/Camera/
+  FG_DefaultCamera.prefab
+  CameraView_Gameplay.asset
+  CameraOutput_Main.asset
+  CameraRigBehavior_MountedFirstPerson.asset
 ```
 
 ## Required Player composition verified
@@ -38,62 +55,86 @@ Scripts/
 ```text
 PlayerSessionProfile_MinimalGame
   Host Provisioning = SceneProvided
+  Supported Slot = PlayerSlotProfile_Player1_MinimalGame
 
-ActorProfile_MinimalPlayer
-  PresentationPrefab = Presentation.prefab
+FG_FirstPersonActorProfile
+  PresentationPrefab = FG_FirstPersonPresentation.prefab
 
-Scene-Provided Local Player
-  PlayerInput
-  LocalPlayerHostAuthoring
-    ActorMount = ActorMount
-    PlayerActorRuntimeHostPrefab = Player Actor Runtime Host.prefab
-  SceneLocalPlayerAdmissionAuthoring
-  UnityPlayerInputGateAdapter
-  ActorMount
-    Player Actor Runtime Host
-      PlayerActorDeclaration
-      PlayerActorRuntimeHost
-        PresentationMount = PresentationMount
-      CharacterController
-      MinimalFirstPersonLocomotion
-      PlayerGameplayInputConsumerBinding
-      PlayerGameplayCameraAuthoring
-      CameraMount
-      First Person Camera Rig
-        CameraRigComposer presentation = Mounted
-        Cinemachine Camera
-      PresentationMount
-        Presentation
-          ScenePlayerActorPresentationEvidence
+FG_SceneProvisioned
+  SceneProvidedLocalPlayerAuthoring
+  FG_Player
+    PlayerInput
+    LocalPlayerHostAuthoring
+      ActorMount
+      PlayerActorRuntimeHostPrefab = FG_PlayerActor.prefab
+    UnityPlayerInputGateAdapter
+    ActorMount
+      FG_PlayerActor
+        PlayerActorDeclaration
+        PlayerActorRuntimeHost
+          PresentationMount
+            FG_FirstPersonPresentation
+              PlayerGameplayInputReader
+              CharacterController
+              MinimalFirstPersonLocomotion
+              ActorCameraSubjectAuthoring
+                Observation Transform = CameraMount
+              CameraMount
 
 Activity_MinimalGame
   Player participation requirement = GameplayReady
-
-MinimalGame_Persistent
-  CameraOutputSessionBinding
-  Unity Camera
-  CinemachineBrain
-  explicit Default Camera Rig = Session Camera Rig
 ```
 
-The Runtime Host owns the sample-specific gameplay composition. The Actor-specific Presentation is materialized separately under the exact `PresentationMount`; it does not own the CharacterController, locomotion, gameplay input binding or gameplay camera authoring.
+The Player side provides Camera Subject evidence. It does not own a normal Camera request, Camera View, Camera Rig or Camera Output.
 
-For the Scene-Provided path, `SceneLocalPlayerAdmissionAuthoring` adopts the authored Runtime Host and Presentation. **Apply / Rebuild** materializes or repairs the current Profile + Runtime Host + Presentation composition, and **Validate** verifies the resulting evidence.
+## Required Camera composition verified
+
+```text
+MinimalGame_Persistent
+  FG_DefaultCamera
+    Camera Output
+      Unity Camera
+      CinemachineBrain
+      CameraOutputAuthoring
+        Output Definition = CameraOutput_Main
+        Default Camera Rig = Default Camera Rig
+
+    Shared Camera Composition
+      CameraSharedComposition
+        View Definition = CameraView_Gameplay
+        Output Definition = CameraOutput_Main
+
+    Default Camera Rig
+      CameraRigComposer
+        Behavior Definition = CameraRigBehavior_MountedFirstPerson
+        Cinemachine Camera
+```
+
+Camera ownership constraints:
+
+```text
+CameraSharedComposition carries no viewport
+Framework does not write Camera.rect
+Unity Camera remains authored full-screen
+PlayerInputManager is not required for this single-player SceneProvided sample
+```
 
 ## Runtime evidence
 
-The accepted Play Mode proof reached:
+The accepted Play Mode proof reaches:
 
 ```text
-Scene-Provided authoring Validate = Valid
-Framework boot succeeded
-Activity Ready
+Scene-Provided authoring validation = valid
+CameraOutputAuthoring = Initialized
+Framework boot = Succeeded
+Activity = Ready
 blockingIssues = 0
-Player gameplay binding READY
-Mounted / First Person Camera active
-Move input received
-Look input received
+Scene Player contextual projection = established
+Mounted / First Person presentation = operational
+Move / Look navigation = operational
 ```
+
+`Local Player provisioning is not configured` is expected here because the sample uses `HostProvisioning = SceneProvided`.
 
 No additional Unity asset is required to close the **current authoring/proving phase** of Getting Started / Minimal Game.
 
