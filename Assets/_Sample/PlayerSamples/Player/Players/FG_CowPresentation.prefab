@@ -32,7 +32,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6426541768166775755}
+  m_Father: {fileID: 1875531316579996745}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2777285080746547306
 MonoBehaviour:
@@ -164,43 +164,27 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 2137699828295470116, guid: 415b0b4f2abd676408948fd4ebaa390b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 984876330475896748}
     - targetCorrespondingSourceObject: {fileID: 5909235418024091049, guid: 415b0b4f2abd676408948fd4ebaa390b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5298694241482542655}
-    - targetCorrespondingSourceObject: {fileID: 6810061460000113574, guid: 415b0b4f2abd676408948fd4ebaa390b, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 984876330475896748}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1818770758136001976, guid: 415b0b4f2abd676408948fd4ebaa390b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: -5316050080023629866}
-    - targetCorrespondingSourceObject: {fileID: 1818770758136001976, guid: 415b0b4f2abd676408948fd4ebaa390b, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 3312503039770643906}
-    - targetCorrespondingSourceObject: {fileID: 7118937566719315242, guid: 415b0b4f2abd676408948fd4ebaa390b, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2008971216492967742}
   m_SourcePrefab: {fileID: 100100000, guid: 415b0b4f2abd676408948fd4ebaa390b, type: 3}
+--- !u!4 &1875531316579996745 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2137699828295470116, guid: 415b0b4f2abd676408948fd4ebaa390b, type: 3}
+  m_PrefabInstance: {fileID: 553269171562485869}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2202270384285838805 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1818770758136001976, guid: 415b0b4f2abd676408948fd4ebaa390b, type: 3}
   m_PrefabInstance: {fileID: 553269171562485869}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &-5316050080023629866
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2202270384285838805}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a99abef159b49deb652fe9c4f74fefc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.PlayerGameplayCameraAuthoring
-  requiredness: 10
-  cameraRig: {fileID: 2008971216492967742}
-  precedence: 50
 --- !u!114 &3312503039770643906
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -214,7 +198,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Immersive.Framework.Samples.Player.MinimalFollowMovement
   moveAction: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  movementReference: {fileID: 6426541768166775755}
+  movementReference: {fileID: 0}
   moveSpeed: 4
   rotationSpeed: 720
 --- !u!4 &6173389645587645892 stripped
@@ -222,58 +206,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5909235418024091049, guid: 415b0b4f2abd676408948fd4ebaa390b, type: 3}
   m_PrefabInstance: {fileID: 553269171562485869}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &6426541768166775755 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6810061460000113574, guid: 415b0b4f2abd676408948fd4ebaa390b, type: 3}
-  m_PrefabInstance: {fileID: 553269171562485869}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &7306545718902461767 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7118937566719315242, guid: 415b0b4f2abd676408948fd4ebaa390b, type: 3}
-  m_PrefabInstance: {fileID: 553269171562485869}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2008971216492967742
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7306545718902461767}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d1bda0d2aa64f85a2a0d71755cd1003, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.CameraAuthoring.CameraRigComposer
-  presentationIntent: 10
-  targetSourceKind: 10
-  targetSource: {fileID: 0}
-  explicitFollowTarget: {fileID: 5298694241482542655}
-  explicitLookAtTarget: {fileID: 5298694241482542655}
-  followRequirement: 20
-  lookAtRequirement: 10
-  followOffset: {x: 0, y: 5, z: -8}
-  mountedPositionDamping: 0
-  mountedRotationDamping: 0
-  thirdPersonShoulderOffset: {x: 0.5, y: -0.4, z: 0}
-  thirdPersonVerticalArmLength: 0.4
-  thirdPersonCameraSide: 1
-  thirdPersonCameraDistance: 2
-  thirdPersonDamping: {x: 0.1, y: 0.5, z: 0.3}
-  cinemachineCamera: {fileID: 2777285080746547306}
-  materializedPresentationIntent: 10
-  frameworkOwnedCinemachineCamera: {fileID: 2777285080746547306}
-  frameworkOwnedPositionControl: {fileID: 3444446162232320514}
-  frameworkOwnedRotationControl: {fileID: 764311278307035327}
-  materializationRevision: 2
-  logApplyRebuildDiagnostics: 1
-  lastApplyRebuildStatus: ApplySucceeded
-  lastBlockingIssue: 
-  lastTargetResolutionSummary: Camera target requirements satisfied.
-  lastMaterializationSummary: created='0' repaired='1' alreadyValid='5' skipped='2'
-    blocked='0' presentation='Follow' cameraOwnership='FrameworkOwned' positionOwnership='FrameworkOwned'
-    rotationOwnership='FrameworkOwned' revision='2'
-  lastResolvedFollowTarget: {fileID: 5298694241482542655}
-  lastResolvedLookAtTarget: {fileID: 5298694241482542655}
 --- !u!1001 &573467909771312990
 PrefabInstance:
   m_ObjectHideFlags: 0
