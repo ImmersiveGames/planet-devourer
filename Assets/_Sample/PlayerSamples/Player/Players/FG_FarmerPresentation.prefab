@@ -173,9 +173,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1818770758136001976, guid: 415b0b4f2abd676408948fd4ebaa390b, type: 3}
       insertIndex: -1
-      addedObject: {fileID: -5316050080023629866}
-    - targetCorrespondingSourceObject: {fileID: 1818770758136001976, guid: 415b0b4f2abd676408948fd4ebaa390b, type: 3}
-      insertIndex: -1
       addedObject: {fileID: -1306648185586518416}
     - targetCorrespondingSourceObject: {fileID: 7118937566719315242, guid: 415b0b4f2abd676408948fd4ebaa390b, type: 3}
       insertIndex: -1
@@ -186,21 +183,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1818770758136001976, guid: 415b0b4f2abd676408948fd4ebaa390b, type: 3}
   m_PrefabInstance: {fileID: 553269171562485869}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &-5316050080023629866
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2202270384285838805}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a99abef159b49deb652fe9c4f74fefc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.PlayerGameplayCameraAuthoring
-  requiredness: 10
-  cameraRig: {fileID: 2008971216492967742}
-  precedence: 50
 --- !u!114 &-1306648185586518416
 MonoBehaviour:
   m_ObjectHideFlags: 0

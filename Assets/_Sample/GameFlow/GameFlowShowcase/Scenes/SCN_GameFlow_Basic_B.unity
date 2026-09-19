@@ -443,8 +443,8 @@ MonoBehaviour:
   frameworkOwnedCinemachineCamera: {fileID: 0}
   frameworkOwnedPositionControl: {fileID: 0}
   frameworkOwnedRotationControl: {fileID: 0}
-  frameworkOwnedSharedFollowTargetGroup: {fileID: 0}
-  frameworkOwnedSharedFollowGroupFraming: {fileID: 0}
+  frameworkOwnedGroupTargetGroup: {fileID: 0}
+  frameworkOwnedGroupFraming: {fileID: 0}
   materializationRevision: 1
   logApplyRebuildDiagnostics: 1
   lastApplyRebuildStatus: ApplySucceeded

@@ -1,6 +1,6 @@
 # Player Provisioning (Manager-Provisioned runtime mode)
 
-Status: **CURRENT PLAYER PROVISIONING CUT — PLAY MODE PROVEN 2026-08-24**
+Status: **CAMERA-029-F MIGRATED LOCALLY — prior Player proof preserved; Camera Unity revalidation pending**
 
 Canonical Player sample authority: `FG-ADR-002 — Player Sample Scope and Demonstration Architecture`.
 
@@ -24,7 +24,8 @@ Player Provisioning authority
   -> physical Actor materialization
   -> Activity participation / readiness
   -> gameplay input
-  -> Player Camera
+  -> Actor Camera Subject
+  -> Camera Composition request
   -> Leave / Rejoin occurrence
 ```
 
@@ -80,9 +81,9 @@ Movement / Look
   -> horizontal Look rotates Player yaw
   -> vertical Look controls camera pitch
 
-Player Camera
-  -> Third Person
-  -> follows current Player
+Camera presentation
+  -> Actor exposes Camera Subject
+  -> Composition publishes Third Person request
 
 Leave / Rejoin
   -> Leave releases current occurrence
@@ -123,21 +124,25 @@ Route and Activity BGM authoring are independent. The Activity owns only its own
 
 ## Camera composition
 
-The current Player Camera uses a Player-owned Third Person rig:
+The Actor supplies observation evidence; the persistent Camera Composition owns gameplay participation:
 
 ```text
-Local Player Logical
-├─ Player Gameplay Camera
-│   Required
-│   precedence = 50
-├─ Camera Tracking Pivot
-└─ Third Person Camera Rig
-    ├─ Camera Rig Composer
-    │   Model = Third Person
-    └─ Cinemachine Camera (materialized by composer)
+Actor Presentation
+  -> ActorCameraSubjectAuthoring
+     Observation Transform = CameraMount
+
+Manager Provisioned Camera
+  -> Camera Output / CameraOutput_Main
+     Default Camera Rig = Fixed
+  -> CameraSharedComposition
+     SubjectPolicy = AllAvailableSubjects
+     Composition Rig = Gameplay Camera Rig
+     request precedence = 50
+  -> Gameplay Camera Rig
+     CameraRigBehavior_ThirdPerson
 ```
 
-The persistent Session Camera Rig remains the explicit Camera Output Default. Join makes the eligible Player request take the output; release returns presentation to the Default when no normal winner remains.
+Boot without a Subject presents the target-independent Fixed Default. Join creates a new Actor occurrence and Camera Subject, activating the Composition request and ThirdPerson rig. Leave releases the request and restores Default; rejoin uses only the new occurrence.
 
 ## Run / observe
 
@@ -169,7 +174,8 @@ GameApplication
       HostProvisioning = ManagerProvisioned
   -> Persistent Content
       Local Player Provisioning
-      Camera Output / Default Camera
+      Camera Output / Fixed Default Camera Rig
+      Camera Composition / Third Person Gameplay Rig
       AudioRuntimeHost + FrameworkBgmDirector
   -> Route
   -> Activity
@@ -178,8 +184,7 @@ GameApplication
   -> Logical Player Actor
       gameplay input
       movement/look
-      Player Gameplay Camera
-      Third Person Camera Rig
+      ActorCameraSubjectAuthoring / CameraMount
 ```
 
 ## Boundary

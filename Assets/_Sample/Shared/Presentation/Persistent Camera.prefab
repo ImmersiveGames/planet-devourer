@@ -94,14 +94,14 @@ MonoBehaviour:
   frameworkOwnedCinemachineCamera: {fileID: 0}
   frameworkOwnedPositionControl: {fileID: 0}
   frameworkOwnedRotationControl: {fileID: 0}
-  frameworkOwnedSharedFollowTargetGroup: {fileID: 0}
-  frameworkOwnedSharedFollowGroupFraming: {fileID: 0}
+  frameworkOwnedGroupTargetGroup: {fileID: 0}
+  frameworkOwnedGroupFraming: {fileID: 0}
   materializationRevision: 2
   logApplyRebuildDiagnostics: 1
   lastApplyRebuildStatus: ValidationSucceeded
   lastBlockingIssue: 
   lastMaterializationSummary: Behavior Definition 'CameraRigBehavior_Fixed' projects
-    Presentation model 'Fixed'. Settings and shared Follow provenance are valid;
+    Presentation model 'Fixed'. Settings and Group provenance are valid;
     Apply / Rebuild preflights pipeline ownership.
 --- !u!1 &2525267510779617927
 GameObject:

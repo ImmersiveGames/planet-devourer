@@ -1,6 +1,6 @@
 # Minimal Game
 
-Status: **AUTHORING COMPLETE / PLAY MODE PROVEN — CAMERA COMPOSITION NORMALIZED 2026-09-17**  
+Status: **CAMERA-029-F MIGRATED LOCALLY — prior Play Mode proof predates this Camera migration; Unity revalidation pending**
 UPM promotion: **PENDING package finalization/import proof**
 
 ## Purpose
@@ -49,7 +49,7 @@ one gameplay scene
 one Scene-Provided Local Player
 one Player Actor Runtime Host
 one first-person Actor Presentation
-one logical Camera View
+one Camera Composition
 one physical Camera Output
 one Output-owned Default Camera Rig
 Mounted / First Person presentation
@@ -92,8 +92,8 @@ Assets/_Sample/PlayerSamples/
 
 Assets/_Sample/Shared/Camera/
   FG_DefaultCamera.prefab
-  CameraView_Gameplay.asset
   CameraOutput_Main.asset
+  CameraRigBehavior_Fixed.asset
   CameraRigBehavior_MountedFirstPerson.asset
 ```
 
@@ -129,7 +129,7 @@ FG_SceneProvisioned
               CameraMount
 ```
 
-The Player side exposes **Camera Subject evidence** only. Ordinary Player gameplay does not own a normal Camera request, Camera View, Camera Rig or Camera Output.
+The Player side exposes **Camera Subject evidence** only. Ordinary Player gameplay does not own Camera Composition, a normal Camera request, Camera Rig or Camera Output.
 
 The first-person presentation supplies the explicit observation Transform through `ActorCameraSubjectAuthoring`. Camera presentation is resolved by the Camera composition described below.
 
@@ -155,10 +155,17 @@ FG_DefaultCamera
 
   Shared Camera Composition
     CameraSharedComposition
-      View Definition = CameraView_Gameplay
       Output Definition = CameraOutput_Main
+      Composition Rig = Gameplay Camera Rig
+      Subject Policy = AllAvailableSubjects
+      Request Precedence = 50
 
   Default Camera Rig
+    CameraRigComposer
+      Behavior Definition = CameraRigBehavior_Fixed
+      Cinemachine Camera
+
+  Gameplay Camera Rig
     CameraRigComposer
       Behavior Definition = CameraRigBehavior_MountedFirstPerson
       Cinemachine Camera
@@ -171,7 +178,9 @@ Player / Actor Presentation
   -> Camera Subject evidence
 
 CameraSharedComposition
-  -> logical View -> Output association
+  -> Subject membership
+  -> Mounted Gameplay Rig
+  -> CameraRequest participation
 
 CameraOutputAuthoring
   -> physical Camera Output
@@ -215,7 +224,7 @@ Player Camera Subject
   -> ActorCameraSubjectAuthoring exposes CameraMount
 
 Camera presentation
-  -> CameraView_Gameplay associated with CameraOutput_Main
+  -> Camera Composition publishes Mounted rig to CameraOutput_Main
   -> Mounted / First Person presentation
 
 MinimalFirstPersonLocomotion
@@ -280,9 +289,11 @@ MinimalGame_Persistent
   -> FG_DefaultCamera
       -> CameraOutputAuthoring / CameraOutput_Main
       -> CameraSharedComposition
-         -> CameraView_Gameplay
          -> CameraOutput_Main
+         -> Gameplay Camera Rig
       -> Default Camera Rig / CameraRigComposer
+         -> CameraRigBehavior_Fixed
+      -> Gameplay Camera Rig / CameraRigComposer
          -> CameraRigBehavior_MountedFirstPerson
   -> AudioRuntimeHost + FrameworkBgmDirector
 

@@ -127,20 +127,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 708972637423863449, guid: 246e47599a291e44fb0c133dc3eda387, type: 3}
-      propertyPath: lastApplyRebuildStatus
-      value: ApplySucceeded
-      objectReference: {fileID: 0}
-    - target: {fileID: 708972637423863449, guid: 246e47599a291e44fb0c133dc3eda387, type: 3}
-      propertyPath: materializationRevision
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 708972637423863449, guid: 246e47599a291e44fb0c133dc3eda387, type: 3}
-      propertyPath: lastMaterializationSummary
-      value: created='0' repaired='0' alreadyValid='5' skipped='2' blocked='0' presentation='Mounted'
-        cameraOwnership='FrameworkOwned' positionOwnership='FrameworkOwned' rotationOwnership='FrameworkOwned'
-        revision='3'
-      objectReference: {fileID: 0}
     - target: {fileID: 5444860953511319855, guid: 246e47599a291e44fb0c133dc3eda387, type: 3}
       propertyPath: m_Name
       value: FG_DefaultCamera

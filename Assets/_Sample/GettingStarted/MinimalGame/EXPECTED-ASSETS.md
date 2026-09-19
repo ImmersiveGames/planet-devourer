@@ -1,6 +1,6 @@
 # Minimal Game — Materialization Checklist
 
-Status: **MATERIALIZED / PLAY MODE PROVEN — CAMERA COMPOSITION NORMALIZED 2026-09-17**
+Status: **CAMERA-029-F MATERIALIZED LOCALLY — Unity import and Play Mode revalidation pending**
 
 The Minimal Game materialization target is present and aligned with the current Scene-Provided Player, Actor Camera Subject and viewport-free Camera composition contracts.
 
@@ -45,8 +45,8 @@ Assets/_Sample/PlayerSamples/
 
 Assets/_Sample/Shared/Camera/
   FG_DefaultCamera.prefab
-  CameraView_Gameplay.asset
   CameraOutput_Main.asset
+  CameraRigBehavior_Fixed.asset
   CameraRigBehavior_MountedFirstPerson.asset
 ```
 
@@ -85,7 +85,7 @@ Activity_MinimalGame
   Player participation requirement = GameplayReady
 ```
 
-The Player side provides Camera Subject evidence. It does not own a normal Camera request, Camera View, Camera Rig or Camera Output.
+The Player side provides Camera Subject evidence. It does not own Camera Composition, a normal Camera request, Camera Rig or Camera Output.
 
 ## Required Camera composition verified
 
@@ -101,10 +101,17 @@ MinimalGame_Persistent
 
     Shared Camera Composition
       CameraSharedComposition
-        View Definition = CameraView_Gameplay
         Output Definition = CameraOutput_Main
+        Composition Rig = Gameplay Camera Rig
+        Subject Policy = AllAvailableSubjects
+        Request Precedence = 50
 
     Default Camera Rig
+      CameraRigComposer
+        Behavior Definition = CameraRigBehavior_Fixed
+        Cinemachine Camera
+
+    Gameplay Camera Rig
       CameraRigComposer
         Behavior Definition = CameraRigBehavior_MountedFirstPerson
         Cinemachine Camera

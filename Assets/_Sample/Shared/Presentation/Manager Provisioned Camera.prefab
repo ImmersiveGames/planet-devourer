@@ -42,11 +42,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 31a959d49e7541e9b4998d2d507f02f2, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.CameraAuthoring.CameraSharedComposition
-  viewDefinition: {fileID: 11400000, guid: 36d334f9b277cb44eac4e2bbc7f2194b, type: 2}
   subjectPolicy: 10
   outputDefinition: {fileID: 11400000, guid: cc3bf2e602b4c694895fbff2a98b3ce9, type: 2}
+  compositionRig: {fileID: 810010000000000003}
+  requestPrecedence: 50
 --- !u!1001 &1489974628318732129
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -57,33 +58,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 289802579495635910, guid: d0bb76da3f6dc77499ca8b6418b4f19d, type: 3}
       propertyPath: m_Name
-      value: Player Camera Rig
-      objectReference: {fileID: 0}
-    - target: {fileID: 2706233871067227582, guid: d0bb76da3f6dc77499ca8b6418b4f19d, type: 3}
-      propertyPath: behaviorDefinition
-      value: 
-      objectReference: {fileID: 11400000, guid: ffb1f6fa1818b6d468c2a126960abad4, type: 2}
-    - target: {fileID: 2706233871067227582, guid: d0bb76da3f6dc77499ca8b6418b4f19d, type: 3}
-      propertyPath: lastApplyRebuildStatus
-      value: ValidationSucceeded
-      objectReference: {fileID: 0}
-    - target: {fileID: 2706233871067227582, guid: d0bb76da3f6dc77499ca8b6418b4f19d, type: 3}
-      propertyPath: materializationRevision
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 2706233871067227582, guid: d0bb76da3f6dc77499ca8b6418b4f19d, type: 3}
-      propertyPath: lastMaterializationSummary
-      value: Behavior Definition 'CameraRigBehavior_ThirdPerson' projects Presentation
-        model 'ThirdPerson'. Settings and shared Follow provenance are valid; Apply
-        / Rebuild preflights pipeline ownership.
-      objectReference: {fileID: 0}
-    - target: {fileID: 2706233871067227582, guid: d0bb76da3f6dc77499ca8b6418b4f19d, type: 3}
-      propertyPath: frameworkOwnedPositionControl
-      value: 
-      objectReference: {fileID: 1447175822763226467}
-    - target: {fileID: 2706233871067227582, guid: d0bb76da3f6dc77499ca8b6418b4f19d, type: 3}
-      propertyPath: materializedPresentationIntent
-      value: 40
+      value: Default Camera Rig
       objectReference: {fileID: 0}
     - target: {fileID: 3724838434628451047, guid: d0bb76da3f6dc77499ca8b6418b4f19d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -143,23 +118,152 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 3724838434628451047, guid: d0bb76da3f6dc77499ca8b6418b4f19d, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8701833161655800883}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 289802579495635910, guid: d0bb76da3f6dc77499ca8b6418b4f19d, type: 3}
+    - targetCorrespondingSourceObject: {fileID: 3724838434628451047, guid: d0bb76da3f6dc77499ca8b6418b4f19d, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1447175822763226467}
+      addedObject: {fileID: 810010000000000002}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d0bb76da3f6dc77499ca8b6418b4f19d, type: 3}
---- !u!1 &1200457715707286695 stripped
+--- !u!1 &810010000000000001
 GameObject:
-  m_CorrespondingSourceObject: {fileID: 289802579495635910, guid: d0bb76da3f6dc77499ca8b6418b4f19d, type: 3}
-  m_PrefabInstance: {fileID: 1489974628318732129}
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1447175822763226467
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 810010000000000002}
+  - component: {fileID: 810010000000000003}
+  m_Layer: 0
+  m_Name: Gameplay Camera Rig
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &810010000000000002
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 810010000000000001}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 810010000000000005}
+  m_Father: {fileID: 2818194354509211014}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &810010000000000003
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1200457715707286695}
+  m_GameObject: {fileID: 810010000000000001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d1bda0d2aa64f85a2a0d71755cd1003, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.CameraAuthoring.CameraRigComposer
+  behaviorDefinition: {fileID: 11400000, guid: ffb1f6fa1818b6d468c2a126960abad4, type: 2}
+  cinemachineCamera: {fileID: 810010000000000006}
+  materializedPresentationIntent: 40
+  frameworkOwnedCinemachineCamera: {fileID: 810010000000000006}
+  frameworkOwnedPositionControl: {fileID: 810010000000000007}
+  frameworkOwnedRotationControl: {fileID: 0}
+  frameworkOwnedGroupTargetGroup: {fileID: 0}
+  frameworkOwnedGroupFraming: {fileID: 0}
+  materializationRevision: 1
+  logApplyRebuildDiagnostics: 1
+  lastApplyRebuildStatus: ValidationSucceeded
+  lastBlockingIssue:
+  lastMaterializationSummary: Third Person gameplay rig authored for Camera Composition.
+--- !u!1 &810010000000000004
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 810010000000000005}
+  - component: {fileID: 810010000000000006}
+  - component: {fileID: 810010000000000007}
+  m_Layer: 0
+  m_Name: Cinemachine Camera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &810010000000000005
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 810010000000000004}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 810010000000000002}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &810010000000000006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 810010000000000004}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCamera
+  Priority:
+    Enabled: 0
+    m_Value: 0
+  OutputChannel: 1
+  StandbyUpdate: 0
+  m_StreamingVersion: 20241001
+  m_LegacyPriority: 0
+  Target:
+    TrackingTarget: {fileID: 0}
+    LookAtTarget: {fileID: 0}
+    CustomLookAtTarget: 0
+  Lens:
+    FieldOfView: 40
+    OrthographicSize: 10
+    NearClipPlane: 0.1
+    FarClipPlane: 5000
+    Dutch: 0
+    ModeOverride: 0
+    PhysicalProperties:
+      GateFit: 2
+      SensorSize: {x: 21.946, y: 16.002}
+      LensShift: {x: 0, y: 0}
+      FocusDistance: 10
+      Iso: 200
+      ShutterSpeed: 0.005
+      Aperture: 16
+      BladeCount: 5
+      Curvature: {x: 2, y: 11}
+      BarrelClipping: 0.25
+      Anamorphism: 0
+  BlendHint: 0
+--- !u!114 &810010000000000007
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 810010000000000004}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 625c14eee3ad46c99df7c7c891ef668a, type: 3}
