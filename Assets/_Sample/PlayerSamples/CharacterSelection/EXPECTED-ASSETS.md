@@ -1,12 +1,10 @@
-# Expected Unity Assets
+# Character Selection — Expected Unity Assets
 
-Status: **MATERIALIZED / PLAY MODE REPROVEN — 2026-09-05**
+Status: **CAMERA-029-F MIGRATED LOCALLY — UNITY / QA REVALIDATION PENDING**
 
-This file records the materialized Character Selection boundary on the **current Player Actor / Presentation architecture**.
+This file records the Character Selection materialization boundary after migration to the current Camera composition model.
 
-The original Character Selection application was proven on 2026-08-28. After the Player prefab architecture was rebuilt, the sample assets were migrated and consumer Play Mode was reproven on 2026-09-05.
-
-## Materialized application intent
+## Application intent
 
 ```text
 GameApplication_CharacterSelection.asset
@@ -16,9 +14,9 @@ PlayerSessionProfile_CharacterSelection.asset
   ActorResolution = LeaveUnresolved
 ```
 
-Character Selection intentionally differs from the default-resolving Player Provisioning application at Session creation time, so it remains a separate Demonstration Application.
+Character Selection remains distinct from default-resolving Player Provisioning because initial Actor resolution is explicit.
 
-## Current materialized composition
+## Materialized application
 
 ```text
 CharacterSelection/
@@ -31,36 +29,19 @@ CharacterSelection/
 
   Routes/
     Route_Character Selection.asset
+    Route Content Character Selection.asset
 
   Activities/
-    Character Selection Activity
+    Activity_Character Selection.asset
 
   Scenes/
     CharacterSelection_UI.unity
+
+  Scripts/
+    CharacterSelectionActorButtonPresenter.cs
 ```
 
-The current shared Player technical prefab baseline is:
-
-```text
-Assets/_Sample/PlayerSamples/Shared/Prefabs/
-  FG_Player.prefab
-  FG_PlayerActor.prefab
-  FG_Presentation.prefab
-```
-
-The concrete Character Selection presentations are:
-
-```text
-Assets/_Sample/PlayerSamples/Player/Players/
-  FG_FarmerPresentation.prefab
-  FG_CowPresentation.prefab
-```
-
-Both concrete presentations derive from the shared `FG_Presentation` prefab baseline.
-
-## ActorProfile -> Presentation contract
-
-The Character Selection Actor profiles now use the current public Actor presentation field:
+## Actor presentation boundary
 
 ```text
 ActorProfile_Farmer
@@ -70,146 +51,103 @@ ActorProfile_Cow
   -> presentationPrefab = FG_CowPresentation
 ```
 
-The old `LogicalActorHostPrefab` composition is not part of the current sample.
-
-Runtime teaching path:
+Both concrete presentations derive from the shared `FG_Presentation` baseline and are expected to contain:
 
 ```text
-selected ActorProfile
-  -> Actor preparation
-  -> Player Actor Runtime Host
-  -> Presentation Mount
-  -> ActorProfile.PresentationPrefab
-  -> selected concrete Presentation
+PlayerGameplayInputReader
+CharacterController
+minimal Player movement
+minimal Third Person look
+ActorCameraSubjectAuthoring
+  -> Observation Transform = CameraMount
+character-specific visual
 ```
 
-The sample authors the concrete presentation; Framework runtime remains responsible for Actor preparation and physical materialization.
-
-## Presentation behavior used by the proof
-
-The concrete Farmer/Cow presentations provide the sample gameplay-facing presentation needed by Character Selection, including:
+They must not contain:
 
 ```text
-Player gameplay input consumption
-character-specific visible presentation
-Follow camera authoring / rig composition
-minimal movement used by the sample proof
+PlayerGameplayCameraAuthoring
+CameraRigComposer
+CinemachineCamera
+CinemachineFollow / CinemachineThirdPersonFollow
+a gameplay CameraRequest owner
+a Camera Output
 ```
 
-The purpose of these components is to prove that selecting a different `ActorProfile` results in the correct usable Player presentation rather than only changing logical Session state.
+## Camera composition reuse
 
-## Route / UI composition
-
-The Character Selection Route reuses the compatible Manager-Provisioned gameplay scene and adds `CharacterSelection_UI.unity` as Route Content.
-
-`CharacterSelection_UI.unity` contains a Route-scoped `PlayerSessionObserver` outside the selection panel.
-
-Its presentation wiring is:
+Character Selection reuses the Manager-Provisioned persistent composition referenced by its GameApplication:
 
 ```text
-On Player Joined
-  -> show Character Selection Controls
-
-On Actor Selected
-  -> hide Character Selection Controls
-
-On Player Left
-  -> hide Character Selection Controls
+ManagerProvisioned_Persistent.unity
+  -> Manager Provisioned Camera
+     -> CameraOutput_Main
+        -> Fixed Default Camera Rig
+     -> CameraSharedComposition
+        SubjectPolicy = AllAvailableSubjects
+        Composition Rig = ThirdPerson Gameplay Rig
+        request precedence = 50
 ```
 
-The selection controls contain the Farmer and Cow choices.
+The selected Actor contributes only Camera Subject evidence. No CharacterSelection-specific Camera Composition is expected.
 
-Each choice uses:
-
-```text
-PlayerSessionSelectActorCommandTrigger
-  -> exact PlayerSlotProfile
-  -> exact ActorProfile
-
-CharacterSelectionActorButtonPresenter
-  -> reads the command's ActorProfile
-  -> ActorProfile.DisplayName -> UI label
-  -> ActorProfile.Icon        -> UI image
-```
-
-The presenter is sample-owned presentation only. It does not own selection authority or Session state.
-
-## Runtime teaching path
+## Route / UI boundary
 
 ```text
-Open Joining
-  -> Join
-  -> Joined Slot
-  -> unresolved Actor
-  -> WaitingForActorSelection
+Route_Character Selection
+  -> Primary Scene = ManagerProvisioned.unity
+  -> Route Content = CharacterSelection_UI.unity
 
-Character choice
+CharacterSelection_UI
+  -> PlayerSessionObserver
+  -> Farmer / Cow selection controls
   -> PlayerSessionSelectActorCommandTrigger
-  -> PlayerActorSelectionResult
-
-Framework lifecycle
-  -> selection commit
-  -> Actor preparation
-  -> Player Actor Runtime Host
-  -> selected PresentationPrefab materialization
-  -> Activity admission / GameplayReady
-
-Leave / Rejoin
-  -> WaitingForJoin
-  -> Joined + unresolved Actor
-  -> WaitingForActorSelection
-  -> another explicit Actor choice
+  -> CharacterSelectionActorButtonPresenter
 ```
 
-## Explicit non-goals
+UI code remains presentation-only and does not own Player or Camera lifecycle.
 
-Do not add:
-
-```text
-private/internal Player runtime access
-reflection-based Player discovery
-direct Session mutation
-parallel Actor registry/selection authority
-hidden Default Actor fallback
-sample-owned Actor preparation/materialization
-physical Actor hot-swap behavior
-Local Multiplayer Slot/device/input architecture
-```
-
-`PlayerSessionReplaceActorSelectionCommandTrigger` and `PlayerSessionClearActorSelectionCommandTrigger` remain valid public lifecycle commands but are not part of this initial Character Selection demonstration.
-
-## Proof status
-
-### Historical lifecycle proof — 2026-08-28
-
-Play Mode consumer validation confirmed Farmer and Cow selection through the explicit `LeaveUnresolved` lifecycle, including Leave/Rejoin.
-
-Framework certification also reported:
-
-```text
-historicalFullPlayer = 25/25
-leaveUnresolved = PASS
-mandatoryContracts = 30
-executedContracts = 30
-passedContracts = 30
-```
-
-### Current physical-composition proof — 2026-09-05
-
-After migration to `ActorProfile.PresentationPrefab` and the current shared Player prefab baseline, consumer Play Mode was rerun successfully.
-
-The closure verifies:
+## Expected runtime path
 
 ```text
 Join
--> WaitingForActorSelection
--> select Farmer / Cow
--> correct PresentationPrefab materialized
--> Follow camera functional
--> gameplay movement/input functional
--> GameplayReady
--> Leave / Rejoin
--> fresh selection remains functional
+  -> WaitingForActorSelection
+  -> Fixed Default Camera remains
+
+Select Farmer / Cow
+  -> Actor selection commit
+  -> Actor preparation/materialization
+  -> ActorCameraSubjectAuthoring publishes exact CameraMount evidence
+  -> CameraSharedComposition becomes eligible
+  -> ThirdPerson Gameplay Rig
+  -> GameplayReady
+
+Leave
+  -> Actor occurrence ends
+  -> Camera Subject becomes unavailable
+  -> Composition request releases
+  -> Fixed Default
+
+Rejoin
+  -> WaitingForActorSelection
+  -> fresh explicit Actor selection
+  -> fresh Subject occurrence
+  -> ThirdPerson Gameplay Rig
 ```
 
-The remaining release gate is final Player UPM promotion/import validation, not Character Selection materialization.
+## Validation status
+
+Historical Character Selection Player proofs remain useful for Player lifecycle behavior, but they predate this Camera migration.
+
+For CAMERA-029-F Character Selection migration:
+
+```text
+Implemented = YES
+Static repository verification = pending final branch review
+Unity tested = NO
+QA Framework tested = NO
+Integrated = NO
+Validated = NO
+```
+
+Required reproof is a real consumer Play Mode run covering Farmer and Cow selection, Leave -> Fixed Default, Rejoin, fresh selection, ThirdPerson Camera, movement/look and GameplayReady.
