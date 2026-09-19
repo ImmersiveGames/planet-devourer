@@ -1,13 +1,14 @@
 # FG-ADR-002 — Player Sample Scope and Demonstration Architecture
 
-Status: **ACCEPTED — CANONICAL PLAYER SAMPLE SCOPE / REVISION 6**  
+Status: **ACCEPTED — CANONICAL PLAYER SAMPLE SCOPE / REVISION 7**  
 Accepted on: **2026-08-22**  
 Revision 2 updated on: **2026-08-24**  
 Revision 3 updated on: **2026-08-26**  
 Revision 4 updated on: **2026-08-28**  
 Revision 5 updated on: **2026-09-05**  
 Revision 6 updated on: **2026-09-07**  
-Current document revision: **6**  
+Revision 7 updated on: **2026-09-19**  
+Current document revision: **7**  
 Canonical filename: **`FG-ADR-002-Player-Sample-Scope-and-Demonstration-Architecture.md`**  
 Scope: **Player sample coverage, Demonstration Application boundaries, implementation sequence, public-surface blockers, Player-specific sharing and product-facing terminology**  
 Related strategy: **FG-ADR-001 — Immersive Framework Sample and Demonstration Strategy**  
@@ -54,9 +55,11 @@ FG-ADR-002
 
 Revision 4 recorded the original Character Selection closure on 2026-08-28: corrected `LeaveUnresolved` behavior, public `PlayerSessionObserver` composition, ActorProfile-driven button presentation and Full Player `30/30` evidence.
 
-Revision 5 records the **current-composition closure** after the Player prefab rebuild: Actor profiles now resolve concrete `PresentationPrefab` assets through the current Player Actor Runtime Host / Presentation boundary, the shared technical prefab baseline is concrete reuse, and Character Selection was reproven in consumer Play Mode on 2026-09-05. Revision 5 moved the historical Local Multiplayer blocker to a current public-contract re-audit before construction.
+Revision 5 recorded the **then-current composition closure** after the Player prefab rebuild: Actor profiles resolve concrete `PresentationPrefab` assets through the Player Actor Runtime Host / Presentation boundary, the shared technical prefab baseline is concrete reuse, and Character Selection was reproven in consumer Play Mode on 2026-09-05. Revision 5 moved the historical Local Multiplayer blocker to a current public-contract re-audit before construction.
 
 Revision 6 records the result of that re-audit and the first Local Multiplayer consumer proof. The current Framework public surface is sufficient for the implemented two-Slot Manager-Provisioned Join/Leave/Rejoin path without sample-owned Slot, device or input authority. Local Multiplayer is now materialized and its first lifecycle slice was proven in consumer Play Mode on 2026-09-07, including occupancy-driven UI, fresh-occurrence Rejoin and Activity placement reapplication. The application remains **in progress** until the remaining P2/input/full-Slot/Joining-control behaviors are proven.
+
+Revision 7 records the Character Selection consumer migration to `IF-ADR-029`. Farmer/Cow presentations now contribute explicit `ActorCameraSubjectAuthoring` evidence through `CameraMount`; Player-owned Camera rig/Cinemachine materialization and the old Camera-relative movement dependency are removed. Character Selection reuses the Manager-Provisioned persistent `CameraSharedComposition` and its Third Person Gameplay Rig. The prior Player lifecycle proof remains historical evidence; Unity/consumer revalidation of the migrated Camera path is pending.
 
 ---
 
@@ -223,7 +226,7 @@ This application remains the canonical demonstration of Session-authorized Local
 
 ## 7. Character Selection
 
-Status: **CLOSED / PLAY MODE REPROVEN — 2026-09-05**
+Status: **CAMERA-029-F MIGRATED LOCALLY — PLAYER PROOF PRESERVED / CAMERA UNITY REVALIDATION PENDING**
 
 Character Selection is a distinct Player Demonstration Application because its Session creation-time Actor-resolution intent differs from Player Provisioning:
 
@@ -338,11 +341,9 @@ PlayerSessionSelectActorCommandTrigger.ActorProfile
 
 The presenter does not select Actors, mutate Session state, own Player lifecycle, perform Player discovery, register another ActorProfile authority or silently wire the Button command.
 
-### 7.5 Current Player Actor / Presentation composition
+### 7.5 Current Player Actor / Presentation and Camera composition
 
-Revision 5 records the current physical composition used by Character Selection.
-
-The reusable technical prefab baseline is:
+The reusable technical Player prefab baseline remains:
 
 ```text
 Assets/_Sample/PlayerSamples/Shared/Prefabs/
@@ -351,7 +352,7 @@ Assets/_Sample/PlayerSamples/Shared/Prefabs/
   FG_Presentation.prefab
 ```
 
-Character Selection Actor profiles now use the current presentation contract:
+Character Selection Actor profiles use the current presentation contract:
 
 ```text
 ActorProfile_Farmer
@@ -380,11 +381,30 @@ selected ActorProfile
   -> Presentation Mount
   -> ActorProfile.PresentationPrefab
   -> selected concrete Presentation
+  -> ActorCameraSubjectAuthoring
+     Observation Transform = CameraMount
 ```
 
 The old `LogicalActorHostPrefab` composition is not part of the current Character Selection sample contract.
 
-The concrete presentations provide the sample-facing gameplay/presentation behavior required by the demonstration, including the selected character presentation, Player gameplay input consumption and Follow camera composition.
+Revision 7 aligns Character Selection with `IF-ADR-029`:
+
+```text
+Actor Presentation
+  -> gameplay input
+  -> minimal Player movement
+  -> minimal Third Person look
+  -> Camera Subject evidence only
+
+Manager-Provisioned Persistent Content
+  -> Camera Output / Fixed Default
+  -> CameraSharedComposition
+     SubjectPolicy = AllAvailableSubjects
+     Composition Rig = Third Person Gameplay Rig
+     request precedence = 50
+```
+
+The Farmer/Cow presentations do not own a gameplay Camera request, `CameraRigComposer`, Cinemachine camera or Camera Output. Character Selection does not create a second Camera Composition; it reuses the compatible Manager-Provisioned persistent composition already owned by the application.
 
 ### 7.6 Sample ownership boundary
 
@@ -396,6 +416,8 @@ character labels/icons/layout
 UI visibility wiring
 which explicit selection command the user invokes
 concrete Farmer/Cow Presentation authoring
+exact Actor Camera observation Transform
+minimal Player movement/look presentation behavior
 ```
 
 The Framework owns:
@@ -410,9 +432,12 @@ Actor preparation barrier
 Player Actor Runtime Host lifecycle
 PresentationPrefab materialization
 Activity participation/admission/readiness
+Camera Subject publication lifetime
+Camera Composition arbitration/request participation
+Camera Output and Default fallback
 ```
 
-The sample must not use private/internal runtime access, reflection, sample-specific Session discovery, direct mutation of internal Session state, parallel Actor-selection authority, hidden fallback Actor or sample-owned Actor preparation/materialization.
+The sample must not use private/internal runtime access, reflection, sample-specific Session discovery, direct mutation of internal Session state, parallel Actor-selection authority, hidden fallback Actor, sample-owned Actor preparation/materialization, or Player-owned Camera request/rig/output authority.
 
 ### 7.7 Initial selection, not hot swap
 
@@ -456,14 +481,14 @@ executedContracts = 30
 passedContracts = 30
 ```
 
-Current-composition consumer reproof — **2026-09-05**:
+Pre-CAMERA-029 consumer reproof — **2026-09-05**:
 
 ```text
 Join
 -> WaitingForActorSelection
 -> select Farmer / Cow
 -> correct PresentationPrefab materialized
--> Follow camera functional
+-> then-current Follow camera functional
 -> gameplay movement/input functional
 -> GameplayReady
 -> Leave
@@ -471,7 +496,25 @@ Join
 -> fresh explicit Actor selection functional
 ```
 
-This closes Character Selection authoring/proving on the current Player architecture. Final UPM promotion/import proof remains a later Player sample-group release gate.
+This closes the Player lifecycle/materialization proof for the 2026-09-05 composition, but it no longer represents the current Camera physical composition.
+
+CAMERA-029-F Character Selection migration — **2026-09-19**:
+
+```text
+implemented locally
+-> Farmer/Cow local CameraRigComposer + Cinemachine materialization removed
+-> old MinimalFollowMovement Camera dependency removed
+-> ActorCameraSubjectAuthoring = CameraMount
+-> Manager-Provisioned CameraSharedComposition reused
+-> Third Person Gameplay Rig owns Camera presentation
+
+Unity / consumer Play Mode = NOT RUN
+QA Framework = NOT RUN
+integrated = NO
+validated = NO
+```
+
+The next Character Selection evidence gate is a consumer run proving Farmer and Cow selection, Subject publication, Third Person Camera, movement/look, Leave -> Fixed Default, Rejoin and fresh Actor selection. Final UPM promotion/import proof remains a later Player sample-group release gate.
 
 ---
 
@@ -834,7 +877,7 @@ FIRSTGAME / authoring workspace
   real integration, ergonomics and consumer composition proof
 ```
 
-The historical Full Player `30/30` result remains technical evidence for the older Player runtime surface. Character Selection's 2026-09-05 Play Mode rerun proves the rebuilt consumer composition on the current Player Actor / Presentation chain.
+The historical Full Player `30/30` result remains technical evidence for the older Player runtime surface. Character Selection's 2026-09-05 Play Mode rerun proves the rebuilt Player Actor / Presentation chain before the CAMERA-029-F Camera migration; Revision 7 requires a new consumer Camera reproof.
 
 The current Full Player aggregate on 2026-09-07 is `PLAYER QA CERTIFIED 17/17` on the current suite composition. Local Multiplayer's 2026-09-07 FIRSTGAME run independently proves the implemented two-Player Join/Leave/Rejoin/placement/UI integration path as a real consumer.
 
