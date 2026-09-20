@@ -1,6 +1,6 @@
 # FG-ADR-002 — Player Sample Scope and Demonstration Architecture
 
-Status: **ACCEPTED — CANONICAL PLAYER SAMPLE SCOPE / REVISION 7**  
+Status: **ACCEPTED — CANONICAL PLAYER SAMPLE SCOPE / REVISION 8**  
 Accepted on: **2026-08-22**  
 Revision 2 updated on: **2026-08-24**  
 Revision 3 updated on: **2026-08-26**  
@@ -8,7 +8,8 @@ Revision 4 updated on: **2026-08-28**
 Revision 5 updated on: **2026-09-05**  
 Revision 6 updated on: **2026-09-07**  
 Revision 7 updated on: **2026-09-19**  
-Current document revision: **7**  
+Revision 8 updated on: **2026-09-20**  
+Current document revision: **8**  
 Canonical filename: **`FG-ADR-002-Player-Sample-Scope-and-Demonstration-Architecture.md`**  
 Scope: **Player sample coverage, Demonstration Application boundaries, implementation sequence, public-surface blockers, Player-specific sharing and product-facing terminology**  
 Related strategy: **FG-ADR-001 — Immersive Framework Sample and Demonstration Strategy**  
@@ -60,6 +61,8 @@ Revision 5 recorded the **then-current composition closure** after the Player pr
 Revision 6 records the result of that re-audit and the first Local Multiplayer consumer proof. The current Framework public surface is sufficient for the implemented two-Slot Manager-Provisioned Join/Leave/Rejoin path without sample-owned Slot, device or input authority. Local Multiplayer is now materialized and its first lifecycle slice was proven in consumer Play Mode on 2026-09-07, including occupancy-driven UI, fresh-occurrence Rejoin and Activity placement reapplication. The application remains **in progress** until the remaining P2/input/full-Slot/Joining-control behaviors are proven.
 
 Revision 7 records the Character Selection consumer migration to `IF-ADR-029`. Farmer/Cow presentations now contribute explicit `ActorCameraSubjectAuthoring` evidence through `CameraMount`; Player-owned Camera rig/Cinemachine materialization and the old Camera-relative movement dependency are removed. Character Selection reuses the Manager-Provisioned persistent `CameraSharedComposition` and its Third Person Gameplay Rig. The prior Player lifecycle proof remains historical evidence; Unity/consumer revalidation of the migrated Camera path is pending.
+
+Revision 8 records the Local Multiplayer Camera topology decision and implementation. The application now uses one application-owned `CameraSharedComposition` with `AllAvailableSubjects` and a `GroupCameraRigBehaviorDefinition`. Prepared Player Actors contribute Camera Subjects only; Group membership follows Subject availability rather than Slot/device state. One Subject remains a valid one-member Group, multiple Subjects are framed together, and zero Subjects release the normal request so the Output presents its Fixed Default. Split-screen remains outside this Demonstration Application. Unity/consumer revalidation of the new Group Camera path is pending.
 
 ---
 
@@ -520,7 +523,7 @@ The next Character Selection evidence gate is a consumer run proving Farmer and 
 
 ## 8. Local Multiplayer
 
-Status: **MATERIALIZED / FIRST LIFECYCLE SLICE PLAY MODE PROVEN — 2026-09-07 / ACTIVE CONSTRUCTION**
+Status: **GROUP CAMERA MIGRATED LOCALLY — prior lifecycle/device proof preserved / Camera Unity revalidation pending**
 
 Local Multiplayer requires more than multiple Player objects in one scene.
 
@@ -606,6 +609,10 @@ Scenes/
   LocalMultiplayer_Persistent.unity
   LocalMultiplayer.unity
   LocalMUltiplayerUI.unity
+
+Camera/
+  CameraRigBehavior_LocalMultiplayerGroup.asset
+  Local Multiplayer Camera.prefab
 
 Scripts/
   LocalMultiplayerJoinInputSource.cs
@@ -696,22 +703,96 @@ The aggregate includes the Leave/Rejoin lifecycle reconciliation and Activity re
 
 FIRSTGAME remains the consumer/integration proof; QAFramework remains the exhaustive technical proof surface.
 
-### 8.7 Remaining Local Multiplayer proof
+### 8.7 Group Camera composition — Revision 8
 
-Revision 6 does **not** close the entire Local Multiplayer Demonstration Application.
-
-Next consumer proof cut should cover:
+Local Multiplayer now has an explicit shared-Camera topology under the existing `IF-ADR-029` boundary.
 
 ```text
-P2 Leave/Rejoin while P1 remains active
-P1 and P2 independent gameplay input/device ownership
-no cross-control between local Players
+prepared Farmer / Cow Actor Presentation
+  -> ActorCameraSubjectAuthoring
+     Observation Transform = CameraMount
+        ↓
+CameraSharedComposition
+  SubjectPolicy = AllAvailableSubjects
+  Output = CameraOutput_Main
+  Composition Rig = Local Multiplayer Group Rig
+  request precedence = 50
+        ↓
+GroupCameraRigBehaviorDefinition
+  -> CinemachineTargetGroup
+  -> CinemachineGroupFraming
+        ↓
+Camera Output
+  Default = Fixed
+```
+
+The Camera Composition operates on Camera Subject availability only. It does not read Player Slots, Player indices, device ownership, `PlayerInputManager` or tutorial state.
+
+Canonical lifecycle:
+
+```text
+0 Subjects
+  -> no normal Group request
+  -> Fixed Default
+
+1 Subject
+  -> valid one-member Group
+  -> shared Camera remains active
+
+2 Subjects
+  -> deterministic two-member Group
+  -> shared Camera frames both
+
+one Actor occurrence ends
+  -> exact Subject is removed
+  -> remaining Group membership stays active
+
+last Actor occurrence ends
+  -> zero Subjects
+  -> Group request releases
+  -> Fixed Default
+
+Rejoin
+  -> fresh Actor occurrence
+  -> fresh Camera Subject
+  -> membership reconciles from availability
+```
+
+This Group behavior is application-specific and remains under `LocalMultiplayer/Camera`. It is not promoted to Player/Shared until another concrete consumer requires the same authored composition.
+
+Split-screen is explicitly outside this Demonstration Application. `PlayerInputManager` remains Player/input infrastructure and does not become Camera membership, rig or Output authority.
+
+### 8.8 Remaining Local Multiplayer proof
+
+The prior Player lifecycle/device-ownership evidence remains valid, but Revision 8 changes the physical Camera composition and therefore requires a new consumer Camera proof.
+
+Next proof cut should cover:
+
+```text
+actual gameplay input no-cross-control between P1 and P2
 behavior when both configured Slots are occupied
 Close Joining while existing Players remain joined
 Reopen Joining behavior when applicable
+
+Group Camera:
+  no Players -> Fixed Default
+  P1 only -> one-member Group
+  P1 + P2 -> two-member Group
+  either Leave -> membership shrinks without Camera authority replacement
+  last Leave -> Fixed Default
+  Rejoin -> fresh Subject membership
 ```
 
-Split-screen remains not implied by this ADR. Camera/output topology should be added only if the final demonstration scope requires it.
+For the Revision 8 Camera migration:
+
+```text
+Implemented = YES
+Static repository verification = PASS
+Unity tested = NO
+QA Framework tested = NO
+Integrated = NO
+Validated = NO
+```
 
 ---
 
@@ -755,9 +836,9 @@ A sample is executable documentation of the product surface.
 
 > **A missing public consumer contract blocks the sample; it does not authorize the sample to implement a substitute framework.**
 
-Player sample code may provide game-owned presentation and interaction such as join prompts, character-selection UI, ActorProfile button presenters, simple HUD, minimal locomotion, test-device simulation and sample navigation.
+Player sample code may provide game-owned presentation and interaction such as join prompts, character-selection UI, ActorProfile button presenters, simple HUD, minimal locomotion, test-device simulation, sample navigation and application-specific Camera composition authoring through the public Camera product surface.
 
-It must not provide hidden Framework responsibilities such as internal Player discovery, private Actor mutation, parallel Slot registry, parallel device ownership, parallel input routing authority, reflection-based binding or silent fallback.
+It must not provide hidden Framework responsibilities such as internal Player discovery, private Actor mutation, parallel Slot registry, parallel device ownership, parallel input routing authority, sample-owned Camera Subject/Slot registries, Player-owned Camera request/rig/Output authority, reflection-based binding or silent fallback.
 
 Character Selection satisfies this gate and is closed. Local Multiplayer also satisfies the gate for the currently implemented Join/Leave/Rejoin/occupancy path and remains in active construction for the remaining multiplayer proofs.
 
