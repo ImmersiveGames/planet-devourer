@@ -179,9 +179,9 @@ MonoBehaviour:
   frameworkOwnedGroupFraming: {fileID: 810010000000000009}
   materializationRevision: 1
   logApplyRebuildDiagnostics: 1
-  lastApplyRebuildStatus: ValidationSucceeded
+  lastApplyRebuildStatus:
   lastBlockingIssue:
-  lastMaterializationSummary: Group gameplay rig authored for Local Multiplayer Camera Composition.
+  lastMaterializationSummary: CAMERA-029 Group migration authored; Unity Apply / Rebuild validation pending.
 --- !u!1 &810010000000000004
 GameObject:
   m_ObjectHideFlags: 0
