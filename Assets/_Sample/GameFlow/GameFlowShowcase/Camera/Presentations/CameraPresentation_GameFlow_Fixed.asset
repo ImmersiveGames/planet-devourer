@@ -16,5 +16,6 @@ MonoBehaviour:
   description: Fixed Session camera for the Game Flow Showcase.
   outputDefinition: {fileID: 11400000, guid: 59cb18909e849e34db5f3c4aed7291dc, type: 2}
   rigPrefab: {fileID: 1367383642938228226, guid: aab506dace4b59a45bca72c513006a27, type: 3}
+  transitionMode: 20
   subjectPolicy: 10
   requestPrecedence: 100
