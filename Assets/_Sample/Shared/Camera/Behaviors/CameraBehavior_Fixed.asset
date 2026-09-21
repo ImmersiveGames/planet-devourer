@@ -10,5 +10,5 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 73e47f9404f34d63ad7dbbb4230dd480, type: 3}
-  m_Name: CameraRigBehavior_Fixed
+  m_Name: CameraBehavior_Fixed
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.CameraAuthoring.FixedCameraRigBehaviorDefinition

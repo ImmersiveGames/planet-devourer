@@ -266,6 +266,14 @@ PrefabInstance:
       propertyPath: m_LocalRotation.z
       value: -0.08390059
       objectReference: {fileID: 0}
+    - target: {fileID: 6839676246481327867, guid: d0bb76da3f6dc77499ca8b6418b4f19d, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6839676246481327867, guid: d0bb76da3f6dc77499ca8b6418b4f19d, type: 3}
+      propertyPath: outputDefinition
+      value: 
+      objectReference: {fileID: 11400000, guid: 59cb18909e849e34db5f3c4aed7291dc, type: 2}
     - target: {fileID: 7043609277635880890, guid: d0bb76da3f6dc77499ca8b6418b4f19d, type: 3}
       propertyPath: m_Name
       value: Persistent Camera
@@ -274,7 +282,8 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6839676246481327867, guid: d0bb76da3f6dc77499ca8b6418b4f19d, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -420,7 +429,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d1bda0d2aa64f85a2a0d71755cd1003, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.CameraAuthoring.CameraRigComposer
-  behaviorDefinition: {fileID: 11400000, guid: 23aef203d98a5b4448a3de334abc8016, type: 2}
+  behaviorDefinition: {fileID: 11400000, guid: fc4059fd9ec5c2e409c3e2cd88cfd40b, type: 2}
   cinemachineCamera: {fileID: 180722762}
   materializedPresentationIntent: 20
   frameworkOwnedCinemachineCamera: {fileID: 180722762}
@@ -428,13 +437,13 @@ MonoBehaviour:
   frameworkOwnedRotationControl: {fileID: 0}
   frameworkOwnedGroupTargetGroup: {fileID: 0}
   frameworkOwnedGroupFraming: {fileID: 0}
-  materializationRevision: 1
+  materializationRevision: 3
   logApplyRebuildDiagnostics: 1
-  lastApplyRebuildStatus: ApplySucceeded
+  lastApplyRebuildStatus: ValidationSucceeded
   lastBlockingIssue: 
-  lastMaterializationSummary: created='1' repaired='0' alreadyValid='2' skipped='2'
-    blocked='0' presentation='Fixed' cameraOwnership='FrameworkOwned' positionOwnership='None'
-    rotationOwnership='None' revision='1'
+  lastMaterializationSummary: Behavior Definition 'CameraBehavior_Fixed' projects
+    Presentation model 'Fixed'. Settings and Group provenance are valid; Apply /
+    Rebuild preflights pipeline ownership.
 --- !u!4 &1703198715
 Transform:
   m_ObjectHideFlags: 0
@@ -498,7 +507,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bb91bee8e474876b090ac9cfd1f60e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Camera.CameraOutputAuthoring
-  outputDefinition: {fileID: 11400000, guid: cb742e471635a424aa72436ff6718920, type: 2}
+  outputDefinition: {fileID: 11400000, guid: 59cb18909e849e34db5f3c4aed7291dc, type: 2}
   unityCamera: {fileID: 1795102196}
   cinemachineBrain: {fileID: 1795102195}
   defaultCameraRig: {fileID: 1703198714}
