@@ -19,6 +19,8 @@ MonoBehaviour:
   playerActorSelectionDuplicatePolicy: 10
   progressionSaveEnabled: 0
   defaultProgressionSaveProfile: {fileID: 0}
+  sessionCameraPresentations:
+  - {fileID: 11400000, guid: 108374b148d1cd3468b7f6a44683d36f, type: 2}
   persistentContent:
     containerScene: {fileID: 102900000, guid: d09f96496619c6b48986c8afc08b0b75, type: 3}
   validationMode: 1
