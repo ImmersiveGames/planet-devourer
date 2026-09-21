@@ -129,15 +129,18 @@ The validated happy path produced no Framework duplicate-device rejection and no
 
 ## Remaining proof before closure
 
-```text
-actual gameplay no-cross-control between P1 and P2
-explicit extra-Join behavior while both configured Slots are occupied
-Close Joining behavior
-Reopen Joining behavior when applicable
+Join/Open/Close/Reopen Joining behavior is already owned by the existing Player Join/public
+Session proof and is not repeated as a Local Multiplayer-specific certification gate.
 
+The remaining technical proof is Camera:
+
+```text
+CAMERA-029 current Group lifecycle -> current QAFramework Camera certification
+CAMERA-030 per-Subject framing    -> focused QA evidence
 ```
 
-Do not introduce sample-owned Slot, device, input or Camera membership authority to complete those remaining proofs.
+Do not introduce sample-owned Slot, device, input or Camera membership authority to complete
+Camera certification.
 
 For the current Camera consumer slice:
 

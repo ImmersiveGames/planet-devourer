@@ -2,7 +2,7 @@
 
 Status: **FUNCTIONAL GROUP CAMERA CONSUMER — manual Unity Play Mode PASS; visual tuning remains application-owned**
 
-Canonical Player sample authority: `FG-ADR-002 — Player Sample Scope and Demonstration Architecture`, Revision 8.
+Canonical Player sample authority: `FG-ADR-002 — Player Sample Scope and Demonstration Architecture`, Revision 9.
 
 Canonical Camera authority: `IF-ADR-029 — Camera Composition, Group Presentation and Camera View Removal` plus `IF-ADR-030 — Camera Subject Framing Evidence`.
 
@@ -341,23 +341,24 @@ PLAYER QA CERTIFIED
 
 This includes Leave/Rejoin reconciliation, ownership preservation and Activity relocation contracts supporting this sample.
 
-## Still to prove before Local Multiplayer closure
+## Remaining closure gate
 
-The Demonstration Application is **not closed yet**.
+The Local Multiplayer consumer path is functionally proven for its intended sample scope.
+Join/Open/Close/Reopen Joining semantics belong to the existing Player Join/public Session
+proof and are not duplicated as Local Multiplayer-specific blockers.
 
-The next consumer proofs should cover:
+The remaining technical closure gate is Camera:
 
 ```text
-actual gameplay input no-cross-control between P1 and P2
-explicit behavior when both configured Slots are occupied and another Join is attempted
-Close Joining behavior while already Joined Players remain preserved
-reopening Joining after Close when applicable
-
+current Group Camera consumer = functional in manual Unity Play Mode
+CAMERA-029 shared Group lifecycle = requires current QAFramework certification run
+CAMERA-030 per-Subject framing = requires focused QA evidence
+visual tuning = application-owned, not a certification blocker
 ```
 
-Distinct per-Player device ownership, P1/P2 Leave preservation, bidirectional Rejoin and the current Group Camera consumer path are no longer pending proof items.
-
-Group Camera is the current functional Local Multiplayer Camera topology. Remaining Camera changes are visual tuning only. Split-screen remains outside this sample scope.
+Distinct per-Player device ownership, gameplay movement, P1/P2 lifecycle, Leave/Rejoin,
+current occupancy presentation and the Group Camera consumer path are not pending sample
+construction items. Split-screen remains outside this sample scope.
 
 ## Non-goals
 

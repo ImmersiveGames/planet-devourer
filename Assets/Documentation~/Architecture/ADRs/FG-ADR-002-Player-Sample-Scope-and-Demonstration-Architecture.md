@@ -779,14 +779,14 @@ Split-screen is explicitly outside this Demonstration Application. `PlayerInputM
 
 The prior Player lifecycle/device-ownership evidence remains valid. Revision 9 adds a successful manual Unity consumer proof for the current dedicated Group Presentations, local-multiplayer movement, per-Subject framing evidence and shared Group Camera.
 
-The remaining non-Camera consumer proof should cover:
+Join/Open/Close/Reopen Joining semantics are already covered by the existing Player Join/public
+Session proof. They are not Local Multiplayer-specific blockers and are not duplicated here.
+
+The remaining closure gate is Camera QA:
 
 ```text
-actual gameplay input no-cross-control between P1 and P2
-behavior when both configured Slots are occupied
-Close Joining while existing Players remain joined
-Reopen Joining behavior when applicable
-
+CAMERA-029 current shared Group lifecycle -> current QAFramework Camera certification
+CAMERA-030 per-Subject framing            -> focused QA evidence
 ```
 
 For the Revision 9 Camera consumer slice:
@@ -848,7 +848,7 @@ Player sample code may provide game-owned presentation and interaction such as j
 
 It must not provide hidden Framework responsibilities such as internal Player discovery, private Actor mutation, parallel Slot registry, parallel device ownership, parallel input routing authority, sample-owned Camera Subject/Slot registries, Player-owned Camera request/rig/Output authority, reflection-based binding or silent fallback.
 
-Character Selection satisfies this gate and is closed. Local Multiplayer also satisfies the gate for the currently implemented Join/Leave/Rejoin/occupancy path and remains in active construction for the remaining multiplayer proofs.
+Character Selection satisfies this gate and is closed. Local Multiplayer satisfies the public-surface gate for its intended two-Player flow; the remaining closure work is Camera QA/certification, not a missing Player public contract.
 
 ---
 
@@ -920,7 +920,7 @@ Reusable presentation/content may be shared; application/session authority remai
    MATERIALIZED
    LIFECYCLE / DEVICE PROOF 2026-09-07
    GROUP CAMERA / MOVEMENT CONSUMER UNITY PASS 2026-09-20
-   remaining work = explicit Join-control/input edge scenarios
+   remaining work = Camera QA / certification
 ```
 
 This order may change only from concrete implementation/product evidence.
@@ -1061,7 +1061,7 @@ Local Multiplayer
   dedicated Group ActorProfiles / Presentations own local multiplayer movement and Camera framing evidence
   shared Group Camera consumer manually proven in Unity on 2026-09-20
   Camera visual tuning remains application-owned
-  remaining extra-Join / Close-Reopen Joining / input-edge proofs remain before full Demonstration Application closure
+  remaining closure gate = Camera QA / certification only
 
 Public-surface rule
   missing product contract blocks the sample
