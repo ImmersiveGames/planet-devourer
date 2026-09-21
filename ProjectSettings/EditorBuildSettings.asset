@@ -50,5 +50,11 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Sample/PlayerSamples/LocalMultiplayer/Scenes/LocalMultiplayerUI.unity
     guid: 79697a4d2184aeb4899e3e7f8063cd65
+  - enabled: 1
+    path: Assets/_Sample/PlayerSamples/CharacterSelectionMultiplayerSplitScreen/Scenes/CharacterSelectionMultiplayerSplitScreen_UI.unity
+    guid: 542434ebe39472147b3487cd60e3e3a7
+  - enabled: 1
+    path: Assets/_Sample/PlayerSamples/CharacterSelectionMultiplayerSplitScreen/Scenes/CharacterSelectionMultiplayerSplitScreen_Persistent.unity
+    guid: 8dcd84bf3b1045e46a8cf59ae2f02789
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
