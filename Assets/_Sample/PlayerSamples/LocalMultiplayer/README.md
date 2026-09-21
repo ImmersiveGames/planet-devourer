@@ -1,10 +1,10 @@
 # Local Multiplayer
 
-Status: **GROUP CAMERA MIGRATED LOCALLY — prior multiplayer lifecycle/device proof preserved; Camera Unity revalidation pending**
+Status: **FUNCTIONAL GROUP CAMERA CONSUMER — manual Unity Play Mode PASS; visual tuning remains application-owned**
 
 Canonical Player sample authority: `FG-ADR-002 — Player Sample Scope and Demonstration Architecture`, Revision 8.
 
-Canonical Camera authority: `IF-ADR-029 — Camera Composition, Group Presentation and Camera View Removal`.
+Canonical Camera authority: `IF-ADR-029 — Camera Composition, Group Presentation and Camera View Removal` plus `IF-ADR-030 — Camera Subject Framing Evidence`.
 
 Local Multiplayer is an active **Player Demonstration Application** under:
 
@@ -95,6 +95,10 @@ Player/
   PlayerSessionProfile_LocalMultiplayer.asset
   PlayerSlotProfile_LocalMultiplayer_P1.asset
   PlayerSlotProfile_LocalMultiplayer_P2.asset
+  ActorProfile_FarmerGroup.asset
+  ActorProfile_CowGroup.asset
+  FG_FarmerPresentationGroup.prefab
+  FG_CowPresentationGroup.prefab
 
 Routes/
   Route_LocalMultiplayer.asset
@@ -116,18 +120,22 @@ Scripts/
   LocalMultiplayerJoinInputSource.cs
   LocalMultiplayerJoinTutorialController.cs
   LocalMultiplayerKeyboardGamepadSimulator.cs
+  MinimalLocalMultiplayerMovement.cs
 ```
 
 The keyboard/gamepad simulator creates test InputDevices for this sample; it does not become Slot or input-ownership authority.
 
-## Group Camera composition — CAMERA-029
+## Group Camera composition — CAMERA-029 / CAMERA-030
 
 Local Multiplayer now uses one shared Group Camera rather than Player-owned or split-screen cameras.
 
 ```text
-Farmer / Cow Actor Presentation
-  -> ActorCameraSubjectAuthoring
-     Observation Transform = CameraMount
+ActorProfile_FarmerGroup / ActorProfile_CowGroup
+  -> dedicated Local Multiplayer Group Presentation
+     -> MinimalLocalMultiplayerMovement
+     -> ActorCameraSubjectAuthoring
+        Observation Transform = presentation-owned Group framing anchor
+        Framing Radius = presentation-owned Subject extent
         ↓
 CameraSharedComposition
   SubjectPolicy = AllAvailableSubjects
@@ -136,8 +144,15 @@ CameraSharedComposition
   request precedence = 50
         ↓
 GroupCameraRigBehaviorDefinition
-  -> CinemachineTargetGroup
-  -> CinemachineGroupFraming
+  member weight + fallback member radius
+  framing size / damping / FOV / dolly / ortho ranges
+        ↓
+CinemachineTargetGroup
+  Object = Subject Observation
+  Radius = Subject Framing Radius when specified
+         = Group Behavior memberRadius fallback otherwise
+        ↓
+CinemachineGroupFraming
         ↓
 Camera Output
   -> Fixed Default when no normal request wins
@@ -145,7 +160,7 @@ Camera Output
 
 The Camera composition consumes Subject availability only. It does not read Player Slots, Player indices, devices, `PlayerInputManager` or tutorial state.
 
-Expected membership lifecycle:
+Current membership lifecycle:
 
 ```text
 no joined/prepared Actor
@@ -176,6 +191,43 @@ Rejoin
 ```
 
 This topology is application-specific and therefore remains under `LocalMultiplayer/Camera`; it is not promoted to shared sample infrastructure.
+
+## Group Camera consumer proof — 2026-09-20
+
+Manual Unity Play Mode on the current consumer composition confirmed the Group Camera slice is functional:
+
+```text
+P1
+  -> ActorProfile_FarmerGroup
+  -> dedicated Group Presentation
+  -> local multiplayer movement functional
+  -> Camera Subject / framing evidence consumed
+
+P2
+  -> ActorProfile_CowGroup
+  -> dedicated Group Presentation
+  -> local multiplayer movement functional
+  -> Camera Subject / framing evidence consumed
+
+P1 + P2
+  -> shared Group Camera frames the current Subject set
+  -> per-Subject framing radius improves member bounds
+```
+
+The remaining Camera work is visual authoring/tuning in
+`CameraRigBehavior_LocalMultiplayerGroup.asset`. It is not a missing Framework Camera
+contract.
+
+For the current Camera consumer slice:
+
+```text
+Implemented = YES
+Unity consumer tested = YES
+Integrated = YES
+QAFramework tested = NO
+Validated = NO
+Certified = NO
+```
 
 
 ## Play Mode proof — 2026-09-07
@@ -301,18 +353,11 @@ explicit behavior when both configured Slots are occupied and another Join is at
 Close Joining behavior while already Joined Players remain preserved
 reopening Joining after Close when applicable
 
-Group Camera consumer reproof:
-  zero Subjects -> Fixed Default
-  P1 only -> one-member Group
-  P1 + P2 -> two-member Group
-  P1/P2 Leave -> membership shrinks without replacing Camera authority
-  last Leave -> Fixed Default
-  Rejoin -> fresh Subject membership
 ```
 
-Distinct per-Player device ownership, P1/P2 Leave preservation and bidirectional Rejoin are no longer pending proof items.
+Distinct per-Player device ownership, P1/P2 Leave preservation, bidirectional Rejoin and the current Group Camera consumer path are no longer pending proof items.
 
-Group Camera is now the intended Local Multiplayer Camera topology. Split-screen remains outside this sample scope.
+Group Camera is the current functional Local Multiplayer Camera topology. Remaining Camera changes are visual tuning only. Split-screen remains outside this sample scope.
 
 ## Non-goals
 

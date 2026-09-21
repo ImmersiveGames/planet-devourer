@@ -1,6 +1,6 @@
 # FG-ADR-002 — Player Sample Scope and Demonstration Architecture
 
-Status: **ACCEPTED — CANONICAL PLAYER SAMPLE SCOPE / REVISION 8**  
+Status: **ACCEPTED — CANONICAL PLAYER SAMPLE SCOPE / REVISION 9**  
 Accepted on: **2026-08-22**  
 Revision 2 updated on: **2026-08-24**  
 Revision 3 updated on: **2026-08-26**  
@@ -9,7 +9,8 @@ Revision 5 updated on: **2026-09-05**
 Revision 6 updated on: **2026-09-07**  
 Revision 7 updated on: **2026-09-19**  
 Revision 8 updated on: **2026-09-20**  
-Current document revision: **8**  
+Revision 9 updated on: **2026-09-20**  
+Current document revision: **9**  
 Canonical filename: **`FG-ADR-002-Player-Sample-Scope-and-Demonstration-Architecture.md`**  
 Scope: **Player sample coverage, Demonstration Application boundaries, implementation sequence, public-surface blockers, Player-specific sharing and product-facing terminology**  
 Related strategy: **FG-ADR-001 — Immersive Framework Sample and Demonstration Strategy**  
@@ -62,7 +63,9 @@ Revision 6 records the result of that re-audit and the first Local Multiplayer c
 
 Revision 7 records the Character Selection consumer migration to `IF-ADR-029`. Farmer/Cow presentations now contribute explicit `ActorCameraSubjectAuthoring` evidence through `CameraMount`; Player-owned Camera rig/Cinemachine materialization and the old Camera-relative movement dependency are removed. Character Selection reuses the Manager-Provisioned persistent `CameraSharedComposition` and its Third Person Gameplay Rig. The prior Player lifecycle proof remains historical evidence; Unity/consumer revalidation of the migrated Camera path is pending.
 
-Revision 8 records the Local Multiplayer Camera topology decision and implementation. The application now uses one application-owned `CameraSharedComposition` with `AllAvailableSubjects` and a `GroupCameraRigBehaviorDefinition`. Prepared Player Actors contribute Camera Subjects only; Group membership follows Subject availability rather than Slot/device state. One Subject remains a valid one-member Group, multiple Subjects are framed together, and zero Subjects release the normal request so the Output presents its Fixed Default. Split-screen remains outside this Demonstration Application. Unity/consumer revalidation of the new Group Camera path is pending.
+Revision 8 records the Local Multiplayer Camera topology decision and implementation. The application now uses one application-owned `CameraSharedComposition` with `AllAvailableSubjects` and a `GroupCameraRigBehaviorDefinition`. Prepared Player Actors contribute Camera Subjects only; Group membership follows Subject availability rather than Slot/device state. One Subject remains a valid one-member Group, multiple Subjects are framed together, and zero Subjects release the normal request so the Output presents its Fixed Default. Split-screen remains outside this Demonstration Application.
+
+Revision 9 records the functional consumer reconciliation after `IF-ADR-030`. Local Multiplayer now owns dedicated Farmer/Cow Group ActorProfiles and Presentations, a camera-independent `MinimalLocalMultiplayerMovement`, presentation-owned Group framing anchors and per-Subject framing radii. Manual Unity Play Mode on 2026-09-20 confirms the current Group Camera consumer path is functional. Remaining Camera work is visual tuning of the application-owned Group behavior asset; QAFramework/technical certification remains separate.
 
 ---
 
@@ -597,6 +600,10 @@ Player/
   PlayerSessionProfile_LocalMultiplayer.asset
   PlayerSlotProfile_LocalMultiplayer_P1.asset
   PlayerSlotProfile_LocalMultiplayer_P2.asset
+  ActorProfile_FarmerGroup.asset
+  ActorProfile_CowGroup.asset
+  FG_FarmerPresentationGroup.prefab
+  FG_CowPresentationGroup.prefab
 
 Routes/
   Route_LocalMultiplayer.asset
@@ -618,6 +625,7 @@ Scripts/
   LocalMultiplayerJoinInputSource.cs
   LocalMultiplayerJoinTutorialController.cs
   LocalMultiplayerKeyboardGamepadSimulator.cs
+  MinimalLocalMultiplayerMovement.cs
 ```
 
 The Session uses two configured local Player Slots and Manager-Provisioned Host creation.
@@ -703,14 +711,16 @@ The aggregate includes the Leave/Rejoin lifecycle reconciliation and Activity re
 
 FIRSTGAME remains the consumer/integration proof; QAFramework remains the exhaustive technical proof surface.
 
-### 8.7 Group Camera composition — Revision 8
+### 8.7 Group Camera composition — Revision 9
 
 Local Multiplayer now has an explicit shared-Camera topology under the existing `IF-ADR-029` boundary.
 
 ```text
-prepared Farmer / Cow Actor Presentation
+dedicated FarmerGroup / CowGroup Actor Presentation
+  -> MinimalLocalMultiplayerMovement
   -> ActorCameraSubjectAuthoring
-     Observation Transform = CameraMount
+     Observation Transform = presentation-owned Group framing anchor
+     Framing Radius = presentation-owned Subject extent
         ↓
 CameraSharedComposition
   SubjectPolicy = AllAvailableSubjects
@@ -719,7 +729,10 @@ CameraSharedComposition
   request precedence = 50
         ↓
 GroupCameraRigBehaviorDefinition
+  -> authored Group composition/tuning
   -> CinemachineTargetGroup
+     member radius = Subject Framing Radius when specified
+                   = Group Behavior fallback otherwise
   -> CinemachineGroupFraming
         ↓
 Camera Output
@@ -758,15 +771,15 @@ Rejoin
   -> membership reconciles from availability
 ```
 
-This Group behavior is application-specific and remains under `LocalMultiplayer/Camera`. It is not promoted to Player/Shared until another concrete consumer requires the same authored composition.
+This Group behavior is application-specific and remains under `LocalMultiplayer/Camera`. It is not promoted to Player/Shared until another concrete consumer requires the same authored composition. IF-ADR-030 owns the presentation-neutral per-Subject framing-radius contract; the sample owns the actual radius values and Group Camera visual tuning.
 
 Split-screen is explicitly outside this Demonstration Application. `PlayerInputManager` remains Player/input infrastructure and does not become Camera membership, rig or Output authority.
 
-### 8.8 Remaining Local Multiplayer proof
+### 8.8 Current Local Multiplayer proof status — Revision 9
 
-The prior Player lifecycle/device-ownership evidence remains valid, but Revision 8 changes the physical Camera composition and therefore requires a new consumer Camera proof.
+The prior Player lifecycle/device-ownership evidence remains valid. Revision 9 adds a successful manual Unity consumer proof for the current dedicated Group Presentations, local-multiplayer movement, per-Subject framing evidence and shared Group Camera.
 
-Next proof cut should cover:
+The remaining non-Camera consumer proof should cover:
 
 ```text
 actual gameplay input no-cross-control between P1 and P2
@@ -774,25 +787,20 @@ behavior when both configured Slots are occupied
 Close Joining while existing Players remain joined
 Reopen Joining behavior when applicable
 
-Group Camera:
-  no Players -> Fixed Default
-  P1 only -> one-member Group
-  P1 + P2 -> two-member Group
-  either Leave -> membership shrinks without Camera authority replacement
-  last Leave -> Fixed Default
-  Rejoin -> fresh Subject membership
 ```
 
-For the Revision 8 Camera migration:
+For the Revision 9 Camera consumer slice:
 
 ```text
 Implemented = YES
-Static repository verification = PASS
-Unity tested = NO
+Unity consumer tested = YES
+Integrated = YES
 QA Framework tested = NO
-Integrated = NO
 Validated = NO
+Certified = NO
 ```
+
+The Camera slice is functionally closed for sample construction. Further work on framing size, Follow offset, damping, FOV/dolly ranges and related Group values is visual authoring/tuning rather than a Player/Camera architecture blocker.
 
 ---
 
@@ -910,8 +918,9 @@ Reusable presentation/content may be shared; application/session authority remai
    HostProvisioning = ManagerProvisioned
    two configured local Player Slots
    MATERIALIZED
-   FIRST LIFECYCLE SLICE PLAY MODE PROVEN 2026-09-07
-   CURRENT ACTIVE PLAYER WORK ITEM
+   LIFECYCLE / DEVICE PROOF 2026-09-07
+   GROUP CAMERA / MOVEMENT CONSUMER UNITY PASS 2026-09-20
+   remaining work = explicit Join-control/input edge scenarios
 ```
 
 This order may change only from concrete implementation/product evidence.
@@ -1049,8 +1058,10 @@ Local Multiplayer
   Leave -> Rejoin creates a fresh Session Player occurrence
   Activity placement is reapplied to the fresh occurrence
   P1 may leave while P2 remains active
-  MATERIALIZED / FIRST LIFECYCLE SLICE PLAY MODE PROVEN 2026-09-07
-  remaining P2/input/full-Slot/Joining-control proofs still required before closure
+  dedicated Group ActorProfiles / Presentations own local multiplayer movement and Camera framing evidence
+  shared Group Camera consumer manually proven in Unity on 2026-09-20
+  Camera visual tuning remains application-owned
+  remaining extra-Join / Close-Reopen Joining / input-edge proofs remain before full Demonstration Application closure
 
 Public-surface rule
   missing product contract blocks the sample

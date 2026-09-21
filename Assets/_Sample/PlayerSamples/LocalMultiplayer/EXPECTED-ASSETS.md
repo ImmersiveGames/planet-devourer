@@ -1,6 +1,6 @@
 # Local Multiplayer Assets
 
-Status: **GROUP CAMERA MIGRATED LOCALLY — UNITY / QA REVALIDATION PENDING**
+Status: **CURRENT LOCAL MULTIPLAYER COMPOSITION MATERIALIZED — GROUP CAMERA CONSUMER UNITY PASS / QA PENDING**
 
 The historical public Slot/device/input ownership blocker is closed for the current Local Multiplayer implementation path. This file records the materialized application rather than a blocked future asset list.
 
@@ -13,6 +13,10 @@ Player/
   PlayerSessionProfile_LocalMultiplayer.asset
   PlayerSlotProfile_LocalMultiplayer_P1.asset
   PlayerSlotProfile_LocalMultiplayer_P2.asset
+  ActorProfile_FarmerGroup.asset
+  ActorProfile_CowGroup.asset
+  FG_FarmerPresentationGroup.prefab
+  FG_CowPresentationGroup.prefab
 
 Routes/
   Route_LocalMultiplayer.asset
@@ -34,6 +38,7 @@ Scripts/
   LocalMultiplayerJoinInputSource.cs
   LocalMultiplayerJoinTutorialController.cs
   LocalMultiplayerKeyboardGamepadSimulator.cs
+  MinimalLocalMultiplayerMovement.cs
 ```
 
 The application reuses the current Player technical/presentation baseline where configured. Application/session authority remains local to Local Multiplayer.
@@ -59,9 +64,12 @@ The keyboard/gamepad simulator exists only to provide deterministic test InputDe
 ## Camera composition
 
 ```text
-ActorProfile_Farmer / ActorProfile_Cow
-  -> migrated PresentationPrefab
-  -> ActorCameraSubjectAuthoring / CameraMount
+ActorProfile_FarmerGroup / ActorProfile_CowGroup
+  -> dedicated Local Multiplayer Group PresentationPrefab
+  -> MinimalLocalMultiplayerMovement
+  -> ActorCameraSubjectAuthoring
+     Observation = presentation-owned Group framing anchor
+     Framing Radius = per-Presentation Subject extent
 
 Local Multiplayer Camera
   -> Camera Output / CameraOutput_Main
@@ -73,9 +81,12 @@ Local Multiplayer Camera
 
 Group Camera Rig
   -> CameraRigBehavior_LocalMultiplayerGroup
+     member weight + fallback member radius
+     framing / damping / FOV / dolly / ortho tuning
   -> CinemachineFollow
   -> CinemachineHardLookAt
   -> CinemachineTargetGroup
+     per-member Radius = Subject Framing Radius or Group fallback
   -> CinemachineGroupFraming
 ```
 
@@ -108,6 +119,10 @@ repeated P1/P2 Leave/Rejoin cycles
 UI derived from current Slot occupancy
 P1 and P2 retain distinct current device ownership
 already-owned device blocked by tutorial before Join
+dedicated P1/P2 Group Presentations materialized
+MinimalLocalMultiplayerMovement functional
+Group Camera consumer functional in manual Unity Play Mode
+per-Subject framing evidence consumed by Group Camera
 ```
 
 The validated happy path produced no Framework duplicate-device rejection and no transient `RegisteredHost.NotRegistered` ownership diagnostic.
@@ -120,24 +135,19 @@ explicit extra-Join behavior while both configured Slots are occupied
 Close Joining behavior
 Reopen Joining behavior when applicable
 
-Group Camera:
-  Fixed Default with zero Subjects
-  one-member Group with one Player
-  two-member Group with both Players
-  membership shrink on either Leave
-  Fixed Default after last Leave
-  fresh membership after Rejoin
 ```
 
 Do not introduce sample-owned Slot, device, input or Camera membership authority to complete those remaining proofs.
 
-For this Camera migration:
+For the current Camera consumer slice:
 
 ```text
 Implemented = YES
-Static repository verification = PASS
-Unity tested = NO
+Unity consumer tested = YES
+Integrated = YES
 QA Framework tested = NO
-Integrated = NO
 Validated = NO
+Certified = NO
 ```
+
+Remaining Camera work is application-owned visual tuning of the Group behavior asset.
