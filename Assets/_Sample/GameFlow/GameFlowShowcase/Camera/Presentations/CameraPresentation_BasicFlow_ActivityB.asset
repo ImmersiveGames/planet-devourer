@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c8f462e826b8420997d5f1292d8fe2d9, type: 3}
-  m_Name: CameraPresentation_BasicFlow_Route
+  m_Name: CameraPresentation_BasicFlow_ActivityB
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.CameraAuthoring.CameraPresentationDefinition
-  stableId: 95a5eabe35bf486b93a8080b21109ce2
-  description: Fixed Route camera for the Basic Flow route.
+  stableId: a4271f3434ac4a24a9089063433401d7
+  description: 
   outputDefinition: {fileID: 11400000, guid: 59cb18909e849e34db5f3c4aed7291dc, type: 2}
-  rigPrefab: {fileID: 1367383642938228226, guid: aab506dace4b59a45bca72c513006a27, type: 3}
-  transitionMode: 20
+  rigPrefab: {fileID: 551325292819897595, guid: a3fef7289d510714c8e5b63bc47fbd47, type: 3}
+  transitionMode: 10
   subjectPolicy: 10
-  requestPrecedence: 200
+  requestPrecedence: 300
