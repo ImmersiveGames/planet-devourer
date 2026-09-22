@@ -19,6 +19,16 @@ MonoBehaviour:
   playerActorSelectionDuplicatePolicy: 10
   progressionSaveEnabled: 0
   defaultProgressionSaveProfile: {fileID: 0}
+  cameraSession:
+    outputPrefabs:
+    - {fileID: 627951520136573394, guid: aa25a21ce579a4944bbd1ed458453d79, type: 3}
+    playerOutputBindings:
+    - playerSlotProfile: {fileID: 11400000, guid: 74a665a54f2420e448955b454bb29b06, type: 2}
+      outputDefinition: {fileID: 11400000, guid: 59cb18909e849e34db5f3c4aed7291dc, type: 2}
+    playerPresentationBindings:
+    - playerSlotProfile: {fileID: 11400000, guid: 74a665a54f2420e448955b454bb29b06, type: 2}
+      presentationDefinition: {fileID: 11400000, guid: d7f06c84c7864fe2b414619466fc2ab9, type: 2}
+  sessionCameraPresentations: []
   persistentContent:
     containerScene: {fileID: 102900000, guid: fdb0c67fbbd9f0845b46422294079fb4, type: 3}
   validationMode: 1
