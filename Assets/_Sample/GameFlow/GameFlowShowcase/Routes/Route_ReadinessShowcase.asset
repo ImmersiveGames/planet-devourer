@@ -18,5 +18,8 @@ MonoBehaviour:
   primarySceneName: SCN_GameFlow_Basic_Readiness
   routeContentProfile: {fileID: 0}
   startupActivity: {fileID: 11400000, guid: 25bb7e2463edac14db7ff11f9d870366, type: 2}
+  playerSpatialEntryPolicy: 0
+  cameraPresentations:
+  - {fileID: 11400000, guid: 515ecc6de16db1a45870a622f48e76b7, type: 2}
   transitionGateMode: 30
   description: 
