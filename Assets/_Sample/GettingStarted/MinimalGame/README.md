@@ -1,6 +1,6 @@
 # Minimal Game
 
-Status: **CAMERA-029-F MIGRATED LOCALLY — prior Play Mode proof predates this Camera migration; Unity revalidation pending**
+Status: **CAMERA-032-D/E MIGRATED LOCALLY — Unity revalidation pending**
 UPM promotion: **PENDING package finalization/import proof**
 
 ## Purpose
@@ -11,30 +11,14 @@ It proves **navigation, not gameplay**.
 
 ## Canonical Scene Player reference
 
-Minimal Game is the **canonical executable Scene Player reference** for the sample program.
-
-```text
-Assets/_Sample/GettingStarted/MinimalGame/
-  -> canonical Scene Player coverage
-```
-
-Runtime policy:
+Minimal Game is the canonical executable Scene-Provided Player reference.
 
 ```text
 PlayerSessionProfile
   HostProvisioning = SceneProvided
 ```
 
-`SceneProvided` is the Host Provisioning mode. The product-facing composition demonstrated here is a **Scene Player**: a Local Player Host already authored in the Scene.
-
-The Player sample family must not duplicate this baseline as a dedicated Scene Player Demonstration Application under Player unless future implementation evidence reveals a distinct Scene Player consumer contract that cannot be demonstrated here.
-
-Player-specific sample sequencing, blockers and terminology are governed by:
-
-```text
-Assets/Documentation~/Architecture/ADRs/
-  FG-ADR-002-Player-Sample-Scope-and-Demonstration-Architecture.md
-```
+The product-facing composition is a Scene Player: a Local Player Host already authored in the gameplay Scene.
 
 ## Implemented composition
 
@@ -49,24 +33,37 @@ one gameplay scene
 one Scene-Provided Local Player
 one Player Actor Runtime Host
 one first-person Actor Presentation
-one Camera Composition
-one physical Camera Output
-one Output-owned Default Camera Rig
-Mounted / First Person presentation
+
+one Session Camera Output
+one Output-owned Fixed Default Camera Rig
+one Activity-owned Player Camera Presentation
+Player Slot -> Output binding
+Player Slot -> Presentation binding
+Mounted / First Person Camera Rig
+ExplicitSelection Subject policy
+
 minimal movement/look Input
 optional persistent Audio runtime
 Route-owned ambient BGM
 ```
 
-The application-specific assets are:
+Application-specific assets:
 
 ```text
 Assets/_Sample/GettingStarted/MinimalGame/
   GameApplication_MinimalGame.asset
+
+  Camera/
+    Presentations/
+      CameraPresentation_MinimalGame_Player.asset
+    Prefabs/
+      PF_MinimalGame_Player_FirstPerson_Presentation.prefab
+
   PlayerProfiles/
     PlayerSessionProfile_MinimalGame.asset
     PlayerSlotProfile_Player1_MinimalGame.asset
     FG_FirstPersonActorProfile.asset
+
   Routes/
     Route_MinimalGame.asset
   Activities/
@@ -78,7 +75,7 @@ Assets/_Sample/GettingStarted/MinimalGame/
     MinimalFirstPersonLocomotion.cs
 ```
 
-The sample intentionally reuses the canonical shared Player and Camera authoring assets:
+Reused canonical assets:
 
 ```text
 Assets/_Sample/PlayerSamples/
@@ -90,18 +87,17 @@ Assets/_Sample/PlayerSamples/
   Player/Players/
     FG_FirstPersonPresentation.prefab
 
-Assets/_Sample/Shared/Camera/
-  FG_DefaultCamera.prefab
-  CameraOutput_Main.asset
-  CameraRigBehavior_Fixed.asset
-  CameraRigBehavior_MountedFirstPerson.asset
+Assets/_Sample/Shared/
+  Prefabs/Cameras/
+    PF_CameraOutput_Main.prefab
+  Camera/Definitions/
+    CameraOutput_Main.asset
+  Camera/Behaviors/
+    CameraBehavior_Fixed.asset
+    CameraBehavior_MountedFirstPerson.asset
 ```
 
-Asset names are changed only through asset-safe Unity move/rename operations that preserve `.meta` identity; documentation terminology does not silently rename serialized assets.
-
 ## Scene-Provided Player composition
-
-The current Player authoring chain is:
 
 ```text
 FG_FirstPersonActorProfile
@@ -129,198 +125,169 @@ FG_SceneProvisioned
               CameraMount
 ```
 
-The Player side exposes **Camera Subject evidence** only. Ordinary Player gameplay does not own Camera Composition, a normal Camera request, Camera Rig or Camera Output.
-
-The first-person presentation supplies the explicit observation Transform through `ActorCameraSubjectAuthoring`. Camera presentation is resolved by the Camera composition described below.
+The Player side exposes Camera Subject evidence only. It does not own a physical Camera Output or a Camera Rig.
 
 ## Camera composition
 
-Persistent Content instantiates the shared camera prefab:
+The physical Camera is Session capacity owned by the GameApplication:
 
 ```text
-MinimalGame_Persistent
-  -> FG_DefaultCamera
+GameApplication_MinimalGame
+  Camera Session
+    Output Prefabs
+      PF_CameraOutput_Main
+
+    Player Output Bindings
+      PlayerSlotProfile_Player1_MinimalGame
+        -> CameraOutput_Main
+
+    Player Presentation Bindings
+      PlayerSlotProfile_Player1_MinimalGame
+        -> CameraPresentation_MinimalGame_Player
 ```
 
-The current Camera chain is:
+The shared Output provides the standard/default camera:
 
 ```text
-FG_DefaultCamera
-  Camera Output
+PF_CameraOutput_Main
+  DefaultOutput
     Unity Camera
     CinemachineBrain
     CameraOutputAuthoring
       Output Definition = CameraOutput_Main
-      Default Camera Rig = Default Camera Rig
+      Default Camera Rig = DefaultRig
 
-  Shared Camera Composition
-    CameraSharedComposition
-      Output Definition = CameraOutput_Main
-      Composition Rig = Gameplay Camera Rig
-      Subject Policy = AllAvailableSubjects
-      Request Precedence = 50
-
-  Default Camera Rig
+  DefaultRig
     CameraRigComposer
-      Behavior Definition = CameraRigBehavior_Fixed
-      Cinemachine Camera
-
-  Gameplay Camera Rig
-    CameraRigComposer
-      Behavior Definition = CameraRigBehavior_MountedFirstPerson
+      Behavior Definition = CameraBehavior_Fixed
       Cinemachine Camera
 ```
 
-Ownership is intentionally separated:
+The gameplay Activity owns the Player Camera Presentation:
 
 ```text
-Player / Actor Presentation
-  -> Camera Subject evidence
+Activity_MinimalGame
+  Camera Presentations
+    CameraPresentation_MinimalGame_Player
+      Output = CameraOutput_Main
+      Subject Policy = ExplicitSelection
+      Transition = Cut
+      Request Precedence = 300
+      Rig Prefab = PF_MinimalGame_Player_FirstPerson_Presentation
 
-CameraSharedComposition
-  -> Subject membership
-  -> Mounted Gameplay Rig
-  -> CameraRequest participation
-
-CameraOutputAuthoring
-  -> physical Camera Output
-  -> Output-owned Default Camera Rig
-
-Unity Camera
-  -> physical full-screen rect
+PF_MinimalGame_Player_FirstPerson_Presentation
+  CameraRigComposer
+    Behavior = CameraBehavior_MountedFirstPerson
+    Cinemachine Camera
+      CinemachineHardLockToTarget
+      CinemachineRotateWithFollowTarget
 ```
 
-`CameraSharedComposition` carries no viewport/layout data. The Framework does not write `Camera.rect`.
+Runtime ownership:
 
-This sample is single-player and `SceneProvided`, so it does not require `PlayerInputManager` as a split-screen layout authority. Samples that demonstrate manager-provisioned local multiplayer own that separate physical layout concern.
+```text
+Player 1 Actor occurrence
+  -> fresh Camera Subject evidence
 
-## Runtime contract proven
+Player 1 -> Presentation binding
+  -> selects that exact Camera Subject
+  -> attaches it to the live Activity Presentation occurrence
 
-The accepted Play Mode proof reaches:
+Activity Presentation
+  -> publishes normal CameraRequest when its selected Subject is available
+
+CameraOutput_Main
+  -> Activity request wins while eligible
+  -> Default Rig remains persistent fallback
+```
+
+Persistent Content intentionally has no Camera authority:
+
+```text
+MinimalGame_Persistent
+  EventSystem
+  Audio Runtime
+
+  no CameraOutputAuthoring
+  no PlayerCameraOutputPolicyAuthoring
+  no PlayerCameraCompositionPolicyAuthoring
+  no CameraSharedComposition
+```
+
+The Framework does not write `Camera.rect`.
+
+## Unity validation target
+
+The previous Play Mode proof predates this CAMERA-032-D/E migration. The migrated composition must now prove:
 
 ```text
 Framework boot
   -> Succeeded
 
-startup Route
-  -> entered
+Camera Session
+  -> Camera Session Outputs materialized
+  -> outputCount = 1
+  -> CameraOutput_Main
 
 startup Activity
   -> Ready
   -> blockingIssues = 0
+  -> CameraPresentation_MinimalGame_Player materialized
 
 Scene Player
   -> Scene-Provided admission completed
-  -> current contextual Player projection established
-
-Camera Output
-  -> CameraOutputAuthoring initialized
-  -> output = CameraOutput_Main
-  -> physical Unity Camera resolved
-  -> CinemachineBrain resolved
-  -> Default Camera Rig resolved
+  -> current Player 1 Actor occurrence established
 
 Player Camera Subject
   -> ActorCameraSubjectAuthoring exposes CameraMount
 
-Camera presentation
-  -> Camera Composition publishes Mounted rig to CameraOutput_Main
-  -> Mounted / First Person presentation
+Player Camera Presentation
+  -> Player Camera Presentation selection attached
+  -> ExplicitSelection resolves Player 1 Subject
+  -> Mounted / First Person CameraRequest wins CameraOutput_Main
 
 MinimalFirstPersonLocomotion
   -> Move / Look navigation operational
-
-Route BGM
-  -> FrameworkRouteBgmBinding = PlayOwn / BGM_Floresta
-  -> BGM_Floresta applied after Startup Activity entry
 ```
-
-Local Player provisioning being reported as `NotConfigured` is expected in this sample because Host Provisioning is `SceneProvided`; it is not a manager-provisioned Player sample.
-
-Audio is **Ambient/Supporting**, not a primary Getting Started lesson.
 
 ## Run
 
-1. Select `GameApplication_MinimalGame.asset` and make it the Active Game Application through the official Framework authoring surface when required.
-2. Open the Minimal Game entry/gameplay context in Unity.
+1. Select `GameApplication_MinimalGame.asset` as the Active Game Application.
+2. Open the Minimal Game gameplay context.
 3. Enter Play Mode.
-4. Use Move and Look to navigate the environment.
-
-## Observe
-
-The intended experience is intentionally small:
-
-```text
-Play
-  -> application starts
-  -> Route enters
-  -> Activity enters
-  -> Scene Player becomes gameplay-ready
-  -> Camera Subject becomes available
-  -> Mounted Camera presents first-person view
-  -> user navigates
-```
-
-No objectives, collectibles, combat, mission flow, Route switching, Activity switching or unrelated gameplay belong to this sample.
+4. Use Move and Look.
 
 ## Inspect
 
-The canonical inspection path is:
-
 ```text
 GameApplication_MinimalGame
-  -> PlayerSessionProfile_MinimalGame (HostProvisioning = SceneProvided)
+  -> PlayerSessionProfile_MinimalGame
+  -> Camera Session
+      -> PF_CameraOutput_Main
+      -> P1 -> CameraOutput_Main
+      -> P1 -> CameraPresentation_MinimalGame_Player
   -> Route_MinimalGame
-  -> Activity_MinimalGame
+      -> Activity_MinimalGame
+          -> CameraPresentation_MinimalGame_Player
 
 MinimalGame_Gameplay
   -> FG_SceneProvisioned
-      -> SceneProvidedLocalPlayerAuthoring
-      -> FG_Player / PlayerInput / LocalPlayerHostAuthoring
+      -> FG_Player
       -> FG_PlayerActor
-          -> PlayerActorRuntimeHost
-          -> PresentationMount
-              -> FG_FirstPersonPresentation
-                  -> MinimalFirstPersonLocomotion
-                  -> ActorCameraSubjectAuthoring
-                     -> CameraMount
+          -> FG_FirstPersonPresentation
+              -> ActorCameraSubjectAuthoring / CameraMount
 
 MinimalGame_Persistent
-  -> FG_DefaultCamera
-      -> CameraOutputAuthoring / CameraOutput_Main
-      -> CameraSharedComposition
-         -> CameraOutput_Main
-         -> Gameplay Camera Rig
-      -> Default Camera Rig / CameraRigComposer
-         -> CameraRigBehavior_Fixed
-      -> Gameplay Camera Rig / CameraRigComposer
-         -> CameraRigBehavior_MountedFirstPerson
-  -> AudioRuntimeHost + FrameworkBgmDirector
-
-Route_MinimalGame
-  -> FrameworkRouteBgmBinding (PlayOwn / BGM_Floresta)
+  -> EventSystem
+  -> Audio Runtime
 ```
 
 ## Completion boundary
 
-For the current visible authoring/proving phase:
-
 ```text
 Getting Started / Minimal Game
-  COMPLETE
+  CAMERA-032-D/E authoring migration complete
+  Unity Play Mode revalidation pending
 ```
 
-This means the configured sample behavior and canonical composition are materialized and proven in Play Mode.
-
-It does **not** mean final UPM distribution is complete. Release promotion remains a separate step:
-
-```text
-planet-devourer/Assets/_Sample/GettingStarted
-  -> promote/materialize into
-com.immersive.framework/Samples~/GettingStarted
-  -> declare package samples metadata
-  -> import through Package Manager in a clean consumer project
-  -> validate references and Play Mode from the imported copy
-```
-
-That packaging/import gate does not block beginning the next sample implementation cut.
+Final UPM promotion/import validation remains a later package-finalization gate.
