@@ -1,6 +1,6 @@
 # Getting Started
 
-Status: **CAMERA-029-F MIGRATED LOCALLY — prior Play Mode proof predates this Camera migration; Unity revalidation pending**
+Status: **CAMERA-032-D/E MIGRATED LOCALLY — Unity revalidation pending**
 UPM promotion: **PENDING package finalization/import proof**
 
 ## Demonstration Application
@@ -17,13 +17,11 @@ Getting Started proves navigation, not gameplay.
 
 Getting Started / Minimal Game is the sample program's **canonical Scene-Provided Player reference**.
 
-The Player sample family does not require a separate dedicated Scene-Provided Demonstration Application under Player for the same baseline. Any future dedicated Scene-Provided Player sample requires evidence of a distinct consumer contract.
+The Player sample family does not require a separate dedicated Scene-Provided Demonstration Application for the same baseline. Any future dedicated Scene-Provided Player sample requires evidence of a distinct consumer contract.
 
 Player-specific sample scope is governed by `FG-ADR-002 — Player Sample Scope and Demonstration Architecture`.
 
-## Current result
-
-Minimal Game now provides and proves the intended baseline:
+## Current composition
 
 ```text
 GameApplication
@@ -34,39 +32,58 @@ one Activity
 Scene-Provided Player
 GameplayReady participation
 explicit Actor Camera Subject
-Camera Composition -> Request -> Output participation
-Output-owned Default Camera Rig
-Mounted / First Person presentation
+
+GameApplication Camera Session
+  -> one explicit physical Camera Output
+  -> Output-owned Fixed Default Camera Rig
+  -> Player 1 -> Output binding
+  -> Player 1 -> Camera Presentation binding
+
+Activity Camera Presentation
+  -> ExplicitSelection
+  -> Mounted / First Person rig
+  -> normal CameraRequest arbitration
+
 minimal Move / Look navigation
 ```
 
-Camera presentation follows the current logical/physical ownership split:
+Camera ownership follows IF-ADR-032:
 
 ```text
 Scene Player / Actor Presentation
   -> ActorCameraSubjectAuthoring
   -> Camera Subject evidence
 
-CameraSharedComposition
-  -> Mounted Gameplay Rig
-  -> CameraRequest
+GameApplication Camera Session
+  -> PF_CameraOutput_Main
   -> CameraOutput_Main
-
-CameraOutputAuthoring
   -> physical Unity Camera + CinemachineBrain
-  -> explicit Fixed Default Camera Rig
+  -> Fixed Default Camera Rig
+  -> Player 1 -> Output
+  -> Player 1 -> CameraPresentation_MinimalGame_Player
+
+Activity_MinimalGame
+  -> CameraPresentation_MinimalGame_Player
+  -> live Mounted / First Person Presentation occurrence
 ```
+
+Persistent Content does **not** own Camera Outputs, Player Camera policies or `CameraSharedComposition`.
 
 Getting Started is single-player and Scene-Provided. It does not require a `PlayerInputManager` split-screen layout authority. The physical Unity Camera remains full-screen and the Framework does not author or write `Camera.rect`.
 
-The current Play Mode proof finishes with:
+## Unity validation target
+
+The migrated sample must prove:
 
 ```text
 Framework boot succeeded
+Camera Session Output materialized
 Activity Ready
 blockingIssues = 0
-Camera Output initialized
 Scene Player admitted
+Player Camera Subject available
+Player Camera Presentation selection attached
+Mounted / First Person Presentation active
 Move received
 Look received
 ```
@@ -75,6 +92,6 @@ See `MinimalGame/README.md` for the runnable composition and inspection path.
 
 ## Program status
 
-For sample construction, Getting Started / Sample 00 is **closed**.
+The authoring migration is materialized. Unity Play Mode revalidation is required before Getting Started / Sample 00 is marked closed again.
 
 Official UPM release remains a later program-wide finalization step. The final `GettingStarted` group must still be promoted into `com.immersive.framework/Samples~/GettingStarted` and validated from a real Package Manager import before being called release-ready.
