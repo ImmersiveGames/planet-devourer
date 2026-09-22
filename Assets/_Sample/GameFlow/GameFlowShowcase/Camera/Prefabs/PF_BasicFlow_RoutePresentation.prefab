@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7585290190919835138}
   - component: {fileID: 2976048303375041583}
   m_Layer: 0
-  m_Name: PF_GameFlow_FixedPresentation
+  m_Name: PF_BasicFlow_RoutePresentation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
