@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ce6d27d442ac76449f283afbc33d04f, type: 3}
+  m_Name: GameApplication_ManagerProvisioned
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.GameApplicationAsset
+  applicationName: ManagerProvisioned
+  startupRoute: {fileID: 11400000, guid: baba9ebae56d14444b137f94af516227, type: 2}
+  playerSessionEnabled: 1
+  defaultPlayerSessionProfile: {fileID: 11400000, guid: 0f11af151d9f96947bed07ad9830da02, type: 2}
+  playerActorSelectionDuplicatePolicy: 10
+  progressionSaveEnabled: 0
+  defaultProgressionSaveProfile: {fileID: 0}
+  cameraSession:
+    outputPrefabs:
+    - {fileID: 627951520136573394, guid: aa25a21ce579a4944bbd1ed458453d79, type: 3}
+    playerOutputBindings:
+    - playerSlotProfile: {fileID: 11400000, guid: c1dee36a59ff7ec45ad47e8224ad7622, type: 2}
+      outputDefinition: {fileID: 11400000, guid: 59cb18909e849e34db5f3c4aed7291dc, type: 2}
+    playerPresentationBindings:
+    - playerSlotProfile: {fileID: 11400000, guid: c1dee36a59ff7ec45ad47e8224ad7622, type: 2}
+      presentationDefinition: {fileID: 11400000, guid: 8e77513eb951b15469af73aca978bd94, type: 2}
+  sessionCameraPresentations: []
+  persistentContent:
+    containerScene: {fileID: 102900000, guid: cdff4c15f56010749b29338a5c224253, type: 3}
+  validationMode: 1

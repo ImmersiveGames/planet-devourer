@@ -1,0 +1,18 @@
+{
+  "base_repository": "ImmersiveGames/planet-devourer",
+  "base_branch": "main",
+  "base_scene": "Assets/_Project/Scenes/RotesContents/Sample_Environment.unity",
+  "base_scene_blob": "82ad475ac8983128b19c52d547ea1a4687acc1aa",
+  "created": [
+    "Assets/_Project/Prefabs/UI.meta",
+    "Assets/_Project/Prefabs/UI/PF_LifecycleBillboard.prefab",
+    "Assets/_Project/Prefabs/UI/PF_LifecycleBillboard.prefab.meta",
+    "Patches/Sample_Environment.LifecycleBillboard.patch",
+    "README.md"
+  ],
+  "edited_by_patch": [
+    "Assets/_Project/Scenes/RotesContents/Sample_Environment.unity"
+  ],
+  "removed": [],
+  "runtime_scripts": 0
+}
