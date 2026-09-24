@@ -135,16 +135,16 @@ using UnityEngine.InputSystem;
         {
             _ = context;
 
-            if (keyboardGamepadSimulator == null)
+            Keyboard keyboard = Keyboard.current;
+            if (keyboard == null || !keyboard.added)
             {
                 Debug.LogError(
                     "[FG_LOCAL_MULTIPLAYER_JOIN_INPUT] " +
-                    "Keyboard Gamepad Simulator is not assigned; cannot simulate Device 1.");
+                    "A physical Keyboard is required for Player 1.");
                 return;
             }
 
-            Gamepad device = keyboardGamepadSimulator.GetOrCreateDevice1();
-            DeviceRequested?.Invoke(device, "Simulated Gamepad 1");
+            DeviceRequested?.Invoke(keyboard, "Keyboard & Mouse");
         }
 
         private void OnSimulateDevice2Performed(InputAction.CallbackContext context)
