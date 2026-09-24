@@ -59,5 +59,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Sample/PlayerSamples/CharacterSelectionMultiplayerSplitScreen/Scenes/CharacterSelectionMultiplayerSplitScreen.unity
     guid: 45e05b1c17f8414459bb2586fdd86a04
+  - enabled: 1
+    path: Assets/_Sample/PlayerSamples/Shared/Scenes/ResetScene.unity
+    guid: bb94a9e5a56bf754ab538f2265992b32
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

@@ -16,7 +16,9 @@ MonoBehaviour:
   routeName: Minimal Game
   primaryScenePath: Assets/_Sample/GettingStarted/MinimalGame/Scenes/MinimalGame_Gameplay.unity
   primarySceneName: MinimalGame_Gameplay
-  routeContentProfile: {fileID: 0}
+  routeContentProfile: {fileID: 11400000, guid: 8e6a7397f606ada46857a0457b7d8f4a, type: 2}
   startupActivity: {fileID: 11400000, guid: d2151ace8eeb61b4c9f47f8ee416810e, type: 2}
+  playerSpatialEntryPolicy: 0
+  cameraPresentations: []
   transitionGateMode: 30
   description: 
