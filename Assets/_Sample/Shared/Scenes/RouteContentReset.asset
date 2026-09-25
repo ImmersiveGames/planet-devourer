@@ -15,7 +15,7 @@ MonoBehaviour:
   profileId: 
   additionalScenes:
   - contentId: route-content.resetscene
-    scenePath: Assets/_Sample/PlayerSamples/Shared/Scenes/ResetScene.unity
+    scenePath: Assets/_Sample/Shared/Scenes/ResetScene.unity
     sceneName: ResetScene
     requiredness: 0
   description: 
