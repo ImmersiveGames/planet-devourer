@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.RouteContentProfileAsset
   profileId: 
   additionalScenes:
-  - contentId: route-content.resetscene
-    scenePath: Assets/_Sample/Shared/Scenes/ResetScene.unity
-    sceneName: ResetScene
+  - contentId: route-content.activityRestart
+    scenePath: Assets/_Sample/Shared/Scenes/ActivityRestart.unity
+    sceneName: ActivityRestart
     requiredness: 0
   description: 

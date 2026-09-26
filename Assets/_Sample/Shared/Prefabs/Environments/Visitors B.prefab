@@ -4554,8 +4554,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3184325946220856319}
+  - component: {fileID: 2360762612306583329}
+  - component: {fileID: 3380026121228664171}
   m_Layer: 0
-  m_Name: Thief_Male_011
+  m_Name: Thief_Male_A
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4580,6 +4582,58 @@ Transform:
   - {fileID: 8609905337603967884}
   m_Father: {fileID: 1855042916481194475}
   m_LocalEulerAnglesHint: {x: 0, y: 185.574, z: 0}
+--- !u!114 &2360762612306583329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2643519635631766331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71ee52cb6da64fb691d51a321688c072, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Reset.Unity.UnityResetSubjectAdapter
+  registerOnEnable: 1
+  unregisterOnDisable: 1
+  retryUntilRuntimeAvailable: 1
+  idGeneration: 10
+  subjectId: sample.reset.npc.a
+  runtimeSubjectIdPrefix: 
+  scope: 20
+  displayName: Thief_Male_A
+  diagnosticTag: 
+  sourceActor: {fileID: 0}
+  sourcePlayerActor: {fileID: 0}
+  participantDiscovery: 10
+  includeInactiveParticipants: 1
+  includeUnityResettableComponents: 1
+--- !u!114 &3380026121228664171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2643519635631766331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c38bb81ea60d475c8bd3479b0ce24e8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Reset.Unity.UnityTransformResetParticipant
+  participantId: transform
+  requiredness: 10
+  order: 0
+  displayName: Transform
+  source: UnityTransformResetParticipant
+  reason: unity-transform-reset
+  target: {fileID: 3184325946220856319}
+  captureBaselineOnEnable: 1
+  resetPosition: 1
+  resetRotation: 1
+  resetScale: 1
+  baselineLocalPosition: {x: -3.71, y: 0, z: 0.06906709}
+  baselineLocalEulerAngles: {x: 0, y: 185.57391, z: 0}
+  baselineLocalScale: {x: 1, y: 1, z: 1}
 --- !u!1 &2680008187743608788
 GameObject:
   m_ObjectHideFlags: 0
@@ -8342,8 +8396,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3128162884788934936}
+  - component: {fileID: 2158969752425559259}
+  - component: {fileID: 156059039225778765}
   m_Layer: 0
-  m_Name: Gym_Female_011
+  m_Name: Gym_Female_C
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8368,6 +8424,58 @@ Transform:
   - {fileID: 1137194863403607786}
   m_Father: {fileID: 1855042916481194475}
   m_LocalEulerAnglesHint: {x: 0, y: 435.08398, z: 0}
+--- !u!114 &2158969752425559259
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4511970170469849638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71ee52cb6da64fb691d51a321688c072, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Reset.Unity.UnityResetSubjectAdapter
+  registerOnEnable: 1
+  unregisterOnDisable: 1
+  retryUntilRuntimeAvailable: 1
+  idGeneration: 10
+  subjectId: sample.reset.npc.c
+  runtimeSubjectIdPrefix: 
+  scope: 20
+  displayName: Gym_Female_C
+  diagnosticTag: 
+  sourceActor: {fileID: 0}
+  sourcePlayerActor: {fileID: 0}
+  participantDiscovery: 10
+  includeInactiveParticipants: 1
+  includeUnityResettableComponents: 1
+--- !u!114 &156059039225778765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4511970170469849638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c38bb81ea60d475c8bd3479b0ce24e8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Reset.Unity.UnityTransformResetParticipant
+  participantId: transform
+  requiredness: 10
+  order: 0
+  displayName: Transform
+  source: UnityTransformResetParticipant
+  reason: unity-transform-reset
+  target: {fileID: 3128162884788934936}
+  captureBaselineOnEnable: 1
+  resetPosition: 1
+  resetRotation: 1
+  resetScale: 1
+  baselineLocalPosition: {x: 1.9954791, y: 0, z: -7.404411}
+  baselineLocalEulerAngles: {x: -0, y: 75.08394, z: 0}
+  baselineLocalScale: {x: 1, y: 1, z: 1}
 --- !u!1 &4526965004014463193
 GameObject:
   m_ObjectHideFlags: 0
@@ -12611,8 +12719,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2179765696542308567}
+  - component: {fileID: 804880958095901103}
+  - component: {fileID: 3793598746029365601}
   m_Layer: 0
-  m_Name: Old_Lady_Female_02
+  m_Name: Old_Lady_Female_B
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12638,6 +12748,58 @@ Transform:
   - {fileID: 4294966308448756082}
   m_Father: {fileID: 1855042916481194475}
   m_LocalEulerAnglesHint: {x: 0, y: 96.73, z: 0}
+--- !u!114 &804880958095901103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7722874785199115505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71ee52cb6da64fb691d51a321688c072, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Reset.Unity.UnityResetSubjectAdapter
+  registerOnEnable: 1
+  unregisterOnDisable: 1
+  retryUntilRuntimeAvailable: 1
+  idGeneration: 10
+  subjectId: sample.reset.npc.b
+  runtimeSubjectIdPrefix: 
+  scope: 20
+  displayName: Old_Lady_Female_B
+  diagnosticTag: 
+  sourceActor: {fileID: 0}
+  sourcePlayerActor: {fileID: 0}
+  participantDiscovery: 10
+  includeInactiveParticipants: 1
+  includeUnityResettableComponents: 1
+--- !u!114 &3793598746029365601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7722874785199115505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c38bb81ea60d475c8bd3479b0ce24e8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Reset.Unity.UnityTransformResetParticipant
+  participantId: transform
+  requiredness: 10
+  order: 0
+  displayName: Transform
+  source: UnityTransformResetParticipant
+  reason: unity-transform-reset
+  target: {fileID: 2179765696542308567}
+  captureBaselineOnEnable: 1
+  resetPosition: 1
+  resetRotation: 1
+  resetScale: 1
+  baselineLocalPosition: {x: -7.4108534, y: 0, z: -2.3530002}
+  baselineLocalEulerAngles: {x: -0, y: 96.72958, z: -0}
+  baselineLocalScale: {x: 1, y: 1, z: 1}
 --- !u!1 &7728654546755870176
 GameObject:
   m_ObjectHideFlags: 0
