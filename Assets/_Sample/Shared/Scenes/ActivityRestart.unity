@@ -333,7 +333,7 @@ MonoBehaviour:
   groupId: sample.reset.group.a-b
   reason: reset.object-group.b-c
   selection:
-    mode: 10
+    mode: 30
     explicitSubjects:
     - subjectAdapter: {fileID: 0}
       subjectId: sample.reset.npc.b
