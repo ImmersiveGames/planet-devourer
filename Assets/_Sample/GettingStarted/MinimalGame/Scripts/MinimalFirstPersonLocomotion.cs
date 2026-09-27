@@ -56,7 +56,7 @@ public sealed class MinimalFirstPersonLocomotion : MonoBehaviour
         if (_characterController == null ||
             !_characterController.enabled ||
             _gameplayInputReader == null ||
-            !_gameplayInputReader.GameplayReady)
+            !_gameplayInputReader.RuntimeGameplayAvailable)
         {
             return;
         }

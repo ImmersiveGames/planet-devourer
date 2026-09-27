@@ -47,7 +47,7 @@ namespace Immersive.Framework.Samples.Player
         private void Update()
         {
             if (_gameplayInputReader == null ||
-                !_gameplayInputReader.GameplayReady ||
+                !_gameplayInputReader.RuntimeGameplayAvailable ||
                 trackingPivot == null ||
                 lookAction == null)
             {

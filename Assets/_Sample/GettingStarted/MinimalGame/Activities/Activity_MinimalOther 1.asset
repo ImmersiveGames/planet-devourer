@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c6d702c1ba364e70ad76a85eb5f1b842, type: 3}
-  m_Name: Activity_MinimalOther
+  m_Name: Activity_MinimalOther 1
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.ActivityAsset
-  activityId: 1d252c3106504725b7f0ae5a586fbc1b
-  activityName: ActivityOther
+  activityId: 64c9ecd552c34c05bea054bdbf425b0f
+  activityName: ActivityOther2
   description: 
   playerParticipationProjectionMode: 10
   playerParticipationZeroParticipantPolicy: 0
@@ -23,6 +23,6 @@ MonoBehaviour:
   playerRelocationPolicy: 0
   activityEntryReadinessPolicy: 0
   visualTransitionMode: 0
-  cameraPresentations:
-  - {fileID: 11400000, guid: d7f06c84c7864fe2b414619466fc2ab9, type: 2}
+  cameraPresentations: []
+  cameraPresentationSelections: []
   transitionGateMode: 10

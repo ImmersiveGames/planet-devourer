@@ -40,7 +40,7 @@ namespace Immersive.Framework.Samples.Player
             if (_characterController == null ||
                 !_characterController.enabled ||
                 _gameplayInputReader == null ||
-                !_gameplayInputReader.GameplayReady ||
+                !_gameplayInputReader.RuntimeGameplayAvailable ||
                 moveAction == null ||
                 movementReference == null)
             {
