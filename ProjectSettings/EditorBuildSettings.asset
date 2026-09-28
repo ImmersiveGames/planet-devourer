@@ -65,5 +65,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Sample/GettingStarted/MinimalGame/Scenes/MinimalGame_Other.unity
     guid: 17977272ab79f5b48af14c5f831c7acb
+  - enabled: 1
+    path: Assets/_Sample/PlayerSamples/ManagerProvisioned/Scenes/ManagerProvisionedOtherRopute.unity
+    guid: ebcfcefca671a144a885e7d0d5b8cafa
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

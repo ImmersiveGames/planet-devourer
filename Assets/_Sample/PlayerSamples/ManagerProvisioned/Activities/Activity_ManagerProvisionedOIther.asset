@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c6d702c1ba364e70ad76a85eb5f1b842, type: 3}
-  m_Name: Activity_MinimalOther 1
+  m_Name: Activity_ManagerProvisionedOIther
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Authoring.ActivityAsset
-  activityId: 64c9ecd552c34c05bea054bdbf425b0f
-  activityName: ActivityOther2
+  activityId: c6a96a8c38d145f887913106310764bb
+  activityName: Manager Provisioned Other
   description: 
   playerParticipationProjectionMode: 10
-  playerParticipationZeroParticipantPolicy: 0
+  playerParticipationZeroParticipantPolicy: 10
   playerParticipationExplicitSlotProfiles: []
   playerParticipationRequirementLevel: 40
   activityContentProfile: {fileID: 0}
