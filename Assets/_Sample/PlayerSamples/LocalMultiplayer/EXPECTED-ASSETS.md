@@ -125,23 +125,23 @@ PF_LocalMultiplayer_Activity_Presentation
 
 Do not put `CameraOutputAuthoring`, a physical Unity Camera, CinemachineBrain or `CameraSharedComposition` in this Presentation prefab.
 
-## Required Actor Camera evidence
+## Required Actor Camera Subject evidence
 
-Both Group Actor Presentations require explicit Camera Subject authoring:
+Each current Actor occurrence owns its Camera Subject authoring and explicitly supplies an Observation Transform. The observation target may differ from the Actor root and must belong to that exact Actor occurrence. The visual Presentation prefab remains subordinate content and does not own Subject identity or spatial authority.
 
 ~~~text
-FG_FarmerPresentationGroup
+Farmer Group Actor occurrence
   ActorCameraSubjectAuthoring
-    Observation Transform = Farmer Group framing anchor
+    Observation Transform = Farmer Group framing anchor (Actor-owned)
     Framing Radius > 0
 
-FG_CowPresentationGroup
+Cow Group Actor occurrence
   ActorCameraSubjectAuthoring
-    Observation Transform = Cow Group framing anchor
+    Observation Transform = Cow Group framing anchor (Actor-owned)
     Framing Radius > 0
 ~~~
 
-The Observation Transform may be an empty GameObject.
+The Observation Transform may be an empty GameObject beneath the Actor occurrence. Camera Subject identity is renewed with Actor replacement while the existing Player and Camera Occurrence remain.
 
 For Group framing:
 
@@ -153,7 +153,7 @@ Target.Radius =
   CameraBehavior_Group.MemberRadius otherwise
 ~~~
 
-The behavior-level member radius is fallback only; character-specific extent belongs on the Actor Presentation.
+The behavior-level member radius is fallback only; character-specific extent belongs to the Actor Camera Subject authoring.
 
 ## Current public Player composition
 
@@ -183,12 +183,12 @@ Activity
   -> CameraPresentation_LocalMultiplayer
 
 P1
-  -> Farmer Group Actor Presentation
+  -> Farmer Group Actor occurrence
   -> Camera Subject
   -> one-member Group
 
 P2
-  -> Cow Group Actor Presentation
+  -> Cow Group Actor occurrence
   -> Camera Subject
   -> two-member Group
 

@@ -46,9 +46,6 @@ Assets/_Sample/PlayerSamples/
     FG_PlayerActor.prefab
   Player/Provisioned/
     FG_SceneProvisioned.prefab (shared baseline)
-  Player/Players/
-    FG_FirstPersonPresentation.prefab
-
 Assets/_Sample/Shared/
   Prefabs/Cameras/
     PF_CameraOutput_Main.prefab
@@ -67,7 +64,7 @@ PlayerSessionProfile_MinimalGame
   Supported Slot = PlayerSlotProfile_Player1_MinimalGame
 
 FG_FirstPersonActorProfile
-  PresentationPrefab = FG_FirstPersonPresentation.prefab
+  VisualContentPrefab = None (the Actor has no concrete visual content)
 
 FG_MinimalGame_SceneProvisioned
   SceneProvidedLocalPlayerAuthoring
@@ -83,8 +80,6 @@ FG_MinimalGame_SceneProvisioned
         ObservationTransform = CameraMount
       CameraMount
       PlayerActorRuntimeHost
-        PresentationMount
-          FG_FirstPersonPresentation (visual only)
 
 Activity_MinimalGame
   Player participation requirement = GameplayReady

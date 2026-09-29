@@ -154,7 +154,7 @@ PlayerSessionObserver.OnActorSelected
 
 Leave/Rejoin returns to `WaitingForActorSelection` and supports another explicit choice without passing through a failed readiness state.
 
-### Current Actor presentation chain
+### Optional Actor visual-content configuration
 
 The physical composition was rebuilt after the Player Actor / Presentation architecture changes.
 
@@ -162,10 +162,10 @@ Current Character Selection Actor assets are:
 
 ```text
 ActorProfile_Farmer
-  -> PresentationPrefab = FG_FarmerPresentation
+  -> optional VisualContentPrefab = FG_FarmerPresentation
 
 ActorProfile_Cow
-  -> PresentationPrefab = FG_CowPresentation
+  -> optional VisualContentPrefab = FG_CowPresentation
 ```
 
 The concrete prefabs are authored under:
@@ -237,7 +237,7 @@ Current physical-composition reproof — **2026-09-05**:
 Join
 -> WaitingForActorSelection
 -> Farmer / Cow explicit selection
--> correct PresentationPrefab materialized
+-> configured optional VisualContentPrefab materialized
 -> Follow camera functional
 -> gameplay movement/input functional
 -> GameplayReady
@@ -446,4 +446,4 @@ Player samples consume public/product Framework APIs.
 
 If a required public Player contract is missing, the demonstration remains blocked at that boundary. Sample code must not hide a product gap with internal discovery, reflection, direct runtime mutation, parallel registries or silent fallbacks.
 
-Character Selection and Local Multiplayer satisfy the Player public-surface gate on their current compositions. Both are migrated to the current Camera Presentation model; remaining Player sample work is concrete demonstration behavior, while full Camera certification remains Framework/QA work.
+Character Selection and Local Multiplayer satisfy the Player public-surface gate on their current compositions. Both consume the current Session Camera APIs; remaining Player sample work is concrete demonstration behavior, while full Camera certification and Actor-occurrence Subject migration remain Framework/QA work.

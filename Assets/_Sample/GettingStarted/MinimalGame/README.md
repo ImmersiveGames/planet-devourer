@@ -32,7 +32,7 @@ one Activity
 one gameplay scene
 one Scene-Provided Local Player
 one Player Actor Runtime Host
-one first-person Actor Presentation
+one Actor occurrence with an explicit Camera Subject
 
 one Session Camera Output
 one Output-owned Fixed Default Camera Rig
@@ -88,9 +88,6 @@ Assets/_Sample/PlayerSamples/
     FG_PlayerActor.prefab
   Player/Provisioned/
     FG_SceneProvisioned.prefab
-  Player/Players/
-    FG_FirstPersonPresentation.prefab
-
 Assets/_Sample/Shared/
   Prefabs/Cameras/
     PF_CameraOutput_Main.prefab
@@ -105,7 +102,7 @@ Assets/_Sample/Shared/
 
 ```text
 FG_FirstPersonActorProfile
-  PresentationPrefab = FG_FirstPersonPresentation.prefab
+  VisualContentPrefab = None (the Actor has no concrete visual content)
 
 FG_MinimalGame_SceneProvisioned
   SceneProvidedLocalPlayerAuthoring
@@ -125,11 +122,9 @@ FG_MinimalGame_SceneProvisioned
           ObservationTransform = CameraMount
         CameraMount
         PlayerActorRuntimeHost
-          PresentationMount
-            FG_FirstPersonPresentation (visual only)
 ```
 
-The Player side exposes Camera Subject evidence only. It does not own a physical Camera Output or a Camera Rig.
+The Actor occurrence owns movement, physical state, and explicit Camera Subject evidence. The MinimalGame Actor has no configured visual content. The Player side does not own a physical Camera Output or a Camera Rig.
 
 ## Camera composition
 
@@ -282,8 +277,7 @@ MinimalGame_Gameplay
           -> ActorCameraSubjectAuthoring
               -> ObservationTransform = CameraMount
           -> CameraMount
-          -> PlayerActorRuntimeHost / PresentationMount
-              -> FG_FirstPersonPresentation (visual only)
+          -> PlayerActorRuntimeHost (no visual content configured)
           -> MinimalFirstPersonLocomotion on Actor root: Move and yaw
              -> ActorCameraSubjectAuthoring ObservationTransform: pitch
 
