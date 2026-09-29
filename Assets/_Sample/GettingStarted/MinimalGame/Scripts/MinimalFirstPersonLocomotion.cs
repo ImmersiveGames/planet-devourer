@@ -1,3 +1,4 @@
+using Immersive.Framework.Actors;
 using Immersive.Framework.PlayerParticipation;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -19,9 +20,6 @@ public sealed class MinimalFirstPersonLocomotion : MonoBehaviour
     private float moveSpeed = 5f;
 
     [Header("Look")]
-    [SerializeField]
-    private Transform cameraMount;
-
     [SerializeField, Min(0f)]
     private float lookSensitivity = 0.1f;
 
@@ -33,6 +31,7 @@ public sealed class MinimalFirstPersonLocomotion : MonoBehaviour
 
     private CharacterController _characterController;
     private IPlayerGameplayInputReader _gameplayInputReader;
+    private Transform _observationTransform;
     private float _pitch;
 
     private void Awake()
@@ -40,10 +39,11 @@ public sealed class MinimalFirstPersonLocomotion : MonoBehaviour
         _characterController = GetComponent<CharacterController>();
         _gameplayInputReader = GetComponent<PlayerGameplayInputReader>();
 
-        if (cameraMount != null)
+        if (TryResolveObservationTransform(out Transform observationTransform))
         {
+            _observationTransform = observationTransform;
             _pitch = Mathf.Clamp(
-                NormalizeSignedAngle(cameraMount.localEulerAngles.x),
+                NormalizeSignedAngle(_observationTransform.localEulerAngles.x),
                 minimumPitch,
                 maximumPitch);
         }
@@ -92,7 +92,6 @@ public sealed class MinimalFirstPersonLocomotion : MonoBehaviour
     private void ApplyLook()
     {
         if (lookAction == null ||
-            cameraMount == null ||
             !_gameplayInputReader.TryReadValue(lookAction, out Vector2 look) ||
             look.sqrMagnitude <= 0.0001f)
         {
@@ -105,12 +104,17 @@ public sealed class MinimalFirstPersonLocomotion : MonoBehaviour
             0f,
             Space.Self);
 
+        if (_observationTransform == null)
+        {
+            return;
+        }
+
         _pitch = Mathf.Clamp(
             _pitch - look.y * lookSensitivity,
             minimumPitch,
             maximumPitch);
 
-        cameraMount.localRotation =
+        _observationTransform.localRotation =
             Quaternion.Euler(_pitch, 0f, 0f);
     }
 
@@ -119,14 +123,14 @@ public sealed class MinimalFirstPersonLocomotion : MonoBehaviour
         if (_characterController == null)
         {
             Debug.LogError(
-                "MinimalFirstPersonLocomotion requires CharacterController on the same Presentation GameObject.",
+                "MinimalFirstPersonLocomotion requires CharacterController on the Actor occurrence root.",
                 this);
         }
 
         if (_gameplayInputReader == null)
         {
             Debug.LogError(
-                "MinimalFirstPersonLocomotion requires PlayerGameplayInputReader on the same Presentation GameObject.",
+                "MinimalFirstPersonLocomotion requires PlayerGameplayInputReader on the Actor occurrence root.",
                 this);
         }
 
@@ -143,13 +147,43 @@ public sealed class MinimalFirstPersonLocomotion : MonoBehaviour
                 "MinimalFirstPersonLocomotion requires an authored Look InputActionReference.",
                 this);
         }
+    }
 
-        if (cameraMount == null)
+    private bool TryResolveObservationTransform(out Transform observationTransform)
+    {
+        observationTransform = null;
+        ActorDeclaration actorDeclaration = GetComponent<ActorDeclaration>();
+        if (actorDeclaration == null)
         {
             Debug.LogError(
-                "MinimalFirstPersonLocomotion requires an authored Camera Mount.",
+                "MinimalFirstPersonLocomotion requires ActorDeclaration on the same Actor occurrence root. Look pitch is disabled; movement and yaw remain available.",
                 this);
+            return false;
         }
+
+        ActorCameraSubjectAuthoring subjectAuthoring =
+            actorDeclaration.GetComponent<ActorCameraSubjectAuthoring>();
+        if (subjectAuthoring == null)
+        {
+            Debug.LogError(
+                "MinimalFirstPersonLocomotion could not resolve ActorCameraSubjectAuthoring on its containing Actor occurrence. Look pitch is disabled; movement and yaw remain available.",
+                this);
+            return false;
+        }
+
+        if (!subjectAuthoring.TryResolveObservation(
+                actorDeclaration,
+                out observationTransform,
+                out string issue))
+        {
+            Debug.LogError(
+                $"MinimalFirstPersonLocomotion could not resolve the Actor occurrence ObservationTransform. Look pitch is disabled; movement and yaw remain available. {issue}",
+                this);
+            observationTransform = null;
+            return false;
+        }
+
+        return true;
     }
 
     private void OnValidate()

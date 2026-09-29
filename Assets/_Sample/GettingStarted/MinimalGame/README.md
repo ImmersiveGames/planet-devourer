@@ -71,6 +71,10 @@ Assets/_Sample/GettingStarted/MinimalGame/
   Scenes/
     MinimalGame_Gameplay.unity
     MinimalGame_Persistent.unity
+  Prefabs/
+    FG_MinimalGame_FirstPersonActor.prefab
+    FG_MinimalGame_SceneProvisioned.prefab
+
   Scripts/
     MinimalFirstPersonLocomotion.cs
 ```
@@ -103,26 +107,26 @@ Assets/_Sample/Shared/
 FG_FirstPersonActorProfile
   PresentationPrefab = FG_FirstPersonPresentation.prefab
 
-FG_SceneProvisioned
+FG_MinimalGame_SceneProvisioned
   SceneProvidedLocalPlayerAuthoring
   FG_Player
     PlayerInput
     LocalPlayerHostAuthoring
       ActorMount
-      PlayerActorRuntimeHostPrefab = FG_PlayerActor.prefab
+      PlayerActorRuntimeHostPrefab = FG_PlayerActor.prefab (shared host default)
     UnityPlayerInputGateAdapter
     ActorMount
-      FG_PlayerActor
+      FG_MinimalGame_FirstPersonActor
         PlayerActorDeclaration
+        CharacterController
+        PlayerGameplayInputReader
+        MinimalFirstPersonLocomotion
+        ActorCameraSubjectAuthoring
+          ObservationTransform = CameraMount
+        CameraMount
         PlayerActorRuntimeHost
           PresentationMount
-            FG_FirstPersonPresentation
-              PlayerGameplayInputReader
-              CharacterController
-              MinimalFirstPersonLocomotion
-              ActorCameraSubjectAuthoring
-                Observation Transform = CameraMount
-              CameraMount
+            FG_FirstPersonPresentation (visual only)
 ```
 
 The Player side exposes Camera Subject evidence only. It does not own a physical Camera Output or a Camera Rig.
@@ -239,7 +243,8 @@ Scene Player
   -> current Player 1 Actor occurrence established
 
 Player Camera Subject
-  -> ActorCameraSubjectAuthoring exposes CameraMount
+  -> Actor occurrence provides ActorCameraSubjectAuthoring
+  -> ObservationTransform = CameraMount
 
 Player Camera Presentation
   -> Player Camera Presentation selection attached
@@ -271,11 +276,16 @@ GameApplication_MinimalGame
           -> CameraPresentation_MinimalGame_Player
 
 MinimalGame_Gameplay
-  -> FG_SceneProvisioned
+  -> FG_MinimalGame_SceneProvisioned
       -> FG_Player
-      -> FG_PlayerActor
-          -> FG_FirstPersonPresentation
-              -> ActorCameraSubjectAuthoring / CameraMount
+      -> FG_MinimalGame_FirstPersonActor
+          -> ActorCameraSubjectAuthoring
+              -> ObservationTransform = CameraMount
+          -> CameraMount
+          -> PlayerActorRuntimeHost / PresentationMount
+              -> FG_FirstPersonPresentation (visual only)
+          -> MinimalFirstPersonLocomotion on Actor root: Move and yaw
+             -> ActorCameraSubjectAuthoring ObservationTransform: pitch
 
 MinimalGame_Persistent
   -> EventSystem

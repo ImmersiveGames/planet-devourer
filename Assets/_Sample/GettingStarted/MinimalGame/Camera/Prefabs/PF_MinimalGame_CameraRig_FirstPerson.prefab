@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8309415884297544212}
   - component: {fileID: 8309415884297544213}
   m_Layer: 0
-  m_Name: PF_MinimalGame_Player_FirstPerson_Presentation
+  m_Name: PF_MinimalGame_CameraRig_FirstPerson
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -43,7 +43,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 6d1bda0d2aa64f85a2a0d71755cd1003, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.CameraAuthoring.CameraRigComposer
   behaviorDefinition: {fileID: 11400000, guid: e33910a5b0ab070458f08f29085317e2, type: 2}
   cinemachineCamera: {fileID: 8309415884297544223}
@@ -56,8 +56,10 @@ MonoBehaviour:
   materializationRevision: 1
   logApplyRebuildDiagnostics: 1
   lastApplyRebuildStatus: ValidationSucceeded
-  lastBlockingIssue:
-  lastMaterializationSummary: Mounted First Person Presentation rig with explicit Follow subject.
+  lastBlockingIssue: 
+  lastMaterializationSummary: Behavior Definition 'CameraBehavior_MountedFirstPerson'
+    projects Presentation model 'Mounted'. Settings and Group provenance are valid;
+    Apply / Rebuild preflights pipeline ownership.
 --- !u!1 &8309415884297544221
 GameObject:
   m_ObjectHideFlags: 0
@@ -102,7 +104,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCamera
   Priority:
     Enabled: 0
@@ -145,7 +147,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 36d1163fa822e8b418a0a603ec078d5c, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineHardLockToTarget
   Damping: 0
 --- !u!114 &8309415884297544225
@@ -158,6 +160,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4afa82ae3200b82408d605c3dbdd1e38, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineRotateWithFollowTarget
   Damping: 0

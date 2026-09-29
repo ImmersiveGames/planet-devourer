@@ -20,5 +20,6 @@ MonoBehaviour:
   startupActivity: {fileID: 11400000, guid: d2151ace8eeb61b4c9f47f8ee416810e, type: 2}
   playerSpatialEntryPolicy: 0
   cameraPresentations: []
+  cameraPresentationSelections: []
   transitionGateMode: 30
   description: 

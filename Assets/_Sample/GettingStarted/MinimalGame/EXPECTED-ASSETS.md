@@ -29,6 +29,10 @@ Assets/_Sample/GettingStarted/MinimalGame/
     MinimalGame_Gameplay.unity
     MinimalGame_Persistent.unity
 
+  Prefabs/
+    FG_MinimalGame_FirstPersonActor.prefab
+    FG_MinimalGame_SceneProvisioned.prefab
+
   Scripts/
     MinimalFirstPersonLocomotion.cs
 ```
@@ -41,7 +45,7 @@ Assets/_Sample/PlayerSamples/
     FG_Player.prefab
     FG_PlayerActor.prefab
   Player/Provisioned/
-    FG_SceneProvisioned.prefab
+    FG_SceneProvisioned.prefab (shared baseline)
   Player/Players/
     FG_FirstPersonPresentation.prefab
 
@@ -65,17 +69,22 @@ PlayerSessionProfile_MinimalGame
 FG_FirstPersonActorProfile
   PresentationPrefab = FG_FirstPersonPresentation.prefab
 
-FG_SceneProvisioned
+FG_MinimalGame_SceneProvisioned
   SceneProvidedLocalPlayerAuthoring
   FG_Player
     PlayerInput
     LocalPlayerHostAuthoring
-    FG_PlayerActor
+    FG_MinimalGame_FirstPersonActor
+      PlayerActorDeclaration
+      CharacterController
+      PlayerGameplayInputReader
+      MinimalFirstPersonLocomotion
+      ActorCameraSubjectAuthoring
+        ObservationTransform = CameraMount
+      CameraMount
       PlayerActorRuntimeHost
-        FG_FirstPersonPresentation
-          MinimalFirstPersonLocomotion
-          ActorCameraSubjectAuthoring
-            Observation Transform = CameraMount
+        PresentationMount
+          FG_FirstPersonPresentation (visual only)
 
 Activity_MinimalGame
   Player participation requirement = GameplayReady
