@@ -21,7 +21,7 @@ MonoBehaviour:
   defaultProgressionSaveProfile: {fileID: 0}
   cameraSession:
     outputPrefabs:
-    - {fileID: 627951520136573394, guid: aa25a21ce579a4944bbd1ed458453d79, type: 3}
+    - {fileID: 335161292588889790, guid: 1dd3737224d7cd04890d9c2b26aa33ca, type: 3}
     playerOutputBindings:
     - playerSlotProfile: {fileID: 11400000, guid: 74a665a54f2420e448955b454bb29b06, type: 2}
       outputDefinition: {fileID: 11400000, guid: 59cb18909e849e34db5f3c4aed7291dc, type: 2}
