@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2560942157491444972}
   - component: {fileID: 5859889290330997287}
   - component: {fileID: 4965938801164354954}
+  - component: {fileID: 3893510025576821774}
   m_Layer: 0
   m_Name: MinimalGame_Player_SceneProvided
   m_TagString: Untagged
@@ -125,6 +126,19 @@ MonoBehaviour:
   lastAuthoringStatus: 10
   lastAuthoringDiagnostic: Scene-Provided Local Player authored composition and prefab
     provenance are valid.
+--- !u!114 &3893510025576821774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3084592557322909645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5af9b1f7c0c642c4b9f7d560d3e21001, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Pause.PlayerPauseInput
+  pauseAction: {fileID: -93351606275402036, guid: 052faaac586de48259a63d0c4782560b, type: 3}
 --- !u!1 &3368360624580802414
 GameObject:
   m_ObjectHideFlags: 0

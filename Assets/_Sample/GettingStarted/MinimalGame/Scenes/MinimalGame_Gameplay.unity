@@ -294,6 +294,70 @@ MonoBehaviour:
   policy: 0
   routePolicySerializationVersion: 1
   director: {fileID: 0}
+--- !u!1 &455403610 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 521190404303194541, guid: 142633ad0828df946815104b1e075af6, type: 3}
+  m_PrefabInstance: {fileID: 1595725880}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &455403611 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2607982990414027057, guid: 142633ad0828df946815104b1e075af6, type: 3}
+  m_PrefabInstance: {fileID: 1595725880}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &455403612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 455403610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a517da3a8044fb9a4e63c43cbbd048f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.ObjectEntry.ObjectEntryDeclaration
+  objectEntryId: c4ef7618ae174fadbb5825a4d1a3ebbd
+  requiredness: 10
+--- !u!114 &455403613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 455403610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c38bb81ea60d475c8bd3479b0ce24e8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Reset.Unity.UnityTransformResetParticipant
+  participantId: transform
+  requiredness: 10
+  order: 0
+  displayName: Transform
+  source: UnityTransformResetParticipant
+  reason: unity-transform-reset
+  target: {fileID: 455403611}
+  captureBaselineOnEnable: 1
+  resetPosition: 1
+  resetRotation: 1
+  resetScale: 1
+  baselineLocalPosition: {x: 4.1924915, y: 0, z: -6.8868003}
+  baselineLocalEulerAngles: {x: 0, y: 254.76941, z: 0}
+  baselineLocalScale: {x: 1, y: 1, z: 1}
+--- !u!114 &455403614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 455403610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee8f539d675a41f4bbffa3139ed5aa62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Reset.Unity.Resettable
+  displayName: 02 Object Stable
+  membership: 0
 --- !u!1001 &1100484731
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -364,6 +428,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1756644272}
     m_Modifications:
+    - target: {fileID: 521190404303194541, guid: 142633ad0828df946815104b1e075af6, type: 3}
+      propertyPath: m_Name
+      value: NPC - Object Stable
+      objectReference: {fileID: 0}
     - target: {fileID: 879044399388274724, guid: 142633ad0828df946815104b1e075af6, type: 3}
       propertyPath: m_Name
       value: Visitors B
@@ -408,16 +476,93 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2643519635631766331, guid: 142633ad0828df946815104b1e075af6, type: 3}
+      propertyPath: m_Name
+      value: NPC - Object Direct
+      objectReference: {fileID: 0}
+    - target: {fileID: 4511970170469849638, guid: 142633ad0828df946815104b1e075af6, type: 3}
+      propertyPath: m_Name
+      value: NPC B - Composition Descendant
+      objectReference: {fileID: 0}
+    - target: {fileID: 7722874785199115505, guid: 142633ad0828df946815104b1e075af6, type: 3}
+      propertyPath: m_Name
+      value: NPC A - Composition Descendant
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2643519635631766331, guid: 142633ad0828df946815104b1e075af6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1595725884}
+    - targetCorrespondingSourceObject: {fileID: 2643519635631766331, guid: 142633ad0828df946815104b1e075af6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1595725885}
+    - targetCorrespondingSourceObject: {fileID: 521190404303194541, guid: 142633ad0828df946815104b1e075af6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 455403614}
+    - targetCorrespondingSourceObject: {fileID: 521190404303194541, guid: 142633ad0828df946815104b1e075af6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 455403613}
+    - targetCorrespondingSourceObject: {fileID: 521190404303194541, guid: 142633ad0828df946815104b1e075af6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 455403612}
   m_SourcePrefab: {fileID: 100100000, guid: 142633ad0828df946815104b1e075af6, type: 3}
 --- !u!4 &1595725881 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1855042916481194475, guid: 142633ad0828df946815104b1e075af6, type: 3}
   m_PrefabInstance: {fileID: 1595725880}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1595725882 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2643519635631766331, guid: 142633ad0828df946815104b1e075af6, type: 3}
+  m_PrefabInstance: {fileID: 1595725880}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1595725883 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3184325946220856319, guid: 142633ad0828df946815104b1e075af6, type: 3}
+  m_PrefabInstance: {fileID: 1595725880}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1595725884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1595725882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee8f539d675a41f4bbffa3139ed5aa62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Reset.Unity.Resettable
+  displayName: Thief_Male_A
+  membership: 0
+--- !u!114 &1595725885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1595725882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c38bb81ea60d475c8bd3479b0ce24e8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Reset.Unity.UnityTransformResetParticipant
+  participantId: transform
+  requiredness: 10
+  order: 0
+  displayName: Transform
+  source: UnityTransformResetParticipant
+  reason: unity-transform-reset
+  target: {fileID: 1595725883}
+  captureBaselineOnEnable: 1
+  resetPosition: 1
+  resetRotation: 1
+  resetScale: 1
+  baselineLocalPosition: {x: -3.71, y: 0, z: 0.06906709}
+  baselineLocalEulerAngles: {x: 0, y: 185.57391, z: 0}
+  baselineLocalScale: {x: 1, y: 1, z: 1}
 --- !u!1 &1742954444
 GameObject:
   m_ObjectHideFlags: 0
@@ -594,6 +739,69 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7436526810446934788, guid: 229df067cb4127b4a9e099d0e82ae972, type: 3}
   m_PrefabInstance: {fileID: 1858573841}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2127722228
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2127722230}
+  - component: {fileID: 2127722229}
+  m_Layer: 0
+  m_Name: Trigger - Object Direct
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2127722229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2127722228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b11862a30054c5c9d228a3e8b0a8074, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Reset.Unity.ResetRequestTrigger
+  target:
+    kind: 10
+    objectTarget:
+      referenceMode: 0
+      directResettable: {fileID: 1595725884}
+      stableReference:
+        objectEntryIdText: 
+        ownerSelectorKind: 0
+        routeOwner: {fileID: 0}
+        activityOwner: {fileID: 0}
+    compositionTarget:
+      referenceMode: 0
+      directComposition: {fileID: 0}
+      stableReference:
+        objectEntryIdText: 
+        ownerSelectorKind: 0
+        routeOwner: {fileID: 0}
+        activityOwner: {fileID: 0}
+  reason: 
+--- !u!4 &2127722230
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2127722228}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &5210594161276140366
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -659,3 +867,4 @@ SceneRoots:
   - {fileID: 1742954445}
   - {fileID: 1779670681}
   - {fileID: 5210594161276140366}
+  - {fileID: 2127722230}
