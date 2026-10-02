@@ -40,7 +40,7 @@ The detailed status lives in the operational guide rather than being duplicated 
 
 ## Reset proof slice
 
-The current Reset work is intentionally demonstrated in the consumer project rather than as a second Reset architecture.
+The Reset consumer proof is closed for the current authoring/proving phase and is intentionally demonstrated in the consumer project rather than as a second Reset architecture.
 
 The proof covers:
 
@@ -55,7 +55,7 @@ Activity Restart
 Multiple Participants
 ```
 
-See `GettingStarted/MinimalGame/RESET-USAGE.md` for the authoring intent, execution steps and validation status.
+See `GettingStarted/MinimalGame/RESET-USAGE.md` for the closed authoring intent, execution steps and validation evidence. UPM promotion/import validation remains separate.
 
 ## Documentation authority
 
