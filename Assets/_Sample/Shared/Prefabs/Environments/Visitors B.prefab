@@ -1538,7 +1538,6 @@ Transform:
   - {fileID: 8037535868754794774}
   - {fileID: 6014707145390048212}
   - {fileID: 8718526404628606767}
-  - {fileID: 278275350305280173}
   - {fileID: 482503257236004708}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -9152,37 +9151,6 @@ Transform:
   - {fileID: 6930439804342002024}
   m_Father: {fileID: 3917758511006480199}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &4800237851867193977
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 726376202049635649}
-  m_Layer: 0
-  m_Name: Active State Target
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &726376202049635649
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4800237851867193977}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1891190772332635694}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4876289529630807188
 GameObject:
   m_ObjectHideFlags: 0
@@ -9492,6 +9460,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 482503257236004708}
+  - component: {fileID: 3116630097603462262}
   m_Layer: 0
   m_Name: Multiple Participants
   m_TagString: Untagged
@@ -9513,8 +9482,23 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1891190772332635694}
+  - {fileID: 278275350305280173}
   m_Father: {fileID: 1855042916481194475}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3116630097603462262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5011832682395189800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee8f539d675a41f4bbffa3139ed5aa62, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Reset.Unity.Resettable
+  displayName: Worker_Male_08
+  membership: 2
 --- !u!1 &5014351079731330110
 GameObject:
   m_ObjectHideFlags: 0
@@ -12758,8 +12742,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 278275350305280173}
+  - component: {fileID: 5451713637199669991}
   m_Layer: 0
-  m_Name: Punk_Male_07_Custom
+  m_Name: NPC - Active State Target
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12782,8 +12767,29 @@ Transform:
   - {fileID: 3574589561441127268}
   - {fileID: 7526671107226709856}
   - {fileID: 743694541444368082}
-  m_Father: {fileID: 1855042916481194475}
+  m_Father: {fileID: 482503257236004708}
   m_LocalEulerAnglesHint: {x: 0, y: 250.38501, z: 0}
+--- !u!114 &5451713637199669991
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7388636623918073267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f536ff8153c2458786e9c62c3bd1392d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Reset.Unity.UnityGameObjectActiveResetParticipant
+  participantId: game-object-active
+  requiredness: 10
+  order: 10
+  displayName: GameObject Active
+  source: UnityGameObjectActiveResetParticipant
+  reason: unity-game-object-active-reset
+  target: {fileID: 7388636623918073267}
+  captureBaselineOnEnable: 1
+  baselineActive: 1
 --- !u!1 &7469585583409688142
 GameObject:
   m_ObjectHideFlags: 0
@@ -14113,9 +14119,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1891190772332635694}
-  - component: {fileID: 5739031723848699509}
   - component: {fileID: 541199378283589060}
-  - component: {fileID: 1399079269203323805}
   m_Layer: 0
   m_Name: NPC - Multiple Participants
   m_TagString: Untagged
@@ -14141,23 +14145,8 @@ Transform:
   - {fileID: 1516689271654006400}
   - {fileID: 1917724802566690628}
   - {fileID: 6601107736730234244}
-  - {fileID: 726376202049635649}
   m_Father: {fileID: 482503257236004708}
   m_LocalEulerAnglesHint: {x: 0, y: -248.751, z: 0}
---- !u!114 &5739031723848699509
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8112317442979586710}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee8f539d675a41f4bbffa3139ed5aa62, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Reset.Unity.Resettable
-  displayName: Worker_Male_08
-  membership: 2
 --- !u!114 &541199378283589060
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14184,27 +14173,6 @@ MonoBehaviour:
   baselineLocalPosition: {x: -6.820545, y: 0, z: 2.1611605}
   baselineLocalEulerAngles: {x: -0, y: 111.24865, z: 0}
   baselineLocalScale: {x: 1, y: 1, z: 1}
---- !u!114 &1399079269203323805
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8112317442979586710}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f536ff8153c2458786e9c62c3bd1392d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.Reset.Unity.UnityGameObjectActiveResetParticipant
-  participantId: game-object-active
-  requiredness: 10
-  order: 10
-  displayName: GameObject Active
-  source: UnityGameObjectActiveResetParticipant
-  reason: unity-game-object-active-reset
-  target: {fileID: 8112317442979586710}
-  captureBaselineOnEnable: 1
-  baselineActive: 1
 --- !u!1 &8116430665302030243
 GameObject:
   m_ObjectHideFlags: 0

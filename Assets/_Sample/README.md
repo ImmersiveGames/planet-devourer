@@ -15,57 +15,47 @@ Authoring root
   Assets/_Sample/
 ```
 
-`Assets/_Sample/` is the **visible development and proving workspace** for creating and editing the official Immersive Framework samples in Unity.
+`Assets/_Sample/` is the visible development and proving workspace for creating and validating Immersive Framework consumer samples in Unity. Final official package distribution belongs to `com.immersive.framework/Samples~/`; do not ship `_Sample/` as the final UPM sample root.
+
+## Where to start
+
+Use the sample-local README for composition and execution instructions, and the operational status guide for construction/proof state.
+
+- Getting Started / Minimal Game: `GettingStarted/MinimalGame/README.md`
+- Reset consumer proof for Minimal Game: `GettingStarted/MinimalGame/RESET-USAGE.md`
+- Game Flow: `GameFlow/README.md` and the GameFlowShowcase README
+- Player samples: `PlayerSamples/README.md`
+- Shared authoring assets: `Shared/README.md`
+- Operational program status: `Assets/Documentation~/Architecture/Plans/Samples/README.md`
+
+## Current authoring picture
+
+The detailed status lives in the operational guide rather than being duplicated here. At the current 2026-10-02 snapshot:
+
+- Getting Started / Minimal Game is the canonical Scene-Provided consumer base and is also being used for the current Reset proof slice.
+- Game Flow is materialized.
+- Player contains proven Scene Player, Provisioning, Character Selection and Local Multiplayer slices, with additional validation still tracked separately.
+- Advanced Context and Persistence remain separate program areas.
+- UPM promotion/import proof remains a later release gate.
+
+## Reset proof slice
+
+The current Reset work is intentionally demonstrated in the consumer project rather than as a second Reset architecture.
+
+The proof covers:
 
 ```text
-Assets/_Sample/
-  authoring/proving workspace
-  visible in Project Browser
-  normal Asset Database participation
-  current operational tree for sample construction
+Object / Direct
+Object / Stable
+Composition / Direct - Descendants
+Composition / Stable - Explicit Members
+CurrentActivity
+CurrentRoute
+Activity Restart
+Multiple Participants
 ```
 
-Final official package distribution belongs to:
-
-```text
-com.immersive.framework/
-  Samples~/
-```
-
-Do not ship `_Sample/` as the final UPM sample root.
-
-## Current construction status
-
-```text
-Getting Started
-  Minimal Game
-    AUTHORING COMPLETE
-    PLAY MODE PROVEN
-    UPM PROMOTION PENDING
-
-Game Flow
-  next implementation area
-
-Player
-  planned after/alongside the sample-program sequence
-
-Advanced Context
-  planned
-
-Persistence
-  planned
-```
-
-`AUTHORING COMPLETE` means the configured sample and its consumer-facing runtime behavior are materialized and proven in the visible workspace.
-
-It does not replace the final release gate:
-
-```text
-promote group into com.immersive.framework/Samples~
-  -> Package Manager Import
-  -> validate imported references
-  -> validate imported Play Mode
-```
+See `GettingStarted/MinimalGame/RESET-USAGE.md` for the authoring intent, execution steps and validation status.
 
 ## Documentation authority
 
@@ -76,10 +66,17 @@ Assets/Documentation~/Architecture/ADRs/
   FG-ADR-001-Immersive-Framework-Sample-and-Demonstration-Strategy.md
 ```
 
+Player-specific strategy:
+
+```text
+Assets/Documentation~/Architecture/ADRs/
+  FG-ADR-002-Player-Sample-Scope-and-Demonstration-Architecture.md
+```
+
 Operational sample guide/status:
 
 ```text
 Assets/Documentation~/Architecture/Plans/Samples/README.md
 ```
 
-The strategy defines the sample-program grammar. The operational guide records the current working branch, construction progress and promotion boundary.
+The ADRs define sample-program boundaries. The operational guide records current construction/proof state. Sample-local READMEs teach the concrete consumer composition.

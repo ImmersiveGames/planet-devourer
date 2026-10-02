@@ -295,3 +295,12 @@ Getting Started / Minimal Game
 ```
 
 Final UPM promotion/import validation remains a later package-finalization gate.
+
+
+## Reset consumer proof
+
+Minimal Game is also the current consumer proving context for the IF-ADR-035 Reset authoring model. The Reset slice is documented separately so this README can remain focused on the minimum application/player/camera composition.
+
+See [RESET-USAGE.md](RESET-USAGE.md) for Object Direct/Stable, Composition Direct/Stable, CurrentActivity, CurrentRoute, Activity Restart and Multiple Participants.
+
+Reset proof status is tracked independently from the Camera migration status at the top of this README.

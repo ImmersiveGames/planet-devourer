@@ -1,5 +1,6 @@
 # Samples Authoring Guide and Status
 
+Reset consumer proof reconciled: **2026-10-02**  
 Player status reconciled: **2026-09-07**  
 Previous Player snapshot: **2026-09-05**  
 Previous general construction snapshot: **2026-08-21**
@@ -405,6 +406,39 @@ Reopen Joining behavior when applicable
 P2 Leave/Rejoin preservation and distinct P1/P2 current device ownership are now proven and no longer belong in the remaining-work list.
 
 Additional camera/output topology is not implied by the current proof.
+
+## Cross-cutting Reset consumer proof — 2026-10-02
+
+Reset is currently proven as a consumer slice on top of Getting Started / Minimal Game and shared Route-owned content. This is feature proof, not a new top-level sample group and not UPM release completion.
+
+Validated scenarios:
+
+```text
+1  Object / Direct                              PASS
+2  Object / Stable                              PASS
+3  Composition / Direct - Descendants           PASS
+4  Composition / Stable - Explicit Members      PASS
+5  CurrentActivity                              PASS
+6  CurrentRoute umbrella semantics              PASS
+7  Activity Restart surviving-state sequence    PASS
+8  Multiple Participants                        PASS manually
+```
+
+Current semantic proof includes:
+
+- ownership independent from Reset membership;
+- `Activity ⊂ Route` selection semantics;
+- stable Object/Composition addressing through generic ObjectEntry identity;
+- Activity Restart Reset before Clear/Reenter;
+- one Resettable executing more than one capability.
+
+The dedicated consumer guide is:
+
+```text
+Assets/_Sample/GettingStarted/MinimalGame/RESET-USAGE.md
+```
+
+Repository note: the current `Reset Compositions` asset commit contains the Reset slice, but the final manually validated Phase 8 teaching layout places the Resettable on a root and the Transform/Active participants on two child NPCs. That physical asset reconciliation is still pending a Unity-authored commit. Do not claim Phase 8 repository integration until that layout is committed.
 
 ## Completion vocabulary
 
