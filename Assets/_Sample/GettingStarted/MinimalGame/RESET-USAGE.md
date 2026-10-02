@@ -1,6 +1,6 @@
 # Minimal Game — Reset Consumer Usage
 
-Status: **consumer scenarios 1-8 manually validated through 2026-10-02; final Phase 8 asset-layout commit still needs reconciliation with the latest manual configuration**
+Status: **CLOSED — consumer scenarios 1-8 are authored, repository-integrated and manually validated through 2026-10-02**
 UPM promotion: **not implied by this proof**
 
 This guide records how Reset is consumed in the Minimal Game authoring/proving workspace. Framework semantics are defined by IF-ADR-035 and the Framework `Reset-Usage.md`; this document is the consumer demonstration.
@@ -18,7 +18,7 @@ The Reset slice is deliberately incremental:
 | 5 | CurrentActivity | Activity membership selection | PASS |
 | 6 | CurrentRoute | Route umbrella selection, including current Activity context | PASS |
 | 7 | Activity Restart | Reset surviving state before Clear/Reenter | PASS |
-| 8 | Multiple Participants | One Resettable executing multiple capabilities | PASS manually; asset-layout reconciliation pending |
+| 8 | Multiple Participants | One Resettable executing multiple capabilities | PASS / INTEGRATED |
 
 Direct local triggers are sufficient where the scenario is about target semantics. Shared UI is used where cross-scene/stable/current-scope/restart behavior is the concept being demonstrated.
 
@@ -222,7 +222,7 @@ Test:
 
 This demonstrates one runtime Reset subject executing two participants that restore different kinds of state on different GameObjects.
 
-The manual run produced successful immediate verification for both Transform and GameObject active-state restoration. The repository's current `Reset Compositions` asset snapshot predates the final two-child Phase 8 layout, so the next Unity asset commit must reconcile the physical prefab with this validated configuration before this phase is considered repository-integrated.
+The manual run produced successful immediate verification for both Transform and GameObject active-state restoration. The repository now contains the final two-child Phase 8 layout: the root owns the `Resettable`, one child owns the Transform participant and the other owns the active-state participant. The `Resettable` display name keeps the original authored object name; it is diagnostic only and is not runtime identity.
 
 ## Shared Reset UI
 
@@ -271,3 +271,21 @@ For participants with focused immediate-verification diagnostics, keep `verifica
 - `Documentation~/Guides/Reset-Usage.md`
 - `Documentation~/API/Public-API.md`
 - `Documentation~/Architecture/ADRs/IF-ADR-035-Reset-Composition-Ownership-Membership-and-Targeting.md`
+
+
+## Closure
+
+The Reset consumer slice is closed for the current authoring/proving phase.
+
+```text
+AUTHORING           PASS
+TRIGGER             PASS
+UI                  PASS where applicable
+RUNTIME EXECUTION   PASS
+VISUAL RESULT       PASS
+LOG EVIDENCE        PASS
+INTEGRATED          PASS
+VALIDATED           PASS
+```
+
+UPM promotion/import proof remains a separate release gate.
