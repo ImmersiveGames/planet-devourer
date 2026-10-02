@@ -421,7 +421,7 @@ Validated scenarios:
 5  CurrentActivity                              PASS
 6  CurrentRoute umbrella semantics              PASS
 7  Activity Restart surviving-state sequence    PASS
-8  Multiple Participants                        PASS manually
+8  Multiple Participants                        PASS / INTEGRATED
 ```
 
 Current semantic proof includes:
@@ -438,7 +438,7 @@ The dedicated consumer guide is:
 Assets/_Sample/GettingStarted/MinimalGame/RESET-USAGE.md
 ```
 
-Repository note: the current `Reset Compositions` asset commit contains the Reset slice, but the final manually validated Phase 8 teaching layout places the Resettable on a root and the Transform/Active participants on two child NPCs. That physical asset reconciliation is still pending a Unity-authored commit. Do not claim Phase 8 repository integration until that layout is committed.
+Reset consumer proof is **CLOSED for authoring/proving**. The final Phase 8 layout is committed: one root `Resettable` collects a Transform participant and a GameObject active-state participant from two descendant GameObjects. The Resettable diagnostic display name preserves the original authored object name and is not runtime identity. UPM promotion/import validation remains pending as a separate release gate.
 
 ## Completion vocabulary
 
