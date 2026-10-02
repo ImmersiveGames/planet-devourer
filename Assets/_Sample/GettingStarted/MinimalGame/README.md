@@ -303,4 +303,4 @@ Minimal Game is also the current consumer proving context for the IF-ADR-035 Res
 
 See [RESET-USAGE.md](RESET-USAGE.md) for Object Direct/Stable, Composition Direct/Stable, CurrentActivity, CurrentRoute, Activity Restart and Multiple Participants.
 
-Reset proof status is tracked independently from the Camera migration status at the top of this README.
+Reset proof status is tracked independently from the Camera migration status at the top of this README. The Reset consumer slice is CLOSED for authoring/proving; see RESET-USAGE.md for the eight validated scenarios and closure evidence.
