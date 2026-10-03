@@ -22,13 +22,6 @@ MonoBehaviour:
   cameraSession:
     outputPrefabs:
     - {fileID: 627951520136573394, guid: aa25a21ce579a4944bbd1ed458453d79, type: 3}
-    playerOutputBindings:
-    - playerSlotProfile: {fileID: 11400000, guid: c1dee36a59ff7ec45ad47e8224ad7622, type: 2}
-      outputDefinition: {fileID: 11400000, guid: 59cb18909e849e34db5f3c4aed7291dc, type: 2}
-    playerPresentationBindings:
-    - playerSlotProfile: {fileID: 11400000, guid: c1dee36a59ff7ec45ad47e8224ad7622, type: 2}
-      presentationDefinition: {fileID: 11400000, guid: 8e77513eb951b15469af73aca978bd94, type: 2}
-  sessionCameraPresentations: []
   persistentContent:
     containerScene: {fileID: 102900000, guid: cdff4c15f56010749b29338a5c224253, type: 3}
   validationMode: 1

@@ -23,17 +23,23 @@ MonoBehaviour:
     outputPrefabs:
     - {fileID: 2529016124947801167, guid: 3a89833304649c54fa673f8bc07756c3, type: 3}
     - {fileID: 2529016124947801167, guid: fba40aed822670945acac5e9d47e6c37, type: 3}
-    playerOutputBindings:
+  sessionCameraAssignments:
+  - assignmentId: 03800000000000000000000000000002
+    definition: {fileID: 11400000, guid: 03800000000000000000000000000038, type: 2}
+    occurrenceMode: 2
+    membershipPolicy: 2
+    targetPolicy: 3
+    memberSlots:
+    - {fileID: 11400000, guid: 8ce67ad014e8c8346bcbd24065b2e9e4, type: 2}
+    - {fileID: 11400000, guid: e15d624f42cad154f8151c979382c942, type: 2}
+    outputDefinitions:
+    - {fileID: 11400000, guid: d48c1c790d7ca2d46bd2f43d5e1325c7, type: 2}
+    - {fileID: 11400000, guid: 2243f9ba0b2dde34cbbb228f06dd560b, type: 2}
+    individualMemberOutputMappings:
     - playerSlotProfile: {fileID: 11400000, guid: 8ce67ad014e8c8346bcbd24065b2e9e4, type: 2}
       outputDefinition: {fileID: 11400000, guid: d48c1c790d7ca2d46bd2f43d5e1325c7, type: 2}
     - playerSlotProfile: {fileID: 11400000, guid: e15d624f42cad154f8151c979382c942, type: 2}
       outputDefinition: {fileID: 11400000, guid: 2243f9ba0b2dde34cbbb228f06dd560b, type: 2}
-    playerPresentationBindings:
-    - playerSlotProfile: {fileID: 11400000, guid: 8ce67ad014e8c8346bcbd24065b2e9e4, type: 2}
-      presentationDefinition: {fileID: 11400000, guid: b3424f7ac66f7be478f33d05539ffc7a, type: 2}
-    - playerSlotProfile: {fileID: 11400000, guid: e15d624f42cad154f8151c979382c942, type: 2}
-      presentationDefinition: {fileID: 11400000, guid: b482943bb6aaf4b4aaf64d9499788577, type: 2}
-  sessionCameraPresentations: []
   persistentContent:
     containerScene: {fileID: 102900000, guid: 8dcd84bf3b1045e46a8cf59ae2f02789, type: 3}
   validationMode: 1
