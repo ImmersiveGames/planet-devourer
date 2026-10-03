@@ -1,6 +1,6 @@
 # Minimal Game — Materialization Checklist
 
-Status: **CAMERA-032-D/E MATERIALIZED LOCALLY — Unity import and Play Mode revalidation pending**
+Status: **Session Camera Assignment asset migrated locally — Unity import and Play Mode revalidation pending**
 
 ## Materialized application assets
 
@@ -9,10 +9,8 @@ Assets/_Sample/GettingStarted/MinimalGame/
   GameApplication_MinimalGame.asset
 
   Camera/
-    Presentations/
-      CameraPresentation_MinimalGame_Player.asset
-    Prefabs/
-      PF_MinimalGame_Player_FirstPerson_Presentation.prefab
+    Assignments/
+      CameraAssignment_MinimalGame_FirstPerson.asset
 
   PlayerProfiles/
     PlayerSessionProfile_MinimalGame.asset
@@ -92,49 +90,23 @@ GameApplication_MinimalGame
   Camera Session
     Output Prefabs
       PF_CameraOutput_Main
-
-    Player Output Bindings
-      Player 1 -> CameraOutput_Main
-
-    Player Presentation Bindings
-      Player 1 -> CameraPresentation_MinimalGame_Player
-
-Activity_MinimalGame
-  Camera Presentations
-    CameraPresentation_MinimalGame_Player
+  Startup Camera Assignments
+    CameraAssignment_MinimalGame_FirstPerson
+      Rig Prefab = MinimalGame_CameraRig_FirstPerson
+      Member Slot = PlayerSlotProfile_Player1_MinimalGame
       Output = CameraOutput_Main
-      Subject Policy = ExplicitSelection
-      Transition = Cut
-      Request Precedence = 300
-      Rig = PF_MinimalGame_Player_FirstPerson_Presentation
 
-PF_MinimalGame_Player_FirstPerson_Presentation
+MinimalGame_CameraRig_FirstPerson
   CameraRigComposer
     Behavior = CameraBehavior_MountedFirstPerson
-    CinemachineCamera
-      HardLockToTarget
-      RotateWithFollowTarget
 
 PF_CameraOutput_Main
   CameraOutputAuthoring
     Output = CameraOutput_Main
-    Default Rig = Fixed
+    Fallback Camera Rig = Fixed
 ```
 
-Camera ownership constraints:
-
-```text
-Persistent Content contains no Camera Output
-Persistent Content contains no Player Camera policy
-Persistent Content contains no CameraSharedComposition
-
-Player owns Camera Subject evidence only
-Activity owns the live Player Camera Presentation occurrence
-GameApplication owns physical Session Camera capacity
-Output Default Rig is the persistent fallback
-Framework does not write Camera.rect
-```
-
+The Assignment is the sole Player Slot → Output authority. Session Output configuration contains physical Output capacity only. The Framework derives `PlayerInput.camera`; `PlayerInputManager` owns viewport geometry and Framework code does not write `Camera.rect` / `Camera.pixelRect`.
 ## Unity validation target
 
 ```text
@@ -145,8 +117,8 @@ Framework boot = Succeeded
 Activity = Ready
 blockingIssues = 0
 Scene Player contextual projection = established
-Player Camera Presentation selection = attached
-Mounted / First Person presentation = operational
+PlayerInput.camera = CameraOutput_Main Unity Camera
+Mounted / First Person Assignment = operational
 Move / Look navigation = operational
 ```
 

@@ -1,6 +1,6 @@
 # Character Selection — Expected Unity Assets
 
-Status: **CAMERA-032-D/E MATERIALIZED AND LOCALLY VALIDATED — Framework application-quit Camera teardown issue pending**
+Status: **Session Camera Assignment asset migrated locally — Unity validation pending**
 
 ## Application intent
 
@@ -66,27 +66,15 @@ They must not contain:
 CameraOutputAuthoring
 CameraRigComposer
 CinemachineCamera
-gameplay CameraRequest ownership
+Framework Camera Output or rig ownership
 ```
 
 ## Reused Camera assets
 
-No CharacterSelection-specific Camera asset is required.
-
 ```text
-Assets/_Sample/Shared/Prefabs/Cameras/
-  PF_CameraOutput_Main.prefab
-
-Assets/_Sample/Shared/Camera/Definitions/
-  CameraOutput_Main.asset
-
-Assets/_Sample/PlayerSamples/Shared/Camera/
-  CameraPresentation_Default_Route.asset
-  CameraPresentation_ThirdPerson.asset
-
-  Presentation/
-    PF_Default_Route_Presentation.prefab
-    PF_Player_ThirdPerson_Presentation.prefab
+Assets/_Sample/Shared/Prefabs/Cameras/PF_CameraOutput_Main.prefab
+Assets/_Sample/Shared/Camera/Definitions/CameraOutput_Main.asset
+Assets/_Sample/PlayerSamples/Shared/Camera/Presentation/PF_Player_ThirdPerson_Presentation.prefab
 ```
 
 ## Required GameApplication Camera configuration
@@ -96,51 +84,17 @@ GameApplication_CharacterSelection
   Camera Session
     Output Prefabs
       PF_CameraOutput_Main
-
-    Player Output Bindings
-      PlayerSlotProfile_ManagerProvisioned
-        -> CameraOutput_Main
-
-    Player Presentation Bindings
-      PlayerSlotProfile_ManagerProvisioned
-        -> CameraPresentation_ThirdPerson
-
-  Session Camera Presentations
-    none
+  Startup Camera Assignments
+    CameraAssignment_CharacterSelection
+      Occurrence = IndividualPerPlayer
+      Member Slot = PlayerSlotProfile_ManagerProvisioned
+      Target Policy = MemberActorTargets
+      Rig Prefab = PF_Player_ThirdPerson_Presentation
+      Output = CameraOutput_Main
+      Slot -> Output = PlayerSlotProfile_ManagerProvisioned -> CameraOutput_Main
 ```
 
-## Required Route Camera configuration
-
-```text
-Route_Character Selection
-  Camera Presentations
-    CameraPresentation_Default_Route
-
-CameraPresentation_Default_Route
-  Output = CameraOutput_Main
-  Subject Policy = AllAvailableSubjects
-  Transition = Cut
-  Request Precedence = 200
-  Rig = PF_Default_Route_Presentation
-```
-
-## Required Activity Camera configuration
-
-```text
-Activity_Character Selection
-  Camera Presentations
-    CameraPresentation_ThirdPerson
-
-CameraPresentation_ThirdPerson
-  Output = CameraOutput_Main
-  Subject Policy = ExplicitSelection
-  Transition = Blend
-  Request Precedence = 300
-  Rig = PF_Player_ThirdPerson_Presentation
-```
-
-The Activity declaration is required. A Player Presentation binding in the GameApplication only maps a Slot to an already-live Presentation definition; it does not materialize the Presentation occurrence.
-
+Route and Activity assets contain no Camera selection fields. Before Actor selection, the Output's own Fallback covers the target-required Assignment; after Actor selection, the current Actor Subject becomes eligible on the same Assignment occurrence.
 ## Route / UI boundary
 
 ```text
@@ -168,78 +122,14 @@ UI code remains presentation-only and does not own Player or Camera lifecycle.
 ## Expected runtime path
 
 ```text
-Boot
-  -> Route Camera [200]
-
-Open Joining
-Join
-  -> SucceededJoined
-  -> WaitingForActorSelection
-  -> no Actor Camera Subject
-  -> Route Camera remains
-
-Select Farmer / Cow
-  -> Actor selection commit
-  -> Actor preparation/materialization
-  -> ActorCameraSubjectAuthoring publishes exact current Subject
-  -> ExplicitSelection resolves that Subject
-  -> Third Person [300]
-  -> GameplayReady
-
-Leave
-  -> Actor / Subject occurrence ends
-  -> Third Person loses eligibility
-  -> Route Camera [200]
-
-Rejoin
-  -> WaitingForActorSelection
-  -> Route Camera remains
-  -> fresh explicit Actor selection required
+Boot -> Session Assignment materialized; Output Fallback covers unavailable target
+Join -> WaitingForActorSelection; no Actor Subject or Player camera association
+Select Farmer / Cow -> current Subject resolves; PlayerInput.camera maps to CameraOutput_Main
+Leave -> exact Player camera association clears; Fallback covers target absence
+Rejoin -> a fresh Player occurrence waits for a fresh explicit Actor selection
+Actor replacement -> Assignment occurrence remains; current Subject is refreshed
+Shutdown -> PlayerInput.camera association and Session Output occurrences are released
 ```
+## Verification status
 
-## Validated runtime behavior
-
-```text
-Camera Session Outputs materialized = 1
-Route Presentation = CameraPresentation_Default_Route / Cut / 200
-Activity Presentation = CameraPresentation_ThirdPerson / Blend / 300
-Player Camera Presentation selection = attached
-
-Join after Open = SucceededJoined
-pre-selection state = WaitingForActorSelection
-
-Farmer selection = SucceededSelected
-Farmer Actor = prepared/materialized
-GameplayReady = true
-
-Leave = succeeded
-Route Camera returns
-
-Rejoin = fresh Player occurrence
-pre-selection state = WaitingForActorSelection
-
-Cow selection = succeeded
-Cow Actor = fresh prepared/materialized occurrence
-GameplayReady = true
-Third Person = operational
-```
-
-## Camera ownership constraints
-
-```text
-GameApplication owns physical Camera Session capacity
-Route owns neutral waiting / selection framing
-Activity owns Player Third Person Presentation occurrence
-Player binding supplies exact Subject selection
-Actor supplies Camera Subject evidence only
-
-Persistent Content contains no Camera authority
-PlayerInputManager remains provisioning / physical split-screen authority
-Framework Camera does not own Camera.rect
-```
-
-## Known Framework issue
-
-Application quit can currently produce Route / Activity Camera Presentation release warnings because normal request arbitration is attempted after Unity has invalidated the materialized Cinemachine Camera Scene.
-
-This is Framework teardown-order debt and is not missing CharacterSelection authoring.
+The Assignment-owned Camera authoring is present in the current tree. Import, compile, Player Join/Leave/Rejoin, Actor selection/replacement and shutdown behavior still require Unity validation. The prior Presentation-era certification does not validate this revision.

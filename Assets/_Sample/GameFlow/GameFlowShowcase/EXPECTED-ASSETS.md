@@ -30,7 +30,12 @@ Scenes/SCN_GameFlow_Basic_Readiness.unity
 Scenes/SCN_GameFlow_Content_Readiness.unity
 
 Scripts/GameFlowVisitorPreparation.cs
+
+Camera/Assignments/CameraAssignment_GameFlow_A.asset
+Camera/Assignments/CameraAssignment_GameFlow_B.asset
 ```
+
+Both Assignment assets reference their existing fixed Rig Prefabs and the shared physical Output. Camera command triggers are not yet connected to the Hub/Basic Activity transitions; the intended Activate A, Replace A↔B and Clear-to-Fallback sequence remains an integration gate.
 
 The current tree contains two proven topic Routes selected from the HUB:
 

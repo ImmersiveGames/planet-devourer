@@ -2,6 +2,8 @@
 
 This sample uses two configured Camera Session Outputs and one Individual Session Camera Assignment. The Assignment is the only Player Slot to Output authority:
 
+`Camera/CameraAssignment_CharacterSelectionMultiplayer.asset` is the reusable Session Camera Assignment asset referenced by the Game Application.
+
 - `PlayerSlotProfile_CharacterSelectionMultiplayer_P1` → `CameraOutput_CharacterSelection_P1`
 - `PlayerSlotProfile_CharacterSelectionMultiplayer_P2` → `CameraOutput_CharacterSelection_P2`
 

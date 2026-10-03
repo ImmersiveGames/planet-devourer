@@ -19,6 +19,10 @@ Game Flow HUB
 
 The HUB is sample navigation. It is not Framework authority or gameplay progression.
 
+## Session Camera Assignments
+
+The sample camera rig configurations are now referenced directly by `CameraAssignment_GameFlow_A` and `CameraAssignment_GameFlow_B` assets. The intended Session Camera command sequence is Hub → Output Fallback, Basic A → Activate A, Basic B → Replace A with B, returning to Basic A → Replace B with A, and Basic C → Clear the active Assignment to Fallback. These Assignment assets are authored, but the sample currently has no serialized Session Camera command triggers or UI/lifecycle bindings for this sequence; command integration and Unity validation remain open.
+
 ## Run
 
 ```text

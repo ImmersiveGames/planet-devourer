@@ -1,6 +1,6 @@
 # Minimal Game
 
-Status: **CAMERA-032-D/E MIGRATED LOCALLY — Unity revalidation pending**
+Status: **Session Camera Assignment asset migrated locally — Unity revalidation pending**
 UPM promotion: **PENDING package finalization/import proof**
 
 ## Purpose
@@ -35,12 +35,9 @@ one Player Actor Runtime Host
 one Actor occurrence with an explicit Camera Subject
 
 one Session Camera Output
-one Output-owned Fixed Default Camera Rig
-one Activity-owned Player Camera Presentation
-Player Slot -> Output binding
-Player Slot -> Presentation binding
-Mounted / First Person Camera Rig
-ExplicitSelection Subject policy
+one Session Camera Assignment asset (`CameraAssignment_MinimalGame_FirstPerson`)
+Player Slot -> Output mapping owned by the Assignment
+Mounted / First Person Rig Prefab
 
 minimal movement/look Input
 optional persistent Audio runtime
@@ -54,10 +51,8 @@ Assets/_Sample/GettingStarted/MinimalGame/
   GameApplication_MinimalGame.asset
 
   Camera/
-    Presentations/
-      CameraPresentation_MinimalGame_Player.asset
-    Prefabs/
-      PF_MinimalGame_Player_FirstPerson_Presentation.prefab
+    Assignments/
+      CameraAssignment_MinimalGame_FirstPerson.asset
 
   PlayerProfiles/
     PlayerSessionProfile_MinimalGame.asset
@@ -128,128 +123,23 @@ The Actor occurrence owns movement, physical state, and explicit Camera Subject 
 
 ## Camera composition
 
-The physical Camera is Session capacity owned by the GameApplication:
+The Game Application owns one physical Output prefab and references `CameraAssignment_MinimalGame_FirstPerson.asset` in `StartupCameraAssignments`. The Assignment asset directly references `MinimalGame_CameraRig_FirstPerson`, declares the Player Slot and maps it to `CameraOutput_Main`. The Framework derives `PlayerInput.camera` from this Assignment and the current Player Host evidence.
 
-```text
-GameApplication_MinimalGame
-  Camera Session
-    Output Prefabs
-      PF_CameraOutput_Main
-
-    Player Output Bindings
-      PlayerSlotProfile_Player1_MinimalGame
-        -> CameraOutput_Main
-
-    Player Presentation Bindings
-      PlayerSlotProfile_Player1_MinimalGame
-        -> CameraPresentation_MinimalGame_Player
-```
-
-The shared Output provides the standard/default camera:
-
-```text
-PF_CameraOutput_Main
-  DefaultOutput
-    Unity Camera
-    CinemachineBrain
-    CameraOutputAuthoring
-      Output Definition = CameraOutput_Main
-      Default Camera Rig = DefaultRig
-
-  DefaultRig
-    CameraRigComposer
-      Behavior Definition = CameraBehavior_Fixed
-      Cinemachine Camera
-```
-
-The gameplay Activity owns the Player Camera Presentation:
-
-```text
-Activity_MinimalGame
-  Camera Presentations
-    CameraPresentation_MinimalGame_Player
-      Output = CameraOutput_Main
-      Subject Policy = ExplicitSelection
-      Transition = Cut
-      Request Precedence = 300
-      Rig Prefab = PF_MinimalGame_Player_FirstPerson_Presentation
-
-PF_MinimalGame_Player_FirstPerson_Presentation
-  CameraRigComposer
-    Behavior = CameraBehavior_MountedFirstPerson
-    Cinemachine Camera
-      CinemachineHardLockToTarget
-      CinemachineRotateWithFollowTarget
-```
-
-Runtime ownership:
-
-```text
-Player 1 Actor occurrence
-  -> fresh Camera Subject evidence
-
-Player 1 -> Presentation binding
-  -> selects that exact Camera Subject
-  -> attaches it to the live Activity Presentation occurrence
-
-Activity Presentation
-  -> publishes normal CameraRequest when its selected Subject is available
-
-CameraOutput_Main
-  -> Activity request wins while eligible
-  -> Default Rig remains persistent fallback
-```
-
-Persistent Content intentionally has no Camera authority:
-
-```text
-MinimalGame_Persistent
-  EventSystem
-  Audio Runtime
-
-  no CameraOutputAuthoring
-  no PlayerCameraOutputPolicyAuthoring
-  no PlayerCameraCompositionPolicyAuthoring
-  no CameraSharedComposition
-```
-
-The Framework does not write `Camera.rect`.
+The camera Rig follows the Actor's explicit `CameraMount` Subject. The Output owns its Unity Camera, Cinemachine Brain and Fallback rig. Route and Activity assets do not select cameras, and Framework camera code does not write `Camera.rect` or `Camera.pixelRect`.
 
 ## Unity validation target
 
-The previous Play Mode proof predates this CAMERA-032-D/E migration. The migrated composition must now prove:
+The previous Play Mode proof predates the Assignment asset migration. The migrated composition must prove:
 
 ```text
-Framework boot
-  -> Succeeded
-
-Camera Session
-  -> Camera Session Outputs materialized
-  -> outputCount = 1
-  -> CameraOutput_Main
-
-startup Activity
-  -> Ready
-  -> blockingIssues = 0
-  -> CameraPresentation_MinimalGame_Player materialized
-
-Scene Player
-  -> Scene-Provided admission completed
-  -> current Player 1 Actor occurrence established
-
-Player Camera Subject
-  -> Actor occurrence provides ActorCameraSubjectAuthoring
-  -> ObservationTransform = CameraMount
-
-Player Camera Presentation
-  -> Player Camera Presentation selection attached
-  -> ExplicitSelection resolves Player 1 Subject
-  -> Mounted / First Person CameraRequest wins CameraOutput_Main
-
-MinimalFirstPersonLocomotion
-  -> Move / Look navigation operational
+Framework boot = Succeeded
+Camera Output materialized = CameraOutput_Main
+Session Camera Assignment materialized = CameraAssignment_MinimalGame_FirstPerson
+Scene-Provided Player admitted with a current Actor occurrence
+PlayerInput.camera references CameraOutput_Main Unity Camera
+Mounted / First Person rig follows the Actor Camera Subject
+Move / Look navigation operational
 ```
-
 ## Run
 
 1. Select `GameApplication_MinimalGame.asset` as the Active Game Application.
@@ -264,11 +154,11 @@ GameApplication_MinimalGame
   -> PlayerSessionProfile_MinimalGame
   -> Camera Session
       -> PF_CameraOutput_Main
-      -> P1 -> CameraOutput_Main
-      -> P1 -> CameraPresentation_MinimalGame_Player
+      -> Startup Camera Assignment = CameraAssignment_MinimalGame_FirstPerson
+      -> P1 PlayerInput.camera = CameraOutput_Main Unity Camera
   -> Route_MinimalGame
       -> Activity_MinimalGame
-          -> CameraPresentation_MinimalGame_Player
+          -> CameraAssignment_MinimalGame_FirstPerson
 
 MinimalGame_Gameplay
   -> FG_MinimalGame_SceneProvisioned
