@@ -25,17 +25,22 @@ PlayerSlotProfile_ManagerProvisioned
 ActorProfile_ManagerProvisionedPlayer
   Presentation Prefab = Manager Provisioned Actor Presentation
 
-Manager Provisioned Actor Presentation
+FG_PlayerActor (canonical Actor occurrence)
+  PlayerActorDeclaration
+  PlayerGameplayInputReader
+  CharacterController
   MinimalPlayerMovement
   MinimalThirdPersonLook
-    Tracking Pivot
+    Tracking Pivot = CameraMount
   ActorCameraSubjectAuthoring
-    Observation Transform = Tracking Pivot
+    Observation Transform = same CameraMount
+  VisualContentMount
+    -> Manager Provisioned Actor Presentation (visual only)
 ```
 
 Join provisions a Local Player Host, prepares and materializes the selected Actor occurrence, and admits it to the configured Activity. The Activity explicitly includes the Manager-Provisioned Slot, requires `GameplayReady`, and has an authored relocation anchor. Leave releases that Player/Actor occurrence. Rejoin creates a new Actor and Subject occurrence; the camera follows the new occurrence through the same Slot Assignment.
 
-The Player composition is unchanged by the Camera migration.
+The Manager-Provisioned Session, Host, Slot and Actor selection flow remains unchanged; the Actor occurrence now owns its movement and spatial state.
 
 ## Camera composition
 
@@ -57,7 +62,7 @@ CameraAssignment_ManagerProvisioned_ThirdPerson
   Rig = PF_Player_ThirdPerson_Presentation
 ```
 
-`PF_CameraFallback` is the physical Output prefab; it owns the Unity Camera, Cinemachine Brain, and persistent fallback rig. Its `CameraOutputAuthoring` uses `CameraOutput_Main`. The Third Person rig is the current shared rig prefab configured with `CameraRigComposer` and `CameraBehavior_ThirdPerson`; its materialized Cinemachine Camera uses `CinemachineThirdPersonFollow`. The Actor occurrence supplies the exact Subject using its `ActorCameraSubjectAuthoring.ObservationTransform`.
+`PF_CameraFallback` is the physical Output prefab; it owns the Unity Camera, Cinemachine Brain, and persistent fallback rig. Its `CameraOutputAuthoring` uses `CameraOutput_Main`. The Third Person rig is the current shared rig prefab configured with `CameraRigComposer` and `CameraBehavior_ThirdPerson`; its materialized Cinemachine Camera uses `CinemachineThirdPersonFollow`. The Actor occurrence supplies the exact Subject using its `ActorCameraSubjectAuthoring.ObservationTransform`. Movement and the CharacterController operate on that same Actor root; the visual prefab contains no spatial or camera authoring.
 
 The Assignment stays configured for the Session even when no Player has joined. With no eligible Player occurrence, the Output presents its fallback. Join makes the Slot's Third Person occurrence eligible. Leave releases the occurrence and returns the Output to fallback. Rejoin provides a fresh Actor/Subject occurrence and Third Person becomes eligible again.
 

@@ -67,11 +67,18 @@ PlayerSlotProfile_ManagerProvisioned
 ActorProfile_ManagerProvisionedPlayer
   Presentation Prefab = Manager_Provisioned_Actor_Presentation
 
-Manager_Provisioned_Actor_Presentation
+FG_PlayerActor (canonical Actor occurrence)
+  PlayerActorDeclaration
+  PlayerGameplayInputReader
+  CharacterController
+  MinimalPlayerMovement
   MinimalThirdPersonLook
-    Tracking Pivot = explicit pivot Transform
+    Tracking Pivot = FG_PlayerActor/CameraMount
   ActorCameraSubjectAuthoring
-    Observation Transform = the same Tracking Pivot
+    Observation Transform = the same FG_PlayerActor/CameraMount
+
+Manager_Provisioned_Actor_Presentation
+  visual content only; no movement, CharacterController, input reader or Actor Camera Subject
 
 Activity_ManagerProvisioned
   Participation = explicit PlayerSlotProfile_ManagerProvisioned

@@ -1,8 +1,8 @@
 # Player Provisioning — Joining Control
 
-Status: **CAMERA-032-D/E VALIDATED — Join / Leave / Rejoin and Camera arbitration proven in Unity Play Mode**
+Status: **Camera Assignment migration authored; Unity import and Play Mode validation pending.**
 
-This sample reuses the same Player, Primary Scene, Persistent Content and neutral Camera assets as ManagerProvisioned. Its product difference is explicit control over whether new Players may join.
+This sample demonstrates Manager-Provisioned Player Join while keeping Session admission closed until the user opens it.
 
 ## Session policy
 
@@ -10,184 +10,96 @@ This sample reuses the same Player, Primary Scene, Persistent Content and neutra
 PlayerSessionProfile_JoiningControl
   HostProvisioning = ManagerProvisioned
   ActorResolution = ResolveConfiguredDefault
-  initialJoiningOpen = false
-  supportedSlots = 1
+  Initial Joining Open = false
+  Supported Slot = PlayerSlotProfile_ManagerProvisioned
 ```
 
-Open / Close Join controls belong to the Joining Control Activity. They change Session admission state; they do not own Camera state.
+Open and Close Join controls remain the focus. They change Session admission state; closing Join does not remove an already Joined Player.
 
-## Camera composition
-
-No sample-specific Camera assets are required. JoiningControl reuses the neutral Player sample Camera assets:
+## Player composition
 
 ```text
-Assets/_Sample/Shared/
-  Prefabs/Cameras/
-    PF_CameraOutput_Main.prefab
+GameApplication_JoiningControl
+  Default Profile = PlayerSessionProfile_JoiningControl
 
-Assets/_Sample/PlayerSamples/Shared/Camera/
-  CameraPresentation_Default_Route.asset
-  CameraPresentation_ThirdPerson.asset
+Local_Player_Provisioning prefab
+  LocalPlayerProvisioningAuthoring
+    Local Player Host prefab = configured Manager-Provisioned Host
 
-  Presentation/
-    PF_Default_Route_Presentation.prefab
-    PF_Player_ThirdPerson_Presentation.prefab
+PlayerSlotProfile_ManagerProvisioned
+  Default Actor = ActorProfile_ManagerProvisionedPlayer
+
+FG_PlayerActor (canonical Actor occurrence)
+  PlayerActorDeclaration
+  CharacterController
+  MinimalPlayerMovement
+  MinimalThirdPersonLook
+    Tracking Pivot = occurrence Camera pivot
+  ActorCameraSubjectAuthoring
+    Observation Transform = occurrence Camera pivot
 ```
 
-The GameApplication owns physical Camera capacity and the explicit Player bindings:
+Join provisions the Host and Actor occurrence and admits that Player to the sample Activity. Leave releases the exact Player and Actor occurrence. Rejoin creates a new Actor and Subject occurrence.
+
+## Camera composition
 
 ```text
 GameApplication_JoiningControl
   Camera Session
-    Output Prefabs
-      PF_CameraOutput_Main
+    Output Prefab = PF_CameraFallback
+  Startup Camera Assignments
+    CameraAssignment_JoiningControl_ThirdPerson
 
-    Player Output Bindings
-      PlayerSlotProfile_ManagerProvisioned
-        -> CameraOutput_Main
-
-    Player Presentation Bindings
-      PlayerSlotProfile_ManagerProvisioned
-        -> CameraPresentation_ThirdPerson
-
-  Session Camera Presentations
-    none
-```
-
-The Route owns the waiting / neutral framing:
-
-```text
-Route_Joining Control
-  Camera Presentations
-    CameraPresentation_Default_Route
-
-CameraPresentation_Default_Route
+CameraAssignment_JoiningControl_ThirdPerson
+  Occurrence = IndividualPerPlayer
+  Membership = Explicit Player Slots
+  Member = PlayerSlotProfile_ManagerProvisioned
+  Target = MemberActorTargets
   Output = CameraOutput_Main
-  Rig = PF_Default_Route_Presentation
-  Subject Policy = AllAvailableSubjects
-  Transition = Cut
-  Request Precedence = 200
-```
-
-The Activity owns the Player gameplay presentation:
-
-```text
-Activity_Joining Control
-  Camera Presentations
-    CameraPresentation_ThirdPerson
-
-CameraPresentation_ThirdPerson
-  Output = CameraOutput_Main
+  Slot mapping:
+    PlayerSlotProfile_ManagerProvisioned -> CameraOutput_Main
   Rig = PF_Player_ThirdPerson_Presentation
-  Subject Policy = ExplicitSelection
-  Transition = Blend
-  Request Precedence = 300
+    CinemachineThirdPersonFollow
 ```
 
-The Player Actor contributes Camera Subject evidence only:
+The Assignment remains configured for the Session even when no Player is Joined. `PF_CameraFallback` owns the physical Output, Unity Camera, Cinemachine Brain and fallback rig. The Actor occurrence provides the Subject through its `ActorCameraSubjectAuthoring`.
+
+Route and Activity changes do not select a different Camera. Camera eligibility follows the Player and Actor occurrence through the application Assignment.
+
+## Expected behavior
 
 ```text
-Actor Presentation
-  MinimalThirdPersonLook
-    Tracking Pivot
-
-  ActorCameraSubjectAuthoring
-    Observation Transform
-      -> Tracking Pivot
-```
-
-The Player does not own a Camera Output or Camera Rig.
-
-## Runtime arbitration
-
-```text
-Boot / Joining closed
-  -> Route Presentation [200]
+Boot with Join closed
+  -> CameraOutput_Main shows fallback
 
 Join while closed
-  -> rejected
-  -> Route Presentation remains
+  -> rejected; fallback remains
 
-Open Join
-Join
-  -> Player Host created
-  -> configured default Actor selected/prepared/materialized
-  -> Actor Camera Subject becomes available
-  -> Player Slot selects that exact Subject
-  -> Activity Third Person Presentation [300] becomes effective
+Open Join, then Join
+  -> Player becomes GameplayReady
+  -> Third Person follows the current Actor Subject
 
 Close Join
-  -> current Player remains
-  -> Third Person remains
+  -> current Player remains Joined; Third Person remains active
 
 Leave
-  -> current Actor / Subject occurrence is released
-  -> Third Person loses eligibility
-  -> Route Presentation [200] becomes effective again
+  -> Player/Actor occurrence released; Output returns to fallback
 
-Reopen Join
-Rejoin
-  -> fresh Player / Actor / Subject occurrence
-  -> Third Person [300] becomes effective again
-```
-
-## Validated runtime evidence
-
-Unity Play Mode validation confirmed:
-
-```text
-Camera Session Outputs materialized = 1
-
-Route Camera Presentation materialized
-  CameraPresentation_Default_Route
-  Cut
-  precedence = 200
-  scope = Route
-
-Player Camera Presentation selection attached
-  PlayerSlot:player.slot.1
-  CameraPresentation_ThirdPerson
-
-Activity Camera Presentation materialized
-  CameraPresentation_ThirdPerson
-  Blend
-  precedence = 300
-  scope = Activity
-
-OpenJoining = Succeeded
-Join = SucceededJoined
-Player = GameplayReady
-Leave = SucceededLeft
-Rejoin = SucceededJoined
-fresh Actor occurrence = confirmed
-CloseJoining = Succeeded
+Reopen Join, then Rejoin
+  -> fresh Actor/Subject occurrence; Third Person follows it
 ```
 
 ## Persistent Content boundary
 
-`ManagerProvisioned_Persistent.unity` is reused as infrastructure only.
+`ManagerProvisioned_Persistent.unity` is shared infrastructure. It contains Player provisioning and shared services; it must not define Camera Session policy or sample gameplay Camera authority. `PlayerInputManager` remains physical Player provisioning authority, while the Framework Camera Assignment maps the Slot to its Output.
 
-It intentionally contains:
+## Validate in Unity
 
-```text
-Local Player Provisioning
-Audio / UI support
-EventSystem
-```
-
-It must not contain:
-
-```text
-CameraOutputAuthoring
-CameraSharedComposition
-legacy Player Camera policy authoring
-sample-specific gameplay Camera authority
-```
-
-`PlayerInputManager` remains provisioning / physical split-screen authority. The Framework Camera layer does not own `Camera.rect`.
-
-## Known Framework issue
-
-When leaving Play Mode, Framework application-quit teardown can attempt normal Camera request arbitration after Unity has already invalidated a materialized Cinemachine Camera Scene.
-
-The resulting Route / Activity `Lifecycle Camera Presentation release failed` warnings are Framework shutdown-order debt, not JoiningControl authoring debt.
+1. Import the project and resolve any authoring validation errors.
+2. Enter Play Mode with Join closed; confirm the Output shows fallback.
+3. Attempt Join while closed; confirm rejection and unchanged fallback.
+4. Open Join and Join; confirm GameplayReady and Third Person tracking.
+5. Close Join; confirm the Player and Third Person view remain.
+6. Leave; confirm the Slot is Available and the Output returns to fallback.
+7. Reopen Join and Rejoin; confirm a fresh Actor/Subject occurrence is followed.
+8. Change Route or Activity; confirm no other Camera is selected.
