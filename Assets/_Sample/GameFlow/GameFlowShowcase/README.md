@@ -34,7 +34,7 @@ A/B -> Hub               -> Clear the source Assignment to Output Fallback
 C -> Hub                 -> no command
 ```
 
-Activity C remains content-less and has no Camera adapter. A/B Exit clears only when the next Activity has no authored Assignment. The Session Camera remains the single writer of Assignment state; Output presentation and fallback coverage remain Session-owned.
+Activity C remains content-less and has no Camera adapter. The single Route-scoped observer interprets each committed Previous/Current Activity pair and clears only when the destination has no authored Assignment. The Session Camera remains the single writer of Assignment state; Output presentation and fallback coverage remain Session-owned.
 
 ### Camera observer validation — 2026-10-04
 
