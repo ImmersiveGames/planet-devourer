@@ -103,6 +103,6 @@ Do not create hidden dependencies on sibling top-level sample groups. Cross-grou
 
 ## Transversal coverage
 
-Game Flow is the natural home for contextual Route/Activity Camera and BGM behavior when those concepts arise naturally.
+Game Flow may issue sample-specific Session Camera Assignment commands from a Route-scoped observer of committed Activity transitions. Camera Assignment state and Output presentation remain Session-owned; Route and Activity assets do not own Camera, and the sample does not use CameraRequest.
 
-The current Basic Flow proves contextual Route/Activity BGM behavior, including the distinction between explicit Silence, explicit Play and no-request preservation. Camera/Audio should remain supporting or ambient unless a later scenario explicitly needs one of them to teach a new contract. Optional Audio package boundaries must remain explicit.
+The current Basic Flow demonstrates Route-scoped transition-observer Activate, Replace and Clear commands for Session Camera Assignments, alongside contextual BGM behavior and the distinction between explicit Silence, explicit Play and no-request preservation. Optional Audio package boundaries remain explicit.

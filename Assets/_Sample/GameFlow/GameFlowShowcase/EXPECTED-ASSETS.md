@@ -1,6 +1,6 @@
 # Expected Unity Assets
 
-This file tracks the Game Flow Showcase materialization target. Unity assets must be created through Unity; this document does not replace serialized assets.
+This file tracks the Game Flow Showcase materialization target and its serialized scene references. Unity import and lifecycle validation remain manual.
 
 ## Materialized in the current authoring tree
 
@@ -30,12 +30,25 @@ Scenes/SCN_GameFlow_Basic_Readiness.unity
 Scenes/SCN_GameFlow_Content_Readiness.unity
 
 Scripts/GameFlowVisitorPreparation.cs
+Scripts/GameFlowCameraAssignmentAdapter.cs
 
 Camera/Assignments/CameraAssignment_GameFlow_A.asset
 Camera/Assignments/CameraAssignment_GameFlow_B.asset
 ```
 
-Both Assignment assets reference their existing fixed Rig Prefabs and the shared physical Output. Camera command triggers are not yet connected to the Hub/Basic Activity transitions; the intended Activate A, Replace A↔B and Clear-to-Fallback sequence remains an integration gate.
+Both Assignment assets reference their existing fixed Rig Prefabs and the shared physical Output. `SCN_GameFlow_Basic` serializes one `GameFlowCameraAssignmentAdapter` under a `RouteContentContribution`, with references to Activity A/B and Assignment A/B. It observes committed Activity transition context and emits explicit Session Camera commands:
+
+| Transition | Observer context | Command |
+|---|---|---|
+| Hub / boot -> Basic Flow A | Previous = none, Current = A | Activate A |
+| A -> B | Previous = A, Current = B | Replace A -> B |
+| B -> A | Previous = B, Current = A | Replace B -> A |
+| A/B -> C | Previous = A/B, Current = C | Clear A/B |
+| C -> A/B | Previous = C, Current = A/B | Activate A/B |
+| A/B -> none / Route exit | Previous = A/B, Current = none | Clear A/B |
+| C -> none / Route exit | Neither Activity maps to Assignment | No command |
+
+Hub does not issue a boot Clear. Activity C remains content-less and has no Camera adapter. There is no CameraRequest or Route/Activity Camera ownership.
 
 The current tree contains two proven topic Routes selected from the HUB:
 
@@ -215,7 +228,7 @@ Create additional assets only when a distinct positive consumer contract justifi
 
 ```text
 Activity Restart when it teaches a real gameplay restart flow
-contextual Camera presentation/requests where natural
+additional Session Camera Assignment command coverage only where it teaches a new contract
 additional Audio coverage only where it teaches a new contract
 supporting Player configuration only if a scenario actually requires Player
 ```
