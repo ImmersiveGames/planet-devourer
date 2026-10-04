@@ -34,9 +34,11 @@ Scripts/GameFlowCameraAssignmentAdapter.cs
 
 Camera/Assignments/CameraAssignment_GameFlow_A.asset
 Camera/Assignments/CameraAssignment_GameFlow_B.asset
+Camera/Assignments/CameraAssignment_GameFlow_Readiness.asset
+Camera/Prefabs/PF_GameFlow_CameraRig_Readiness.prefab
 ```
 
-Both Assignment assets reference their existing fixed Rig Prefabs and the shared physical Output. `SCN_GameFlow_Basic` serializes one `GameFlowCameraAssignmentAdapter` under a `RouteContentContribution`, with references to Activity A/B and Assignment A/B. It observes committed Activity transition context and emits explicit Session Camera commands:
+Each Route Assignment references a fixed Rig Prefab and the shared physical Output. `SCN_GameFlow_Basic` and `SCN_GameFlow_Basic_Readiness` each serialize one `GameFlowCameraAssignmentAdapter` under a `RouteContentContribution`. The adapter's serialized Activity-to-Assignment map is Route policy: Basic Flow maps A/B to their Assignments and C to none; Readiness maps C/D/E to the shared Readiness Assignment. It observes committed Activity transition context and emits explicit Session Camera commands:
 
 | Transition | Observer context | Command |
 |---|---|---|
@@ -48,7 +50,16 @@ Both Assignment assets reference their existing fixed Rig Prefabs and the shared
 | A/B -> none / Route exit | Previous = A/B, Current = none | Clear A/B |
 | C -> none / Route exit | Neither Activity maps to Assignment | No command |
 
-Hub does not issue a boot Clear. Activity C remains content-less and has no Camera adapter. There is no CameraRequest or Route/Activity Camera ownership.
+Readiness camera transitions:
+
+| Transition | Observer context | Command |
+|---|---|---|
+| Hub / boot -> Readiness C | Previous = none, Current = C | Activate Readiness |
+| C -> D / E | Previous and Current map to the same Assignment | No-op |
+| D / E -> C | Previous and Current map to the same Assignment | No-op |
+| C/D/E -> none / Route exit | Previous maps to Readiness, Current = none | Clear Readiness |
+
+Hub does not issue a boot Clear. Activity C remains content-less; Basic Flow maps it to no Assignment, while Readiness maps it to the same stable Assignment as D/E. There is no CameraRequest or Route/Activity Camera ownership.
 
 Current validation evidence:
 
@@ -122,6 +133,7 @@ Activity_Basic_C
   neutral baseline
   Observe Only
   no ActivityContentProfile
+  shares CameraAssignment_GameFlow_Readiness with D/E in Readiness Showcase
 
 Activity_Basic_D
   Wait Visible
@@ -148,6 +160,8 @@ C -> E -> C
 ```
 
 while C is active, D/E controls are visible. While D or E is active, only the return-to-C control is visible. The controls still use normal `ActivityRequestTrigger` requests; visibility is not request authority.
+
+One Route-scoped Camera adapter in `SCN_GameFlow_Basic_Readiness` maps C, D, and E to `CameraAssignment_GameFlow_Readiness`. Entering the Route activates the fixed Assignment; transitions among C/D/E are no-ops; Route exit clears it. Camera is not part of the readiness participant or its result.
 
 Returning to C unloads `SCN_GameFlow_Content_Readiness`, so the next D or E request materializes fresh Activity-owned content and creates a fresh readiness occurrence. `D -> C -> D` and `E -> C -> E` are repeatable.
 

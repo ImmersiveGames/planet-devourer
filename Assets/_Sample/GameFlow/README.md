@@ -24,6 +24,8 @@ GameFlowShowcase/
 
 The current application intentionally starts in a sample HUB. The HUB is navigation only; it is not runtime authority or gameplay progression.
 
+The Game Flow Showcase authors Session Camera policy per Route through one Route-scoped adapter in each Route primary scene. Basic Flow maps A/B to their respective Assignments and C to none. Readiness maps C/D/E to one fixed Readiness Assignment, keeping the view stable across the readiness test. Camera remains Session-owned and single-writer; Route and Activity assets have no Camera fields.
+
 ## Run
 
 1. Select `GameFlowShowcase/GameApplication_GameFlow.asset` and use the Framework **Set Active** action when it is not already active.
@@ -105,7 +107,7 @@ Do not create hidden dependencies on sibling top-level sample groups. Cross-grou
 
 Game Flow may issue sample-specific Session Camera Assignment commands from a Route-scoped observer of committed Activity transitions. Camera Assignment state and Output presentation remain Session-owned; Route and Activity assets do not own Camera, and the sample does not use CameraRequest.
 
-The current Basic Flow demonstrates Route-scoped transition-observer Activate, Replace and Clear commands for Session Camera Assignments, alongside contextual BGM behavior and the distinction between explicit Silence, explicit Play and no-request preservation. Optional Audio package boundaries remain explicit.
+Basic Flow and Readiness demonstrate Route-scoped transition-observer Session Camera policy: Basic Flow uses Activate/Replace/Clear for A/B, while Readiness activates one fixed Assignment for C and keeps it unchanged across C/D/E before clearing on Route exit. The Session remains the Camera single writer. The sample also demonstrates contextual BGM behavior and the distinction between explicit Silence, explicit Play and no-request preservation. Optional Audio package boundaries remain explicit.
 
 The Route-scoped Camera observer proof is closed as of 2026-10-04: Framework EditMode **169/169**, RouteLifecycle observer **6/6**, Camera Editor **74/74**, and GameFlow Play Mode `Hub -> A -> B -> A -> C -> B -> Hub` completed with `blockingIssues=0`. The adapter exists once in the Route-owned `SCN_GameFlow_Basic`; Activity A/B scenes do not own copies.
 

@@ -1,3 +1,4 @@
+using System;
 using Immersive.Framework.Authoring;
 using Immersive.Framework.Camera;
 using Immersive.Framework.CameraAuthoring;
@@ -15,13 +16,20 @@ namespace ImmersiveGames.PlanetDevourer.Samples.GameFlow
         ISessionCameraAssignmentCommandConsumer
     {
         [Header("Activity Assignments")]
-        [SerializeField] private ActivityAsset activityA;
-        [SerializeField] private SessionCameraAssignmentAsset assignmentA;
-        [SerializeField] private ActivityAsset activityB;
-        [SerializeField] private SessionCameraAssignmentAsset assignmentB;
+        [SerializeField] private ActivityAssignment[] activityAssignments = Array.Empty<ActivityAssignment>();
 
         private ISessionCameraAssignmentCommandPort _commands;
         private ISessionCameraAssignmentCommandPort _lastReleasedCommands;
+
+        [Serializable]
+        private struct ActivityAssignment
+        {
+            [SerializeField] private ActivityAsset activity;
+            [SerializeField] private SessionCameraAssignmentAsset assignment;
+
+            public ActivityAsset Activity => activity;
+            public SessionCameraAssignmentAsset Assignment => assignment;
+        }
 
         public bool IsBoundToSessionCameraAssignmentCommands(
             ISessionCameraAssignmentCommandPort commands) =>
@@ -126,14 +134,12 @@ namespace ImmersiveGames.PlanetDevourer.Samples.GameFlow
                 return null;
             }
 
-            if (ReferenceEquals(activity, activityA))
+            for (int i = 0; i < activityAssignments.Length; i++)
             {
-                return assignmentA;
-            }
-
-            if (ReferenceEquals(activity, activityB))
-            {
-                return assignmentB;
+                if (ReferenceEquals(activity, activityAssignments[i].Activity))
+                {
+                    return activityAssignments[i].Assignment;
+                }
             }
 
             return null;

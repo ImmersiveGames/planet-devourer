@@ -1223,6 +1223,73 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!4 &650000000000001
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 650000000000002}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &650000000000002
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 650000000000001}
+  - component: {fileID: 650000000000003}
+  - component: {fileID: 650000000000004}
+  m_Layer: 0
+  m_Name: GameFlow Camera Assignment Policy
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &650000000000003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 650000000000002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f37a6125514e4491a7174d4372fc4c22, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.RouteLifecycle.RouteContentContribution
+  route: {fileID: 11400000, guid: b0a19f32029d1024093b6af8e167e232, type: 2}
+  localContentId: route-local-content.gameflow-readiness-camera-assignment-policy
+  requiredness: 10
+--- !u!114 &650000000000004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 650000000000002}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99734bc487e742d0bae76e9e41edad97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ImmersiveGames.PlanetDevourer.Samples.GameFlow.GameFlowCameraAssignmentAdapter
+  activityAssignments:
+  - activity: {fileID: 11400000, guid: 25bb7e2463edac14db7ff11f9d870366, type: 2}
+    assignment: {fileID: 11400000, guid: 70ff39a4938940b6b74f52e4bf3db625, type: 2}
+  - activity: {fileID: 11400000, guid: 018dacf296c3f264b81ae2bdf493705c, type: 2}
+    assignment: {fileID: 11400000, guid: 70ff39a4938940b6b74f52e4bf3db625, type: 2}
+  - activity: {fileID: 11400000, guid: f75c2bc1ee1a7ac499f1dbd8595368dc, type: 2}
+    assignment: {fileID: 11400000, guid: 70ff39a4938940b6b74f52e4bf3db625, type: 2}
 --- !u!1001 &895144749476624047
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1292,3 +1359,4 @@ SceneRoots:
   - {fileID: 2141644780}
   - {fileID: 1922753790}
   - {fileID: 1079241607}
+  - {fileID: 650000000000001}

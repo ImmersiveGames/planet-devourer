@@ -21,7 +21,7 @@ The HUB is sample navigation. It is not Framework authority or gameplay progress
 
 ## Session Camera Assignments
 
-Session Camera Assignments are owned by the Session. One `GameFlowCameraAssignmentAdapter` is authored beneath a `RouteContentContribution` in `SCN_GameFlow_Basic` and observes committed Activity transitions through `IRouteActivityTransitionObserver`. It issues explicit commands through the Session command port. Activity and Route assets have no Camera ownership or fields; there is no CameraRequest path.
+Session Camera Assignments are owned by the Session. Each showcase Route has one `GameFlowCameraAssignmentAdapter` beneath a `RouteContentContribution` in its primary scene. The adapter observes committed Activity transitions through `IRouteActivityTransitionObserver`, maps Activities to Assignments, and issues explicit commands through the Session command port. Basic Flow maps A/B to distinct Assignments and C to none; Readiness maps C/D/E to one shared Readiness Assignment, so its camera remains stable while readiness content and policy change. Activity and Route assets have no Camera ownership or fields; there is no CameraRequest path.
 
 ```text
 Session boot / Hub       -> Output Fallback; no Hub Clear command
@@ -32,6 +32,9 @@ A/B -> C                 -> Clear the source Assignment to Output Fallback
 C -> A/B                 -> Activate the destination Assignment
 A/B -> Hub               -> Clear the source Assignment to Output Fallback
 C -> Hub                 -> no command
+Hub -> Readiness / C     -> Activate Readiness Assignment
+C <-> D/E                -> no-op (same Readiness Assignment)
+Readiness -> Hub         -> Clear Readiness Assignment
 ```
 
 Activity C remains content-less and has no Camera adapter. The single Route-scoped observer interprets each committed Previous/Current Activity pair and clears only when the destination has no authored Assignment. The Session Camera remains the single writer of Assignment state; Output presentation and fallback coverage remain Session-owned.
@@ -190,6 +193,8 @@ The comparison uses the same preparation content for both waiting policies. The 
 D = Wait Visible
 E = Wait Covered
 ```
+
+`SCN_GameFlow_Basic_Readiness` contains one Route-scoped `GameFlowCameraAssignmentAdapter`. C, D, and E map to `CameraAssignment_GameFlow_Readiness`, whose fixed rig keeps the view stable while readiness content and policy change. Entering the Route activates that Assignment, C/D/E transitions issue no Camera command, and leaving the Route clears it. Camera remains Session-owned and single-writer; this mapping is sample policy only.
 
 ## Topology
 

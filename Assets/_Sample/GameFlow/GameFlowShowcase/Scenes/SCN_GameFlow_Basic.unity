@@ -1470,10 +1470,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99734bc487e742d0bae76e9e41edad97, type: 3}
   m_Name:
   m_EditorClassIdentifier: Assembly-CSharp::ImmersiveGames.PlanetDevourer.Samples.GameFlow.GameFlowCameraAssignmentAdapter
-  activityA: {fileID: 11400000, guid: 082033c485b15ac4ba095eb3386156d8, type: 2}
-  assignmentA: {fileID: 11400000, guid: 8df7622dd3a8443da9a872e0e6f3a20f, type: 2}
-  activityB: {fileID: 11400000, guid: 1de60b795043d8349acc5bcb9c8e0db2, type: 2}
-  assignmentB: {fileID: 11400000, guid: 65339dced9104445b1da2b60093c6e31, type: 2}
+  activityAssignments:
+  - activity: {fileID: 11400000, guid: 082033c485b15ac4ba095eb3386156d8, type: 2}
+    assignment: {fileID: 11400000, guid: 8df7622dd3a8443da9a872e0e6f3a20f, type: 2}
+  - activity: {fileID: 11400000, guid: 1de60b795043d8349acc5bcb9c8e0db2, type: 2}
+    assignment: {fileID: 11400000, guid: 65339dced9104445b1da2b60093c6e31, type: 2}
+  - activity: {fileID: 11400000, guid: 25bb7e2463edac14db7ff11f9d870366, type: 2}
+    assignment: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
