@@ -1,6 +1,6 @@
 # Expected Unity Assets
 
-This file tracks the Game Flow Showcase materialization target and its serialized scene references. Unity import and lifecycle validation remain manual.
+This file tracks the Game Flow Showcase materialization target and its serialized scene references. The IF-ADR-041 Route-scoped Camera observer path was validated in Unity on 2026-10-04; unrelated future materialization changes still require their own validation.
 
 ## Materialized in the current authoring tree
 
@@ -49,6 +49,25 @@ Both Assignment assets reference their existing fixed Rig Prefabs and the shared
 | C -> none / Route exit | Neither Activity maps to Assignment | No command |
 
 Hub does not issue a boot Clear. Activity C remains content-less and has no Camera adapter. There is no CameraRequest or Route/Activity Camera ownership.
+
+Current validation evidence:
+
+```text
+Framework EditMode        169/169 PASS
+RouteLifecycle observer     6/6 PASS
+Camera Editor              74/74 PASS
+GameFlow Play Mode         Hub -> A -> B -> A -> C -> B -> Hub
+blockingIssues             0 on every executed request
+```
+
+Observed Session Camera state:
+- Hub -> A: Assignment A active after transition coverage release;
+- A -> C: no active normal Assignment;
+- C -> B: Assignment B active;
+- B -> Hub: no active normal Assignment.
+
+The single Route-scoped observer therefore remains alive across A/B/C and is released with the Route as intended.
+
 
 The current tree contains two proven topic Routes selected from the HUB:
 
