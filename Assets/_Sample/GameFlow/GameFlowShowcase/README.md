@@ -36,6 +36,28 @@ C -> Hub                 -> no command
 
 Activity C remains content-less and has no Camera adapter. A/B Exit clears only when the next Activity has no authored Assignment. The Session Camera remains the single writer of Assignment state; Output presentation and fallback coverage remain Session-owned.
 
+## Camera consumer validation
+
+Play Mode validation completed on 2026-10-04 against Framework commit `f7101b6b7204ada1a98b9c2c4d17cf3ebf2a3d83`.
+
+Observed paths:
+
+```text
+Session boot / Hub       -> Fallback
+Hub -> Basic Flow / A    -> Assignment A active after Route coverage release
+A -> B                   -> Replace A -> B
+B -> A                   -> Replace B -> A
+A -> C                   -> Clear A -> Fallback
+C -> A                   -> Activate A
+A -> B -> C              -> Replace A -> B; Clear B -> Fallback
+C -> B                   -> Activate B
+B -> Hub                 -> Clear B -> Fallback
+```
+
+All corresponding Route/Activity requests completed with `blockingIssues=0`. Covered transitions opened with temporary Fallback coverage and closed with the expected configured Assignment state: Hub -> A restored A after coverage release; A/B -> C and A/B -> Hub closed with no active normal Assignment.
+
+This closes the GameFlow consumer proof for IF-ADR-039 Activate/Replace/Clear composition. It does not make Route or Activity a Camera authority.
+
 ## Run
 
 ```text
@@ -372,6 +394,7 @@ Scenes/SCN_GameFlow_Basic_Readiness.unity
 Scenes/SCN_GameFlow_Content_Readiness.unity
 
 Scripts/GameFlowVisitorPreparation.cs
+Scripts/GameFlowCameraAssignmentAdapter.cs
 ```
 
 There is intentionally no `ActivityContent_Basic_C.asset` and no `SCN_GameFlow_Basic_C.unity`.
@@ -406,12 +429,14 @@ readiness occurrence reentry
 Activity-owned content release/reload between readiness tests
 contextual Route / Activity BGM intent
 BGM no-request preservation
+Session Camera Assignment Activate / Replace / Clear from Activity context
+covered transition Camera continuity / fallback release
 teardown and return to Activity None
 ```
 
 # Consumer proof disposition
 
-The current Game Flow Showcase closes the intended positive consumer proof for Game Flow. Composition / Visibility, baseline Transition/Loading presentation, successful Activity Readiness waiting/progress and contextual BGM behavior are all demonstrated through valid game paths.
+The current Game Flow Showcase closes the intended positive consumer proof for Game Flow. Composition / Visibility, baseline Transition/Loading presentation, successful Activity Readiness waiting/progress, contextual BGM behavior and Session Camera Assignment commands are all demonstrated through valid game paths.
 
 There is no remaining mandatory Game Flow scenario solely to exercise negative, invalid or terminal failure behavior. Those paths belong to technical QA unless a future real product feature introduces an explicit player-facing recovery behavior that is itself worth demonstrating.
 

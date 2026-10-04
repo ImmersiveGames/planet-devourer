@@ -1,6 +1,6 @@
 # Expected Unity Assets
 
-This file tracks the Game Flow Showcase materialization target and its serialized scene references. Unity import and lifecycle validation remain manual.
+This file tracks the Game Flow Showcase materialization target and its serialized scene references. Current Camera command lifecycle validation completed in Play Mode on 2026-10-04.
 
 ## Materialized in the current authoring tree
 
@@ -49,6 +49,21 @@ Both Assignment assets reference their existing fixed Rig Prefabs and the shared
 | C -> Hub | No A/B adapter callback | No command |
 
 Hub does not issue a boot Clear. Activity C remains content-less and has no Camera adapter. There is no CameraRequest or Route/Activity Camera ownership.
+
+## Current Camera proof
+
+Play Mode consumer validation passed against Framework commit `f7101b6b7204ada1a98b9c2c4d17cf3ebf2a3d83`:
+
+```text
+Hub -> A      PASS: A active after covered Route transition releases
+A -> B        PASS: Replace A -> B
+B -> A        PASS: Replace B -> A
+A/B -> C      PASS: Clear source -> Fallback
+C -> A/B      PASS: Activate destination
+A/B -> Hub    PASS: Clear source -> Fallback
+```
+
+The observed transitions completed with `blockingIssues=0`. Fallback coverage remained presentation-only: it no longer blocked logical Activate/Replace/Clear, and releasing coverage restored the retained normal occurrence when an Assignment remained active.
 
 The current tree contains two proven topic Routes selected from the HUB:
 
@@ -218,6 +233,8 @@ Required readiness participant
 participant-aware determinate Loading progress
 readiness scene release/reentry
 contextual BGM Play / Preserve / Silence
+Session Camera Assignment Activate / Replace / Clear
+covered Camera fallback continuity
 ```
 
 The intended Game Flow consumer proof is closed by these valid paths. Negative/invalid/interrupted/terminal failure cases remain technical QA responsibility and are not materialization targets for this Sample.

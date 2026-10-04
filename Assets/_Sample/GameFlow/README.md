@@ -89,7 +89,7 @@ Basic Flow
     BGM intent = Silence
 ```
 
-The Basic Flow cycle, Activity-local visibility, Activity-owned scene composition, content-less Activity isolation, contextual BGM replacement/preservation, Route cover/loading presentation and return-to-HUB teardown are proven in Play Mode.
+The Basic Flow cycle, Activity-local visibility, Activity-owned scene composition, content-less Activity isolation, contextual BGM replacement/preservation, Session Camera Assignment Activate/Replace/Clear, Route cover/loading presentation and return-to-HUB teardown are proven in Play Mode.
 
 Composition / Visibility remains intentionally absorbed into Basic Flow instead of being materialized as a separate scenario. Activity A/B demonstrate both local visibility changes inside the Route scene and load/release of Activity-owned scenes. Activity C provides the negative case: it is a valid Activity with no Activity Content Profile, so A/B content does not leak into it.
 
@@ -106,3 +106,5 @@ Do not create hidden dependencies on sibling top-level sample groups. Cross-grou
 Game Flow may issue sample-specific Session Camera Assignment commands from Activity context. Camera Assignment state and Output presentation remain Session-owned; Route and Activity assets do not own Camera, and the sample does not use CameraRequest.
 
 The current Basic Flow demonstrates Activity-context Activate, Replace and Clear commands for Session Camera Assignments, alongside contextual BGM behavior and the distinction between explicit Silence, explicit Play and no-request preservation. Optional Audio package boundaries remain explicit.
+
+Camera consumer proof: **PASS (2026-10-04)**. Hub -> A, A <-> B, A/B -> C, C -> A/B and A/B -> Hub were exercised in Play Mode. Covered transitions retained the expected Session Assignment state and returned to the normal occurrence or Fallback correctly, with no blocking issues.
