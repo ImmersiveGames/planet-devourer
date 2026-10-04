@@ -36,6 +36,24 @@ C -> Hub                 -> no command
 
 Activity C remains content-less and has no Camera adapter. A/B Exit clears only when the next Activity has no authored Assignment. The Session Camera remains the single writer of Assignment state; Output presentation and fallback coverage remain Session-owned.
 
+### Camera observer validation — 2026-10-04
+
+The Route-scoped consumer migration is validated in Unity:
+
+```text
+Framework EditMode        169/169 PASS
+RouteLifecycle observer     6/6 PASS
+Camera Editor              74/74 PASS
+
+Play Mode executed:
+Hub -> A -> B -> A -> C -> B -> Hub
+```
+
+Every executed Route/Activity request completed with `blockingIssues=0`. Runtime Camera state closed the important boundaries as expected: Hub -> A with Assignment A active, A -> C with no active normal Assignment, C -> B with Assignment B active, and B -> Hub with no active normal Assignment.
+
+This closes the IF-ADR-041 GameFlow consumer proof with one adapter in `SCN_GameFlow_Basic`; Activity scenes A/B contain no Camera adapter.
+
+
 ## Run
 
 ```text
