@@ -106,3 +106,6 @@ Do not create hidden dependencies on sibling top-level sample groups. Cross-grou
 Game Flow may issue sample-specific Session Camera Assignment commands from a Route-scoped observer of committed Activity transitions. Camera Assignment state and Output presentation remain Session-owned; Route and Activity assets do not own Camera, and the sample does not use CameraRequest.
 
 The current Basic Flow demonstrates Route-scoped transition-observer Activate, Replace and Clear commands for Session Camera Assignments, alongside contextual BGM behavior and the distinction between explicit Silence, explicit Play and no-request preservation. Optional Audio package boundaries remain explicit.
+
+The Route-scoped Camera observer proof is closed as of 2026-10-04: Framework EditMode **169/169**, RouteLifecycle observer **6/6**, Camera Editor **74/74**, and GameFlow Play Mode `Hub -> A -> B -> A -> C -> B -> Hub` completed with `blockingIssues=0`. The adapter exists once in the Route-owned `SCN_GameFlow_Basic`; Activity A/B scenes do not own copies.
+
