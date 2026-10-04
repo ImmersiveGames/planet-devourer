@@ -1,199 +1,144 @@
-# Player Provisioning / ManagerProvisioned — Materialization Checklist
-
-Status: **CAMERA-032-D/E MATERIALIZED AND RUNTIME-VALIDATED — Framework application-quit Camera teardown issue pending**
+# Player Provisioning / Manager-Provisioned — Expected Assets
 
 ## Application assets
 
 ```text
 Assets/_Sample/PlayerSamples/ManagerProvisioned/
   GameApplication_ManagerProvisioned.asset
-
+  Camera/Assignments/
+    CameraAssignment_ManagerProvisioned_ThirdPerson.asset
   Shared/
     PlayerSessionProfile_ManagerProvisioned.asset
     ActorProfile_ManagerProvisionedPlayer.asset
-
   Routes/
     Route_ManagerProvisioned.asset
-
+    Route_ManagerProvisionedOther.asset
   Activities/
     Activity_ManagerProvisioned.asset
-
-  Presentation/
-    CameraPresentation_ManagerProvisioned_Route.asset
-    CameraPresentation_ManagerProvisioned_Player.asset
-
+    Activity_ManagerProvisionedOIther.asset
   Prefabs/
-    Local Player Provisioning.prefab
-    Manager Provisioned Actor Presentation.prefab
-
-    Camera/
-      PF_ManagerProvisioned_Route_Presentation.prefab
-      PF_ManagerProvisioned_Player_ThirdPerson_Presentation.prefab
-
+    Local_Player_Provisioning.prefab
+    Manager_Provisioned_Actor_Presentation.prefab
   Scenes/
     ManagerProvisioned.unity
     ManagerProvisioned_Persistent.unity
+    ManagerProvisionedOtherRopute.unity
 ```
 
-## Reused canonical Camera assets
+## Reused shared assets
 
 ```text
-Assets/_Sample/Shared/
-  Prefabs/Cameras/
-    PF_CameraOutput_Main.prefab
+Assets/_Sample/PlayerSamples/Shared/Characters/Players/
+  PlayerSlotProfile_ManagerProvisioned.asset
 
-  Camera/Definitions/
-    CameraOutput_Main.asset
+Assets/_Sample/PlayerSamples/Shared/Prefabs/
+  FG_Player.prefab (Manager-Provisioned Local Player Host)
 
-  Camera/Behaviors/
-    CameraBehavior_Fixed.asset
-    CameraBehavior_ThirdPerson.asset
+Assets/_Sample/PlayerSamples/Shared/Camera/Presentation/
+  PF_Player_ThirdPerson_Presentation.prefab
+
+Assets/_Sample/Shared/Camera/
+  Definitions/CameraOutput_Main.asset
+  Behaviors/CameraBehavior_ThirdPerson.asset
+
+Assets/_Sample/Shared/Prefabs/Cameras/
+  PF_CameraFallback.prefab (Camera Output with fallback rig)
 ```
 
-## Required Player composition
+## Required Player configuration
 
 ```text
+GameApplication_ManagerProvisioned
+  Player Session enabled = true
+  Default Profile = PlayerSessionProfile_ManagerProvisioned
+
 PlayerSessionProfile_ManagerProvisioned
   Host Provisioning = ManagerProvisioned
   Supported Slot = PlayerSlotProfile_ManagerProvisioned
   Initial Joining Open = true
 
+Local_Player_Provisioning
+  PlayerInputManager = manual local Join, maximum one Player
+  Local Player Host Prefab = FG_Player
+
 PlayerSlotProfile_ManagerProvisioned
   Default Actor = ActorProfile_ManagerProvisionedPlayer
 
 ActorProfile_ManagerProvisionedPlayer
-  Presentation Prefab = Manager Provisioned Actor Presentation
+  Presentation Prefab = Manager_Provisioned_Actor_Presentation
 
-Manager Provisioned Actor Presentation
-  movement / look
+Manager_Provisioned_Actor_Presentation
+  MinimalThirdPersonLook
+    Tracking Pivot = explicit pivot Transform
   ActorCameraSubjectAuthoring
-    Observation Transform = Third Person tracking pivot
+    Observation Transform = the same Tracking Pivot
 
 Activity_ManagerProvisioned
-  Player participation = explicit Player 1
+  Participation = explicit PlayerSlotProfile_ManagerProvisioned
   Requirement = GameplayReady
+  Relocation = explicit Activity anchor
 ```
 
-## Required Camera Session composition
+## Required Camera configuration
 
 ```text
 GameApplication_ManagerProvisioned
-  Camera Session
-    Output Prefabs
-      PF_CameraOutput_Main
+  Camera Session Output Prefab = PF_CameraFallback
+  Startup Camera Assignments
+    CameraAssignment_ManagerProvisioned_ThirdPerson
 
-    Player Output Bindings
-      PlayerSlotProfile_ManagerProvisioned
-        -> CameraOutput_Main
+CameraAssignment_ManagerProvisioned_ThirdPerson
+  Occurrence Mode = IndividualPerPlayer
+  Membership Policy = ExplicitPlayerSlots
+  Member Slot = PlayerSlotProfile_ManagerProvisioned
+  Target Policy = MemberActorTargets
+  Output Definition = CameraOutput_Main
+  Individual Slot-to-Output mapping:
+    PlayerSlotProfile_ManagerProvisioned -> CameraOutput_Main
+  Rig Prefab = PF_Player_ThirdPerson_Presentation
 
-    Player Presentation Bindings
-      PlayerSlotProfile_ManagerProvisioned
-        -> CameraPresentation_ManagerProvisioned_Player
-
-  Session Camera Presentations
-    none
-```
-
-## Required Route Camera composition
-
-```text
-Route_ManagerProvisioned
-  Camera Presentations
-    CameraPresentation_ManagerProvisioned_Route
-
-CameraPresentation_ManagerProvisioned_Route
-  Output = CameraOutput_Main
-  Subject Policy = AllAvailableSubjects
-  Transition = Cut
-  Request Precedence = 200
-  Rig = PF_ManagerProvisioned_Route_Presentation
-
-PF_ManagerProvisioned_Route_Presentation
+PF_Player_ThirdPerson_Presentation
   CameraRigComposer
-    Behavior = CameraBehavior_Fixed
-    CinemachineCamera
+    Behavior Definition = CameraBehavior_ThirdPerson
+    Materialized position control = CinemachineThirdPersonFollow
+
+PF_CameraFallback
+  CameraOutputAuthoring
+    Output Definition = CameraOutput_Main
+    Unity Camera + CinemachineBrain
+    persistent fallback camera rig
 ```
 
-## Required Activity Player Camera composition
+The Third Person camera Subject comes from the current Actor occurrence's `ActorCameraSubjectAuthoring`; the Assignment does not serialize a specific Actor occurrence.
+
+## Expected behavior
 
 ```text
-Activity_ManagerProvisioned
-  Camera Presentations
-    CameraPresentation_ManagerProvisioned_Player
-
-CameraPresentation_ManagerProvisioned_Player
-  Output = CameraOutput_Main
-  Subject Policy = ExplicitSelection
-  Transition = Blend
-  Request Precedence = 300
-  Rig = PF_ManagerProvisioned_Player_ThirdPerson_Presentation
-
-PF_ManagerProvisioned_Player_ThirdPerson_Presentation
-  CameraRigComposer
-    Behavior = CameraBehavior_ThirdPerson
-    CinemachineCamera
-      CinemachineThirdPersonFollow
-```
-
-## Camera ownership constraints
-
-```text
-GameApplication owns physical Session Camera capacity
-PF_CameraOutput_Main owns the persistent Default Rig fallback
-
-Route owns the fixed waiting-screen Presentation
-Activity owns the Player Third Person Presentation
-Player owns Camera Subject evidence only
-
-Player Slot -> Output is explicit
-Player Slot -> Presentation is explicit
-Player Presentation Subject Policy = ExplicitSelection
-
-Persistent Content contains no Camera Output
-Persistent Content contains no CameraSharedComposition
-Persistent Content contains no legacy Player Camera policy authoring
-
-PlayerInputManager remains provisioning / physical split-screen authority
-Framework Camera does not own Camera.rect
-```
-
-## Validated runtime behavior
-
-```text
-Camera Session Outputs materialized = 1
-Route Camera Presentation materialized
-  transition = Cut
-  precedence = 200
-  scope = Route
-
-Activity Player Camera Presentation materialized
-  transition = Blend
-  precedence = 300
-  scope = Activity
-
-Before Join
-  Player lifecycle = WaitingForJoin
-  Route Camera is the contextual presentation
+Boot, no Player
+  Assignment remains configured
+  Output presents fallback
 
 Join
-  SucceededJoined
-  Actor prepared / materialized
-  gameplay admitted
-  Third Person Player Presentation becomes effective
+  Manager-Provisioned Player and Actor occurrence become eligible
+  Third Person follows that occurrence's Subject
 
 Leave
-  SucceededLeft
-  Actor / Subject occurrence released
-  Slot returns to Available
-  Route Camera becomes effective
+  Player/Actor/Subject occurrence is released
+  Output presents fallback
 
 Rejoin
-  second Join succeeds
-  new Host / Actor occurrence
-  new Camera Subject occurrence
-  Third Person Player Presentation becomes effective again
+  New Actor/Subject occurrence is followed by Third Person
+
+Route or Activity change
+  No Camera selection or ownership change
 ```
 
-## Known Framework issue
+Route and Activity assets do not configure Camera selection. Persistent Content contains no Camera Output; the application Camera Session owns Output capacity.
 
-When exiting Play Mode, Framework application-quit teardown can attempt normal Camera request arbitration after Unity has already invalidated a materialized Cinemachine Camera Scene. The resulting Route / Activity Presentation release warnings are Framework teardown-order debt, not missing ManagerProvisioned authoring.
+## Unity validation checklist
+
+- Import the sample and confirm all asset references resolve.
+- Validate `GameApplication_ManagerProvisioned` and the Assignment in the Framework authoring validators.
+- Confirm the rig materialization is valid and includes `CinemachineThirdPersonFollow`.
+- In Play Mode, verify Boot fallback, Join Third Person, Leave fallback, and Rejoin with the new Actor/Subject.
+- Change Route/Activity and confirm the configured Assignment remains authoritative.
