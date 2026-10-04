@@ -21,7 +21,20 @@ The HUB is sample navigation. It is not Framework authority or gameplay progress
 
 ## Session Camera Assignments
 
-The sample camera rig configurations are now referenced directly by `CameraAssignment_GameFlow_A` and `CameraAssignment_GameFlow_B` assets. The intended Session Camera command sequence is Hub → Output Fallback, Basic A → Activate A, Basic B → Replace A with B, returning to Basic A → Replace B with A, and Basic C → Clear the active Assignment to Fallback. These Assignment assets are authored, but the sample currently has no serialized Session Camera command triggers or UI/lifecycle bindings for this sequence; command integration and Unity validation remain open.
+Session Camera Assignments are owned by the Session. The sample's `GameFlowCameraAssignmentAdapter` is authored in the Activity A and B content scenes and uses `ActivityContentLifecycleContext` to issue explicit commands through the Session command port. Activity and Route assets have no Camera ownership or fields; there is no CameraRequest path.
+
+```text
+Session boot / Hub       -> Output Fallback; no Hub Clear command
+Hub -> Basic Flow / A    -> Activate Assignment A
+A -> B                   -> Replace A with B
+B -> A                   -> Replace B with A
+A/B -> C                 -> Clear the source Assignment to Output Fallback
+C -> A/B                 -> Activate the destination Assignment
+A/B -> Hub               -> Clear the source Assignment to Output Fallback
+C -> Hub                 -> no command
+```
+
+Activity C remains content-less and has no Camera adapter. A/B Exit clears only when the next Activity has no authored Assignment. The Session Camera remains the single writer of Assignment state; Output presentation and fallback coverage remain Session-owned.
 
 ## Run
 
@@ -402,6 +415,6 @@ The current Game Flow Showcase closes the intended positive consumer proof for G
 
 There is no remaining mandatory Game Flow scenario solely to exercise negative, invalid or terminal failure behavior. Those paths belong to technical QA unless a future real product feature introduces an explicit player-facing recovery behavior that is itself worth demonstrating.
 
-Possible later demonstrations such as Activity Restart, Camera, Player, Pause, Progression Save or additional Audio remain feature-owned/evolutionary work. They do not block the current Game Flow consumer closure.
+Possible later demonstrations such as Activity Restart, Player, Pause, Progression Save or additional Audio remain feature-owned/evolutionary work. They do not block the current Game Flow consumer closure.
 
 Do not add new scenarios merely to mirror the ADR inventory. Each new scenario must teach a distinct positive consumer contract.

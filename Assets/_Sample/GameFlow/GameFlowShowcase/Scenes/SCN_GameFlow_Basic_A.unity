@@ -289,7 +289,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
   m_UsePipelineSettings: 1
   m_AdditionalLightsShadowResolutionTier: 2
@@ -349,6 +349,7 @@ GameObject:
   m_Component:
   - component: {fileID: 548348188}
   - component: {fileID: 548348187}
+  - component: {fileID: 7823561001}
   m_Layer: 0
   m_Name: Activity BGM
   m_TagString: Untagged
@@ -372,6 +373,22 @@ MonoBehaviour:
   activityBgm: {fileID: 11400000, guid: a18d033a7279dbe49833b81eb52625da, type: 2}
   policy: 1
   director: {fileID: 0}
+--- !u!114 &7823561001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 548348186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99734bc487e742d0bae76e9e41edad97, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::ImmersiveGames.PlanetDevourer.Samples.GameFlow.GameFlowCameraAssignmentAdapter
+  activityA: {fileID: 11400000, guid: 082033c485b15ac4ba095eb3386156d8, type: 2}
+  assignmentA: {fileID: 11400000, guid: 8df7622dd3a8443da9a872e0e6f3a20f, type: 2}
+  activityB: {fileID: 11400000, guid: 1de60b795043d8349acc5bcb9c8e0db2, type: 2}
+  assignmentB: {fileID: 11400000, guid: 65339dced9104445b1da2b60093c6e31, type: 2}
 --- !u!4 &548348188
 Transform:
   m_ObjectHideFlags: 0
