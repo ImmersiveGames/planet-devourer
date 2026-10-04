@@ -15,6 +15,8 @@ Player/
   PlayerSlotProfile_LocalMultiplayer_P2.asset
   ActorProfile_FarmerGroup.asset
   ActorProfile_CowGroup.asset
+  FG_Player_LocalMultiplayer.prefab
+  FG_PlayerActor_LocalMultiplayer.prefab
   FG_FarmerPresentationGroup.prefab
   FG_CowPresentationGroup.prefab
 

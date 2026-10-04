@@ -54,13 +54,13 @@ MonoBehaviour:
   frameworkOwnedRotationControl: {fileID: 1712814550200707565}
   frameworkOwnedGroupTargetGroup: {fileID: 1729431845821327384}
   frameworkOwnedGroupFraming: {fileID: 7104208692797042}
-  materializationRevision: 3
+  materializationRevision: 5
   logApplyRebuildDiagnostics: 1
-  lastApplyRebuildStatus: ValidationSucceeded
+  lastApplyRebuildStatus: ApplySucceeded
   lastBlockingIssue: 
-  lastMaterializationSummary: Behavior Definition 'CameraPresentation_Group' projects
-    Presentation model 'Group'. Settings and Group provenance are valid; Apply /
-    Rebuild preflights pipeline ownership.
+  lastMaterializationSummary: created='0' repaired='0' alreadyValid='4' skipped='2'
+    blocked='0' presentation='Group' cameraOwnership='FrameworkOwned' positionOwnership='FrameworkOwned'
+    rotationOwnership='FrameworkOwned' revision='5'
 --- !u!1 &5003140688317065907
 GameObject:
   m_ObjectHideFlags: 0
@@ -227,7 +227,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8285784482030861984}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4eb4843bae7d24943842ea23130dcd55, type: 3}
   m_Name: 
@@ -238,6 +238,6 @@ MonoBehaviour:
   Damping: 2
   SizeAdjustment: 2
   LateralAdjustment: 0
-  FovRange: {x: 1, y: 100}
-  DollyRange: {x: -100, y: 100}
+  FovRange: {x: 40, y: 100}
+  DollyRange: {x: 0, y: 100}
   OrthoSizeRange: {x: 1, y: 1000}

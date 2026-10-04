@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 77252ac8d7db46d0b832aeecc4e42c67, type: 3}
+  m_Name: CameraAssignment_LocalMultiplayer_Group
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.CameraAuthoring.SessionCameraAssignmentAsset
+  assignmentId: 12539157e9084ec7bac8ac14ebbc81a1
+  rigPrefab: {fileID: 1034733890701993237, guid: 938858a35dff60940b15a7563293e9b6, type: 3}
+  occurrenceMode: 3
+  membershipPolicy: 2
+  targetPolicy: 3
+  memberSlots:
+  - {fileID: 11400000, guid: 2f980de85e9627643b15656c8d3dc815, type: 2}
+  - {fileID: 11400000, guid: 3d9415299ea976c4f9b00a15407404d3, type: 2}
+  outputDefinitions:
+  - {fileID: 11400000, guid: 59cb18909e849e34db5f3c4aed7291dc, type: 2}
+  individualMemberOutputMappings: []

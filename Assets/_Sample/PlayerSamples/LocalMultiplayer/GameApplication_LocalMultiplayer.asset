@@ -22,6 +22,8 @@ MonoBehaviour:
   cameraSession:
     outputPrefabs:
     - {fileID: 627951520136573394, guid: aa25a21ce579a4944bbd1ed458453d79, type: 3}
+  startupCameraAssignments:
+  - {fileID: 11400000, guid: 96ce8f8b85214926b5727309df1f11b3, type: 2}
   persistentContent:
     containerScene: {fileID: 102900000, guid: 6129046a7166d084bbc1a4f1c5b54e18, type: 3}
   validationMode: 1

@@ -64,7 +64,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: Group Presentation
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 18661541978170544, guid: 415b0b4f2abd676408948fd4ebaa390b, type: 3}
+    - {fileID: 5709334512434225456, guid: 415b0b4f2abd676408948fd4ebaa390b, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 5909235418024091049, guid: 415b0b4f2abd676408948fd4ebaa390b, type: 3}
@@ -74,9 +76,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 1818770758136001976, guid: 415b0b4f2abd676408948fd4ebaa390b, type: 3}
       insertIndex: -1
       addedObject: {fileID: 4307801740424745272}
-    - targetCorrespondingSourceObject: {fileID: 1818770758136001976, guid: 415b0b4f2abd676408948fd4ebaa390b, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: -1447385222309216106}
   m_SourcePrefab: {fileID: 100100000, guid: 415b0b4f2abd676408948fd4ebaa390b, type: 3}
 --- !u!1 &1251386278289134570 stripped
 GameObject:
@@ -97,20 +96,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.CameraAuthoring.ActorCameraSubjectAuthoring
   observationTransform: {fileID: 1295410876986556625}
   framingRadius: 1
---- !u!114 &-1447385222309216106
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1251386278289134570}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d07c40a1dc2e6dc4f812e8e8ce781b4c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Immersive.Framework.Samples.Player.MinimalLocalMultiplayerMovement
-  moveAction: {fileID: -1680190386980627800, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  moveSpeed: 4
 --- !u!4 &1295410876986556625 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1844921389780215427, guid: 415b0b4f2abd676408948fd4ebaa390b, type: 3}

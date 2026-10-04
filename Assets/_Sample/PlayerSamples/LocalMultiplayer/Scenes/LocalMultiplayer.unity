@@ -383,6 +383,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Visitors B
       objectReference: {fileID: 0}
+    - target: {fileID: 879044399388274724, guid: 142633ad0828df946815104b1e075af6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1855042916481194475, guid: 142633ad0828df946815104b1e075af6, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -581,6 +585,10 @@ PrefabInstance:
     - target: {fileID: 3736687813276301096, guid: 2f4e30ec3d5e9654993ca93270226cb5, type: 3}
       propertyPath: m_Name
       value: Statues
+      objectReference: {fileID: 0}
+    - target: {fileID: 3736687813276301096, guid: 2f4e30ec3d5e9654993ca93270226cb5, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8410789205004418417, guid: 2f4e30ec3d5e9654993ca93270226cb5, type: 3}
       propertyPath: m_LocalPosition.x

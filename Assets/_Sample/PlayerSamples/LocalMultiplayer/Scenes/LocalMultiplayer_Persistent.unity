@@ -372,6 +372,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Local Player Provisioning
       objectReference: {fileID: 0}
+    - target: {fileID: 6250155997045494238, guid: 94907d0e3a2818249a06d4de55d6d5ba, type: 3}
+      propertyPath: localPlayerHostPrefab
+      value:
+      objectReference: {fileID: 710000000000000002, guid: b37c6c8648ec41e98f47aa8a52b4e8d1, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
