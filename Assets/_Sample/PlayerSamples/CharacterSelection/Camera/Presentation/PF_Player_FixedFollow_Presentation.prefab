@@ -1,0 +1,124 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &723000000000000001
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1034733890701993237, guid: dc393f9529d3c1e498f581d7f3616504, type: 3}
+      propertyPath: m_Name
+      value: PF_Player_FixedFollow_Presentation
+      objectReference: {fileID: 0}
+    - target: {fileID: -2466651152814714718, guid: dc393f9529d3c1e498f581d7f3616504, type: 3}
+      propertyPath: behaviorDefinition
+      value:
+      objectReference: {fileID: 11400000, guid: 69d7a36a977842dea2acd57ff89aee34, type: 2}
+    - target: {fileID: -2466651152814714718, guid: dc393f9529d3c1e498f581d7f3616504, type: 3}
+      propertyPath: materializedPresentationIntent
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -2466651152814714718, guid: dc393f9529d3c1e498f581d7f3616504, type: 3}
+      propertyPath: frameworkOwnedPositionControl
+      value:
+      objectReference: {fileID: 723000000000000008}
+    - target: {fileID: -2466651152814714718, guid: dc393f9529d3c1e498f581d7f3616504, type: 3}
+      propertyPath: frameworkOwnedRotationControl
+      value:
+      objectReference: {fileID: 0}
+    - target: {fileID: -2466651152814714718, guid: dc393f9529d3c1e498f581d7f3616504, type: 3}
+      propertyPath: lastApplyRebuildStatus
+      value: ApplySucceeded
+      objectReference: {fileID: 0}
+    - target: {fileID: 8648337396180562196, guid: dc393f9529d3c1e498f581d7f3616504, type: 3}
+      propertyPath: Lens.FieldOfView
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 6976526617770880480, guid: dc393f9529d3c1e498f581d7f3616504, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.33035043
+      objectReference: {fileID: 0}
+    - target: {fileID: 6976526617770880480, guid: dc393f9529d3c1e498f581d7f3616504, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6976526617770880480, guid: dc393f9529d3c1e498f581d7f3616504, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6976526617770880480, guid: dc393f9529d3c1e498f581d7f3616504, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9438584
+      objectReference: {fileID: 0}
+    - target: {fileID: 6976526617770880480, guid: dc393f9529d3c1e498f581d7f3616504, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 38.65981
+      objectReference: {fileID: 0}
+    - target: {fileID: 6976526617770880480, guid: dc393f9529d3c1e498f581d7f3616504, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6976526617770880480, guid: dc393f9529d3c1e498f581d7f3616504, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 1289095062473905040, guid: dc393f9529d3c1e498f581d7f3616504, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8285784482030861984, guid: dc393f9529d3c1e498f581d7f3616504, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 723000000000000008}
+  m_SourcePrefab: {fileID: 100100000, guid: dc393f9529d3c1e498f581d7f3616504, type: 3}
+--- !u!1 &723000000000000002 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1034733890701993237, guid: dc393f9529d3c1e498f581d7f3616504, type: 3}
+  m_PrefabInstance: {fileID: 723000000000000001}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &723000000000000003 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4821448783137512895, guid: dc393f9529d3c1e498f581d7f3616504, type: 3}
+  m_PrefabInstance: {fileID: 723000000000000001}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &723000000000000004 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: -2466651152814714718, guid: dc393f9529d3c1e498f581d7f3616504, type: 3}
+  m_PrefabInstance: {fileID: 723000000000000001}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &723000000000000005 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8285784482030861984, guid: dc393f9529d3c1e498f581d7f3616504, type: 3}
+  m_PrefabInstance: {fileID: 723000000000000001}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &723000000000000006 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6976526617770880480, guid: dc393f9529d3c1e498f581d7f3616504, type: 3}
+  m_PrefabInstance: {fileID: 723000000000000001}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &723000000000000007 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8648337396180562196, guid: dc393f9529d3c1e498f581d7f3616504, type: 3}
+  m_PrefabInstance: {fileID: 723000000000000001}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &723000000000000008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 723000000000000005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b617507da6d07e749b7efdb34e1173e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineFollow
+  TrackerSettings:
+    BindingMode: 4
+    PositionDamping: {x: 0, y: 0, z: 0}
+    AngularDampingMode: 0
+    RotationDamping: {x: 0, y: 0, z: 0}
+    QuaternionDamping: 0
+  FollowOffset: {x: 0, y: 8, z: -10}

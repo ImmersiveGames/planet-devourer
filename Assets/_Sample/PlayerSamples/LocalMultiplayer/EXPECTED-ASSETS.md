@@ -1,12 +1,12 @@
 # Local Multiplayer Assets
 
-Status: **CAMERA-032 SHARED-GROUP COMPOSITION MATERIALIZED — UNITY CONSUMER PASS 2026-09-22**
+Status: **IF-ADR-038 / IF-ADR-042 SharedGroup consumer manual validation PASS — 2026-10-06**
 
-This file records the current Local Multiplayer application and the exact Camera ownership expected after migration to IF-ADR-032.
+This file records the current two-Player sample composition and its startup Session Camera Assignment. Session Camera is the single writer for Assignment activation, occurrence membership/projection, Output routing, and fallback coverage.
 
 ## Application-owned assets
 
-~~~text
+```text
 GameApplication_LocalMultiplayer.asset
 
 Player/
@@ -20,12 +20,8 @@ Player/
   FG_FarmerPresentationGroup.prefab
   FG_CowPresentationGroup.prefab
 
-Routes/
-  Route_LocalMultiplayer.asset
-  MultiplayerRouteContentProfile.asset
-
-Activities/
-  Activity_LocalMultiplayer.asset
+Camera/Assignments/
+  CameraAssignment_LocalMultiplayer_Group.asset
 
 Presentation/
   PF_LocalMultiplayer_Activity_Presentation.prefab
@@ -40,195 +36,82 @@ Scripts/
   LocalMultiplayerJoinTutorialController.cs
   LocalMultiplayerKeyboardGamepadSimulator.cs
   MinimalLocalMultiplayerMovement.cs
-~~~
+```
+
+## Player Actor composition
+
+The Local Multiplayer host references `FG_Player_LocalMultiplayer`, which uses `FG_PlayerActor_LocalMultiplayer`. The Actor variant retains `PlayerGameplayInputReader` and `CharacterController`, and owns movement/rotation through `MinimalLocalMultiplayerMovement`. `MinimalPlayerMovement` and `MinimalThirdPersonLook` are absent from this variant. Presentation prefabs do not own gameplay input or movement.
 
 ## Reused Camera assets
 
-~~~text
+```text
 Assets/_Sample/Shared/
-  Camera/Definitions/
-    CameraOutput_Main.asset
+  Camera/Definitions/CameraOutput_Main.asset
+  Camera/Behaviors/CameraBehavior_Group.asset
+  Prefabs/Cameras/PF_CameraOutput_Main.prefab
 
-  Camera/Behaviors/
-    CameraBehavior_Group.asset
+Assets/_Sample/PlayerSamples/LocalMultiplayer/
+  Camera/Assignments/CameraAssignment_LocalMultiplayer_Group.asset
+  Presentation/PF_LocalMultiplayer_Activity_Presentation.prefab
+```
 
-  Prefabs/Cameras/
-    PF_CameraOutput_Main.prefab
+## Startup Session Camera Assignment
 
-Assets/_Sample/PlayerSamples/Shared/Camera/
-  CameraPresentation_Default_Route.asset
-  CameraPresentation_LocalMultiplayer.asset
+`GameApplication_LocalMultiplayer.StartupCameraAssignments` contains `CameraAssignment_LocalMultiplayer_Group`. It is activated at startup; no trigger is used.
 
-  Presentation/
-    PF_Default_Route_Presentation.prefab
-~~~
+```text
+OccurrenceMode   = SharedGroup
+MembershipPolicy = ExplicitPlayerSlots (P1, P2)
+TargetPolicy     = MemberActorTargets
+Output           = CameraOutput_Main
+Rig              = PF_LocalMultiplayer_Activity_Presentation
+```
 
-## Required GameApplication Camera configuration
+The Assignment creates one occurrence per Assignment/Output. That occurrence persists while membership changes. Session Camera projects all current eligible Actor Subjects into the Framework-owned `CinemachineTargetGroup`, replacing the member set on reconciliation so no duplicate targets accumulate.
 
-~~~text
-GameApplication_LocalMultiplayer
-  Camera Session
-    Output Prefabs
-      PF_CameraOutput_Main
-
-    Player Output Bindings
-      []
-
-    Player Presentation Bindings
-      []
-
-  Session Camera Presentations
-    []
-~~~
-
-The empty Player Camera bindings are intentional. This sample uses one shared physical Output and one shared Activity Group Presentation.
-
-## Required Route Camera configuration
-
-~~~text
-Route_LocalMultiplayer
-  Camera Presentations
-    CameraPresentation_Default_Route
-
-CameraPresentation_Default_Route
-  Output = CameraOutput_Main
-  Subject Policy = AllAvailableSubjects
-  Transition = Cut
-  Request Precedence = 200
-  Rig = PF_Default_Route_Presentation
-~~~
-
-## Required Activity Camera configuration
-
-~~~text
-Activity_LocalMultiplayer
-  Camera Presentations
-    CameraPresentation_LocalMultiplayer
-
-CameraPresentation_LocalMultiplayer
-  Output = CameraOutput_Main
-  Subject Policy = AllAvailableSubjects
-  Transition = Blend
-  Request Precedence = 300
-  Rig = PF_LocalMultiplayer_Activity_Presentation
-~~~
-
-## Required Group Presentation prefab
-
-~~~text
-PF_LocalMultiplayer_Activity_Presentation
-  CameraRigComposer
-    Behavior Definition = CameraBehavior_Group
-    Presentation Intent = Group
-    materialized CinemachineCamera
-    framework-owned CinemachineTargetGroup
-    framework-owned CinemachineGroupFraming
-~~~
-
-Do not put `CameraOutputAuthoring`, a physical Unity Camera, CinemachineBrain or `CameraSharedComposition` in this Presentation prefab.
-
-## Required Actor Camera Subject evidence
-
-Each current Actor occurrence owns its Camera Subject authoring and explicitly supplies an Observation Transform. The observation target may differ from the Actor root and must belong to that exact Actor occurrence. The visual Presentation prefab remains subordinate content and does not own Subject identity or spatial authority.
-
-~~~text
-Farmer Group Actor occurrence
-  ActorCameraSubjectAuthoring
-    Observation Transform = Farmer Group framing anchor (Actor-owned)
-    Framing Radius > 0
-
-Cow Group Actor occurrence
-  ActorCameraSubjectAuthoring
-    Observation Transform = Cow Group framing anchor (Actor-owned)
-    Framing Radius > 0
-~~~
-
-The Observation Transform may be an empty GameObject beneath the Actor occurrence. Camera Subject identity is renewed with Actor replacement while the existing Player and Camera Occurrence remain.
-
-For Group framing:
-
-~~~text
+```text
 Target.Object = Subject.Observation
+Target.Radius = Subject.FramingRadius > 0
+              ? Subject.FramingRadius
+              : CameraBehavior_Group.GroupMemberRadius
+Target.Weight = CameraBehavior_Group.GroupMemberWeight
+```
 
-Target.Radius =
-  Subject.FramingRadius        when authored
-  CameraBehavior_Group.MemberRadius otherwise
-~~~
+The rig contains the materialized Group `CinemachineTargetGroup` and enabled `CinemachineGroupFraming`, configured from `CameraBehavior_Group` (`FramingSize`, `Damping`, `FovRange`, `DollyRange`, and `OrthoSizeRange`).
 
-The behavior-level member radius is fallback only; character-specific extent belongs to the Actor Camera Subject authoring.
+```text
+0 eligible Subjects -> empty TargetGroup; Output fallback active
+1 eligible Subject  -> one TargetGroup member; fallback released
+N eligible Subjects -> N current members; fallback released
+last member leaves  -> empty TargetGroup; fallback active
+new member eligible -> fallback released; same occurrence retained
+```
 
-## Current public Player composition
+Join, Leave, Rejoin and Actor replacement reconcile current membership on the same occurrence. `FovRange.x` must follow the base lens FOV.
 
-~~~text
-Open Joining command
-Join command from InputDevice
-Leave command per configured Slot
+## Actor Camera Subject
 
-IPlayerSessionScopedAccess.Changed
-IPlayerSessionScopedAccess.TryGetObservation(...)
+The Actor root owns `ActorCameraSubjectAuthoring`. Farmer and Cow use a neutral Actor-owned Observation anchor at local `X=0`, `Z=0`, approximately `Y=1`, with `FramingRadius=1`.
 
-PlayerSessionScopedSlotObservation.IsJoined
-PlayerSessionScopedSlotObservation.InputOwnership
-~~~
+The Observation is not `CameraMount` ThirdPerson. That mount is offset and orbits with Actor rotation, which would shift the observed point when the Actor turns. Preserve the shared ThirdPerson `CameraMount` unchanged.
 
-The keyboard/gamepad simulator is test input only. It does not own Slot assignment or Session state.
+## Consumer validation
 
-## Proven current consumer slice
+Manual Unity validation: **PASS — 2026-10-06**.
 
-~~~text
-GameApplication Camera Session materializes one explicit Output
+```text
+1 Player follows translation without orbiting around the Actor
+2 Players are both framed
+separating Players causes dolly/FOV adjustment while keeping both visible
+rotating an Actor in place does not move its Subject
+```
 
-Route
-  -> CameraPresentation_Default_Route
+This is consumer evidence for SharedGroup behavior. Framework Camera Editor/QA suites and any other unexecuted certification remain pending; see IF-TRACK.
 
-Activity
-  -> CameraPresentation_LocalMultiplayer
+## Explicit boundaries
 
-P1
-  -> Farmer Group Actor occurrence
-  -> Camera Subject
-  -> one-member Group
-
-P2
-  -> Cow Group Actor occurrence
-  -> Camera Subject
-  -> two-member Group
-
-Framing Radius
-  -> per-Subject Target Group extent
-  -> functional visual correction for dimensionless observation target
-
-P1/P2 Leave/Rejoin
-  -> Player lifecycle remains occurrence-safe
-  -> Camera Subject membership follows current Actor occurrences
-~~~
-
-## Explicitly absent legacy Camera authority
-
-The current sample must not contain or require:
-
-~~~text
-Local Multiplayer Camera.prefab
-CameraSharedComposition
-PlayerCameraOutputPolicyAuthoring
-PlayerCameraCompositionPolicyAuthoring
-physical Camera Output in Persistent Content
-Player-owned Camera request/rig/output
-~~~
-
-## Validation boundary
-
-~~~text
-Local Multiplayer IF-ADR-032 migration      PASS
-one-Output Session consumer proof           PASS
-Route Presentation consumer proof           PASS
-Activity Group Presentation consumer proof  PASS
-AllAvailableSubjects Group consumer         PASS
-per-Subject Framing Radius consumer         PASS
-
-CAMERA-032-E ExplicitSelection              NOT EXERCISED BY THIS SAMPLE
-two-Output / split-screen Camera             NOT THIS SAMPLE
-full IF-ADR-032 certification                PENDING IN FRAMEWORK/QA
-~~~
-
-Visual tuning of `CameraBehavior_Group` remains application-owned.
+- One shared physical Output: `CameraOutput_Main`.
+- No Route or Activity Camera ownership.
+- No parallel Camera arbitration authority.
+- No individual Output topology, viewport, or command-boundary changes.
+- Session Camera remains the sole writer of Assignment activation and active Camera Output state.

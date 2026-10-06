@@ -1,0 +1,59 @@
+using Immersive.Framework.PlayerParticipation;
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+namespace Immersive.Framework.Samples.Player
+{
+    [DisallowMultipleComponent]
+    [RequireComponent(typeof(PlayerGameplayInputReader))]
+    [RequireComponent(typeof(CharacterController))]
+    public sealed class CharacterSelectionActorMovement : MonoBehaviour
+    {
+        [Header("Input")]
+        [SerializeField]
+        private InputActionReference moveAction;
+
+        [Header("Movement")]
+        [SerializeField, Min(0f)]
+        private float moveSpeed = 4f;
+
+        private PlayerGameplayInputReader _gameplayInputReader;
+        private CharacterController _characterController;
+
+        private void Awake()
+        {
+            _gameplayInputReader = GetComponent<PlayerGameplayInputReader>();
+            _characterController = GetComponent<CharacterController>();
+
+            if (moveAction == null)
+            {
+                Debug.LogError(
+                    $"{nameof(CharacterSelectionActorMovement)} requires an authored Move InputActionReference.",
+                    this);
+            }
+        }
+
+        private void Update()
+        {
+            if (_characterController == null ||
+                !_characterController.enabled ||
+                _gameplayInputReader == null ||
+                !_gameplayInputReader.RuntimeGameplayAvailable ||
+                moveAction == null ||
+                !_gameplayInputReader.TryReadValue(moveAction, out Vector2 move))
+            {
+                return;
+            }
+
+            Vector2 planarInput = Vector2.ClampMagnitude(move, 1f);
+            Vector3 worldDirection = new Vector3(planarInput.x, 0f, planarInput.y);
+            if (worldDirection.sqrMagnitude <= 0.0001f)
+            {
+                return;
+            }
+
+            _characterController.Move(worldDirection * (moveSpeed * Time.deltaTime));
+            transform.rotation = Quaternion.LookRotation(worldDirection, Vector3.up);
+        }
+    }
+}

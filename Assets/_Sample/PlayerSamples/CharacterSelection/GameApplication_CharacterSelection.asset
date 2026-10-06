@@ -25,5 +25,5 @@ MonoBehaviour:
     outputPrefabs:
     - {fileID: 627951520136573394, guid: aa25a21ce579a4944bbd1ed458453d79, type: 3}
   persistentContent:
-    containerScene: {fileID: 102900000, guid: cdff4c15f56010749b29338a5c224253, type: 3}
+    containerScene: {fileID: 102900000, guid: 702a7368125c40d99a9d1a7946082689, type: 3}
   validationMode: 1
