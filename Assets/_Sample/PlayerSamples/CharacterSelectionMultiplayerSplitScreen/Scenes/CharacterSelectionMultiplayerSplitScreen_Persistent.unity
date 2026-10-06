@@ -328,6 +328,10 @@ PrefabInstance:
       propertyPath: m_SplitScreen
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6250155997045494238, guid: 94907d0e3a2818249a06d4de55d6d5ba, type: 3}
+      propertyPath: localPlayerHostPrefab
+      value:
+      objectReference: {fileID: 721000000000000002, guid: e8a9b2a50c8a49b6a8f5469dd6f8043e, type: 3}
     - target: {fileID: 1674905164032223181, guid: 94907d0e3a2818249a06d4de55d6d5ba, type: 3}
       propertyPath: m_MaxPlayerCount
       value: 2

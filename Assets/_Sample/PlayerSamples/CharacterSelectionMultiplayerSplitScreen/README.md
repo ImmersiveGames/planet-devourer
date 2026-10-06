@@ -1,29 +1,29 @@
 # Character Selection Multiplayer Split Screen
 
-This sample uses two configured Camera Session Outputs and one Individual Session Camera Assignment. The Assignment is the only Player Slot to Output authority:
+Status: **Implemented / Integrated / Manual Play Mode: PASS**
 
-`Camera/CameraAssignment_CharacterSelectionMultiplayer.asset` is the reusable Session Camera Assignment asset referenced by the Game Application.
+The sample provisions P1 and P2 through `PlayerSessionProfile_CharacterSelectionMultiplayerSplitScreen` and presents an independent Farmer/Cow selection UI for each joined Slot. Both Players use the same CharacterSelection Actor composition as the single-player sample: one `PlayerGameplayInputReader`, one `CharacterController`, `CharacterSelectionActorMovement` for planar movement and Actor rotation, and a neutral `FollowObservation` camera subject. Farmer and Cow remain visual-only. No mouse-look controls the camera.
+
+## Camera assignment and Outputs
+
+`CameraAssignment_CharacterSelectionMultiplayer` is `IndividualPerPlayer` with `ExplicitPlayerSlots`, `MemberActorTargets`, and one configured Output mapping per Slot:
 
 - `PlayerSlotProfile_CharacterSelectionMultiplayer_P1` → `CameraOutput_CharacterSelection_P1`
 - `PlayerSlotProfile_CharacterSelectionMultiplayer_P2` → `CameraOutput_CharacterSelection_P2`
 
-`CameraSessionConfiguration` contains only the two physical Output prefabs. The Assignment declares both Outputs and maps each member Slot to its Output. The Framework derives the exact `PlayerInput.camera` association from the Assignment and current Player Host evidence. Join, Leave, Rejoin and Host replacement reconcile that association; shutdown clears it.
+Both mappings use `PF_Player_FixedFollow_Presentation` with the CharacterSelection Fixed Follow behavior. Each Output follows its bound Actor's neutral observation with the fixed high, distant, world-space offset. Actor rotation does not orbit the camera. Camera Session owns Assignment and Output lifecycle; `PlayerInputManager` owns split-screen viewport rectangles.
 
-## Ownership
+## Player-count and fallback behavior
 
-The Framework chooses the Individual split-screen regime and associates each current PlayerInput with its configured Output Camera. `PlayerInputManager` owns viewport geometry. Framework Camera code does not write `Camera.rect` or `Camera.pixelRect`.
+- **0 Players:** exactly one physical Fallback Camera covers the view; the other mapped Output Camera is disabled.
+- **1 Player:** only that Player's bound Output participates; an unbound Output cannot render over it.
+- **2 Players:** P1 and P2 Outputs participate in split-screen.
+- **Leave/Rejoin:** bindings and physical Output participation update on the same configured Outputs; at zero Players, one physical Fallback remains.
 
-A SharedGroup Assignment uses one shared Output occurrence and creates no per-Player Output topology. It does not request split-screen. SessionScoped cameras also create no Player binding and can remain normal cameras with zero Players when their target policy allows it.
+Assignment reservation and logical per-Output Fallback coverage remain intact throughout. Framework Camera code does not write `Camera.rect` or `Camera.pixelRect`.
 
-## Validation in Unity
+## Manual validation
 
-After package import, validate in the sample scene:
+**PASS:** P1 and P2 each reach `GameplayReady`; each can explicitly select Farmer or Cow independently; movement translates and rotates each Actor; each camera follows its neutral Actor subject without orbiting on in-place rotation; 0 → 1 → 2 → 1 → 0 Players preserves one physical camera at zero and prevents unbound Outputs from overlapping active Players; Rejoin restores the mapped Output.
 
-1. P1 receives Output P1 and `PlayerInput.camera` references Output P1's Unity Camera.
-2. P2 receives Output P2 and `PlayerInput.camera` references Output P2's Unity Camera.
-3. Leave clears only the leaving Player's association; Rejoin uses the current Slot-to-Output mapping.
-4. Actor replacement keeps the existing Assignment/Output association.
-5. Leaving all Players and shutting down clears PlayerInput associations and releases the Session Outputs.
-6. `PlayerInputManager` recomposes viewport geometry while Framework code leaves `Camera.rect` and `Camera.pixelRect` untouched.
-
-Unity import, compile and Play Mode validation are pending for this Assignment-owned topology revision. Earlier sample certification covers its dated Presentation-era implementation only.
+Automated tests and QA certification remain pending.

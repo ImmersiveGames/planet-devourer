@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CameraAssignment_CharacterSelectionMultiplayer
   m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.CameraAuthoring.SessionCameraAssignmentAsset
   assignmentId: 03800000000000000000000000000002
-  rigPrefab: {fileID: 1034733890701993237, guid: dc393f9529d3c1e498f581d7f3616504, type: 3}
+  rigPrefab: {fileID: 723000000000000002, guid: 7e9b521310b1461cb6d97ded295dcd49, type: 3}
   occurrenceMode: 2
   membershipPolicy: 2
   targetPolicy: 3
