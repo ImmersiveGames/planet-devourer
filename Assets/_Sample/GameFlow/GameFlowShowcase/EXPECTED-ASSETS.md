@@ -59,7 +59,7 @@ Readiness camera transitions:
 | D / E -> C | Previous and Current map to the same Assignment | No-op |
 | C/D/E -> none / Route exit | Previous maps to Readiness, Current = none | Clear Readiness |
 
-Hub does not issue a boot Clear. Activity C remains content-less; Basic Flow maps it to no Assignment, while Readiness maps it to the same stable Assignment as D/E. There is no CameraRequest or Route/Activity Camera ownership.
+Hub does not issue a boot Clear. Activity C remains content-less; Basic Flow maps it to no Assignment, while Readiness maps it to the same stable Assignment as D/E. Session Camera Assignment selection remains Session-owned.
 
 Current validation evidence:
 

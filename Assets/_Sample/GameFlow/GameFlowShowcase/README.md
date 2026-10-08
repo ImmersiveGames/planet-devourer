@@ -21,7 +21,7 @@ The HUB is sample navigation. It is not Framework authority or gameplay progress
 
 ## Session Camera Assignments
 
-Session Camera Assignments are owned by the Session. Each showcase Route has one `GameFlowCameraAssignmentAdapter` beneath a `RouteContentContribution` in its primary scene. The adapter observes committed Activity transitions through `IRouteActivityTransitionObserver`, maps Activities to Assignments, and issues explicit commands through the Session command port. Basic Flow maps A/B to distinct Assignments and C to none; Readiness maps C/D/E to one shared Readiness Assignment, so its camera remains stable while readiness content and policy change. Activity and Route assets have no Camera ownership or fields; there is no CameraRequest path.
+Session Camera Assignments are owned by the Session. Each showcase Route has one `GameFlowCameraAssignmentAdapter` beneath a `RouteContentContribution` in its primary scene. The adapter observes committed Activity transitions through `IRouteActivityTransitionObserver`, maps Activities to Assignments, and issues explicit commands through the Session command port. Basic Flow maps A/B to distinct Assignments and C to none; Readiness maps C/D/E to one shared Readiness Assignment, so its camera remains stable while readiness content and policy change. Route and Activity assets do not select the Assignment.
 
 ```text
 Session boot / Hub       -> Output Fallback; no Hub Clear command

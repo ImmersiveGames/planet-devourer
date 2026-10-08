@@ -30,11 +30,11 @@ Use the sample-local README for composition and execution instructions, and the 
 
 ## Current authoring picture
 
-The detailed status lives in the operational guide rather than being duplicated here. At the current 2026-10-02 snapshot:
+The detailed program status lives in the operational guide. Current consumer documentation records:
 
-- Getting Started / Minimal Game is the canonical Scene-Provided consumer base and is also being used for the current Reset proof slice.
-- Game Flow is materialized.
-- Player contains proven Scene Player, Provisioning, Character Selection and Local Multiplayer slices, with additional validation still tracked separately.
+- Getting Started / Minimal Game is the canonical Scene-Provided consumer base; its current Session Camera Assignment composition is authored, while migrated Play Mode proof remains to be confirmed.
+- Game Flow contains Session Camera Assignment command consumers and Route-scoped Activity transition observation.
+- Player includes Manager-Provisioned, Character Selection, Local Multiplayer and Split Screen samples. Local Multiplayer SharedGroup has manual PASS (2026-10-06); its Runtime Gameplay Availability consumer has manual PASS (2026-10-08). Other validation remains sample-specific.
 - Advanced Context and Persistence remain separate program areas.
 - UPM promotion/import proof remains a later release gate.
 

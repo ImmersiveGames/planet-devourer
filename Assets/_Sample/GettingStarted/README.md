@@ -1,97 +1,50 @@
 # Getting Started
 
-Status: **CAMERA-032-D/E MIGRATED LOCALLY — Unity revalidation pending**
-UPM promotion: **PENDING package finalization/import proof**
+Status: **Current Session Camera Assignment composition is authored in the checkout.**
 
-## Demonstration Application
+## Purpose
 
-```text
-Minimal Game
-```
+`MinimalGame` is the first runnable consumer composition for a small navigable game. It demonstrates a Scene-Provided Player, one Route, an Activity, gameplay input and a Session-owned Camera Assignment. The sample establishes application setup; it is not a full gameplay template.
 
-Purpose: demonstrate the **minimum coherent Framework application**.
-
-Getting Started proves navigation, not gameplay.
-
-## Canonical Scene-Provided coverage
-
-Getting Started / Minimal Game is the sample program's **canonical Scene-Provided Player reference**.
-
-The Player sample family does not require a separate dedicated Scene-Provided Demonstration Application for the same baseline. Any future dedicated Scene-Provided Player sample requires evidence of a distinct consumer contract.
-
-Player-specific sample scope is governed by `FG-ADR-002 — Player Sample Scope and Demonstration Architecture`.
-
-## Current composition
+## Minimum composition
 
 ```text
-GameApplication
-PlayerSessionProfile
-Persistent Content
-one Route
-one Activity
-Scene-Provided Player
-GameplayReady participation
-explicit Actor Camera Subject
+GameApplication_MinimalGame
+  PlayerSessionProfile_MinimalGame
+  Startup Route = Route_MinimalGame
+  Startup Camera Assignment = CameraAssignment_MinimalGame_FirstPerson
 
-GameApplication Camera Session
-  -> one explicit physical Camera Output
-  -> Output-owned Fixed Default Camera Rig
-  -> Player 1 -> Output binding
-  -> Player 1 -> Camera Presentation binding
+Route_MinimalGame
+  Activity_MinimalGame
+  Gameplay scene = MinimalGame_Gameplay
 
-Activity Camera Presentation
-  -> ExplicitSelection
-  -> Mounted / First Person rig
-  -> normal CameraRequest arbitration
-
-minimal Move / Look navigation
+MinimalGame_Gameplay
+  MinimalGame_Player_SceneProvided
+    PlayerInput + LocalPlayerHostAuthoring + ActorMount
+    SceneProvidedLocalPlayerAuthoring
+    FG_MinimalGame_FirstPersonActor
+      PlayerActorRuntimeHost + PlayerActorDeclaration
+      PlayerGameplayInputReader + MinimalFirstPersonLocomotion
+      ActorCameraSubjectAuthoring -> CameraMount
 ```
 
-Camera ownership follows IF-ADR-032:
+The `PlayerSessionProfile` lists `PlayerSlotProfile_Player1_MinimalGame` as a supported Slot and uses Scene-Provided provisioning. The physical Player Host is authored in the gameplay scene. The Actor occurrence owns its body, movement and explicit Camera Subject. The camera output and rig are not owned by the Player or Activity.
 
-```text
-Scene Player / Actor Presentation
-  -> ActorCameraSubjectAuthoring
-  -> Camera Subject evidence
+## Camera Assignment
 
-GameApplication Camera Session
-  -> PF_CameraOutput_Main
-  -> CameraOutput_Main
-  -> physical Unity Camera + CinemachineBrain
-  -> Fixed Default Camera Rig
-  -> Player 1 -> Output
-  -> Player 1 -> CameraPresentation_MinimalGame_Player
+`GameApplication_MinimalGame` references `CameraAssignment_MinimalGame_FirstPerson`. The Assignment directly references `MinimalGame_CameraRig_FirstPerson`, uses `IndividualPerPlayer`, explicitly includes the Player 1 Slot and maps it to `CameraOutput_Main`. `MinimalGame_CameraOutput_Main` owns the Unity Camera, Cinemachine Brain and Fallback rig through `CameraOutputAuthoring`. The Assignment selects the normal rig; the Output supplies fallback coverage.
 
-Activity_MinimalGame
-  -> CameraPresentation_MinimalGame_Player
-  -> live Mounted / First Person Presentation occurrence
-```
+Route and Activity changes do not select or replace the Assignment. The Actor occurrence provides its exact `CameraMount` observation transform. Framework Camera code does not write viewport rectangles.
 
-Persistent Content does **not** own Camera Outputs, Player Camera policies or `CameraSharedComposition`.
+## Run and inspect
 
-Getting Started is single-player and Scene-Provided. It does not require a `PlayerInputManager` split-screen layout authority. The physical Unity Camera remains full-screen and the Framework does not author or write `Camera.rect`.
+1. In Unity, open `Assets/_Sample/GettingStarted/MinimalGame/Scenes/MinimalGame_Persistent.unity` and `MinimalGame_Gameplay.unity` as the sample's authored scene setup.
+2. Set `GameApplication_MinimalGame` as the active Game Application using its Inspector action.
+3. Enter Play Mode and use the configured Move and Look actions.
+4. Inspect the application asset, Session Profile, Slot Profile, Route, Activity, Camera Assignment and Output prefab listed above.
 
-## Unity validation target
+Expected: the Scene-Provided Player is admitted by the current Activity, movement input reaches the Actor, and the Session Assignment presents the Actor's explicit Camera Subject. See [Minimal Game](MinimalGame/README.md) for asset-by-asset details and [Reset consumer usage](MinimalGame/RESET-USAGE.md) for the separate Reset scenarios.
 
-The migrated sample must prove:
+## Validation status
 
-```text
-Framework boot succeeded
-Camera Session Output materialized
-Activity Ready
-blockingIssues = 0
-Scene Player admitted
-Player Camera Subject available
-Player Camera Presentation selection attached
-Mounted / First Person Presentation active
-Move received
-Look received
-```
-
-See `MinimalGame/README.md` for the runnable composition and inspection path.
-
-## Program status
-
-The authoring migration is materialized. Unity Play Mode revalidation is required before Getting Started / Sample 00 is marked closed again.
-
-Official UPM release remains a later program-wide finalization step. The final `GettingStarted` group must still be promoted into `com.immersive.framework/Samples~/GettingStarted` and validated from a real Package Manager import before being called release-ready.
+The repository has historical Scene-Provided readiness evidence, while the current Assignment migration is authored in this checkout. Do not infer current package import/compile or Play Mode validation from the authored assets. Check the Framework package's `Documentation~/Architecture/Tracking/IF-TRACK-Framework.md` for package gates and this sample's evidence before claiming validation.

@@ -105,7 +105,7 @@ Do not create hidden dependencies on sibling top-level sample groups. Cross-grou
 
 ## Transversal coverage
 
-Game Flow may issue sample-specific Session Camera Assignment commands from a Route-scoped observer of committed Activity transitions. Camera Assignment state and Output presentation remain Session-owned; Route and Activity assets do not own Camera, and the sample does not use CameraRequest.
+Game Flow may issue sample-specific Session Camera Assignment commands from a Route-scoped observer of committed Activity transitions. Camera Assignment state and Output presentation remain Session-owned; Route and Activity assets do not select the Assignment.
 
 Basic Flow and Readiness demonstrate Route-scoped transition-observer Session Camera policy: Basic Flow uses Activate/Replace/Clear for A/B, while Readiness activates one fixed Assignment for C and keeps it unchanged across C/D/E before clearing on Route exit. The Session remains the Camera single writer. The sample also demonstrates contextual BGM behavior and the distinction between explicit Silence, explicit Play and no-request preservation. Optional Audio package boundaries remain explicit.
 

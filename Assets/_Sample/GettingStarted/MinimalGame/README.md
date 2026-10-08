@@ -1,196 +1,53 @@
 # Minimal Game
 
-Status: **Session Camera Assignment asset migrated locally — Unity revalidation pending**
-UPM promotion: **PENDING package finalization/import proof**
-
 ## Purpose
 
-Minimal Game is the Getting Started demonstration application for the minimum coherent Immersive Framework game.
+The smallest navigable Framework consumer sample: one Scene-Provided Player, one Session, a Route with an Activity, gameplay input, and an explicit Session Camera Assignment.
 
-It proves **navigation, not gameplay**.
-
-## Canonical Scene Player reference
-
-Minimal Game is the canonical executable Scene-Provided Player reference.
+## Required authored assets
 
 ```text
-PlayerSessionProfile
-  HostProvisioning = SceneProvided
+GameApplication_MinimalGame.asset
+PlayerProfiles/PlayerSessionProfile_MinimalGame.asset
+PlayerProfiles/PlayerSlotProfile_Player1_MinimalGame.asset
+PlayerProfiles/FG_FirstPersonActorProfile.asset
+Routes/Route_MinimalGame.asset
+Activities/Activity_MinimalGame.asset
+Camera/Assignments/CameraAssignment_MinimalGame_FirstPerson.asset
+Camera/Prefabs/MinimalGame_CameraRig_FirstPerson.prefab
+Camera/Outputs/MinimalGame_CameraOutput_Main.prefab
+Scenes/MinimalGame_Persistent.unity
+Scenes/MinimalGame_Gameplay.unity
+Prefabs/MinimalGame_Player_SceneProvided.prefab
+Prefabs/FG_MinimalGame_FirstPersonActor.prefab
+Scripts/MinimalFirstPersonLocomotion.cs
 ```
 
-The product-facing composition is a Scene Player: a Local Player Host already authored in the gameplay Scene.
+`PlayerSessionProfile_MinimalGame` configures Scene-Provided provisioning and the supported Player Slot. The Scene Player prefab supplies the exact `LocalPlayerHostAuthoring` / `ActorMount` composition. The Actor prefab contains `PlayerActorRuntimeHost`, `PlayerActorDeclaration`, `PlayerGameplayInputReader`, `MinimalFirstPersonLocomotion` and `ActorCameraSubjectAuthoring` bound to `CameraMount`.
 
-## Implemented composition
+## Camera ownership
 
-```text
-one GameApplication
-one PlayerSessionProfile
-one supported Player Slot
-Persistent Content
-one Route
-one Activity
-one gameplay scene
-one Scene-Provided Local Player
-one Player Actor Runtime Host
-one Actor occurrence with an explicit Camera Subject
+`GameApplication_MinimalGame` owns the startup `CameraAssignment_MinimalGame_FirstPerson` and the physical Output configuration. The Assignment uses `IndividualPerPlayer`, explicitly includes the Player 1 Slot, maps it to `CameraOutput_Main` and references `MinimalGame_CameraRig_FirstPerson`. The Output prefab owns its Unity Camera, Cinemachine Brain and explicit fallback rig through `CameraOutputAuthoring`.
 
-one Session Camera Output
-one Session Camera Assignment asset (`CameraAssignment_MinimalGame_FirstPerson`)
-Player Slot -> Output mapping owned by the Assignment
-Mounted / First Person Rig Prefab
+The Session Assignment owns selection and Slot-to-Output mapping. Route and Activity do not select Cameras. The current Actor occurrence owns the Subject evidence; its `CameraMount` is the observation transform. The Scene Player does not own an Output or camera rig.
 
-minimal movement/look Input
-optional persistent Audio runtime
-Route-owned ambient BGM
-```
-
-Application-specific assets:
-
-```text
-Assets/_Sample/GettingStarted/MinimalGame/
-  GameApplication_MinimalGame.asset
-
-  Camera/
-    Assignments/
-      CameraAssignment_MinimalGame_FirstPerson.asset
-
-  PlayerProfiles/
-    PlayerSessionProfile_MinimalGame.asset
-    PlayerSlotProfile_Player1_MinimalGame.asset
-    FG_FirstPersonActorProfile.asset
-
-  Routes/
-    Route_MinimalGame.asset
-  Activities/
-    Activity_MinimalGame.asset
-  Scenes/
-    MinimalGame_Gameplay.unity
-    MinimalGame_Persistent.unity
-  Prefabs/
-    FG_MinimalGame_FirstPersonActor.prefab
-    FG_MinimalGame_SceneProvisioned.prefab
-
-  Scripts/
-    MinimalFirstPersonLocomotion.cs
-```
-
-Reused canonical assets:
-
-```text
-Assets/_Sample/PlayerSamples/
-  Shared/Prefabs/
-    FG_Player.prefab
-    FG_PlayerActor.prefab
-  Player/Provisioned/
-    FG_SceneProvisioned.prefab
-Assets/_Sample/Shared/
-  Prefabs/Cameras/
-    PF_CameraOutput_Main.prefab
-  Camera/Definitions/
-    CameraOutput_Main.asset
-  Camera/Behaviors/
-    CameraBehavior_Fixed.asset
-    CameraBehavior_MountedFirstPerson.asset
-```
-
-## Scene-Provided Player composition
-
-```text
-FG_FirstPersonActorProfile
-  VisualContentPrefab = None (the Actor has no concrete visual content)
-
-FG_MinimalGame_SceneProvisioned
-  SceneProvidedLocalPlayerAuthoring
-  FG_Player
-    PlayerInput
-    LocalPlayerHostAuthoring
-      ActorMount
-      PlayerActorRuntimeHostPrefab = FG_PlayerActor.prefab (shared host default)
-    UnityPlayerInputGateAdapter
-    ActorMount
-      FG_MinimalGame_FirstPersonActor
-        PlayerActorDeclaration
-        CharacterController
-        PlayerGameplayInputReader
-        MinimalFirstPersonLocomotion
-        ActorCameraSubjectAuthoring
-          ObservationTransform = CameraMount
-        CameraMount
-        PlayerActorRuntimeHost
-```
-
-The Actor occurrence owns movement, physical state, and explicit Camera Subject evidence. The MinimalGame Actor has no configured visual content. The Player side does not own a physical Camera Output or a Camera Rig.
-
-## Camera composition
-
-The Game Application owns one physical Output prefab and references `CameraAssignment_MinimalGame_FirstPerson.asset` in `StartupCameraAssignments`. The Assignment asset directly references `MinimalGame_CameraRig_FirstPerson`, declares the Player Slot and maps it to `CameraOutput_Main`. The Framework derives `PlayerInput.camera` from this Assignment and the current Player Host evidence.
-
-The camera Rig follows the Actor's explicit `CameraMount` Subject. The Output owns its Unity Camera, Cinemachine Brain and Fallback rig. Route and Activity assets do not select cameras, and Framework camera code does not write `Camera.rect` or `Camera.pixelRect`.
-
-## Unity validation target
-
-The previous Play Mode proof predates the Assignment asset migration. The migrated composition must prove:
-
-```text
-Framework boot = Succeeded
-Camera Output materialized = CameraOutput_Main
-Session Camera Assignment materialized = CameraAssignment_MinimalGame_FirstPerson
-Scene-Provided Player admitted with a current Actor occurrence
-PlayerInput.camera references CameraOutput_Main Unity Camera
-Mounted / First Person rig follows the Actor Camera Subject
-Move / Look navigation operational
-```
 ## Run
 
-1. Select `GameApplication_MinimalGame.asset` as the Active Game Application.
-2. Open the Minimal Game gameplay context.
-3. Enter Play Mode.
-4. Use Move and Look.
+1. Set `GameApplication_MinimalGame` as the active Game Application using its Inspector action.
+2. Enter Play Mode from the sample project and use the configured Move and Look input.
+3. Inspect `Scenes/MinimalGame_Gameplay.unity` for the Scene-Provided Player; `GameApplication_MinimalGame` references `Scenes/MinimalGame_Persistent.unity` as Persistent Content.
+
+Expected behavior is a Scene-Provided Player admitted into the current Activity, with movement on the Actor occurrence and the Assignment rig following its explicit Subject. The second Route/Activity assets are navigation fixtures, not Camera owners.
 
 ## Inspect
 
-```text
-GameApplication_MinimalGame
-  -> PlayerSessionProfile_MinimalGame
-  -> Camera Session
-      -> PF_CameraOutput_Main
-      -> Startup Camera Assignment = CameraAssignment_MinimalGame_FirstPerson
-      -> P1 PlayerInput.camera = CameraOutput_Main Unity Camera
-  -> Route_MinimalGame
-      -> Activity_MinimalGame
-          -> CameraAssignment_MinimalGame_FirstPerson
+Inspect the Game Application's Session Profile, Startup Route and Startup Camera Assignments; then inspect the Route, Activity, Slot Profile, Assignment, Output prefab, rig prefab and Scene Player/Actor hierarchy listed above.
 
-MinimalGame_Gameplay
-  -> FG_MinimalGame_SceneProvisioned
-      -> FG_Player
-      -> FG_MinimalGame_FirstPersonActor
-          -> ActorCameraSubjectAuthoring
-              -> ObservationTransform = CameraMount
-          -> CameraMount
-          -> PlayerActorRuntimeHost (no visual content configured)
-          -> MinimalFirstPersonLocomotion on Actor root: Move and yaw
-             -> ActorCameraSubjectAuthoring ObservationTransform: pitch
+## Validation
 
-MinimalGame_Persistent
-  -> EventSystem
-  -> Audio Runtime
-```
+This README records the current authored composition. The previous Play Mode proof predates this Assignment migration; the repository tracker does not claim that the migrated Minimal Game was revalidated. Unity import/compile and consumer Play Mode validation remain to be confirmed.
 
-## Completion boundary
+## Related samples
 
-```text
-Getting Started / Minimal Game
-  CAMERA-032-D/E authoring migration complete
-  Unity Play Mode revalidation pending
-```
-
-Final UPM promotion/import validation remains a later package-finalization gate.
-
-
-## Reset consumer proof
-
-Minimal Game is also the current consumer proving context for the IF-ADR-035 Reset authoring model. The Reset slice is documented separately so this README can remain focused on the minimum application/player/camera composition.
-
-See [RESET-USAGE.md](RESET-USAGE.md) for Object Direct/Stable, Composition Direct/Stable, CurrentActivity, CurrentRoute, Activity Restart and Multiple Participants.
-
-Reset proof status is tracked independently from the Camera migration status at the top of this README. The Reset consumer slice is CLOSED for authoring/proving; see RESET-USAGE.md for the eight validated scenarios and closure evidence.
+- [Reset consumer usage](RESET-USAGE.md) — distinct Reset scenarios in this same sample.
+- [Getting Started index](../README.md) — sample family entry point.

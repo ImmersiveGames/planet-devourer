@@ -1,6 +1,6 @@
 # Local Multiplayer
 
-Status: **SharedGroup consumer validation PASS — 2026-10-06**
+Status: **SharedGroup + Runtime Gameplay Availability consumer validation PASS — 2026-10-08**
 
 Local Multiplayer demonstrates two local Players (`P1`, `P2`) joining, reaching `GameplayReady`, and sharing one physical Camera Output. Camera assignment and occurrence behavior follow **IF-ADR-038 / IF-ADR-042**. Session Camera is the sole writer of Assignment activation, membership projection, Output routing, and fallback coverage.
 
@@ -63,9 +63,42 @@ Actor rotation in place: Subject position does not move
 
 This consumer result does not close Framework Camera Editor/QA suites or other IF-ADR-038 validation gates; those remain tracked separately.
 
+## Runtime Gameplay Availability — IF-ADR-044
+
+Manual Unity validation: **PASS** (2026-10-08).
+
+The sample now includes two public Framework authoring surfaces in `LocalMultiplayerUI`:
+
+```text
+Player 1 Gameplay Block
+  Scope = Activity
+  Player Slot Profile = P1
+
+Player 2 Gameplay Block
+  Scope = Activity
+  Player Slot Profile = P2
+```
+
+Each `PlayerGameplayAvailabilityBlockTrigger` owns only its own occurrence-scoped block token and exposes `RequestBlock()` / `RequestRelease()` to UnityEvents. The controls intentionally demonstrate the primitive directly; no turn system, active-player selector or P1 -> P2 cycle is implemented in this sample cut.
+
+Validated behavior:
+
+```text
+Block P1   -> P1 gameplay Action Map disabled; P2 unaffected
+Release P1 -> P1 gameplay restored
+Block P2   -> P2 gameplay Action Map disabled; P1 unaffected
+independent blocks compose without changing Session participation
+consumer teardown releases a held block through the canonical writer
+Pause/Resume continues to compose with consumer availability
+```
+
+The Players remain Joined and GameplayReady; Actor ownership, paired devices and SharedGroup Camera membership are not changed by the consumer block.
+
+The triggers are authored in `LocalMultiplayerUI`, where the active Activity can discover and bind them through the normal scoped-access composition. Placing an Activity-scoped trigger in arbitrary Persistent Content does not grant Activity ownership and will leave it unbound.
+
 ## Boundaries
 
-- No Route or Activity Camera ownership is introduced.
+- Session Camera Assignment authority remains with the Game Application and Session.
 - No parallel Camera arbitration authority is introduced.
 - The sample keeps one physical Output; no individual Output topology, viewport, or command boundary changes are part of this sample.
 - Session Camera remains the only writer of Assignment activation, occurrence membership, Subject projection, Output routing, and fallback coverage.
