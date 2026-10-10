@@ -25,5 +25,7 @@ MonoBehaviour:
   startupCameraAssignments:
   - {fileID: 11400000, guid: a9062dd2839640409aed2784cd92ad35, type: 2}
   persistentContent:
+    scenePath: Assets/_Sample/GettingStarted/MinimalGame/Scenes/MinimalGame_Persistent.unity
+    sceneName: MinimalGame_Persistent
     containerScene: {fileID: 102900000, guid: fdb0c67fbbd9f0845b46422294079fb4, type: 3}
   validationMode: 1

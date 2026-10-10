@@ -19,11 +19,13 @@ MonoBehaviour:
   playerActorSelectionDuplicatePolicy: 10
   progressionSaveEnabled: 0
   defaultProgressionSaveProfile: {fileID: 0}
-  startupCameraAssignments:
-  - {fileID: 11400000, guid: a11b40f81d1c4ba08931fa4f8bc04d13, type: 2}
   cameraSession:
     outputPrefabs:
     - {fileID: 627951520136573394, guid: aa25a21ce579a4944bbd1ed458453d79, type: 3}
+  startupCameraAssignments:
+  - {fileID: 11400000, guid: a11b40f81d1c4ba08931fa4f8bc04d13, type: 2}
   persistentContent:
+    scenePath: Assets/_Sample/PlayerSamples/CharacterSelection/Scenes/CharacterSelection_Persistent.unity
+    sceneName: CharacterSelection_Persistent
     containerScene: {fileID: 102900000, guid: 702a7368125c40d99a9d1a7946082689, type: 3}
   validationMode: 1

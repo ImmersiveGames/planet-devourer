@@ -26,5 +26,7 @@ MonoBehaviour:
   startupCameraAssignments:
   - {fileID: 11400000, guid: 61e13ce1f6934c77b0dc0b8f921c9158, type: 2}
   persistentContent:
+    scenePath: Assets/_Sample/PlayerSamples/CharacterSelectionMultiplayerSplitScreen/Scenes/CharacterSelectionMultiplayerSplitScreen_Persistent.unity
+    sceneName: CharacterSelectionMultiplayerSplitScreen_Persistent
     containerScene: {fileID: 102900000, guid: 8dcd84bf3b1045e46a8cf59ae2f02789, type: 3}
   validationMode: 1

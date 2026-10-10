@@ -25,5 +25,7 @@ MonoBehaviour:
   startupCameraAssignments:
   - {fileID: 11400000, guid: 96ce8f8b85214926b5727309df1f11b3, type: 2}
   persistentContent:
+    scenePath: Assets/_Sample/PlayerSamples/LocalMultiplayer/Scenes/LocalMultiplayer_Persistent.unity
+    sceneName: LocalMultiplayer_Persistent
     containerScene: {fileID: 102900000, guid: 6129046a7166d084bbc1a4f1c5b54e18, type: 3}
   validationMode: 1
