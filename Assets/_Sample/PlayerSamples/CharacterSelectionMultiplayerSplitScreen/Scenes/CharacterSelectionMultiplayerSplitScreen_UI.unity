@@ -422,9 +422,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 993068253}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a1ab0b68f54b074babd906b60740182, type: 3}
+  m_Script: {fileID: 11500000, guid: 5b9a5ffbb42643c3ab9ba6af6c43198d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.PlayerSessionJoinCommandTrigger
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.PlayerSessionJoinTrigger
   scope: 20
   reason: local-multiplayer-join
   controlScheme: 
@@ -3676,7 +3676,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LocalMultiplayerJoinTutorialController
   openJoiningCommand: {fileID: 993068257}
   closeJoiningCommand: {fileID: 993068256}
-  joinCommand: {fileID: 993068254}
+  joinTrigger: {fileID: 993068254}
+  sessionObserver: {fileID: 2041204071}
   joinInputSource: {fileID: 1865299571}
   joiningClosedRoot: {fileID: 180738184}
   joiningOpenRoot: {fileID: 1035117115}

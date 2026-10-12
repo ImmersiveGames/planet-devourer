@@ -13,7 +13,8 @@ public sealed class LocalMultiplayerJoinTutorialController : MonoBehaviour
     [Header("Framework Commands")]
     [SerializeField] private PlayerSessionOpenJoiningCommandTrigger openJoiningCommand;
     [SerializeField] private PlayerSessionCloseJoiningCommandTrigger closeJoiningCommand;
-    [SerializeField] private PlayerSessionJoinCommandTrigger joinCommand;
+    [SerializeField] private PlayerSessionJoinTrigger joinTrigger;
+    [SerializeField] private PlayerSessionObserver sessionObserver;
 
     [Header("Input Source")]
     [SerializeField] private LocalMultiplayerJoinInputSource joinInputSource;
@@ -40,6 +41,8 @@ public sealed class LocalMultiplayerJoinTutorialController : MonoBehaviour
     private bool _hasStableSessionState;
     private bool _sessionRefreshPending;
     private readonly HashSet<int> _ownedDeviceIds = new();
+    private int _pendingJoinedDeviceId = -1;
+    private string _pendingJoinedDeviceLabel;
 
     private void OnEnable()
     {
@@ -197,9 +200,9 @@ public sealed class LocalMultiplayerJoinTutorialController : MonoBehaviour
 
     private void TryJoinWithDevice(InputDevice device, string deviceLabel)
     {
-        if (joinCommand == null)
+        if (joinTrigger == null)
         {
-            SetStatus("Join command is not assigned.");
+            SetStatus("Join trigger is not assigned.");
             return;
         }
 
@@ -224,18 +227,21 @@ public sealed class LocalMultiplayerJoinTutorialController : MonoBehaviour
             return;
         }
 
-        joinCommand.InvokeFromDevice(device);
-
-        LocalPlayerJoinResult result = joinCommand.LastJoinResult;
+        LocalPlayerJoinOutcome result = joinTrigger.RequestJoin(
+            new LocalPlayerJoinRequest(
+                nameof(LocalMultiplayerJoinTutorialController),
+                "local-multiplayer-join",
+                device));
         if (result == null)
         {
             SetStatus("Join returned no result.");
             return;
         }
 
-        if (!result.Succeeded)
+        if (result.Code != LocalPlayerJoinOutcomeCode.Joined ||
+            result.AdmissionState != LocalPlayerJoinAdmissionState.Admitted)
         {
-            SetStatus($"Join rejected: {result.Status}. {result.Message}");
+            SetStatus(DescribeJoinOutcome(result));
             RefreshView();
             return;
         }
@@ -248,19 +254,9 @@ public sealed class LocalMultiplayerJoinTutorialController : MonoBehaviour
         TryBindSessionAccess();
         ScheduleSessionRefresh();
 
-        string slotId = result.Slot.PlayerSlotId.IsValid
-            ? result.Slot.PlayerSlotId.StableText
-            : "<invalid-slot>";
-
-        SetStatus(
-            $"{slotId} joined with {deviceLabel} " +
-            $"(deviceId={device.deviceId}, playerIndex={result.UnityPlayerIndex}).");
-
-        Debug.Log(
-            "[FG_LOCAL_MULTIPLAYER_TUTORIAL] " +
-            $"status='Joined' slot='{slotId}' " +
-            $"device='{deviceLabel}' deviceId='{device.deviceId}' " +
-            $"playerIndex='{result.UnityPlayerIndex}'.");
+        _pendingJoinedDeviceId = device.deviceId;
+        _pendingJoinedDeviceLabel = deviceLabel;
+        SetStatus($"Join admitted for {deviceLabel}; reading the assigned Slot from Player Session.");
 
         RefreshView();
     }
@@ -274,8 +270,8 @@ public sealed class LocalMultiplayerJoinTutorialController : MonoBehaviour
 
         ReleaseSessionAccess();
 
-        if (joinCommand == null ||
-            !joinCommand.TryGetAccess(
+        if (sessionObserver == null ||
+            !sessionObserver.TryGetAccess(
                 out IPlayerSessionScopedAccess resolvedAccess,
                 out _))
         {
@@ -339,7 +335,10 @@ public sealed class LocalMultiplayerJoinTutorialController : MonoBehaviour
         }
 
         RefreshView();
-        SetStatus(BuildSessionStatus());
+        if (!TryReportPendingJoin())
+        {
+            SetStatus(BuildSessionStatus());
+        }
     }
 
     private bool RefreshSessionState()
@@ -405,6 +404,74 @@ public sealed class LocalMultiplayerJoinTutorialController : MonoBehaviour
         _hasStableSessionState = true;
 
         return true;
+    }
+
+    private bool TryReportPendingJoin()
+    {
+        if (_pendingJoinedDeviceId < 0 ||
+            sessionObserver == null ||
+            !sessionObserver.TryGetObservation(
+                out PlayerSessionScopedObservationSnapshot observation) ||
+            observation == null ||
+            !observation.IsAvailable)
+        {
+            return false;
+        }
+
+        for (int slotIndex = 0; slotIndex < observation.Slots.Count; slotIndex++)
+        {
+            PlayerSessionScopedSlotObservation slot = observation.Slots[slotIndex];
+            if (!slot.IsJoined || !slot.HasInputOwnershipEvidence)
+            {
+                continue;
+            }
+
+            for (int deviceIndex = 0;
+                 deviceIndex < slot.InputOwnership.Devices.Count;
+                 deviceIndex++)
+            {
+                if (slot.InputOwnership.Devices[deviceIndex].DeviceId != _pendingJoinedDeviceId)
+                {
+                    continue;
+                }
+
+                string slotId = slot.Slot.PlayerSlotId.IsValid
+                    ? slot.Slot.PlayerSlotId.StableText
+                    : "<invalid-slot>";
+                int playerIndex = slot.InputOwnership.UnityPlayerIndex;
+                string deviceLabel = _pendingJoinedDeviceLabel ?? "Input device";
+
+                SetStatus(
+                    $"{slotId} joined with {deviceLabel} " +
+                    $"(deviceId={_pendingJoinedDeviceId}, playerIndex={playerIndex}).");
+                Debug.Log(
+                    "[FG_LOCAL_MULTIPLAYER_TUTORIAL] " +
+                    $"status='Joined' slot='{slotId}' device='{deviceLabel}' " +
+                    $"deviceId='{_pendingJoinedDeviceId}' playerIndex='{playerIndex}'.");
+
+                _pendingJoinedDeviceId = -1;
+                _pendingJoinedDeviceLabel = null;
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static string DescribeJoinOutcome(LocalPlayerJoinOutcome outcome)
+    {
+        switch (outcome.Code)
+        {
+            case LocalPlayerJoinOutcomeCode.FailedRollback:
+                return $"Join rollback failed; original outcome: {outcome.OriginalCode?.ToString() ?? "unknown"}.";
+            case LocalPlayerJoinOutcomeCode.FailedAdmission:
+            case LocalPlayerJoinOutcomeCode.FailedUnknown:
+                return $"Join failed: {outcome.Code} (admission={outcome.AdmissionState}).";
+            case LocalPlayerJoinOutcomeCode.Joined:
+                return $"Join returned an inconsistent success outcome (admission={outcome.AdmissionState}).";
+            default:
+                return $"Join rejected: {outcome.Code}.";
+        }
     }
 
     private bool AreBothPlayersJoined()

@@ -678,6 +678,7 @@ GameObject:
   - component: {fileID: 993068254}
   - component: {fileID: 993068256}
   - component: {fileID: 993068257}
+  - component: {fileID: 993068258}
   m_Layer: 0
   m_Name: Commands
   m_TagString: Untagged
@@ -694,12 +695,46 @@ MonoBehaviour:
   m_GameObject: {fileID: 993068253}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a1ab0b68f54b074babd906b60740182, type: 3}
+  m_Script: {fileID: 11500000, guid: 5b9a5ffbb42643c3ab9ba6af6c43198d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.PlayerSessionJoinCommandTrigger
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.PlayerSessionJoinTrigger
   scope: 20
   reason: local-multiplayer-join
   controlScheme: 
+--- !u!114 &993068258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 993068253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44d40c4cca356b446bf782279981c9dc, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Immersive.Framework.Runtime::Immersive.Framework.PlayerParticipation.PlayerSessionObserver
+  scope: 20
+  onJoiningOpened:
+    m_PersistentCalls:
+      m_Calls: []
+  onJoiningClosed:
+    m_PersistentCalls:
+      m_Calls: []
+  onPlayerJoined:
+    m_PersistentCalls:
+      m_Calls: []
+  onPlayerLeft:
+    m_PersistentCalls:
+      m_Calls: []
+  onActorSelected:
+    m_PersistentCalls:
+      m_Calls: []
+  onActorChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  onActorCleared:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &993068255
 Transform:
   m_ObjectHideFlags: 0
@@ -3228,7 +3263,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LocalMultiplayerJoinTutorialController
   openJoiningCommand: {fileID: 993068257}
   closeJoiningCommand: {fileID: 993068256}
-  joinCommand: {fileID: 993068254}
+  joinTrigger: {fileID: 993068254}
+  sessionObserver: {fileID: 993068258}
   joinInputSource: {fileID: 1865299571}
   joiningClosedRoot: {fileID: 180738184}
   joiningOpenRoot: {fileID: 1035117115}
