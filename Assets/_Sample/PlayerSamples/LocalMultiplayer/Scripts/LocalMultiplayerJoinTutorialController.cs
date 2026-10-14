@@ -33,7 +33,6 @@ public sealed class LocalMultiplayerJoinTutorialController : MonoBehaviour
     [SerializeField] private TMP_Text devicePromptLabel;
     [SerializeField] private TMP_Text statusLabel;
 
-    private IPlayerSessionScopedAccess _sessionAccess;
     private bool _joiningOpen;
     private bool _awaitingDevice;
     private bool _playerOneJoined;
@@ -51,16 +50,21 @@ public sealed class LocalMultiplayerJoinTutorialController : MonoBehaviour
             joinInputSource.DeviceRequested += OnDeviceRequested;
         }
 
-        TryBindSessionAccess();
+        if (sessionObserver != null)
+        {
+            sessionObserver.Changed += OnSessionChanged;
+        }
+
         ScheduleSessionRefresh();
         RefreshView();
     }
 
     private void Update()
     {
-        // Scoped consumers are bound after scene composition. Retry only until
-        // access becomes available; after that all state updates are event-driven.
-        if (_sessionAccess == null && TryBindSessionAccess())
+        // The observer can become available after scene composition. Poll only
+        // until a stable observation is available; subsequent changes are event-driven.
+        if (!_hasStableSessionState ||
+            (sessionObserver != null && !sessionObserver.IsAvailable))
         {
             ScheduleSessionRefresh();
         }
@@ -75,7 +79,14 @@ public sealed class LocalMultiplayerJoinTutorialController : MonoBehaviour
             joinInputSource.DeviceRequested -= OnDeviceRequested;
         }
 
-        ReleaseSessionAccess();
+        if (sessionObserver != null)
+        {
+            sessionObserver.Changed -= OnSessionChanged;
+        }
+
+        _hasStableSessionState = false;
+        _sessionRefreshPending = false;
+        _ownedDeviceIds.Clear();
     }
 
     public void OpenJoining()
@@ -99,7 +110,6 @@ public sealed class LocalMultiplayerJoinTutorialController : MonoBehaviour
 
         _awaitingDevice = false;
 
-        TryBindSessionAccess();
         ScheduleSessionRefresh();
 
         SetStatus(result.IgnoredNoChange
@@ -130,7 +140,6 @@ public sealed class LocalMultiplayerJoinTutorialController : MonoBehaviour
 
         _awaitingDevice = false;
 
-        TryBindSessionAccess();
         ScheduleSessionRefresh();
 
         SetStatus(result.IgnoredNoChange
@@ -142,8 +151,6 @@ public sealed class LocalMultiplayerJoinTutorialController : MonoBehaviour
 
     public void RequestJoin()
     {
-        TryBindSessionAccess();
-
         if (!_hasStableSessionState || _sessionRefreshPending)
         {
             SetStatus("Player Session state is still updating. Try again after the tutorial refreshes.");
@@ -251,7 +258,6 @@ public sealed class LocalMultiplayerJoinTutorialController : MonoBehaviour
         // The command can publish Slot Joined before its physical Host finishes
         // registration. Consume the coalesced canonical state on a later frame.
         _hasStableSessionState = false;
-        TryBindSessionAccess();
         ScheduleSessionRefresh();
 
         _pendingJoinedDeviceId = device.deviceId;
@@ -259,43 +265,6 @@ public sealed class LocalMultiplayerJoinTutorialController : MonoBehaviour
         SetStatus($"Join admitted for {deviceLabel}; reading the assigned Slot from Player Session.");
 
         RefreshView();
-    }
-
-    private bool TryBindSessionAccess()
-    {
-        if (_sessionAccess != null && _sessionAccess.Snapshot.IsAvailable)
-        {
-            return true;
-        }
-
-        ReleaseSessionAccess();
-
-        if (sessionObserver == null ||
-            !sessionObserver.TryGetAccess(
-                out IPlayerSessionScopedAccess resolvedAccess,
-                out _))
-        {
-            return false;
-        }
-
-        _sessionAccess = resolvedAccess;
-        _sessionAccess.Changed += OnSessionChanged;
-        ScheduleSessionRefresh();
-        return true;
-    }
-
-    private void ReleaseSessionAccess()
-    {
-        if (_sessionAccess == null)
-        {
-            return;
-        }
-
-        _sessionAccess.Changed -= OnSessionChanged;
-        _sessionAccess = null;
-        _hasStableSessionState = false;
-        _sessionRefreshPending = false;
-        _ownedDeviceIds.Clear();
     }
 
     private void OnSessionChanged(PlayerSessionChange change)
@@ -310,7 +279,7 @@ public sealed class LocalMultiplayerJoinTutorialController : MonoBehaviour
 
     private void ScheduleSessionRefresh()
     {
-        if (_sessionAccess != null)
+        if (sessionObserver != null)
         {
             _sessionRefreshPending = true;
         }
@@ -345,8 +314,8 @@ public sealed class LocalMultiplayerJoinTutorialController : MonoBehaviour
     {
         _hasStableSessionState = false;
 
-        if (_sessionAccess == null ||
-            !_sessionAccess.TryGetObservation(
+        if (sessionObserver == null ||
+            !sessionObserver.TryGetObservation(
                 out PlayerSessionScopedObservationSnapshot observation) ||
             observation == null ||
             !observation.IsAvailable)
